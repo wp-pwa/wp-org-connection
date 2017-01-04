@@ -19,7 +19,9 @@
   ],
   "author": "luis@worona.org",
   "license": "MIT",
-  "dependencies": {},
+  "dependencies": {
+    "wpapi": "^1.0.0"
+  },
   "devDependencies": {
     "eslint": "^3.6.1",
     "eslint-config-airbnb": "^12.0.0",
