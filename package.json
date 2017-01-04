@@ -1,19 +1,23 @@
 {
-  "name": "package-development-worona",
+  "name": "wp-org-connection-app-extension-worona",
   "version": "1.0.0",
-  "description": "Boilerplate to create Worona packages",
+  "description": "Connect to any self hosted WP using the WP-API",
   "scripts": {
     "start": "node node_modules/worona-packages/dist/start.js"
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/worona/package-development-worona.git"
+    "url": "git+https://github.com/worona/wp-org-connection-app-extension-worona.git"
   },
   "keywords": [
+    "wordpress",
+    "org",
+    "connection",
+    "app",
     "worona",
     "package"
   ],
-  "author": "",
+  "author": "luis@worona.org",
   "license": "MIT",
   "dependencies": {},
   "devDependencies": {
@@ -22,6 +26,26 @@
     "eslint-plugin-import": "^1.16.0",
     "eslint-plugin-jsx-a11y": "^2.2.2",
     "eslint-plugin-react": "^6.3.0",
-    "worona-packages": "1.3.8"
+    "vendors-app-worona": "1.3.0",
+    "worona-packages": "1.3.9"
+  },
+  "bugs": {
+    "url": "https://github.com/worona/wp-org-connection-app-extension-worona/issues"
+  },
+  "homepage": "https://github.com/worona/wp-org-connection-app-extension-worona#readme",
+  "worona": {
+    "authors": [
+      "luis@worona.org"
+    ],
+    "private": false,
+    "app": {
+      "type": "extension",
+      "namespace": "connection",
+      "default": true,
+      "name": "WordPress Org Connection",
+      "description": "Connect to any self hosted WP using the WP-API",
+      "image": "",
+      "listed": false
+    }
   }
 }
