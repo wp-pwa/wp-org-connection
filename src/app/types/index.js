@@ -1,0 +1,3 @@
+export const REFRESH_POSTS_REQUESTED = 'connection/REFRESH_POSTS_REQUESTED';
+export const REFRESH_POSTS_FAILED = 'connection/REFRESH_POSTS_FAILED';
+export const REFRESH_POSTS_SUCCEED = 'connection/REFRESH_POSTS_SUCCEED';
