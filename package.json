@@ -20,7 +20,7 @@
   "author": "luis@worona.org",
   "license": "MIT",
   "dependencies": {
-    "wpapi": "^1.0.0"
+    "wpapi": "git+https://github.com/luisherranz/node-wpapi.git#allow-endpoints-with-queries"
   },
   "devDependencies": {
     "eslint": "^3.6.1",
@@ -28,8 +28,8 @@
     "eslint-plugin-import": "^1.16.0",
     "eslint-plugin-jsx-a11y": "^2.2.2",
     "eslint-plugin-react": "^6.3.0",
-    "vendors-app-worona": "1.3.0",
-    "worona-packages": "1.3.9"
+    "vendors-app-worona": "1.3.1",
+    "worona-packages": "1.3.11"
   },
   "bugs": {
     "url": "https://github.com/worona/wp-org-connection-app-extension-worona/issues"
@@ -39,14 +39,9 @@
     "authors": [
       "luis@worona.org"
     ],
-    "private": false,
     "app": {
       "type": "extension",
       "namespace": "connection",
-      "default": true,
-      "name": "WordPress Org Connection",
-      "description": "Connect to any self hosted WP using the WP-API",
-      "image": "",
       "listed": false
     }
   }
