@@ -10,9 +10,14 @@ export function* initConnection() {
   return new Wpapi({ endpoint: `${url}?rest_route=` });
 }
 
+export const getPosts = connection => new Promise((resolve, reject) =>
+  connection.posts().embed()
+    .then(result => resolve(result))
+    .catch(error => reject(error)));
+
 export const refreshPosts = connection => function* refreshPostsSaga() {
   try {
-    const posts = yield call([connection, connection.posts]);
+    const posts = yield call(getPosts, connection);
     yield put(actions.refreshPostsSucceed({ posts }));
   } catch (error) {
     yield put(actions.refreshPostsFailed({ error }));
