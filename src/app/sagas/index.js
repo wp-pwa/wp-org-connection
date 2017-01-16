@@ -23,9 +23,9 @@ export function* initConnection() {
 export const refreshPosts = connection => function* refreshPostsSaga({ params }) {
   try {
     const posts = yield call(getPosts, { connection, params });
-    yield put(actions.refreshPostsSucceed({ posts }));
+    yield put(actions.refreshPostsSucceed({ posts, params }));
   } catch (error) {
-    yield put(actions.refreshPostsFailed({ error }));
+    yield put(actions.refreshPostsFailed({ error, params }));
   }
 };
 
