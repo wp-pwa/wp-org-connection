@@ -22,7 +22,6 @@ export const isReady = (state = false, { type }) => {
     case types.REFRESH_CATEGORIES_REQUESTED:
       return false;
     case types.REFRESH_CATEGORIES_SUCCEED:
-    case types.REFRESH_CATEGORIES_FAILED:
       return true;
     default:
       return state;
