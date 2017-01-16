@@ -29,8 +29,8 @@ export const isReady = (state = false, { type }) => {
 };
 
 export const params = (state = {}, action) => {
-  if (action.type === types.REFRESH_POSTS_REQUESTED) {
-    return action.params || {};
+  if (action.type === types.POST_PARAMS_CHANGED) {
+    return { ...state, ...action.params };
   }
   return state;
 };

@@ -1,7 +1,6 @@
 import * as types from '../types';
 
-export const refreshPostsRequested = (action = {}) =>
-  ({ type: types.REFRESH_POSTS_REQUESTED, params: action.params });
+export const refreshPostsRequested = () => ({ type: types.REFRESH_POSTS_REQUESTED });
 export const refreshPostsSucceed = ({ posts, params }) =>
   ({ type: types.REFRESH_POSTS_SUCCEED, posts, params });
 export const refreshPostsFailed = ({ error, params }) =>
@@ -13,5 +12,4 @@ export const refreshCategoriesSucceed = ({ categories }) =>
 export const refreshCategoriesFailed = ({ error }) =>
   ({ type: types.REFRESH_CATEGORIES_FAILED, error });
 
-export const newCategorySelected = ({ categories }) =>
-  ({ type: types.NEW_CATEGORIES_SELECTED, categories });
+export const postParamsChanged = ({ params }) => ({ type: types.POST_PARAMS_CHANGED, params });
