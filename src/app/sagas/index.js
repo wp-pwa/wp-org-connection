@@ -4,6 +4,7 @@ import { forOwn } from 'lodash';
 import { call, select, put } from 'redux-saga/effects';
 import * as actions from '../actions';
 import * as types from '../types';
+import * as selectors from '../selectors';
 import * as deps from '../deps';
 
 const getPosts = ({ connection, params }) => {
@@ -20,7 +21,8 @@ export function* initConnection() {
   return new Wpapi({ endpoint: `${url}?rest_route=` });
 }
 
-export const refreshPosts = connection => function* refreshPostsSaga({ params }) {
+export const refreshPosts = connection => function* refreshPostsSaga() {
+  const params = yield select(selectors.getPostParams);
   try {
     const posts = yield call(getPosts, { connection, params });
     yield put(actions.refreshPostsSucceed({ posts, params }));
@@ -43,6 +45,9 @@ export default function* wpOrgConnectionSagas() {
   yield [
     takeLatest(types.REFRESH_POSTS_REQUESTED, refreshPosts(connection)),
     takeLatest(types.REFRESH_CATEGORIES_REQUESTED, refreshCategories(connection)),
+    takeLatest(types.POST_PARAMS_CHANGED, function* () {
+      yield put(actions.refreshPostsRequested());
+    }),
     put(actions.refreshPostsRequested()),
     put(actions.refreshCategoriesRequested()),
   ];
