@@ -28,11 +28,4 @@ export const isReady = (state = false, { type }) => {
   }
 };
 
-export const selected = (state = false, { type, category }) => {
-  if (type === types.NEW_CATEGORY_SELECTED) {
-    return category;
-  }
-  return state;
-}
-
 export default combineReducers({ entities, result, isReady })
