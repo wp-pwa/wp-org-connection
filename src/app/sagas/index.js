@@ -1,14 +1,18 @@
 import Wpapi from 'wpapi';
 import { takeLatest } from 'redux-saga';
+import { forOwn } from 'lodash';
 import { call, select, put } from 'redux-saga/effects';
 import * as actions from '../actions';
 import * as types from '../types';
 import * as deps from '../deps';
 
-const getPosts = connection => new Promise((resolve, reject) =>
-  connection.posts().embed()
-    .then(result => resolve(result))
-    .catch(error => reject(error)));
+const getPosts = ({ connection, params }) => {
+  let query = connection.posts().embed();
+  forOwn(params, (value, key) => {
+    query = query.param(key, value);
+  });
+  return query;
+};
 const getCategories = connection => connection.categories();
 
 export function* initConnection() {
@@ -16,9 +20,9 @@ export function* initConnection() {
   return new Wpapi({ endpoint: `${url}?rest_route=` });
 }
 
-export const refreshPosts = connection => function* refreshPostsSaga() {
+export const refreshPosts = connection => function* refreshPostsSaga({ params }) {
   try {
-    const posts = yield call(getPosts, connection);
+    const posts = yield call(getPosts, { connection, params });
     yield put(actions.refreshPostsSucceed({ posts }));
   } catch (error) {
     yield put(actions.refreshPostsFailed({ error }));
