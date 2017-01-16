@@ -13,5 +13,5 @@ export const refreshCategoriesSucceed = ({ categories }) =>
 export const refreshCategoriesFailed = ({ error }) =>
   ({ type: types.REFRESH_CATEGORIES_FAILED, error });
 
-export const newCategorySelected = ({ category }) =>
-  ({ type: types.NEW_CATEGORY_SELECTED, category });
+export const newCategorySelected = ({ categories }) =>
+  ({ type: types.NEW_CATEGORIES_SELECTED, categories });
