@@ -10,6 +10,7 @@
     "array-bracket-spacing": 0,
     "curly": 0,
     "semi": 0,
-    "arrow-parens": ["error", "as-needed", { "requireForBlockBody": false }]
+    "arrow-parens": ["error", "as-needed", { "requireForBlockBody": false }],
+    "generator-star-spacing": 0
   }
 }
