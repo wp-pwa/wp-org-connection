@@ -45,10 +45,8 @@ export default function* wpOrgConnectionSagas() {
   yield [
     takeLatest(types.REFRESH_POSTS_REQUESTED, refreshPosts(connection)),
     takeLatest(types.REFRESH_CATEGORIES_REQUESTED, refreshCategories(connection)),
-    takeLatest(types.POST_PARAMS_CHANGED, function* () {
-      yield put(actions.refreshPostsRequested());
+    takeLatest(deps.types.INITIAL_PACKAGES_ACTIVATED, function* refresh() {
+      yield [ put(actions.refreshPostsRequested()), put(actions.refreshCategoriesRequested()) ];
     }),
-    put(actions.refreshPostsRequested()),
-    put(actions.refreshCategoriesRequested()),
   ];
 }
