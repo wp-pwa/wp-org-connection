@@ -1,7 +1,7 @@
 import { schema } from 'normalizr';
 
-const author = new schema.Entity('author');
-const featuredMedia = new schema.Entity('featured_media');
+const author = new schema.Entity('users');
+const featuredMedia = new schema.Entity('media');
 const category = new schema.Entity('categories');
 const categories = new schema.Array(category);
 const tag = new schema.Entity('tags');
@@ -10,7 +10,7 @@ const term = new schema.Array({
   category: categories,
   post_tag: tags,
 }, input => input[0] && input[0].taxonomy);
-const post = new schema.Entity('post', { _embedded: {
+const post = new schema.Entity('posts', { _embedded: {
   author: [author],
   'wp:featuredmedia': [featuredMedia],
   'wp:term': term,

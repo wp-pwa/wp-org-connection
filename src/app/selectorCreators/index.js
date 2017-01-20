@@ -4,3 +4,4 @@ export const getAuthorById = id => state => state.connection.posts.entities.auth
 export const getFeaturedMediaById = id =>
   state => state.connection.posts.entities.featured_media[id];
 export const getCategoryById = id => state => state.connection.categories.entities.category[id];
+export const getParams = type => state => state.connection.params[type];
