@@ -1,19 +1,19 @@
 import { combineReducers } from 'redux';
-import { flow, keyBy, mapValues } from 'lodash/fp';
+import { mapValues } from 'lodash';
 import * as types from '../types';
 
-const wpTypes = [
-  'posts',
-  'pages',
-  'categories',
-  'tags',
-  'users',
-  'media',
-  'comments',
-  'taxonomies',
-  'postTypes',
-  'postStatuses',
-];
+const wpTypes = {
+  posts: 'posts',
+  pages: 'pages',
+  categories: 'categories',
+  tags: 'tags',
+  users: 'users',
+  media: 'media',
+  comments: 'comments',
+  taxonomies: 'taxonomies',
+  postTypes: 'postTypes',
+  postStatuses: 'postStatuses',
+};
 
 export const getParams = type => (state = {}, action) => {
   if (action.type === types[`${type.toUpperCase()}_PARAMS_CHANGED`])
@@ -28,10 +28,19 @@ export const getEntities = type => (state = {}, action) => {
   return state;
 };
 
-const entities = combineReducers(
-  flow(keyBy(key => key), mapValues(key => getEntities(key)))(wpTypes),
-);
+export const getResults = type => (state = {}, action) => {
+  if (action.type === types[`${type.toUpperCase()}_LIST_SUCCEED`]) {
+    const result = state[action.key] || [];
+    result[action.page - 1] = action.result;
+    return { ...state, [action.key]: result };
+  }
+  return state;
+}
 
-const params = combineReducers(flow(keyBy(key => key), mapValues(key => getParams(key)))(wpTypes));
+const entities = combineReducers(mapValues(wpTypes, key => getEntities(key)));
 
-export default () => combineReducers({ entities, params })
+const params = combineReducers(mapValues(wpTypes, key => getParams(key)));
+
+const results = combineReducers(mapValues(wpTypes, key => getResults(key)));
+
+export default () => combineReducers({ entities, params, results })

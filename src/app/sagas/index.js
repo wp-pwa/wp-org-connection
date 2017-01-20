@@ -10,8 +10,8 @@ import * as selectorCreators from '../selectorCreators';
 import * as schemas from '../schemas';
 import * as deps from '../deps';
 
-const getList = ({ connection, type, params }) => {
-  let query = connection[type]();
+const getList = ({ connection, type, params, page }) => {
+  let query = connection[type]().page(page);
   forOwn(params, (value, key) => {
     query = query.param(key, value);
   });
@@ -24,16 +24,22 @@ export function* initConnection() {
 }
 
 export const listRequested = (connection, type) =>
-  function* listRequestedSaga({ params: newParams, current }) {
+  function* listRequestedSaga({ params: newParams, current, page }) {
     const globalParams = yield select(selectorCreators.getParams(type));
     const params = { ...globalParams, ...newParams };
     try {
-      const response = yield call(getList, { connection, type, params });
+      const response = yield call(getList, { connection, type, params, page });
       const normalized = normalize(response, schemas[type]);
-      const key = `${type}?${toString(params)}`;
-      yield put(actions[`${type}ListSucceed`]({ ...normalized, params, key, current }));
+      const key = toString(params);
+      yield put(actions[`${type}ListSucceed`]({ ...normalized, params, key, current, page }));
     } catch (error) {
-      yield put(actions[`${type}ListFailed`]({ error, params }));
+      yield put(
+        actions[`${type}ListFailed`]({
+          error,
+          params,
+          endpoint: getList({ connection, type, params, page }).toString(),
+        }),
+      );
     }
   };
 
