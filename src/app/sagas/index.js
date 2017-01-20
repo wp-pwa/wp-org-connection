@@ -10,8 +10,8 @@ import * as selectorCreators from '../selectorCreators';
 import * as schemas from '../schemas';
 import * as deps from '../deps';
 
-const getList = ({ connection, type, params, page }) => {
-  let query = connection[type]().page(page);
+const getList = ({ connection, wpType, params, page }) => {
+  let query = connection[wpType]().page(page);
   forOwn(params, (value, key) => {
     query = query.param(key, value);
   });
@@ -23,21 +23,22 @@ export function* initConnection() {
   return new Wpapi({ endpoint: `${url}?rest_route=` });
 }
 
-export const listRequested = (connection, type) =>
-  function* listRequestedSaga({ params: newParams, current, page }) {
-    const globalParams = yield select(selectorCreators.getParams(type));
+export const listRequested = (connection, wpType) =>
+  function* listRequestedSaga({ params: newParams, name, page }) {
+    const globalParams = yield select(selectorCreators.getParams(wpType));
     const params = { ...globalParams, ...newParams };
     try {
-      const response = yield call(getList, { connection, type, params, page });
-      const normalized = normalize(response, schemas[type]);
+      const response = yield call(getList, { connection, wpType, params, page });
+      const normalized = normalize(response, schemas[wpType]);
       const key = toString(params);
-      yield put(actions[`${type}ListSucceed`]({ ...normalized, params, key, current, page }));
+      yield put(actions[`${wpType}ListSucceed`]({ ...normalized, params, key, name, page, wpType }));
     } catch (error) {
       yield put(
-        actions[`${type}ListFailed`]({
+        actions[`${wpType}ListFailed`]({
           error,
           params,
-          endpoint: getList({ connection, type, params, page }).toString(),
+          name,
+          endpoint: getList({ connection, wpType, params, page }).toString(),
         }),
       );
     }
