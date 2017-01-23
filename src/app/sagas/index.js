@@ -1,52 +1,110 @@
 import Wpapi from 'wpapi';
 import { takeLatest } from 'redux-saga';
-import { forOwn } from 'lodash';
-import { call, select, put } from 'redux-saga/effects';
+import { normalize } from 'normalizr';
+import { forOwn, capitalize } from 'lodash';
+import { toString } from 'query-parse';
+import { call, select, put, fork } from 'redux-saga/effects';
+import defaults from './defaults';
 import * as actions from '../actions';
 import * as types from '../types';
-import * as selectors from '../selectors';
+import * as selectorCreators from '../selectorCreators';
+import * as schemas from '../schemas';
 import * as deps from '../deps';
+import { wpTypes } from '../constants';
 
-const getPosts = ({ connection, params }) => {
-  let query = connection.posts().embed();
+const CORSAnywhere = 'https://cors-anywhere.herokuapp.com/';
+
+const getList = ({ connection, wpType, params, page }) => {
+  let query = connection[wpType]().page(page);
   forOwn(params, (value, key) => {
     query = query.param(key, value);
   });
   return query;
 };
-const getCategories = connection => connection.categories();
 
 export function* initConnection() {
   const url = yield select(deps.selectorCreators.getSetting('generalSite', 'url'));
-  return new Wpapi({ endpoint: `${url}?rest_route=` });
+  return new Wpapi({ endpoint: `${CORSAnywhere}${url}?rest_route=` });
 }
 
-export const refreshPosts = connection => function* refreshPostsSaga() {
-  const params = yield select(selectors.getPostParams);
-  try {
-    const posts = yield call(getPosts, { connection, params });
-    yield put(actions.refreshPostsSucceed({ posts, params }));
-  } catch (error) {
-    yield put(actions.refreshPostsFailed({ error, params }));
-  }
-};
+export const newListRequested = (connection, wpType) =>
+  function* newListRequestedSaga({ params: newParams, name }) {
+    const globalParams = yield select(selectorCreators.getParams(wpType));
+    const params = { ...globalParams, ...newParams };
+    try {
+      const response = yield call(getList, { connection, wpType, params, page: 1 });
+      const normalized = normalize(response, schemas[wpType]);
+      const key = toString(params);
+      yield put(
+        actions[`new${capitalize(wpType)}ListSucceed`]({
+          ...normalized,
+          params,
+          key,
+          name,
+          wpType,
+        }),
+      );
+    } catch (error) {
+      yield put(
+        actions[`new${capitalize(wpType)}ListFailed`]({
+          error,
+          params,
+          name,
+          endpoint: getList({ connection, wpType, params, page: 1 }).toString(),
+        }),
+      );
+    }
+  };
 
-export const refreshCategories = connection => function* refreshCategoriesSaga() {
-  try {
-    const categories = yield call(getCategories, connection);
-    yield put(actions.refreshCategoriesSucceed({ categories }));
-  } catch (error) {
-    yield put(actions.refreshCategoriesFailed({ error }));
-  }
-};
+export const anotherPageRequested = (connection, wpType) =>
+  function* anotherPageRequestedSage({ page: reqPage, name }) {
+    const params = yield select(selectorCreators.getListParams(name));
+    try {
+      const isListInitialisated = yield select(selectorCreators.isListInitialisated(name));
+      if (!isListInitialisated) throw new Error(`List ${name} is not initialised yet.`);
+      const page = reqPage || (yield select(selectorCreators.getListNumberOfPages(name))) + 1;
+      const response = yield call(getList, { connection, wpType, params, page });
+      const normalized = normalize(response, schemas[wpType]);
+      const key = toString(params);
+      yield put(
+        actions[`another${capitalize(wpType)}PageSucceed`]({
+          ...normalized,
+          params,
+          key,
+          page,
+          name,
+          wpType,
+        }),
+      );
+    } catch (error) {
+      yield put(
+        actions[`another${capitalize(wpType)}PageFailed`]({
+          error,
+          params,
+          name,
+          endpoint: getList({ connection, wpType, params, page: 1 }).toString(),
+        }),
+      );
+    }
+  };
 
 export default function* wpOrgConnectionSagas() {
   const connection = yield call(initConnection);
-  yield [
-    takeLatest(types.REFRESH_POSTS_REQUESTED, refreshPosts(connection)),
-    takeLatest(types.REFRESH_CATEGORIES_REQUESTED, refreshCategories(connection)),
-    takeLatest(deps.types.INITIAL_PACKAGES_ACTIVATED, function* refresh() {
-      yield [ put(actions.refreshPostsRequested()), put(actions.refreshCategoriesRequested()) ];
-    }),
-  ];
+  yield put(actions.postsParamsChanged({ params: { _embed: true } }));
+  yield Object
+    .keys(wpTypes)
+    .map(
+      key =>
+        takeLatest(types[`NEW_${wpTypes[key]}_LIST_REQUESTED`], newListRequested(connection, key)),
+    );
+  yield Object
+    .keys(wpTypes)
+    .map(
+      key =>
+        takeLatest(
+          types[`ANOTHER_${wpTypes[key]}_PAGE_REQUESTED`],
+          anotherPageRequested(connection, key),
+        ),
+    );
+  yield fork(defaults);
 }

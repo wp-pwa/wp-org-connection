@@ -20,7 +20,8 @@
   "author": "luis@worona.org",
   "license": "MIT",
   "dependencies": {
-    "wpapi": "git+https://github.com/luisherranz/node-wpapi.git#allow-endpoints-with-queries"
+    "query-parse": "^1.0.0",
+    "wpapi": "^1.0.1"
   },
   "devDependencies": {
     "eslint": "^3.6.1",

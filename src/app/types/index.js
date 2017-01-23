@@ -1,9 +1,47 @@
-export const REFRESH_POSTS_REQUESTED = 'connection/REFRESH_POSTS_REQUESTED';
-export const REFRESH_POSTS_FAILED = 'connection/REFRESH_POSTS_FAILED';
-export const REFRESH_POSTS_SUCCEED = 'connection/REFRESH_POSTS_SUCCEED';
+import { flow, mapValues, mapKeys } from 'lodash/fp';
+import { wpTypes } from '../constants';
 
-export const REFRESH_CATEGORIES_REQUESTED = 'connection/REFRESH_CATEGORIES_REQUESTED';
-export const REFRESH_CATEGORIES_FAILED = 'connection/REFRESH_CATEGORIES_FAILED';
-export const REFRESH_CATEGORIES_SUCCEED = 'connection/REFRESH_CATEGORIES_SUCCEED';
+const paramsChanged = flow(
+  mapValues(value => `connection/${value}_PARAMS_CHANGED`),
+  mapKeys(key => `${wpTypes[key]}_PARAMS_CHANGED`),
+)(wpTypes);
 
-export const POST_PARAMS_CHANGED = 'connection/POST_PARAMS_CHANGED';
+const newListRequested = flow(
+  mapValues(value => `connection/NEW_${value}_LIST_REQUESTED`),
+  mapKeys(key => `NEW_${wpTypes[key]}_LIST_REQUESTED`),
+)(wpTypes);
+
+const newListSucceed = flow(
+  mapValues(value => `connection/NEW_${value}_LIST_SUCCEED`),
+  mapKeys(key => `NEW_${wpTypes[key]}_LIST_SUCCEED`),
+)(wpTypes);
+
+const newListFailed = flow(
+  mapValues(value => `connection/NEW_${value}_LIST_FAILED`),
+  mapKeys(key => `NEW_${wpTypes[key]}_LIST_FAILED`),
+)(wpTypes);
+
+const anotherPageRequested = flow(
+  mapValues(value => `connection/ANOTHER_${value}_PAGE_REQUESTED`),
+  mapKeys(key => `ANOTHER_${wpTypes[key]}_PAGE_REQUESTED`),
+)(wpTypes);
+
+const anotherPageSucceed = flow(
+  mapValues(value => `connection/ANOTHER_${value}_PAGE_SUCCEED`),
+  mapKeys(key => `ANOTHER_${wpTypes[key]}_PAGE_SUCCEED`),
+)(wpTypes);
+
+const anotherPageFailed = flow(
+  mapValues(value => `connection/ANOTHER_${value}_PAGE_FAILED`),
+  mapKeys(key => `ANOTHER_${wpTypes[key]}_PAGE_FAILED`),
+)(wpTypes);
+
+module.exports = {
+  ...paramsChanged,
+  ...newListRequested,
+  ...newListSucceed,
+  ...newListFailed,
+  ...anotherPageRequested,
+  ...anotherPageSucceed,
+  ...anotherPageFailed,
+};
