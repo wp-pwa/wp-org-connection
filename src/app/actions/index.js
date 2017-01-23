@@ -1,15 +1,94 @@
+import { capitalize } from 'lodash';
+import { flow, mapValues, mapKeys } from 'lodash/fp';
 import * as types from '../types';
+import { wpTypes } from '../constants';
 
-export const refreshPostsRequested = () => ({ type: types.REFRESH_POSTS_REQUESTED });
-export const refreshPostsSucceed = ({ posts, params }) =>
-  ({ type: types.REFRESH_POSTS_SUCCEED, posts, params });
-export const refreshPostsFailed = ({ error, params }) =>
-  ({ type: types.REFRESH_POSTS_FAILED, error, params });
+const paramsChange = flow(
+  mapValues(value =>
+    ({ params = {} } = {}) => ({ type: types[`${value}_PARAMS_CHANGED`], params })),
+  mapKeys(key => `${key}ParamsChanged`),
+)(wpTypes);
 
-export const refreshCategoriesRequested = () => ({ type: types.REFRESH_CATEGORIES_REQUESTED });
-export const refreshCategoriesSucceed = ({ categories }) =>
-  ({ type: types.REFRESH_CATEGORIES_SUCCEED, categories });
-export const refreshCategoriesFailed = ({ error }) =>
-  ({ type: types.REFRESH_CATEGORIES_FAILED, error });
+const newListRequested = flow(
+  mapValues(value =>
+    ({ params = {}, name = 'currentList' } = {}) => ({
+      type: types[`NEW_${value}_LIST_REQUESTED`],
+      params,
+      name,
+    })),
+  mapKeys(key => `new${capitalize(key)}ListRequested`),
+)(wpTypes);
 
-export const postParamsChanged = ({ params }) => ({ type: types.POST_PARAMS_CHANGED, params });
+const newListSucceed = flow(
+  mapValues(value =>
+    ({ params, entities, result, key, wpType, name }) => ({
+      type: types[`NEW_${value}_LIST_SUCCEED`],
+      params,
+      entities,
+      result,
+      key,
+      wpType,
+      name,
+    })),
+  mapKeys(key => `new${capitalize(key)}ListSucceed`),
+)(wpTypes);
+
+const newListFailed = flow(
+  mapValues(value =>
+    ({ params, error, endpoint, name }) => ({
+      type: types[`NEW_${value}_LIST_FAILED`],
+      params,
+      error,
+      endpoint,
+      name,
+    })),
+  mapKeys(key => `new${capitalize(key)}ListFailed`),
+)(wpTypes);
+
+const anotherPageRequested = flow(
+  mapValues(value =>
+    ({ name = 'currentList', page } = {}) => ({
+      type: types[`ANOTHER_${value}_PAGE_REQUESTED`],
+      page,
+      name,
+    })),
+  mapKeys(key => `another${capitalize(key)}PageRequested`),
+)(wpTypes);
+
+const anotherPageSucceed = flow(
+  mapValues(value =>
+    ({ params, entities, result, key, wpType, name, page }) => ({
+      type: types[`ANOTHER_${value}_PAGE_SUCCEED`],
+      params,
+      entities,
+      result,
+      key,
+      wpType,
+      name,
+      page,
+    })),
+  mapKeys(key => `another${capitalize(key)}PageSucceed`),
+)(wpTypes);
+
+const anotherPageFailed = flow(
+  mapValues(value =>
+    ({ params, error, endpoint, name, page }) => ({
+      type: types[`ANOTHER_${value}_PAGE_FAILED`],
+      params,
+      error,
+      endpoint,
+      name,
+      page,
+    })),
+  mapKeys(key => `another${capitalize(key)}PageFailed`),
+)(wpTypes);
+
+module.exports = {
+  ...paramsChange,
+  ...newListRequested,
+  ...newListSucceed,
+  ...newListFailed,
+  ...anotherPageRequested,
+  ...anotherPageSucceed,
+  ...anotherPageFailed,
+};

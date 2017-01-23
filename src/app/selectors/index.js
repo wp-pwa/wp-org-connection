@@ -1,4 +1,4 @@
-export const getPostParams = state => state.connection.posts.params;
+export const getPostsParams = state => state.connection.params.posts;
 export const isPostsReady = state => state.connection.posts.isReady;
 export const getPostsById = state => state.connection.posts.entities.post;
 export const getTagsById = state => state.connection.posts.entities.tags;
