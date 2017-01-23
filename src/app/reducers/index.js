@@ -1,54 +1,48 @@
 import { combineReducers } from 'redux';
 import { mapValues } from 'lodash';
 import * as types from '../types';
+import { wpTypes } from '../constants';
 
-const wpTypes = {
-  posts: 'POSTS',
-  pages: 'PAGES',
-  categories: 'CATEGORIES',
-  tags: 'TAGS',
-  users: 'USERS',
-  media: 'MEDIA',
-  comments: 'COMMENTS',
-  taxonomies: 'TAXONOMIES',
-  postTypes: 'POST_TYPES',
-  postStatuses: 'POST_STATUSES',
-};
-
-export const getParams = type => (state = {}, action) => {
-  if (action.type === types[`${wpTypes[type]}_PARAMS_CHANGED`])
+export const paramsReducer = value => (state = {}, action) => {
+  if (action.type === types[`${value}_PARAMS_CHANGED`]) {
     return { ...state, ...action.params };
-  return state;
-};
-
-export const getEntities = type => (state = {}, action) => {
-  if (
-    action.type.startsWith('connection/') && action.type.endsWith('_LIST_SUCCEED') &&
-      typeof action.entities[type] !== 'undefined'
-  ) {
-    return { ...state, ...action.entities[type] };
   }
   return state;
 };
 
-export const getResults = type => (state = {}, action) => {
-  if (action.type === types[`${wpTypes[type]}_LIST_SUCCEED`]) {
+export const entitiesReducer = (value, key) => (state = {}, action) => {
+  if (
+    (action.type.startsWith('connection/NEW_') && action.type.endsWith('_LIST_SUCCEED') ||
+      action.type.startsWith('connection/ANOTHER_') && action.type.endsWith('_PAGE_SUCCEED')) &&
+      typeof action.entities[key] !== 'undefined'
+  ) {
+    return { ...state, ...action.entities[key] };
+  }
+  return state;
+};
+
+export const resultsReducer = value => (state = {}, action) => {
+  if (
+    action.type === types[`NEW_${value}_LIST_SUCCEED`] ||
+      action.type === types[`ANOTHER_${value}_PAGE_SUCCEED`]
+  ) {
     const result = state[action.key] || [];
-    result[action.page - 1] = action.result;
+    const page = action.page || 1;
+    result[page - 1] = action.result;
     return { ...state, [action.key]: result };
   }
   return state;
 };
 
-export const names = (state = {}, { type, wpType, name, key }) => {
-  if (type.startsWith('connection/') && type.endsWith('_LIST_SUCCEED')) {
-    return { ...state, [name]: { wpType, key } };
+export const names = (state = {}, { type, wpType, name, key, params }) => {
+  if (type.startsWith('connection/NEW_') && type.endsWith('_LIST_SUCCEED')) {
+    return { ...state, [name]: { wpType, key, params } };
   }
   return state;
 };
 
-const entities = combineReducers(mapValues(wpTypes, key => getEntities(key)));
-const params = combineReducers(mapValues(wpTypes, key => getParams(key)));
-const results = combineReducers(mapValues(wpTypes, key => getResults(key)));
+const entities = combineReducers(mapValues(wpTypes, entitiesReducer));
+const params = combineReducers(mapValues(wpTypes, paramsReducer));
+const results = combineReducers(mapValues(wpTypes, resultsReducer));
 
-export default () => combineReducers({ entities, params, results, names })
+export default () => combineReducers({ entities, params, results, names });
