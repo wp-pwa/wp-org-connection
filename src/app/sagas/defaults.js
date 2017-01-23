@@ -1,6 +1,6 @@
 /* eslint-disable camelcase */
 import { takeLatest } from 'redux-saga';
-import { put, select, take } from 'redux-saga/effects';
+import { put, select, take, call, fork } from 'redux-saga/effects';
 import * as actions from '../actions';
 import * as deps from '../deps';
 
@@ -18,9 +18,14 @@ export function* router() {
   else yield put(actions.newPostsListRequested());
 }
 
+export function* doFirstRequest() {
+  yield take(deps.types.INITIAL_PACKAGES_ACTIVATED);
+  yield call(router);
+}
+
 export default function* defaultsSaga() {
   yield [
-    take(deps.types.INITIAL_PACKAGES_ACTIVATED, router),
+    fork(doFirstRequest),
     takeLatest(deps.types.ROUTER_DID_CHANGE, router),
   ];
 }
