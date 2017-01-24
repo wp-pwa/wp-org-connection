@@ -1,13 +1,13 @@
 import { capitalize } from 'lodash';
 import { flow, mapValues, mapKeys } from 'lodash/fp';
 import * as types from '../types';
-import { wpTypes } from '../constants';
+import { wpTypesPlural, wpTypesSingular } from '../constants';
 
 const paramsChange = flow(
   mapValues(value =>
     ({ params = {} } = {}) => ({ type: types[`${value}_PARAMS_CHANGED`], params })),
   mapKeys(key => `${key}ParamsChanged`),
-)(wpTypes);
+)(wpTypesPlural);
 
 const newListRequested = flow(
   mapValues(value =>
@@ -17,7 +17,7 @@ const newListRequested = flow(
       name,
     })),
   mapKeys(key => `new${capitalize(key)}ListRequested`),
-)(wpTypes);
+)(wpTypesPlural);
 
 const newListSucceed = flow(
   mapValues(value =>
@@ -31,7 +31,7 @@ const newListSucceed = flow(
       name,
     })),
   mapKeys(key => `new${capitalize(key)}ListSucceed`),
-)(wpTypes);
+)(wpTypesPlural);
 
 const newListFailed = flow(
   mapValues(value =>
@@ -43,7 +43,7 @@ const newListFailed = flow(
       name,
     })),
   mapKeys(key => `new${capitalize(key)}ListFailed`),
-)(wpTypes);
+)(wpTypesPlural);
 
 const anotherPageRequested = flow(
   mapValues(value =>
@@ -53,7 +53,7 @@ const anotherPageRequested = flow(
       name,
     })),
   mapKeys(key => `another${capitalize(key)}PageRequested`),
-)(wpTypes);
+)(wpTypesPlural);
 
 const anotherPageSucceed = flow(
   mapValues(value =>
@@ -68,7 +68,7 @@ const anotherPageSucceed = flow(
       page,
     })),
   mapKeys(key => `another${capitalize(key)}PageSucceed`),
-)(wpTypes);
+)(wpTypesPlural);
 
 const anotherPageFailed = flow(
   mapValues(value =>
@@ -81,7 +81,24 @@ const anotherPageFailed = flow(
       page,
     })),
   mapKeys(key => `another${capitalize(key)}PageFailed`),
-)(wpTypes);
+)(wpTypesPlural);
+
+const singleRequested = flow(
+  mapValues(value => ({ id }) => ({ type: types[`${value}_REQUESTED`], id })),
+  mapKeys(key => `${key}Requested`),
+)(wpTypesSingular);
+
+const singleSucceed = flow(
+  mapValues(value =>
+    ({ id, entities }) => ({ type: types[`${value}_SUCCEED`], id, entities })),
+  mapKeys(key => `${key}Succeed`),
+)(wpTypesSingular);
+
+const singleFailed = flow(
+  mapValues(value =>
+    ({ id, error, endpoint }) => ({ type: types[`${value}_FAILED`], id, error, endpoint })),
+  mapKeys(key => `${key}Failed`),
+)(wpTypesSingular);
 
 module.exports = {
   ...paramsChange,
@@ -91,4 +108,7 @@ module.exports = {
   ...anotherPageRequested,
   ...anotherPageSucceed,
   ...anotherPageFailed,
+  ...singleRequested,
+  ...singleSucceed,
+  ...singleFailed,
 };

@@ -1,10 +1,14 @@
-export const getPostsParams = state => state.connection.params.posts;
-export const isPostsReady = state => state.connection.posts.isReady;
-export const getPostsById = state => state.connection.posts.entities.post;
-export const getTagsById = state => state.connection.posts.entities.tags;
-export const getAuthorsById = state => state.connection.posts.entities.author;
-export const getFeaturedMediasById = state => state.connection.posts.entities.featured_media;
-export const getPostsResult = state => state.connection.posts.result;
-export const getCategoriesById = state => state.connection.categories.entities.category;
-export const isCategoriesReady = state => state.connection.categories.isReady;
-export const getCategoriesResult = state => state.connection.categories.result;
+import { flow, mapValues, mapKeys } from 'lodash/fp';
+import { capitalize } from 'lodash';
+import { wpTypesPlural } from '../constants';
+
+const mapValuesWithKey = mapValues.convert({ cap: false });
+
+const getParams = flow(
+  mapValuesWithKey((value, key) => state => state.connection.params[key]),
+  mapKeys(key => `get${capitalize(key)}Params`),
+)(wpTypesPlural);
+
+module.exports = {
+  ...getParams,
+}

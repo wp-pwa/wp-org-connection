@@ -1,7 +1,7 @@
 import { combineReducers } from 'redux';
 import { mapValues } from 'lodash';
 import * as types from '../types';
-import { wpTypes } from '../constants';
+import { wpTypesPlural, wpTypesSingular } from '../constants';
 
 export const paramsReducer = value => (state = {}, action) => {
   if (action.type === types[`${value}_PARAMS_CHANGED`]) {
@@ -10,10 +10,25 @@ export const paramsReducer = value => (state = {}, action) => {
   return state;
 };
 
+const isNewListSucceed = type =>
+  Object.values(wpTypesPlural).map(item => `connection/NEW_${item}_LIST_SUCCEED`).indexOf(type) !==
+    -1;
+
+const isAnotherPageSucceed = type =>
+  Object
+    .values(wpTypesPlural)
+    .map(item => `connection/ANOTHER_${item}_PAGE_SUCCEED`)
+    .indexOf(type) !==
+    -1;
+
+const isSingleSucceed = type =>
+  Object.values(wpTypesSingular).map(item => `connection/${item}_SUCCEED`).indexOf(type) !== -1;
+
 export const entitiesReducer = (value, key) => (state = {}, action) => {
   if (
-    (action.type.startsWith('connection/NEW_') && action.type.endsWith('_LIST_SUCCEED') ||
-      action.type.startsWith('connection/ANOTHER_') && action.type.endsWith('_PAGE_SUCCEED')) &&
+    (isNewListSucceed(action.type) ||
+      isAnotherPageSucceed(action.type) ||
+      isSingleSucceed(action.type)) &&
       typeof action.entities[key] !== 'undefined'
   ) {
     return { ...state, ...action.entities[key] };
@@ -35,14 +50,14 @@ export const resultsReducer = value => (state = {}, action) => {
 };
 
 export const names = (state = {}, { type, wpType, name, key, params }) => {
-  if (type.startsWith('connection/NEW_') && type.endsWith('_LIST_SUCCEED')) {
+  if (isNewListSucceed(type)) {
     return { ...state, [name]: { wpType, key, params } };
   }
   return state;
 };
 
-const entities = combineReducers(mapValues(wpTypes, entitiesReducer));
-const params = combineReducers(mapValues(wpTypes, paramsReducer));
-const results = combineReducers(mapValues(wpTypes, resultsReducer));
+const entities = combineReducers(mapValues(wpTypesPlural, entitiesReducer));
+const params = combineReducers(mapValues(wpTypesPlural, paramsReducer));
+const results = combineReducers(mapValues(wpTypesPlural, resultsReducer));
 
 export default () => combineReducers({ entities, params, results, names });
