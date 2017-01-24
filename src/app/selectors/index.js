@@ -28,8 +28,14 @@ const isCurrentSingleReady = state => {
   return selectorCreators.isWpTypeReady(wpType, id)(state);
 };
 
+const getEntities = flow(
+  mapValuesWithKey((value, key) => state => state.connection.entities[key]),
+  mapKeys(key => `get${capitalize(key)}Entities`),
+)(wpTypesPlural);
+
 module.exports = {
   ...getParams,
+  ...getEntities,
   getCurrentSingle,
   isCurrentSingleReady,
   getCurrentWpType,
