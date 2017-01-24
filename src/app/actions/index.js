@@ -84,19 +84,33 @@ const anotherPageFailed = flow(
 )(wpTypesPlural);
 
 const singleRequested = flow(
-  mapValues(value => ({ id }) => ({ type: types[`${value}_REQUESTED`], id })),
+  mapValues(value =>
+    ({ id, current = false }) => ({ type: types[`${value}_REQUESTED`], id, current })),
   mapKeys(key => `${key}Requested`),
 )(wpTypesSingular);
 
 const singleSucceed = flow(
   mapValues(value =>
-    ({ id, entities }) => ({ type: types[`${value}_SUCCEED`], id, entities })),
+    ({ id, entities, current, wpType }) => ({
+      type: types[`${value}_SUCCEED`],
+      id,
+      entities,
+      current,
+      wpType,
+    })),
   mapKeys(key => `${key}Succeed`),
 )(wpTypesSingular);
 
 const singleFailed = flow(
   mapValues(value =>
-    ({ id, error, endpoint }) => ({ type: types[`${value}_FAILED`], id, error, endpoint })),
+    ({ id, error, endpoint, current, wpType }) => ({
+      type: types[`${value}_FAILED`],
+      id,
+      error,
+      endpoint,
+      wpType,
+      current,
+    })),
   mapKeys(key => `${key}Failed`),
 )(wpTypesSingular);
 

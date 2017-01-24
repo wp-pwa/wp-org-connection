@@ -89,21 +89,31 @@ export const anotherPageRequested = (connection, wpType) =>
     }
   };
 
-export const singleRequested = (connection, wpType) => function* singleRequestedSaga({ id }) {
-  try {
-    const response = yield call(getSingle, { connection, wpType, id });
-    const { entities } = normalize(response, schemas[wpType]);
-    yield put(actions[`${wpType}Succeed`]({ entities, id, wpType }));
-  } catch (error) {
-    yield put(
-      actions[`${wpType}Failed`]({
-        error,
-        id,
-        endpoint: getSingle({ connection, wpType, id }).toString(),
-      }),
-    );
-  }
-};
+export const singleRequested = (connection, wpType) =>
+  function* singleRequestedSaga({ id, current }) {
+    try {
+      const response = yield call(getSingle, { connection, wpType, id });
+      const { entities } = normalize(response, schemas[wpType]);
+      yield put(
+        actions[`${wpType}Succeed`]({
+          entities,
+          id,
+          wpType: wpTypesSingularToPlural[wpType],
+          current,
+        }),
+      );
+    } catch (error) {
+      yield put(
+        actions[`${wpType}Failed`]({
+          error,
+          id,
+          current,
+          wpType: wpTypesSingularToPlural[wpType],
+          endpoint: getSingle({ connection, wpType, id }).toString(),
+        }),
+      );
+    }
+  };
 
 export default function* wpOrgConnectionSagas() {
   const connection = yield call(initConnection);
