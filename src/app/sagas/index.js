@@ -10,7 +10,7 @@ import * as types from '../types';
 import * as selectorCreators from '../selectorCreators';
 import * as schemas from '../schemas';
 import * as deps from '../deps';
-import { wpTypes } from '../constants';
+import { wpTypesPlural } from '../constants';
 
 const getList = ({ connection, wpType, params, page }) => {
   let query = connection[wpType]().page(page);
@@ -90,17 +90,20 @@ export default function* wpOrgConnectionSagas() {
   const connection = yield call(initConnection);
   yield put(actions.postsParamsChanged({ params: { _embed: true } }));
   yield Object
-    .keys(wpTypes)
-    .map(
-      key =>
-        takeLatest(types[`NEW_${wpTypes[key]}_LIST_REQUESTED`], newListRequested(connection, key)),
-    );
-  yield Object
-    .keys(wpTypes)
+    .keys(wpTypesPlural)
     .map(
       key =>
         takeLatest(
-          types[`ANOTHER_${wpTypes[key]}_PAGE_REQUESTED`],
+          types[`NEW_${wpTypesPlural[key]}_LIST_REQUESTED`],
+          newListRequested(connection, key),
+        ),
+    );
+  yield Object
+    .keys(wpTypesPlural)
+    .map(
+      key =>
+        takeLatest(
+          types[`ANOTHER_${wpTypesPlural[key]}_PAGE_REQUESTED`],
           anotherPageRequested(connection, key),
         ),
     );

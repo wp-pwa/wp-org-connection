@@ -1,13 +1,13 @@
 import { capitalize } from 'lodash';
 import { flow, mapValues, mapKeys } from 'lodash/fp';
 import * as types from '../types';
-import { wpTypes } from '../constants';
+import { wpTypesPlural, wpTypesPluralSingular } from '../constants';
 
 const paramsChange = flow(
   mapValues(value =>
     ({ params = {} } = {}) => ({ type: types[`${value}_PARAMS_CHANGED`], params })),
   mapKeys(key => `${key}ParamsChanged`),
-)(wpTypes);
+)(wpTypesPlural);
 
 const newListRequested = flow(
   mapValues(value =>
@@ -17,7 +17,7 @@ const newListRequested = flow(
       name,
     })),
   mapKeys(key => `new${capitalize(key)}ListRequested`),
-)(wpTypes);
+)(wpTypesPlural);
 
 const newListSucceed = flow(
   mapValues(value =>
@@ -31,7 +31,7 @@ const newListSucceed = flow(
       name,
     })),
   mapKeys(key => `new${capitalize(key)}ListSucceed`),
-)(wpTypes);
+)(wpTypesPlural);
 
 const newListFailed = flow(
   mapValues(value =>
@@ -43,7 +43,7 @@ const newListFailed = flow(
       name,
     })),
   mapKeys(key => `new${capitalize(key)}ListFailed`),
-)(wpTypes);
+)(wpTypesPlural);
 
 const anotherPageRequested = flow(
   mapValues(value =>
@@ -53,7 +53,7 @@ const anotherPageRequested = flow(
       name,
     })),
   mapKeys(key => `another${capitalize(key)}PageRequested`),
-)(wpTypes);
+)(wpTypesPlural);
 
 const anotherPageSucceed = flow(
   mapValues(value =>
@@ -68,7 +68,7 @@ const anotherPageSucceed = flow(
       page,
     })),
   mapKeys(key => `another${capitalize(key)}PageSucceed`),
-)(wpTypes);
+)(wpTypesPlural);
 
 const anotherPageFailed = flow(
   mapValues(value =>
@@ -81,7 +81,7 @@ const anotherPageFailed = flow(
       page,
     })),
   mapKeys(key => `another${capitalize(key)}PageFailed`),
-)(wpTypes);
+)(wpTypesPlural);
 
 module.exports = {
   ...paramsChange,

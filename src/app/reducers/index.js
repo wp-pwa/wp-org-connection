@@ -1,7 +1,7 @@
 import { combineReducers } from 'redux';
 import { mapValues } from 'lodash';
 import * as types from '../types';
-import { wpTypes } from '../constants';
+import { wpTypesPlural } from '../constants';
 
 export const paramsReducer = value => (state = {}, action) => {
   if (action.type === types[`${value}_PARAMS_CHANGED`]) {
@@ -41,8 +41,8 @@ export const names = (state = {}, { type, wpType, name, key, params }) => {
   return state;
 };
 
-const entities = combineReducers(mapValues(wpTypes, entitiesReducer));
-const params = combineReducers(mapValues(wpTypes, paramsReducer));
-const results = combineReducers(mapValues(wpTypes, resultsReducer));
+const entities = combineReducers(mapValues(wpTypesPlural, entitiesReducer));
+const params = combineReducers(mapValues(wpTypesPlural, paramsReducer));
+const results = combineReducers(mapValues(wpTypesPlural, resultsReducer));
 
 export default () => combineReducers({ entities, params, results, names });

@@ -1,4 +1,4 @@
-export const wpTypes = {
+export const wpTypesPlural = {
   posts: 'POSTS',
   pages: 'PAGES',
   categories: 'CATEGORIES',
