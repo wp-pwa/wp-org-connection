@@ -10,3 +10,16 @@ export const wpTypes = {
   postTypes: 'POST_TYPES',
   postStatuses: 'POST_STATUSES',
 };
+
+export const wpTypesSingular = {
+  post: 'POST',
+  page: 'PAGE',
+  category: 'CATEGORY',
+  tag: 'TAG',
+  user: 'USER',
+  media: 'MEDIA',
+  comment: 'COMMENT',
+  taxonomy: 'TAXONOMY',
+  postType: 'POST_TYPE',
+  postStatus: 'POST_STATUS',
+};
