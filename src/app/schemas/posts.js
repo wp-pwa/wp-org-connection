@@ -10,9 +10,9 @@ const term = new schema.Array({
   category: categories,
   post_tag: tags,
 }, input => input[0] && input[0].taxonomy);
-const post = new schema.Entity('posts', { _embedded: {
+export const post = new schema.Entity('posts', { _embedded: {
   author: [author],
   'wp:featuredmedia': [featuredMedia],
   'wp:term': term,
 } });
-export default new schema.Array(post);
+export const posts = new schema.Array(post);

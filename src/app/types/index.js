@@ -1,5 +1,5 @@
 import { flow, mapValues, mapKeys } from 'lodash/fp';
-import { wpTypesPlural } from '../constants';
+import { wpTypesPlural, wpTypesSingular } from '../constants';
 
 const paramsChanged = flow(
   mapValues(value => `connection/${value}_PARAMS_CHANGED`),
@@ -36,6 +36,21 @@ const anotherPageFailed = flow(
   mapKeys(key => `ANOTHER_${wpTypesPlural[key]}_PAGE_FAILED`),
 )(wpTypesPlural);
 
+const singleRequested = flow(
+  mapValues(value => `connection/${value}_REQUESTED`),
+  mapKeys(key => `${wpTypesSingular[key]}_REQUESTED`),
+)(wpTypesSingular);
+
+const singleSucceed = flow(
+  mapValues(value => `connection/${value}_SUCCEED`),
+  mapKeys(key => `${wpTypesSingular[key]}_SUCCEED`),
+)(wpTypesSingular);
+
+const singleFailed = flow(
+  mapValues(value => `connection/${value}_FAILED`),
+  mapKeys(key => `${wpTypesSingular[key]}_FAILED`),
+)(wpTypesSingular);
+
 module.exports = {
   ...paramsChanged,
   ...newListRequested,
@@ -44,4 +59,7 @@ module.exports = {
   ...anotherPageRequested,
   ...anotherPageSucceed,
   ...anotherPageFailed,
+  ...singleRequested,
+  ...singleSucceed,
+  ...singleFailed,
 };

@@ -23,3 +23,16 @@ export const wpTypesSingular = {
   postType: 'POST_TYPE',
   postStatus: 'POST_STATUS',
 };
+
+export const wpTypesSingularToPlural = {
+  post: 'posts',
+  page: 'pages',
+  category: 'categories',
+  tag: 'tags',
+  user: 'users',
+  media: 'media',
+  comment: 'comments',
+  taxonomy: 'taxonomies',
+  postType: 'postTypes',
+  postStatus: 'postStatuses',
+};

@@ -10,7 +10,7 @@ import * as types from '../types';
 import * as selectorCreators from '../selectorCreators';
 import * as schemas from '../schemas';
 import * as deps from '../deps';
-import { wpTypesPlural } from '../constants';
+import { wpTypesPlural, wpTypesSingular, wpTypesSingularToPlural } from '../constants';
 
 const getList = ({ connection, wpType, params, page }) => {
   let query = connection[wpType]().page(page);
@@ -19,6 +19,9 @@ const getList = ({ connection, wpType, params, page }) => {
   });
   return query;
 };
+
+const getSingle = ({ connection, wpType, id }) =>
+  connection[wpTypesSingularToPlural[wpType]]().id(id).embed();
 
 export function* initConnection() {
   const url = yield select(deps.selectorCreators.getSetting('generalSite', 'url'));
@@ -86,6 +89,22 @@ export const anotherPageRequested = (connection, wpType) =>
     }
   };
 
+export const singleRequested = (connection, wpType) => function* singleRequestedSaga({ id }) {
+  try {
+    const response = yield call(getSingle, { connection, wpType, id });
+    const { entities } = normalize(response, schemas[wpType]);
+    yield put(actions[`${wpType}Succeed`]({ entities, id, wpType }));
+  } catch (error) {
+    yield put(
+      actions[`${wpType}Failed`]({
+        error,
+        id,
+        endpoint: getSingle({ connection, wpType, id }).toString(),
+      }),
+    );
+  }
+};
+
 export default function* wpOrgConnectionSagas() {
   const connection = yield call(initConnection);
   yield put(actions.postsParamsChanged({ params: { _embed: true } }));
@@ -106,6 +125,12 @@ export default function* wpOrgConnectionSagas() {
           types[`ANOTHER_${wpTypesPlural[key]}_PAGE_REQUESTED`],
           anotherPageRequested(connection, key),
         ),
+    );
+  yield Object
+    .keys(wpTypesSingular)
+    .map(
+      key =>
+        takeLatest(types[`${wpTypesSingular[key]}_REQUESTED`], singleRequested(connection, key)),
     );
   yield fork(defaults);
 }

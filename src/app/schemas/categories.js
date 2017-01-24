@@ -1,4 +1,4 @@
 import { schema } from 'normalizr';
 
-const category = new schema.Entity('categories');
-export default new schema.Array(category);
+export const category = new schema.Entity('categories');
+export const categories = new schema.Array(category);

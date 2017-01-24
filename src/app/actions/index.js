@@ -1,7 +1,7 @@
 import { capitalize } from 'lodash';
 import { flow, mapValues, mapKeys } from 'lodash/fp';
 import * as types from '../types';
-import { wpTypesPlural, wpTypesPluralSingular } from '../constants';
+import { wpTypesPlural, wpTypesSingular } from '../constants';
 
 const paramsChange = flow(
   mapValues(value =>
@@ -83,6 +83,23 @@ const anotherPageFailed = flow(
   mapKeys(key => `another${capitalize(key)}PageFailed`),
 )(wpTypesPlural);
 
+const singleRequested = flow(
+  mapValues(value => ({ id }) => ({ type: types[`${value}_REQUESTED`], id })),
+  mapKeys(key => `${key}Requested`),
+)(wpTypesSingular);
+
+const singleSucceed = flow(
+  mapValues(value =>
+    ({ id, entities }) => ({ type: types[`${value}_SUCCEED`], id, entities })),
+  mapKeys(key => `${key}Succeed`),
+)(wpTypesSingular);
+
+const singleFailed = flow(
+  mapValues(value =>
+    ({ id, error, endpoint }) => ({ type: types[`${value}_FAILED`], id, error, endpoint })),
+  mapKeys(key => `${key}Failed`),
+)(wpTypesSingular);
+
 module.exports = {
   ...paramsChange,
   ...newListRequested,
@@ -91,4 +108,7 @@ module.exports = {
   ...anotherPageRequested,
   ...anotherPageSucceed,
   ...anotherPageFailed,
+  ...singleRequested,
+  ...singleSucceed,
+  ...singleFailed,
 };
