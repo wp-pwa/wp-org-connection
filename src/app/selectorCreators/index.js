@@ -50,7 +50,7 @@ const isListReady = name => state => {
   const wpType = getListWpType(name)(state);
   if (!wpType) return false;
   const result = getListResults(name)(state);
-  return result.reduce((prev, id) => prev && !!getById[wpType](id)(state), true);
+  return result.reduce((prev, id) => prev && !!getWpTypeById(wpType, id)(state), true);
 };
 
 const isThisReady = flow(
