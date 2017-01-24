@@ -1,6 +1,6 @@
 import { flow, mapValues, mapKeys } from 'lodash/fp';
 import { flatten, capitalize } from 'lodash';
-import { wpTypesSingular } from '../constants';
+import { wpTypesSingular, wpTypesSingularToPlural } from '../constants';
 
 const mapValuesWithKey = mapValues.convert({ cap: false });
 
@@ -51,6 +51,11 @@ const isListReady = name => state => {
   return result.reduce((prev, id) => prev && !!getById[wpType](id)(state), true);
 };
 
+const isThisReady = flow(
+  mapValuesWithKey(value => id => state => !!state.connection.entities[value][id]),
+  mapKeys(key => `is${capitalize(key)}Ready`),
+)(wpTypesSingularToPlural);
+
 module.exports = {
   getParams,
   getListResults,
@@ -60,4 +65,5 @@ module.exports = {
   isListInitialisated,
   isListReady,
   ...getById,
+  ...isThisReady,
 };
