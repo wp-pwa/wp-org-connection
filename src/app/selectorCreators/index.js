@@ -11,7 +11,8 @@ const getById = flow(
   mapKeys(key => `get${capitalize(key)}ById`),
 )(wpTypesSingular);
 
-const getWpTypeById = (wpType, id) => state => state.connection.entities[wpType][id];
+const getWpTypeById = (wpType, id) =>
+  state => state.connection.entities[wpType] && state.connection.entities[wpType][id];
 
 const getListKey = name =>
   state => state.connection.names[name] && state.connection.names[name].key;
