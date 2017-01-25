@@ -64,7 +64,7 @@ export const anotherPageRequested = (connection, wpType) =>
     try {
       const isListInitialisated = yield select(selectorCreators.isListInitialisated(name));
       if (!isListInitialisated) throw new Error(`List ${name} is not initialised yet.`);
-      const page = reqPage || (yield select(selectorCreators.getListNumberOfPages(name))) + 1;
+      const page = reqPage || (yield select(selectorCreators.getNumberOfPages(name))) + 1;
       const response = yield call(getList, { connection, wpType, params, page });
       const normalized = normalize(response, schemas[wpType]);
       const key = toString(params);
