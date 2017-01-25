@@ -11,9 +11,9 @@ const getParams = flow(
 )(wpTypesPlural);
 
 const getCurrentWpType = state =>
-  state.connection.names.currentId && state.connection.names.currentId.wpType;
+  state.connection.names.currentSingle && state.connection.names.currentSingle.wpType;
 const getCurrentId = state =>
-  state.connection.names.currentId && state.connection.names.currentId.id;
+  state.connection.names.currentSingle && state.connection.names.currentSingle.id;
 
 const getCurrentSingle = state => {
   const wpType = getCurrentWpType(state);
