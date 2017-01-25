@@ -50,10 +50,9 @@ export const resultsReducer = value => (state = {}, action) => {
 };
 
 export const names = (state = {}, { type, wpType, name, key, params, id }) => {
-  if (isNewListSucceed(type)) {
+  if (type === types.NAME_KEY_CHANGED) {
+    if (name === 'currentSingle') return { ...state, currentSingle: { wpType, id } };
     return { ...state, [name]: { wpType, key, params } };
-  } else if (isSingleSucceed(type)) {
-    return { ...state, currentSingle: { wpType, id } };
   }
   return state;
 };

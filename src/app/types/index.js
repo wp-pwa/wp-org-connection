@@ -11,6 +11,8 @@ const newListRequested = flow(
   mapKeys(key => `NEW_${wpTypesPlural[key]}_LIST_REQUESTED`),
 )(wpTypesPlural);
 
+const NAME_KEY_CHANGED = 'connection/NAME_KEY_CHANGED';
+
 const newListSucceed = flow(
   mapValues(value => `connection/NEW_${value}_LIST_SUCCEED`),
   mapKeys(key => `NEW_${wpTypesPlural[key]}_LIST_SUCCEED`),
@@ -54,6 +56,7 @@ const singleFailed = flow(
 module.exports = {
   ...paramsChanged,
   ...newListRequested,
+  NAME_KEY_CHANGED,
   ...newListSucceed,
   ...newListFailed,
   ...anotherPageRequested,
