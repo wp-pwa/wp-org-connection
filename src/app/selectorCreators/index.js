@@ -50,8 +50,8 @@ const isListInitialisated = name => state => typeof state.connection.names[name]
 const isListReady = name => state => {
   const wpType = getListWpType(name)(state);
   if (!wpType) return false;
-  const result = getListResults(name)(state);
-  return result.reduce((prev, id) => prev && !!getWpTypeById(wpType, id)(state), true);
+  const key = getListKey(name)(state)
+  return !!state.connection.results[wpType][key];
 };
 
 const isThisReady = flow(
