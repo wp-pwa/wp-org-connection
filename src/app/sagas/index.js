@@ -32,10 +32,11 @@ export const newListRequested = (connection, wpType) =>
   function* newListRequestedSaga({ params: newParams, name }) {
     const globalParams = yield select(selectorCreators.getParams(wpType));
     const params = { ...globalParams, ...newParams };
+    const key = toString(params);
+    yield put(actions.nameKeyChanged({ name, key, params, wpType }));
     try {
       const response = yield call(getList, { connection, wpType, params, page: 1 });
       const normalized = normalize(response, schemas[wpType]);
-      const key = toString(params);
       yield put(
         actions[`new${capitalize(wpType)}ListSucceed`]({
           ...normalized,
@@ -91,6 +92,14 @@ export const anotherPageRequested = (connection, wpType) =>
 
 export const singleRequested = (connection, wpType) =>
   function* singleRequestedSaga({ id, current }) {
+    if (current)
+      yield put(
+        actions.nameKeyChanged({
+          name: 'currentSingle',
+          wpType: wpTypesSingularToPlural[wpType],
+          id,
+        }),
+      );
     try {
       const response = yield call(getSingle, { connection, wpType, id });
       const { entities } = normalize(response, schemas[wpType]);
