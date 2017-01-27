@@ -49,6 +49,16 @@ export const resultsReducer = value => (state = {}, action) => {
   return state;
 };
 
+export const pagesReducer = value => (state = {}, action) => {
+  if (action.type === types[`NEW_${value}_LIST_SUCCEED`]) {
+    return {
+      ...state,
+      [action.key]: { items: action.items, pages: action.pages },
+    };
+  }
+  return state;
+};
+
 export const names = (state = {}, { type, wpType, name, key, params, id }) => {
   if (type === types.NAME_KEY_CHANGED) {
     if (name === 'currentSingle') return { ...state, currentSingle: { wpType, id } };
@@ -60,5 +70,6 @@ export const names = (state = {}, { type, wpType, name, key, params, id }) => {
 const entities = combineReducers(mapValues(wpTypesPlural, entitiesReducer));
 const params = combineReducers(mapValues(wpTypesPlural, paramsReducer));
 const results = combineReducers(mapValues(wpTypesPlural, resultsReducer));
+const pages = combineReducers(mapValues(wpTypesPlural, pagesReducer));
 
-export default () => combineReducers({ entities, params, results, names });
+export default () => combineReducers({ entities, params, results, names, pages });

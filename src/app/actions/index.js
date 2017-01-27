@@ -30,7 +30,7 @@ const nameKeyChanged = ({ name, key, wpType, params, id }) => ({
 
 const newListSucceed = flow(
   mapValues(value =>
-    ({ params, entities, result, key, wpType, name }) => ({
+    ({ params, entities, result, key, wpType, name, pages, items }) => ({
       type: types[`NEW_${value}_LIST_SUCCEED`],
       params,
       entities,
@@ -38,6 +38,8 @@ const newListSucceed = flow(
       key,
       wpType,
       name,
+      pages,
+      items,
     })),
   mapKeys(key => `new${capitalize(key)}ListSucceed`),
 )(wpTypesPlural);
