@@ -35,11 +35,25 @@ const getListResultsByPage = (name, page) => state => {
   return results[page - 1] || [];
 };
 
-const getNumberOfPages = name => state => {
+const getNumberOfRetrievedPages = name => state => {
   const key = getListKey(name)(state);
   const wpType = getListWpType(name)(state);
   const results = getResults(key, wpType)(state);
   return results.length;
+};
+
+const getNumberOfTotalPages = name => state => {
+  const wpType = getListWpType(name)(state);
+  if (!wpType) return 0;
+  const key = getListKey(name)(state);
+  return parseInt(state.connection.pages[wpType][key].pages, 10);
+};
+
+const getNumberOfTotalItems = name => state => {
+  const wpType = getListWpType(name)(state);
+  if (!wpType) return 0;
+  const key = getListKey(name)(state);
+  return parseInt(state.connection.pages[wpType][key].items, 10);
 };
 
 const getListParams = name =>
@@ -65,7 +79,9 @@ module.exports = {
   getParams,
   getListResults,
   getListResultsByPage,
-  getNumberOfPages,
+  getNumberOfRetrievedPages,
+  getNumberOfTotalPages,
+  getNumberOfTotalItems,
   getListParams,
   isListInitialisated,
   isListReady,

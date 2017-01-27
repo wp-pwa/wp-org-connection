@@ -1,3 +1,4 @@
+/* eslint-disable no-underscore-dangle */
 import Wpapi from 'wpapi';
 import { takeLatest } from 'redux-saga';
 import { normalize } from 'normalizr';
@@ -44,6 +45,8 @@ export const newListRequested = (connection, wpType) =>
           key,
           name,
           wpType,
+          items: response._paging.total,
+          pages: response._paging.totalPages,
         }),
       );
     } catch (error) {
@@ -64,7 +67,7 @@ export const anotherPageRequested = (connection, wpType) =>
     try {
       const isListInitialisated = yield select(selectorCreators.isListInitialisated(name));
       if (!isListInitialisated) throw new Error(`List ${name} is not initialised yet.`);
-      const page = reqPage || (yield select(selectorCreators.getNumberOfPages(name))) + 1;
+      const page = reqPage || (yield select(selectorCreators.getNumberOfRetrievedPages(name))) + 1;
       const response = yield call(getList, { connection, wpType, params, page });
       const normalized = normalize(response, schemas[wpType]);
       const key = toString(params);
