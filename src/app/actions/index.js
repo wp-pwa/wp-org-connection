@@ -125,6 +125,25 @@ const singleFailed = flow(
   mapKeys(key => `${key}Failed`),
 )(wpTypesSingular);
 
+const discoverUrlRequested = ({ firstFolder, lastFolder }) => ({
+  type: types.DISCOVER_URL_REQUESTED,
+  firstFolder,
+  lastFolder,
+});
+const discoverUrlSucceed = ({ postType, taxonomy, id }) => ({
+  type: types.DISCOVER_URL_SUCCEED,
+  postType,
+  taxonomy,
+  id,
+});
+const discoverUrlFailed = ({ error, firstFolder, lastFolder, endpoint }) => ({
+  type: types.DISCOVER_URL_FAILED,
+  error,
+  firstFolder,
+  lastFolder,
+  endpoint,
+});
+
 module.exports = {
   ...paramsChange,
   ...newListRequested,
@@ -137,4 +156,7 @@ module.exports = {
   ...singleRequested,
   ...singleSucceed,
   ...singleFailed,
+  discoverUrlRequested,
+  discoverUrlSucceed,
+  discoverUrlFailed,
 };

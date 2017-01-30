@@ -19,4 +19,13 @@ export const types = {
   get ROUTER_DID_CHANGE() {
     return dep('router', 'types', 'ROUTER_DID_CHANGE');
   },
+  get DEEP_URL_VISITED() {
+    return dep('router', 'types', 'DEEP_URL_VISITED');
+  },
+};
+
+export const libs = {
+  get push() {
+    return dep('router', 'libs', 'push');
+  },
 };

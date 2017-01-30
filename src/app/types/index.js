@@ -53,6 +53,10 @@ const singleFailed = flow(
   mapKeys(key => `${wpTypesSingular[key]}_FAILED`),
 )(wpTypesSingular);
 
+const DISCOVER_URL_REQUESTED = 'connection/DISCOVER_URL_REQUESTED';
+const DISCOVER_URL_SUCCEED = 'connection/DISCOVER_URL_SUCCEED';
+const DISCOVER_URL_FAILED = 'connection/DISCOVER_URL_FAILED';
+
 module.exports = {
   ...paramsChanged,
   ...newListRequested,
@@ -65,4 +69,7 @@ module.exports = {
   ...singleRequested,
   ...singleSucceed,
   ...singleFailed,
+  DISCOVER_URL_REQUESTED,
+  DISCOVER_URL_SUCCEED,
+  DISCOVER_URL_FAILED,
 };
