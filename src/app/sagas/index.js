@@ -14,6 +14,8 @@ import * as schemas from '../schemas';
 import * as deps from '../deps';
 import { wpTypesPlural, wpTypesSingular, wpTypesSingularToPlural } from '../constants';
 
+const CorsAnywhere = 'https://cors-anywhere.herokuapp.com/';
+
 const getList = ({ connection, wpType, params, page }) => {
   let query = connection[wpType]().page(page);
   forOwn(params, (value, key) => {
@@ -27,7 +29,8 @@ const getSingle = ({ connection, wpType, id }) =>
 
 export function* initConnection() {
   const url = yield select(deps.selectorCreators.getSetting('generalSite', 'url'));
-  return new Wpapi({ endpoint: `${url}?rest_route=` });
+  const preview = yield select(deps.selectors.getPreview);
+  return new Wpapi({ endpoint: `${preview ? CorsAnywhere : ''}${url}?rest_route=` });
 }
 
 export const newListRequested = (connection, wpType) =>

@@ -4,6 +4,9 @@ export const selectors = {
   get getURLQueries() {
     return dep('router', 'selectors', 'getURLQueries');
   },
+  get getPreview() {
+    return dep('router', 'selectors', 'getPreview');
+  },
 };
 
 export const selectorCreators = {
