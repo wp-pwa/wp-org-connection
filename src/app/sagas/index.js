@@ -6,6 +6,7 @@ import { forOwn, capitalize } from 'lodash';
 import { toString } from 'query-parse';
 import { call, select, put, fork } from 'redux-saga/effects';
 import defaults from './defaults';
+import deepUrls from './deepUrls';
 import * as actions from '../actions';
 import * as types from '../types';
 import * as selectorCreators from '../selectorCreators';
@@ -155,4 +156,5 @@ export default function* wpOrgConnectionSagas() {
         takeLatest(types[`${wpTypesSingular[key]}_REQUESTED`], singleRequested(connection, key)),
     );
   yield fork(defaults);
+  yield fork(deepUrls, connection)
 }
