@@ -67,9 +67,25 @@ export const names = (state = {}, { type, wpType, name, key, params, id }) => {
   return state;
 };
 
+export const loadingReducer = value => (state = {}, { type, name }) => {
+  switch (type) {
+    case types[`NEW_${value}_LIST_REQUESTED`]:
+    case types[`ANOTHER_${value}_PAGE_REQUESTED`]:
+      return { ...state, [name]: true };
+    case types[`NEW_${value}_LIST_SUCCEED`]:
+    case types[`NEW_${value}_LIST_FAILED`]:
+    case types[`ANOTHER_${value}_PAGE_SUCCEED`]:
+    case types[`ANOTHER_${value}_PAGE_FAILED`]:
+      return { ...state, [name]: false };
+    default:
+      return state;
+  }
+}
+
 const entities = combineReducers(mapValues(wpTypesPlural, entitiesReducer));
 const params = combineReducers(mapValues(wpTypesPlural, paramsReducer));
 const results = combineReducers(mapValues(wpTypesPlural, resultsReducer));
 const pages = combineReducers(mapValues(wpTypesPlural, pagesReducer));
+const loading = combineReducers(mapValues(wpTypesPlural, loadingReducer));
 
-export default () => combineReducers({ entities, params, results, names, pages });
+export default () => combineReducers({ entities, params, results, names, pages, loading });
