@@ -42,6 +42,7 @@ export const newListRequested = (connection, wpType) =>
     try {
       const response = yield call(getList, { connection, wpType, params, page: 1 });
       const normalized = normalize(response, schemas[wpType]);
+      response._paging = response._paging || { total: 0, totalPages: 0 };
       yield put(
         actions[`new${capitalize(wpType)}ListSucceed`]({
           ...normalized,
