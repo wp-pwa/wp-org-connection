@@ -1,6 +1,6 @@
 /* eslint-disable no-underscore-dangle */
 import Wpapi from 'wpapi';
-import { takeLatest } from 'redux-saga';
+import { takeEvery } from 'redux-saga';
 import { normalize } from 'normalizr';
 import { forOwn, capitalize } from 'lodash';
 import { toString } from 'query-parse';
@@ -138,7 +138,7 @@ export default function* wpOrgConnectionSagas() {
     .keys(wpTypesPlural)
     .map(
       key =>
-        takeLatest(
+        takeEvery(
           types[`NEW_${wpTypesPlural[key]}_LIST_REQUESTED`],
           newListRequested(connection, key),
         ),
@@ -147,7 +147,7 @@ export default function* wpOrgConnectionSagas() {
     .keys(wpTypesPlural)
     .map(
       key =>
-        takeLatest(
+        takeEvery(
           types[`ANOTHER_${wpTypesPlural[key]}_PAGE_REQUESTED`],
           anotherPageRequested(connection, key),
         ),
@@ -156,7 +156,7 @@ export default function* wpOrgConnectionSagas() {
     .keys(wpTypesSingular)
     .map(
       key =>
-        takeLatest(types[`${wpTypesSingular[key]}_REQUESTED`], singleRequested(connection, key)),
+        takeEvery(types[`${wpTypesSingular[key]}_REQUESTED`], singleRequested(connection, key)),
     );
   yield fork(defaults);
   yield fork(deepUrls, connection)

@@ -68,6 +68,12 @@ const isListReady = name => state => {
   return !!state.connection.results[wpType][key];
 };
 
+const isListLoading = name => state => {
+  const wpType = getListWpType(name)(state);
+  if (!wpType) return false;
+  return !!state.connection.loading[wpType][name];
+};
+
 const isThisReady = flow(
   mapValuesWithKey(value => id => state => !!state.connection.entities[value][id]),
   mapKeys(key => `is${capitalize(key)}Ready`),
@@ -85,6 +91,7 @@ module.exports = {
   getListParams,
   isListInitialisated,
   isListReady,
+  isListLoading,
   getWpTypeById,
   ...getById,
   isWpTypeReady,
