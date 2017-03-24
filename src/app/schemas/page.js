@@ -2,7 +2,7 @@ import { schema } from 'normalizr';
 
 const author = new schema.Entity('users');
 const featuredMedia = new schema.Entity('media');
-const page = new schema.Entity('page');
+const page = new schema.Entity('pages');
 const pages = new schema.Array(page);
 page.define({
   _embedded: {
