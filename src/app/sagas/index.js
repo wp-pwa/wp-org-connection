@@ -1,4 +1,4 @@
-/* eslint-disable no-underscore-dangle */
+/* eslint-disable no-underscore-dangle, no-undef */
 import Wpapi from 'wpapi';
 import { takeEvery } from 'redux-saga';
 import { normalize } from 'normalizr';
@@ -30,7 +30,9 @@ const getSingle = ({ connection, wpType, id }) =>
 export function* initConnection() {
   const url = yield select(deps.selectorCreators.getSetting('generalSite', 'url'));
   const preview = yield select(deps.selectors.getPreview);
-  return new Wpapi({ endpoint: `${preview ? CorsAnywhere : ''}${url}?rest_route=` });
+  return new Wpapi({
+    endpoint: `${preview || window.location.protocol === 'https:' ? CorsAnywhere : ''}${url}?rest_route=`,
+  });
 }
 
 export const newListRequested = (connection, wpType) =>
