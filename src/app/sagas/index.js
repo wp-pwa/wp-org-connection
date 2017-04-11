@@ -1,4 +1,4 @@
-/* eslint-disable no-underscore-dangle */
+/* eslint-disable no-underscore-dangle, no-undef */
 import Wpapi from 'wpapi';
 import { takeEvery } from 'redux-saga';
 import { normalize } from 'normalizr';
@@ -14,7 +14,7 @@ import * as schemas from '../schemas';
 import * as deps from '../deps';
 import { wpTypesPlural, wpTypesSingular, wpTypesSingularToPlural } from '../constants';
 
-const CorsAnywhere = 'https://cors.worona.io/';
+const CorsAnywhere = 'https://backend.worona.io/api/v1/cors/';
 
 const getList = ({ connection, wpType, params, page }) => {
   let query = connection[wpType]().page(page);
@@ -30,7 +30,9 @@ const getSingle = ({ connection, wpType, id }) =>
 export function* initConnection() {
   const url = yield select(deps.selectorCreators.getSetting('generalSite', 'url'));
   const preview = yield select(deps.selectors.getPreview);
-  return new Wpapi({ endpoint: `${preview ? CorsAnywhere : ''}${url}?rest_route=` });
+  return new Wpapi({
+    endpoint: `${preview || window.location.protocol === 'https:' ? CorsAnywhere : ''}${url}?rest_route=`,
+  });
 }
 
 export const newListRequested = (connection, wpType) =>
@@ -135,30 +137,18 @@ export const singleRequested = (connection, wpType) =>
 export default function* wpOrgConnectionSagas() {
   const connection = yield call(initConnection);
   yield put(actions.postsParamsChanged({ params: { _embed: true } }));
-  yield Object
-    .keys(wpTypesPlural)
-    .map(
-      key =>
-        takeEvery(
-          types[`NEW_${wpTypesPlural[key]}_LIST_REQUESTED`],
-          newListRequested(connection, key),
-        ),
-    );
-  yield Object
-    .keys(wpTypesPlural)
-    .map(
-      key =>
-        takeEvery(
-          types[`ANOTHER_${wpTypesPlural[key]}_PAGE_REQUESTED`],
-          anotherPageRequested(connection, key),
-        ),
-    );
-  yield Object
-    .keys(wpTypesSingular)
-    .map(
-      key =>
-        takeEvery(types[`${wpTypesSingular[key]}_REQUESTED`], singleRequested(connection, key)),
-    );
+  yield Object.keys(wpTypesPlural).map(key =>
+    takeEvery(
+      types[`NEW_${wpTypesPlural[key]}_LIST_REQUESTED`],
+      newListRequested(connection, key),
+    ));
+  yield Object.keys(wpTypesPlural).map(key =>
+    takeEvery(
+      types[`ANOTHER_${wpTypesPlural[key]}_PAGE_REQUESTED`],
+      anotherPageRequested(connection, key),
+    ));
+  yield Object.keys(wpTypesSingular).map(key =>
+    takeEvery(types[`${wpTypesSingular[key]}_REQUESTED`], singleRequested(connection, key)));
   yield fork(defaults);
-  yield fork(deepUrls, connection)
+  yield fork(deepUrls, connection);
 }
