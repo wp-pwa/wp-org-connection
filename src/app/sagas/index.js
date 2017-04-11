@@ -14,7 +14,7 @@ import * as schemas from '../schemas';
 import * as deps from '../deps';
 import { wpTypesPlural, wpTypesSingular, wpTypesSingularToPlural } from '../constants';
 
-const CorsAnywhere = 'https://cors.worona.io/';
+const CorsAnywhere = 'https://backend.worona.io/api/v1/cors/';
 
 const getList = ({ connection, wpType, params, page }) => {
   let query = connection[wpType]().page(page);
