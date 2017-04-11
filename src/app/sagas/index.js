@@ -137,30 +137,18 @@ export const singleRequested = (connection, wpType) =>
 export default function* wpOrgConnectionSagas() {
   const connection = yield call(initConnection);
   yield put(actions.postsParamsChanged({ params: { _embed: true } }));
-  yield Object
-    .keys(wpTypesPlural)
-    .map(
-      key =>
-        takeEvery(
-          types[`NEW_${wpTypesPlural[key]}_LIST_REQUESTED`],
-          newListRequested(connection, key),
-        ),
-    );
-  yield Object
-    .keys(wpTypesPlural)
-    .map(
-      key =>
-        takeEvery(
-          types[`ANOTHER_${wpTypesPlural[key]}_PAGE_REQUESTED`],
-          anotherPageRequested(connection, key),
-        ),
-    );
-  yield Object
-    .keys(wpTypesSingular)
-    .map(
-      key =>
-        takeEvery(types[`${wpTypesSingular[key]}_REQUESTED`], singleRequested(connection, key)),
-    );
+  yield Object.keys(wpTypesPlural).map(key =>
+    takeEvery(
+      types[`NEW_${wpTypesPlural[key]}_LIST_REQUESTED`],
+      newListRequested(connection, key),
+    ));
+  yield Object.keys(wpTypesPlural).map(key =>
+    takeEvery(
+      types[`ANOTHER_${wpTypesPlural[key]}_PAGE_REQUESTED`],
+      anotherPageRequested(connection, key),
+    ));
+  yield Object.keys(wpTypesSingular).map(key =>
+    takeEvery(types[`${wpTypesSingular[key]}_REQUESTED`], singleRequested(connection, key)));
   yield fork(defaults);
-  yield fork(deepUrls, connection)
+  yield fork(deepUrls, connection);
 }
