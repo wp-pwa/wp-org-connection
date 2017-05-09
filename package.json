@@ -1,6 +1,6 @@
 {
   "name": "wp-org-connection-app-extension-worona",
-  "version": "1.3.3",
+  "version": "1.3.4",
   "description": "Connect to any self hosted WP using the WP-API",
   "scripts": {
     "start": "node node_modules/worona-packages/dist/start.js"
