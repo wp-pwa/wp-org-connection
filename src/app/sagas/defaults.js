@@ -6,7 +6,7 @@ import * as deps from '../deps';
 
 export function* router() {
   const query = yield select(deps.selectors.getURLQueries);
-  const { p, cat, tag, author, y, m, page_id, s, attachment_id } = query;
+  const { p, cat, tag, author, page_id, s, attachment_id } = query;
   if (p) yield put(actions.postRequested({ id: p, current: true }));
   else if (cat) yield put(actions.newPostsListRequested({ params: { categories: cat } }));
   else if (tag) yield put(actions.newPostsListRequested({ params: { tags: tag } }));
