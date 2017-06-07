@@ -1,5 +1,6 @@
 import { post, posts } from './posts';
 import { category, categories } from './categories';
+import { author, authors } from './authors';
 import page from './page';
 
 export {
@@ -7,5 +8,7 @@ export {
   posts,
   category,
   categories,
+  author,
+  authors,
   page,
 };
