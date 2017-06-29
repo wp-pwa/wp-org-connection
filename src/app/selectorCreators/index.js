@@ -1,15 +1,15 @@
 import { flow, mapValues, mapKeys } from 'lodash/fp';
 import { flatten, capitalize } from 'lodash';
-import { wpTypesSingular, wpTypesSingularToPlural } from '../constants';
+import { wpTypesSingularToPlural } from '../constants';
 
 const mapValuesWithKey = mapValues.convert({ cap: false });
 
 const getParams = type => state => state.connection.params[type];
 
 const getById = flow(
-  mapValuesWithKey((value, key) => id => state => state.connection.entities[key][id]),
+  mapValuesWithKey(value => id => state => state.connection.entities[value][id]),
   mapKeys(key => `get${capitalize(key)}ById`),
-)(wpTypesSingular);
+)(wpTypesSingularToPlural);
 
 const getWpTypeById = (wpType, id) =>
   state => state.connection.entities[wpType] && state.connection.entities[wpType][id];
