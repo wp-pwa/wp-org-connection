@@ -1,10 +1,9 @@
 /* eslint-disable no-underscore-dangle, no-undef */
 import Wpapi from 'wpapi';
-import { takeEvery } from 'redux-saga';
 import { normalize } from 'normalizr';
 import { forOwn, capitalize } from 'lodash';
 import { toString } from 'query-parse';
-import { call, select, put } from 'redux-saga/effects';
+import { call, select, put, takeEvery, all } from 'redux-saga/effects';
 import { dep } from 'worona-deps';
 import * as actions from '../actions';
 import * as types from '../types';
@@ -134,16 +133,16 @@ export const singleRequested = (connection, wpType) =>
 export default function* wpApiWatchersSaga() {
   const connection = yield call(initConnection);
   yield put(actions.postsParamsChanged({ params: { _embed: true } }));
-  yield Object.keys(wpTypesPlural).map(key =>
+  yield all(Object.keys(wpTypesPlural).map(key =>
     takeEvery(types[`NEW_${wpTypesPlural[key]}_LIST_REQUESTED`], newListRequested(connection, key))
-  );
-  yield Object.keys(wpTypesPlural).map(key =>
+  ));
+  yield all(Object.keys(wpTypesPlural).map(key =>
     takeEvery(
       types[`ANOTHER_${wpTypesPlural[key]}_PAGE_REQUESTED`],
       anotherPageRequested(connection, key)
     )
-  );
-  yield Object.keys(wpTypesSingular).map(key =>
+  ));
+  yield all(Object.keys(wpTypesSingular).map(key =>
     takeEvery(types[`${wpTypesSingular[key]}_REQUESTED`], singleRequested(connection, key))
-  );
+  ));
 }
