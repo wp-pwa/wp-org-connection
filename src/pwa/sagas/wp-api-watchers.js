@@ -4,17 +4,22 @@ import { takeEvery } from 'redux-saga';
 import { normalize } from 'normalizr';
 import { forOwn, capitalize } from 'lodash';
 import { toString } from 'query-parse';
-import { call, select, put, fork } from 'redux-saga/effects';
-import defaults from './defaults';
-import deepUrls from './deepUrls';
+import { call, select, put } from 'redux-saga/effects';
+import { dep } from 'worona-deps';
 import * as actions from '../actions';
 import * as types from '../types';
 import * as selectorCreators from '../selectorCreators';
 import * as schemas from '../schemas';
-import * as deps from '../deps';
 import { wpTypesPlural, wpTypesSingular, wpTypesSingularToPlural } from '../constants';
 
 const CorsAnywhere = 'https://cors.worona.io/';
+
+export function* initConnection() {
+  const isCors = yield call(dep('router', 'sagaHelpers', 'isCors'));
+  const getSetting = dep('settings', 'selectorCreators', 'getSetting');
+  const url = yield select(getSetting('generalSite', 'url'));
+  return new Wpapi({ endpoint: `${isCors ? CorsAnywhere : ''}${url}?rest_route=` });
+}
 
 const getList = ({ connection, wpType, params, page }) => {
   let query = connection[wpType]().page(page);
@@ -26,14 +31,6 @@ const getList = ({ connection, wpType, params, page }) => {
 
 const getSingle = ({ connection, wpType, id }) =>
   connection[wpTypesSingularToPlural[wpType]]().id(id).embed();
-
-export function* initConnection() {
-  const url = yield select(deps.selectorCreators.getSetting('generalSite', 'url'));
-  const preview = yield select(deps.selectors.getPreview);
-  return new Wpapi({
-    endpoint: `${preview || window.location.protocol === 'https:' ? CorsAnywhere : ''}${url}?rest_route=`,
-  });
-}
 
 export const newListRequested = (connection, wpType) =>
   function* newListRequestedSaga({ params: newParams, name }) {
@@ -54,7 +51,7 @@ export const newListRequested = (connection, wpType) =>
           wpType,
           items: response._paging.total,
           pages: response._paging.totalPages,
-        }),
+        })
       );
     } catch (error) {
       yield put(
@@ -63,7 +60,7 @@ export const newListRequested = (connection, wpType) =>
           params,
           name,
           endpoint: getList({ connection, wpType, params, page: 1 }).toString(),
-        }),
+        })
       );
     }
   };
@@ -86,7 +83,7 @@ export const anotherPageRequested = (connection, wpType) =>
           page,
           name,
           wpType,
-        }),
+        })
       );
     } catch (error) {
       yield put(
@@ -95,7 +92,7 @@ export const anotherPageRequested = (connection, wpType) =>
           params,
           name,
           endpoint: getList({ connection, wpType, params, page: 1 }).toString(),
-        }),
+        })
       );
     }
   };
@@ -108,7 +105,7 @@ export const singleRequested = (connection, wpType) =>
           name: 'currentSingle',
           wpType: wpTypesSingularToPlural[wpType],
           id,
-        }),
+        })
       );
     try {
       const response = yield call(getSingle, { connection, wpType, id });
@@ -119,7 +116,7 @@ export const singleRequested = (connection, wpType) =>
           id,
           wpType: wpTypesSingularToPlural[wpType],
           current,
-        }),
+        })
       );
     } catch (error) {
       yield put(
@@ -129,26 +126,24 @@ export const singleRequested = (connection, wpType) =>
           current,
           wpType: wpTypesSingularToPlural[wpType],
           endpoint: getSingle({ connection, wpType, id }).toString(),
-        }),
+        })
       );
     }
   };
 
-export default function* wpOrgConnectionSagas() {
+export default function* wpApiWatchersSaga() {
   const connection = yield call(initConnection);
   yield put(actions.postsParamsChanged({ params: { _embed: true } }));
   yield Object.keys(wpTypesPlural).map(key =>
-    takeEvery(
-      types[`NEW_${wpTypesPlural[key]}_LIST_REQUESTED`],
-      newListRequested(connection, key),
-    ));
+    takeEvery(types[`NEW_${wpTypesPlural[key]}_LIST_REQUESTED`], newListRequested(connection, key))
+  );
   yield Object.keys(wpTypesPlural).map(key =>
     takeEvery(
       types[`ANOTHER_${wpTypesPlural[key]}_PAGE_REQUESTED`],
-      anotherPageRequested(connection, key),
-    ));
+      anotherPageRequested(connection, key)
+    )
+  );
   yield Object.keys(wpTypesSingular).map(key =>
-    takeEvery(types[`${wpTypesSingular[key]}_REQUESTED`], singleRequested(connection, key)));
-  yield fork(defaults);
-  yield fork(deepUrls, connection);
+    takeEvery(types[`${wpTypesSingular[key]}_REQUESTED`], singleRequested(connection, key))
+  );
 }
