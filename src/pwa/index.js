@@ -3,8 +3,8 @@ import * as actions from './actions';
 import * as types from './types';
 import sagas from './sagas/client';
 import reducers from './reducers';
-// import selectors from './selectors';
-// import selectorCreators from './selectorCreators';
+import selectors from './selectors';
+import selectorCreators from './selectorCreators';
 
 const WpOrgConnection = () => null;
 
@@ -13,6 +13,6 @@ export default compose(
   setStatic('types', types),
   setStatic('sagas', sagas),
   setStatic('reducers', reducers),
-  // setStatic('selectors', selectors),
-  // setStatic('selectorCreators', selectorCreators),
+  setStatic('selectors', selectors),
+  setStatic('selectorCreators', selectorCreators),
 )(WpOrgConnection);
