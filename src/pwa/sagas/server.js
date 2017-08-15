@@ -1,13 +1,16 @@
-import { fork, spawn, join, take } from 'redux-saga/effects';
+import { fork, spawn, join, take, put } from 'redux-saga/effects';
 import { dep } from 'worona-deps';
 import wpApiWatchers from './wp-api-watchers';
 import { requestCurrentContent, waitForCurrentContent } from './current';
+import * as actions from '../actions';
 
 export default function* wpOrgConnectionServerSaga() {
-  // Wait until the INIT_SERVER_SAGAS action is dispatched. This gives other extensions time to
-  // populate the store with configurations, like additional params.
-  const INIT_SERVER_SAGAS = dep('build', 'types', 'INIT_SERVER_SAGAS');
-  yield take(INIT_SERVER_SAGAS);
+  const SERVER_SAGAS_INITIALIZED = dep('build', 'types', 'SERVER_SAGAS_INITIALIZED');
+  // Configure the wpapi params.
+  yield put(actions.postsParamsChanged({ params: { _embed: true } }));
+  // Wait until the SERVER_SAGAS_INITIALIZED action is dispatched. This gives other extensions time
+  // to populate the store with configurations, like additional params.
+  yield take(SERVER_SAGAS_INITIALIZED);
   // Spawn the wp api watchers. We do not fork, so this doesn't block the saga.
   yield spawn(wpApiWatchers);
   // We create a task to wait for the succeed (or fail) of the action we will dispatch later.

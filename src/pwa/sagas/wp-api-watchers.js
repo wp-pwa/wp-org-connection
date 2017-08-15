@@ -132,7 +132,6 @@ export const singleRequested = (connection, wpType) =>
 
 export default function* wpApiWatchersSaga() {
   const connection = yield call(initConnection);
-  yield put(actions.postsParamsChanged({ params: { _embed: true } }));
   yield all(Object.keys(wpTypesPlural).map(key =>
     takeEvery(types[`NEW_${wpTypesPlural[key]}_LIST_REQUESTED`], newListRequested(connection, key))
   ));
