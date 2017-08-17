@@ -10,16 +10,16 @@ export function* requestCurrentContent() {
 
   // Dispatch the proper action.
   switch (type) {
-    case 'p':
+    case 'post':
       yield put(actions.postRequested({ id, current: true }));
       break;
-    case 'page_id':
+    case 'page':
       yield put(actions.pageRequested({ id, current: true }));
       break;
-    case 'attachment_id':
+    case 'media':
       yield put(actions.attachmentRequested({ id, current: true }));
       break;
-    case 'cat':
+    case 'category':
       yield put(actions.newPostsListRequested({ params: { categories: id } }));
       break;
     case 'tag':
@@ -28,7 +28,7 @@ export function* requestCurrentContent() {
     case 'author':
       yield put(actions.newPostsListRequested({ params: { author: id } }));
       break;
-    case 's':
+    case 'search':
       yield put(actions.newPostsListRequested({ params: { search: id } }));
       break;
     default:
@@ -43,19 +43,19 @@ export function* waitForCurrentContent() {
 
   // Wait for the proper action.
   switch (currentType) {
-    case 'p':
+    case 'post':
       yield take(
         ({ type, id }) =>
           (type === types.POST_SUCCEED || type === types.POST_FAILED) && currentId === id
       );
       break;
-    case 'page_id':
+    case 'page':
       yield take(
         ({ type, id }) =>
           (type === types.PAGE_SUCCEED || type === types.PAGE_FAILED) && currentId === id
       );
       break;
-    case 'attachment_id':
+    case 'media':
       yield take(
         ({ type, id }) =>
           (type === types.ATTACHMENT_SUCCEED || type === types.ATTACHMENT_FAILED) &&
