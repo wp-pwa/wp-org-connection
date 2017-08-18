@@ -6,15 +6,13 @@ import { dep } from 'worona-deps';
 import { parse } from 'url';
 import * as selectors from '../../selectors';
 
-const Link = ({ query, id = 0, children, siteId, as }) =>
-  <NextLink href={{ pathname: '/', query: { [query]: id, siteId } }} as={as} passHref>
+const Link = ({ href, children, as }) =>
+  <NextLink href={href} as={as} passHref>
     {children}
   </NextLink>;
 Link.propTypes = {
-  type: PropTypes.string.isRequired,
-  id: PropTypes.number,
+  href: PropTypes.shape().isRequired,
   children: PropTypes.node.isRequired,
-  siteId: PropTypes.node.isRequired,
   as: PropTypes.string.isRequired,
 };
 
@@ -37,11 +35,13 @@ const mapStateToProps = (state, { type, id }) => {
     else link = `/?${entities[type].query}=${id}`;
   } else if (type === 'search') link = `/?s=${id}`;
 
-  return {
-    siteId: dep('settings', 'selectors', 'getSiteId')(state),
+  const siteId = dep('settings', 'selectors', 'getSiteId')(state);
+  const props = {
     as: parse(link).path,
-    query: entities[type] && entities[type].query,
+    href: { pathname: '/', query: { siteId } },
   };
+  if (type !== 'latest') props.href.query = { [entities[type].query]: id, siteId };
+  return props;
 };
 
 export default connect(mapStateToProps)(Link);
