@@ -8,18 +8,18 @@ const getParams = type => state => state.connection.params[type];
 
 const getById = flow(
   mapValuesWithKey((value, key) => id => state => state.connection.entities[key][id]),
-  mapKeys(key => `get${capitalize(key)}ById`),
+  mapKeys(key => `get${capitalize(key)}ById`)
 )(wpTypesSingular);
 
-const getWpTypeById = (wpType, id) =>
-  state => state.connection.entities[wpType] && state.connection.entities[wpType][id];
+const getWpTypeById = (wpType, id) => state =>
+  state.connection.entities[wpType] && state.connection.entities[wpType][id];
 
-const getListKey = name =>
-  state => state.connection.names[name] && state.connection.names[name].key;
-const getListWpType = name =>
-  state => state.connection.names[name] && state.connection.names[name].wpType;
-const getResults = (key, wpType) =>
-  state => state.connection.results[wpType] && state.connection.results[wpType][key] || [];
+const getListKey = name => state =>
+  state.connection.names[name] && state.connection.names[name].key;
+const getListWpType = name => state =>
+  state.connection.names[name] && state.connection.names[name].wpType;
+const getResults = (key, wpType) => state =>
+  (state.connection.results[wpType] && state.connection.results[wpType][key]) || [];
 
 const getListResults = name => state => {
   const key = getListKey(name)(state);
@@ -56,15 +56,15 @@ const getNumberOfTotalItems = name => state => {
   return parseInt(state.connection.pages[wpType][key].items, 10);
 };
 
-const getListParams = name =>
-  state => state.connection.names[name] && state.connection.names[name].params || {};
+const getListParams = name => state =>
+  (state.connection.names[name] && state.connection.names[name].params) || {};
 
 const isListInitialisated = name => state => typeof state.connection.names[name] !== 'undefined';
 
 const isListReady = name => state => {
   const wpType = getListWpType(name)(state);
   if (!wpType) return false;
-  const key = getListKey(name)(state)
+  const key = getListKey(name)(state);
   return !!state.connection.results[wpType][key];
 };
 
@@ -76,10 +76,22 @@ const isListLoading = name => state => {
 
 const isThisReady = flow(
   mapValuesWithKey(value => id => state => !!state.connection.entities[value][id]),
-  mapKeys(key => `is${capitalize(key)}Ready`),
+  mapKeys(key => `is${capitalize(key)}Ready`)
 )(wpTypesSingularToPlural);
 
 const isWpTypeReady = (wpType, id) => state => !!state.connection.entities[wpType][id];
+
+const entitiesByType = {
+  post: 'getPostsEntities',
+  page: 'getPagesEntities',
+  category: 'getCategoriesEntities',
+  tag: 'getTagsEntities',
+  author: 'getUsersEntities',
+  media: 'getAttachmentsEntities',
+};
+
+const getEntitiesByType = wpType => state =>
+  state.connection.entities[entitiesByType[wpType]] || null;
 
 module.exports = {
   getParams,
@@ -96,4 +108,5 @@ module.exports = {
   ...getById,
   isWpTypeReady,
   ...isThisReady,
+  getEntitiesByType,
 };
