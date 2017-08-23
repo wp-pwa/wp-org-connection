@@ -6,42 +6,60 @@ import { dep } from 'worona-deps';
 import { parse } from 'url';
 import * as selectors from '../../selectors';
 
-const Link = ({ href, children, as }) =>
-  <NextLink href={href} as={as} passHref>
-    {children}
-  </NextLink>;
-Link.propTypes = {
-  href: PropTypes.shape().isRequired,
-  children: PropTypes.node.isRequired,
-  as: PropTypes.string.isRequired,
-};
-
-const mapStateToProps = (state, { type, id }) => {
-  const entities = {
-    post: { selector: 'getPostsEntities', query: 'p' },
-    page: { selector: 'getPagesEntities', query: 'page_id' },
-    category: { selector: 'getCategoriesEntities', query: 'cat' },
-    tag: { selector: 'getTagsEntities', query: 'tag' },
-    author: { selector: 'getUsersEntities', query: 'author' },
-    media: { selector: 'getAttachmentsEntities', query: 'media' },
-    search: { query: 's' },
+const Link = ({ siteId, entity, type, id, children }) => {
+  const queries = {
+    post: 'p',
+    page: 'page_id',
+    category: 'cat',
+    tag: 'tag',
+    author: 'author',
+    media: 'media',
+    search: 's',
   };
 
   let link = '/';
-  if (entities[type]) {
-    const selector = entities[type].selector;
-    const entity = selectors[selector](state)[id];
-    if (entity && entity.link) link = entity.link;
-    else link = `/?${entities[type].query}=${id}`;
-  } else if (type === 'search') link = `/?s=${id}`;
 
-  const siteId = dep('settings', 'selectors', 'getSiteId')(state);
-  const props = {
-    as: parse(link).path,
-    href: { pathname: '/', query: { siteId } },
+  if (entity && entity.link) link = entity.link;
+  else if (queries[type]) link = `/?${queries[type]}=${id}`;
+
+  let query = {
+    siteId,
   };
-  if (type !== 'latest') props.href.query = { [entities[type].query]: id, siteId };
-  return props;
+
+  if (queries[type]) query = { ...query, [queries[type]]: id };
+
+  const href = { pathname: '/', query };
+  const as = parse(link).path;
+
+  return (
+    <NextLink href={href} as={as} passHref>
+      {children}
+    </NextLink>
+  );
+};
+
+Link.propTypes = {
+  id: PropTypes.number,
+  type: PropTypes.string,
+  children: PropTypes.node.isRequired,
+  entity: PropTypes.shape({}),
+  siteId: PropTypes.string.isRequired,
+};
+
+const mapStateToProps = (state, { type, id }) => {
+  const methods = {
+    post: 'getPostsEntities',
+    page: 'getPagesEntities',
+    category: 'getCategoriesEntities',
+    tags: 'getTagsEntities',
+    author: 'getUsersEntities',
+    media: 'getMediaEntities',
+  };
+
+  return {
+    entity: methods[type] ? selectors[methods[type]](state)[id] : null,
+    siteId: dep('settings', 'selectors', 'getSiteId')(state),
+  };
 };
 
 export default connect(mapStateToProps)(Link);
