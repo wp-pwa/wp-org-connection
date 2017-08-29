@@ -51,7 +51,7 @@ const mapStateToProps = (state, { type, id }) => {
     post: 'getPostsEntities',
     page: 'getPagesEntities',
     category: 'getCategoriesEntities',
-    tags: 'getTagsEntities',
+    tag: 'getTagsEntities',
     author: 'getUsersEntities',
     media: 'getMediaEntities',
   };
