@@ -1,5 +1,5 @@
-import { flow, mapValues, mapKeys } from 'lodash/fp';
-import { flatten, capitalize } from 'lodash';
+import { flow, mapValues, mapKeys, uniq, flatten } from 'lodash/fp';
+import { capitalize, memoize } from 'lodash';
 import { wpTypesSingularToPlural } from '../constants';
 
 const mapValuesWithKey = mapValues.convert({ cap: false });
@@ -21,11 +21,13 @@ const getListWpType = name => state =>
 const getResults = (key, wpType) => state =>
   (state.connection.results[wpType] && state.connection.results[wpType][key]) || [];
 
+const listResults = memoize(flow(flatten, uniq));
+
 const getListResults = name => state => {
   const key = getListKey(name)(state);
   const wpType = getListWpType(name)(state);
   const results = getResults(key, wpType)(state);
-  return flatten(results);
+  return listResults(results);
 };
 
 const getListResultsByPage = (name, page) => state => {
