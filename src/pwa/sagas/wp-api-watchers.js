@@ -2,7 +2,7 @@
 import Wpapi from 'wpapi';
 import { normalize } from 'normalizr';
 import { forOwn, capitalize } from 'lodash';
-import { toString } from 'query-parse';
+import { toString } from '@worona/query-parse';
 import { call, select, put, takeEvery, all } from 'redux-saga/effects';
 import { dep } from 'worona-deps';
 import * as actions from '../actions';
