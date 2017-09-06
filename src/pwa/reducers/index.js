@@ -41,7 +41,7 @@ export const resultsReducer = value => (state = {}, action) => {
     action.type === types[`NEW_${value}_LIST_SUCCEED`] ||
       action.type === types[`ANOTHER_${value}_PAGE_SUCCEED`]
   ) {
-    const result = state[action.key] || [];
+    const result = state[action.key] ? [...state[action.key]] : [];
     const page = action.page || 1;
     result[page - 1] = action.result;
     return { ...state, [action.key]: result };
