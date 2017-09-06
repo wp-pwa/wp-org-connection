@@ -62,6 +62,7 @@ export function* waitForCurrentContent() {
           currentId === id
       );
       break;
+    // The rest of the content are lists.
     default:
       yield take(
         ({ type, name }) =>
