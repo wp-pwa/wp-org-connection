@@ -20,7 +20,7 @@
   "author": "luis@worona.org",
   "license": "MIT",
   "dependencies": {
-    "@worona/query-parse": "^1.0.1",
+    "query-parse": "^1.0.0",
     "url": "^0.11.0",
     "wpapi": "^1.0.1"
   },

@@ -3,7 +3,7 @@ import Wpapi from 'wpapi';
 import { takeEvery } from 'redux-saga';
 import { normalize } from 'normalizr';
 import { forOwn, capitalize } from 'lodash';
-import { toString } from '@worona/query-parse';
+import { toString } from 'query-parse';
 import { call, select, put, fork } from 'redux-saga/effects';
 import defaults from './defaults';
 import deepUrls from './deepUrls';
