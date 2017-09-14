@@ -1,50 +1,85 @@
-import React from 'react';
+/* global window */
+import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import NextLink from '@worona/next/link';
+import Router from '@worona/next/router';
+import NProgress from 'nprogress';
 import { connect } from 'react-redux';
 import { dep } from 'worona-deps';
 import { parse } from 'url';
 import * as selectors from '../../selectors';
 
-const Link = ({ siteId, entity, type, id, children }) => {
-  const queries = {
-    post: 'p',
-    page: 'page_id',
-    category: 'cat',
-    tag: 'tag',
-    author: 'author',
-    media: 'media',
-    search: 's',
+class Link extends Component {
+  static propTypes = {
+    id: PropTypes.number,
+    type: PropTypes.string.isRequired,
+    children: PropTypes.node.isRequired,
+    entity: PropTypes.oneOfType([PropTypes.shape({}), PropTypes.null]).isRequired,
+    siteId: PropTypes.string.isRequired,
   };
 
-  let link = '/';
+  static defaultProps = {
+    id: 0,
+  }
 
-  if (entity && entity.link) link = entity.link;
-  else if (queries[type]) link = `/?${queries[type]}=${id}`;
+  constructor(props, ...rest) {
+    super(props, ...rest);
+    this.linkClicked = this.linkClicked.bind(this);
+    this.formatUrl = this.formatUrl.bind(this);
+    this.queries = {
+      post: 'p',
+      page: 'page_id',
+      category: 'cat',
+      tag: 'tag',
+      author: 'author',
+      media: 'media',
+      search: 's',
+    };
+    this.href = '/';
+    this.as = '/';
+    this.formatUrl();
+  }
 
-  let query = {
-    siteId,
-  };
+  componentWillReceiveProps() {
+    this.formatUrl();
+  }
 
-  if (queries[type]) query = { ...query, [queries[type]]: id };
+  formatUrl() {
+    let link = '/';
 
-  const href = { pathname: '/', query };
-  const as = parse(link).path;
+    if (this.props.entity && this.props.entity.link) link = this.props.entity.link;
+    else if (this.queries[this.props.type])
+      link = `/?${this.queries[this.props.type]}=${this.props.id}`;
 
-  return (
-    <NextLink href={href} as={as} passHref>
-      {children}
-    </NextLink>
-  );
-};
+    let query = { siteId: this.props.siteId };
 
-Link.propTypes = {
-  id: PropTypes.number,
-  type: PropTypes.string,
-  children: PropTypes.node.isRequired,
-  entity: PropTypes.shape({}),
-  siteId: PropTypes.string.isRequired,
-};
+    if (this.queries[this.props.type])
+      query = { ...query, [this.queries[this.props.type]]: this.props.id };
+
+    this.href = { pathname: '/', query };
+    this.as = parse(link).path;
+  }
+
+
+  linkClicked(e) {
+    if (
+      e.currentTarget.nodeName === 'A' &&
+      (e.metaKey || e.ctrlKey || e.shiftKey || (e.nativeEvent && e.nativeEvent.which === 2))
+    ) {
+      // ignore click for new tab / new window behavior
+      return;
+    }
+
+    e.preventDefault();
+    NProgress.start();
+    setTimeout(() => Router.push(this.href, this.as), 100);
+  }
+  render() {
+    return React.cloneElement(this.props.children, {
+      onClick: this.linkClicked,
+      href: this.as,
+    });
+  }
+}
 
 const mapStateToProps = (state, { type, id }) => {
   const methods = {
