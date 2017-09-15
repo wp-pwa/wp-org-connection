@@ -13,12 +13,13 @@ class Link extends Component {
     id: PropTypes.number,
     type: PropTypes.string.isRequired,
     children: PropTypes.node.isRequired,
-    entity: PropTypes.oneOfType([PropTypes.shape({}), PropTypes.null]).isRequired,
+    entity: PropTypes.oneOfType([PropTypes.shape({}), PropTypes.bool]),
     siteId: PropTypes.string.isRequired,
   };
 
   static defaultProps = {
     id: 0,
+    entity: false,
   }
 
   constructor(props, ...rest) {
@@ -92,7 +93,7 @@ const mapStateToProps = (state, { type, id }) => {
   };
 
   return {
-    entity: methods[type] ? selectors[methods[type]](state)[id] : null,
+    entity: methods[type] ? selectors[methods[type]](state)[id] : false,
     siteId: dep('settings', 'selectors', 'getSiteId')(state),
   };
 };
