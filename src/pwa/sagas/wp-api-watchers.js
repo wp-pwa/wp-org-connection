@@ -29,7 +29,9 @@ const getList = ({ connection, wpType, params, page }) => {
 };
 
 const getSingle = ({ connection, wpType, id }) =>
-  connection[wpTypesSingularToPlural[wpType]]().id(id).embed();
+  connection[wpTypesSingularToPlural[wpType]]()
+    .id(id)
+    .embed();
 
 export const newListRequested = (connection, wpType) =>
   function* newListRequestedSaga({ params: newParams, name }) {
@@ -50,7 +52,7 @@ export const newListRequested = (connection, wpType) =>
           wpType,
           items: response._paging.total,
           pages: response._paging.totalPages,
-        })
+        }),
       );
     } catch (error) {
       yield put(
@@ -59,7 +61,7 @@ export const newListRequested = (connection, wpType) =>
           params,
           name,
           endpoint: getList({ connection, wpType, params, page: 1 }).toString(),
-        })
+        }),
       );
     }
   };
@@ -82,7 +84,7 @@ export const anotherPageRequested = (connection, wpType) =>
           page,
           name,
           wpType,
-        })
+        }),
       );
     } catch (error) {
       yield put(
@@ -91,7 +93,7 @@ export const anotherPageRequested = (connection, wpType) =>
           params,
           name,
           endpoint: getList({ connection, wpType, params, page: 1 }).toString(),
-        })
+        }),
       );
     }
   };
@@ -104,7 +106,7 @@ export const singleRequested = (connection, wpType) =>
           name: 'currentSingle',
           wpType: wpTypesSingularToPlural[wpType],
           id,
-        })
+        }),
       );
     try {
       const response = yield call(getSingle, { connection, wpType, id });
@@ -115,7 +117,7 @@ export const singleRequested = (connection, wpType) =>
           id,
           wpType: wpTypesSingularToPlural[wpType],
           current,
-        })
+        }),
       );
     } catch (error) {
       yield put(
@@ -125,23 +127,48 @@ export const singleRequested = (connection, wpType) =>
           current,
           wpType: wpTypesSingularToPlural[wpType],
           endpoint: getSingle({ connection, wpType, id }).toString(),
-        })
+        }),
       );
+    }
+  };
+
+export const siteInfoRequested = connection =>
+  function* siteInfoRequestedSaga() {
+    try {
+      const data = yield call([connection, 'siteInfo']);
+
+      yield put(
+        actions.siteInfoSucceed({ title: data.homepage_title, metadesc: data.homepage_metadesc }),
+      );
+    } catch (error) {
+      yield put(actions.siteInfoFailed({ error }));
     }
   };
 
 export default function* wpApiWatchersSaga() {
   const connection = yield call(initConnection);
-  yield all(Object.keys(wpTypesPlural).map(key =>
-    takeEvery(types[`NEW_${wpTypesPlural[key]}_LIST_REQUESTED`], newListRequested(connection, key))
-  ));
-  yield all(Object.keys(wpTypesPlural).map(key =>
-    takeEvery(
-      types[`ANOTHER_${wpTypesPlural[key]}_PAGE_REQUESTED`],
-      anotherPageRequested(connection, key)
-    )
-  ));
-  yield all(Object.keys(wpTypesSingular).map(key =>
-    takeEvery(types[`${wpTypesSingular[key]}_REQUESTED`], singleRequested(connection, key))
-  ));
+  connection.siteInfo = connection.registerRoute('worona/v1', '/site-info');
+
+  yield all(
+    Object.keys(wpTypesPlural).map(key =>
+      takeEvery(
+        types[`NEW_${wpTypesPlural[key]}_LIST_REQUESTED`],
+        newListRequested(connection, key),
+      ),
+    ),
+  );
+  yield all(
+    Object.keys(wpTypesPlural).map(key =>
+      takeEvery(
+        types[`ANOTHER_${wpTypesPlural[key]}_PAGE_REQUESTED`],
+        anotherPageRequested(connection, key),
+      ),
+    ),
+  );
+  yield all(
+    Object.keys(wpTypesSingular).map(key =>
+      takeEvery(types[`${wpTypesSingular[key]}_REQUESTED`], singleRequested(connection, key)),
+    ),
+  );
+  yield takeEvery(types.SITE_INFO_REQUESTED, siteInfoRequested(connection));
 }
