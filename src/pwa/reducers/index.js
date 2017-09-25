@@ -88,7 +88,7 @@ export const siteInfo = (state = null, action) => {
     case types.SITE_INFO_SUCCEED:
       return {
         title: action.title,
-        metadesc: action.metadesc,
+        description: action.metadesc,
       };
     default:
       return state;

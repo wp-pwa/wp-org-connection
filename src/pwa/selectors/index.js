@@ -33,6 +33,11 @@ const getEntities = flow(
   mapKeys(key => `get${capitalize(key)}Entities`),
 )(wpTypesPlural);
 
+const getSiteTitle = state => state.connection.siteInfo && state.connection.siteInfo.title;
+
+const getSiteDescription = state =>
+  state.connection.siteInfo && state.connection.siteInfo.description;
+
 module.exports = {
   ...getParams,
   ...getEntities,
@@ -40,4 +45,6 @@ module.exports = {
   isCurrentSingleReady,
   getCurrentWpType,
   getCurrentId,
+  getSiteTitle,
+  getSiteDescription,
 };
