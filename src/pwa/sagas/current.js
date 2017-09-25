@@ -46,20 +46,20 @@ export function* waitForCurrentContent() {
     case 'post':
       yield take(
         ({ type, id }) =>
-          (type === types.POST_SUCCEED || type === types.POST_FAILED) && currentId === id
+          (type === types.POST_SUCCEED || type === types.POST_FAILED) && currentId === id,
       );
       break;
     case 'page':
       yield take(
         ({ type, id }) =>
-          (type === types.PAGE_SUCCEED || type === types.PAGE_FAILED) && currentId === id
+          (type === types.PAGE_SUCCEED || type === types.PAGE_FAILED) && currentId === id,
       );
       break;
     case 'media':
       yield take(
         ({ type, id }) =>
           (type === types.ATTACHMENT_SUCCEED || type === types.ATTACHMENT_FAILED) &&
-          currentId === id
+          currentId === id,
       );
       break;
     // The rest of the content are lists.
@@ -67,7 +67,7 @@ export function* waitForCurrentContent() {
       yield take(
         ({ type, name }) =>
           (type === types.NEW_POSTS_LIST_SUCCEED || type === types.NEW_POSTS_LIST_FAILED) &&
-          name === 'currentList'
+          name === 'currentList',
       );
   }
 }

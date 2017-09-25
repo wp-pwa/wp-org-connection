@@ -57,6 +57,10 @@ const DISCOVER_URL_REQUESTED = 'connection/DISCOVER_URL_REQUESTED';
 const DISCOVER_URL_SUCCEED = 'connection/DISCOVER_URL_SUCCEED';
 const DISCOVER_URL_FAILED = 'connection/DISCOVER_URL_FAILED';
 
+const SITE_INFO_REQUESTED = 'connection/SITE_INFO_REQUESTED';
+const SITE_INFO_SUCCEED = 'connection/SITE_INFO_SUCCEED';
+const SITE_INFO_FAILED = 'connection/SITE_INFO_FAILED';
+
 module.exports = {
   ...paramsChanged,
   ...newListRequested,
@@ -72,4 +76,7 @@ module.exports = {
   DISCOVER_URL_REQUESTED,
   DISCOVER_URL_SUCCEED,
   DISCOVER_URL_FAILED,
+  SITE_INFO_REQUESTED,
+  SITE_INFO_SUCCEED,
+  SITE_INFO_FAILED,
 };
