@@ -87,6 +87,7 @@ module.exports = {
   isCurrentSingleReady,
   getCurrentWpType,
   getCurrentId,
+  getEntity,
   getTitle,
   getDescription,
   getCanonical,
