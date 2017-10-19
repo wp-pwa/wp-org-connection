@@ -48,6 +48,7 @@ const getNumberOfTotalPages = name => state => {
   const wpType = getListWpType(name)(state);
   if (!wpType) return 0;
   const key = getListKey(name)(state);
+  if (!state.connection.pages[wpType][key]) return 0;
   return parseInt(state.connection.pages[wpType][key].pages, 10);
 };
 
@@ -55,6 +56,7 @@ const getNumberOfTotalItems = name => state => {
   const wpType = getListWpType(name)(state);
   if (!wpType) return 0;
   const key = getListKey(name)(state);
+  if (!state.connection.pages[wpType][key]) return 0;
   return parseInt(state.connection.pages[wpType][key].items, 10);
 };
 
