@@ -68,7 +68,6 @@ const getDescription = createSelector(
   (state, entity) =>
     (entity && entity.yoast_meta && entity.yoast_meta.yoast_wpseo_metadesc) ||
     (entity && entity.description) ||
-    (state.connection.siteInfo && state.connection.siteInfo.description) ||
     '',
 );
 
