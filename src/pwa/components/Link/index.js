@@ -1,7 +1,6 @@
 /* global window */
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import Router from '@worona/next/router';
 import NProgress from 'nprogress';
 import { connect } from 'react-redux';
 import { dep } from 'worona-deps';
@@ -147,7 +146,7 @@ class Link extends Component {
 
     e.preventDefault();
     NProgress.start();
-    setTimeout(() => Router.push(this.href, this.as), 100);
+    // setTimeout(() => Router.push(this.href, this.as), 100);
   }
   render() {
     return React.cloneElement(this.props.children, {
