@@ -2,6 +2,7 @@ import { combineReducers } from 'redux';
 import { mapValues } from 'lodash';
 import * as types from '../types';
 import { wpTypesPlural, wpTypesSingular } from '../constants';
+import router from './router';
 
 export const paramsReducer = value => (state = {}, action) => {
   if (action.type === types[`${value}_PARAMS_CHANGED`]) {
@@ -101,4 +102,13 @@ const results = combineReducers(mapValues(wpTypesPlural, resultsReducer));
 const pages = combineReducers(mapValues(wpTypesPlural, pagesReducer));
 const loading = combineReducers(mapValues(wpTypesPlural, loadingReducer));
 
-export default combineReducers({ siteInfo, entities, params, results, names, pages, loading });
+export default combineReducers({
+  siteInfo,
+  entities,
+  params,
+  results,
+  names,
+  pages,
+  loading,
+  router,
+});

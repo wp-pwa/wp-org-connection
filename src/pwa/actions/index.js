@@ -2,6 +2,7 @@ import { capitalize } from 'lodash';
 import { flow, mapValues, mapKeys } from 'lodash/fp';
 import * as types from '../types';
 import { wpTypesPlural, wpTypesSingular } from '../constants';
+import * as routerTypes from './router';
 
 const paramsChange = flow(
   mapValues(value => ({ params = {} } = {}) => ({
@@ -174,4 +175,5 @@ module.exports = {
   siteInfoRequested,
   siteInfoSucceed,
   siteInfoFailed,
+  ...routerTypes,
 };

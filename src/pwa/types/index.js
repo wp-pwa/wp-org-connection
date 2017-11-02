@@ -61,6 +61,9 @@ const SITE_INFO_REQUESTED = 'connection/SITE_INFO_REQUESTED';
 const SITE_INFO_SUCCEED = 'connection/SITE_INFO_SUCCEED';
 const SITE_INFO_FAILED = 'connection/SITE_INFO_FAILED';
 
+export const ROUTE_CHANGE_REQUESTED = 'connection/ROUTE_CHANGE_REQUESTED';
+export const ROUTE_CHANGE_SUCCEED = 'connection/ROUTE_CHANGE_SUCCEED';
+
 module.exports = {
   ...paramsChanged,
   ...newListRequested,
@@ -79,4 +82,6 @@ module.exports = {
   SITE_INFO_REQUESTED,
   SITE_INFO_SUCCEED,
   SITE_INFO_FAILED,
+  ROUTE_CHANGE_REQUESTED,
+  ROUTE_CHANGE_SUCCEED,
 };
