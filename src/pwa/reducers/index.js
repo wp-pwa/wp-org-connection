@@ -102,7 +102,7 @@ const results = combineReducers(mapValues(wpTypesPlural, resultsReducer));
 const pages = combineReducers(mapValues(wpTypesPlural, pagesReducer));
 const loading = combineReducers(mapValues(wpTypesPlural, loadingReducer));
 
-export default combineReducers({
+export default () => combineReducers({
   siteInfo,
   entities,
   params,
