@@ -53,7 +53,7 @@ const Single = types.model('Single').props({
   content: types.string,
   excerpt: types.string,
   author: types.reference(Author),
-  featured: types.maybe(Media),
+  featured: types.maybe(types.reference(Media)),
   taxonomies: types.map(types.array(types.reference(Taxonomy))),
   meta: types.maybe(Meta),
 });
