@@ -7,7 +7,7 @@ import reducers from './reducers';
 // import selectors from './selectors';
 // import selectorCreators from './selectorCreators';
 
-const WpOrgConnection = () => <div>hi from wp-orgggg</div>;
+const WpOrgConnection = () => <div>hi from wp-org</div>;
 
 export default WpOrgConnection;
 export { actions, types, reducers };

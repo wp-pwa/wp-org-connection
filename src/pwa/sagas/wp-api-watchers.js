@@ -14,7 +14,8 @@ import { wpTypesPlural, wpTypesSingular, wpTypesSingularToPlural } from '../cons
 const CorsAnywhere = 'https://cors.worona.io/';
 
 export function* initConnection() {
-  const isCors = yield call(dep('router', 'sagaHelpers', 'isCors'));
+  // const isCors = yield call(dep('router', 'sagaHelpers', 'isCors'));
+  const isCors = false;
   const getSetting = dep('settings', 'selectorCreators', 'getSetting');
   const url = yield select(getSetting('generalSite', 'url'));
   return new Wpapi({ endpoint: `${isCors ? CorsAnywhere : ''}${url}?rest_route=` });
