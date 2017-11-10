@@ -48,6 +48,10 @@ const Connection = types
         .get(singleType)
         .set(singleId, { id: singleId, type: singleType, fetching: true });
     },
+    [actionTypes.SINGLE_FAILED]({ singleType, singleId }) {
+      // Populate the state with the entity value and set both fetching and ready.
+      self.single[singleType][singleId].fetching = false;
+    },
     [actionTypes.SINGLE_SUCCEED]({ entity }) {
       // Populate the state with the entity value and set both fetching and ready.
       self.singleMap.get(entity.type).set(entity.id, { ...entity, fetching: false, ready: true });
