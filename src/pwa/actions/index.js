@@ -1,15 +1,20 @@
 import * as actionTypes from '../actionTypes';
 
-export const singleRequested = () => ({
+export const singleRequested = ({ singleType, singleId }) => ({
   type: actionTypes.SINGLE_REQUESTED,
+  singleType,
+  singleId,
 });
 
 export const singleSucceed = ({ entity }) => ({
   type: actionTypes.SINGLE_SUCCEED,
   entity,
 });
-export const singleFailed = () => ({
+export const singleFailed = ({ singleType, singleId, error }) => ({
   type: actionTypes.SINGLE_FAILED,
+  singleType,
+  singleId,
+  error,
 });
 
 export const listRequested = () => ({
