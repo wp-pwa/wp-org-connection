@@ -1,4 +1,3 @@
-import { autorun } from 'mobx';
 import { applySnapshot } from 'mobx-state-tree';
 import Connection from '../connection';
 
@@ -24,7 +23,7 @@ test('Retrieve entity properties', () => {
           id: 7,
           name: 'New Nature',
           slug: 'nature',
-          type: 'categoryyyyy',
+          type: 'category',
           link: 'http://example.com/category/nature',
         },
         8: {
@@ -106,7 +105,7 @@ test('Retrieve nested entities', () => {
           ],
           creationDate: new Date('2016-11-25T18:33:33'),
           slug: 'iceland-test',
-          link: 'https://demo.worona.org/the-beauties-of-gullfoss/iceland-test/',
+          link: 'https://demo.worona.org/post-60-slug/iceland-test/',
           author: 2,
           alt: 'iceland',
         },
@@ -125,12 +124,11 @@ test('Retrieve nested entities', () => {
           id: 60,
           creationDate: new Date('2016-11-25T18:31:11'),
           modificationDate: new Date('2017-10-02T14:23:48'),
-          title: 'The Beauties of Gullfoss',
-          slug: 'the-beauties-of-gullfoss',
+          title: 'Post 60',
+          slug: 'post-60-slug',
           type: 'post',
-          link: 'http://example.com/the-beauties-of-gullfoss/',
+          link: 'http://example.com/post-60-slug/',
           content: '<p>Gullfoss is a waterfall located in the canyon of the Hvita</p>',
-          excerpt: '<p>Gullfoss is a waterfall</p>',
           author: 4,
           featured: 62,
           taxonomiesMap: {
@@ -145,4 +143,113 @@ test('Retrieve nested entities', () => {
   expect(connection.single.post[60].taxonomies.category[0].name).toBe('Photography');
   expect(connection.single.post[60].featured.original.height).toBe(123);
   expect(connection.single.post[60].featured.sizes[1].height).toBe(250);
+});
+
+test('Check if lists are ready', () => {
+  const connection = Connection.create({
+    listMap: { category: { 7: { page: [{ fetching: true }] } } },
+  });
+  expect(connection.list.category[7].page[0].isReady).toBe(false);
+  expect(connection.list.category[7].isReady).toBe(false);
+  applySnapshot(connection, {
+    singleMap: {
+      post: {
+        60: {
+          id: 60,
+          creationDate: new Date('2016-11-25T18:31:11'),
+          modificationDate: new Date('2017-10-02T14:23:48'),
+          title: 'Post 60',
+          slug: 'post-60-slug',
+          type: 'post',
+          link: 'http://example.com/post-60-slug/',
+          content: '<p>Gullfoss is a waterfall located in the canyon of the Hvita</p>',
+          author: 4,
+        },
+      },
+    },
+    listMap: {
+      category: {
+        7: {
+          page: [
+            {
+              items: [60],
+            },
+          ],
+        },
+      },
+    },
+  });
+  expect(connection.list.category[7].page[0].isReady).toBe(true);
+  expect(connection.list.category[7].page[0].total).toBe(1);
+  expect(connection.list.category[7].isReady).toBe(true);
+});
+
+test('Retrieve list items', () => {
+  const connection = Connection.create({
+    singleMap: {
+      post: {
+        60: {
+          id: 60,
+          creationDate: new Date('2016-11-25T18:31:11'),
+          modificationDate: new Date('2017-10-02T14:23:48'),
+          title: 'Post 60',
+          slug: 'post-60-slug',
+          type: 'post',
+          link: 'http://example.com/post-60-slug/',
+          content: '<p>Gullfoss is a waterfall located in the canyon of the Hvita</p>',
+          author: 4,
+        },
+        61: {
+          id: 61,
+          creationDate: new Date('2016-11-25T18:31:11'),
+          modificationDate: new Date('2017-10-02T14:23:48'),
+          title: 'Post 61',
+          slug: 'post-61-slug',
+          type: 'post',
+          link: 'http://example.com/post-61-slug/',
+          content: '<p>Gullfoss is a waterfall located in the canyon of the Hvita</p>',
+          author: 4,
+        },
+        62: {
+          id: 62,
+          creationDate: new Date('2016-11-25T18:31:11'),
+          modificationDate: new Date('2017-10-02T14:23:48'),
+          title: 'Post 62',
+          slug: 'post-62-slug',
+          type: 'post',
+          link: 'http://example.com/post-62-slug/',
+          content: '<p>Gullfoss is a waterfall located in the canyon of the Hvita</p>',
+          author: 4,
+        },
+        63: {
+          id: 63,
+          creationDate: new Date('2016-11-25T18:31:11'),
+          modificationDate: new Date('2017-10-02T14:23:48'),
+          title: 'Post 63',
+          slug: 'post-63-slug',
+          type: 'post',
+          link: 'http://example.com/post-63-slug/',
+          content: '<p>Gullfoss is a waterfall located in the canyon of the Hvita</p>',
+          author: 4,
+        },
+      },
+    },
+    listMap: {
+      category: {
+        7: {
+          page: [
+            {
+              items: [60, 61],
+            },
+            {
+              items: [62, 63],
+            },
+          ],
+        },
+      },
+    },
+  });
+  expect(connection.list.category[7].page[0].items[1].title).toBe('Post 61');
+  expect(connection.list.category[7].page[1].items[0].title).toBe('Post 62');
+  expect(connection.list.category[7].items[1].title).toBe('Post 61');
 });
