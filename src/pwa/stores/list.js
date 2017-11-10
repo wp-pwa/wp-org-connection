@@ -9,15 +9,15 @@ export const Total = types.model('Total').props({
 export const Page = types
   .model('Page')
   .props({
-    items: types.optional(types.array(types.reference(Single)), []),
+    entities: types.optional(types.array(types.reference(Single)), []),
     fetching: types.optional(types.boolean, false),
   })
   .views(self => ({
     get isReady() {
-      return self.items.length > 0;
+      return self.entities.length > 0;
     },
     get total() {
-      return self.items.length || null;
+      return self.entities.length || null;
     },
   }));
 
@@ -28,20 +28,20 @@ export const List = types
     total: types.optional(Total, {}),
   })
   .views(self => {
-    const items = [];
+    const entities = [];
     return {
-      get items() {
+      get entities() {
         let index = 0;
         self.page.forEach(page => {
-          page.items.forEach(result => {
-            items[index] = result;
+          page.entities.forEach(result => {
+            entities[index] = result;
             index += 1;
           });
         });
-        return items;
+        return entities;
       },
       get isReady() {
-        return self.items.length > 0;
+        return self.entities.length > 0;
       },
     };
   });

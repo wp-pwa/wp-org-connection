@@ -1,6 +1,7 @@
 import { types } from 'mobx-state-tree';
 import { Any } from './single';
 import { List } from './list';
+import * as actionTypes from '../actionTypes';
 
 const Connection = types
   .model('Connection')
@@ -37,6 +38,11 @@ const Connection = types
         return list;
       },
     };
-  });
+  }).actions(self => ({
+      [actionTypes.SINGLE_SUCCEED]({ entity }) {
+        self.singleMap.get(entity.type).set(entity.id, entity);
+      }
+    })
+  );
 
 export default Connection;
