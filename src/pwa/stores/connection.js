@@ -54,43 +54,53 @@ const Single = types.model('Single').props({
   excerpt: types.string,
   author: types.reference(Author),
   featured: types.maybe(types.reference(Media)),
-  taxonomies: types.map(types.array(types.reference(Taxonomy))),
+  taxonomiesMap: types.map(types.array(types.reference(Taxonomy))),
   meta: types.maybe(Meta),
+}).views(self => {
+  const taxonomies = {};
+  return {
+    get taxonomies() {
+      self.taxonomiesMap.keys().forEach(taxonomy => {
+        taxonomies[taxonomy] = self.taxonomiesMap.get(taxonomy);
+      });
+      return taxonomies;
+    }
+  }
 });
 
 const Any = types.union(Single, Taxonomy, Author, Media);
 
-const SingleView = types
-  .model('SingleView')
+const Connection = types
+  .model('Connection')
   .props({
-    data: types.optional(types.map(types.map(Any)), {}),
+    singleMap: types.optional(types.map(types.map(Any)), {}),
+    listMap: types.optional(
+      types.map(types.map(types.array(types.array(types.reference(Any))))),
+      {},
+    ),
   })
-  .views(self => ({
-    get(type, id) {
-      if (typeof id === 'undefined') {
-        return self.data.get(type);
-      }
-      return self.data.get(type).get(id);
-    },
-  }));
-
-const ListView = types
-  .model('ListView')
-  .props({
-    data: types.optional(types.map(types.map(types.array(types.array(types.reference(Any))))), {}),
-  })
-  .views(self => ({
-    get(type, id) {
-      if (typeof id === 'undefined') {
-        return self.data.get(type);
-      }
-      return self.data.get(type).get(id);
-    },
-  }));
-
-const Connection = types.model('Connection').props({
-  single: types.optional(SingleView, {}),
-  list: types.optional(ListView, {}),
-});
+  .views(self => {
+    const single = {};
+    const list = {};
+    return {
+      get single() {
+        self.singleMap.keys().forEach(type => {
+          single[type] = single[type] || [];
+          self.singleMap.get(type).keys().forEach(index => {
+            if (!single[type][index]) single[type][index] = self.singleMap.get(type).get(index);
+          });
+        });
+        return single;
+      },
+      get list() {
+        const keys = self.listMap.keys();
+        keys.reduce((acc, key) => {
+          list[key] = self.listMap.get(key);
+          return list;
+        }, list);
+        return list;
+      },
+    };
+  });
 
 export default Connection;
