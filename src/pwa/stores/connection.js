@@ -1,27 +1,51 @@
+/* eslint-disable no-use-before-define */
 import { types } from 'mobx-state-tree';
 
-export const Author = types.model('Author').props({});
-
-export const Media = types.model('Media').props({});
-
-export const Featured = types.model('Featured').props({
-  media: types.reference(Media),
-  caption: types.string,
+const Image = types.model('Image').props({
+  height: types.number,
+  width: types.number,
+  filename: types.string,
+  url: types.string,
 });
 
-export const Category = types.model('Category').props({
-  
+const Media = types.model('Media').props({
+  id: types.identifier(types.number),
+  creationDate: types.Date,
+  slug: types.string,
+  alt: types.string,
+  mimeType: types.string,
+  title: types.string,
+  author: types.reference(types.late(() => Author)),
+  original: Image,
+  sizes: types.array(Image),
 });
 
-export const Taxonomies = types.model('Taxonomies').props({
-  category: types.array(types.reference(Category)),
-  tag: types.array(types.reference(Tag)),
+const Author = types.model('Author').props({
+  id: types.identifier(types.number),
+  name: types.string,
+  slug: types.string,
+  description: types.string,
+  link: types.string,
+  avatar: types.maybe(types.union(Media, types.string)),
 });
 
-export const Single = types.model('Post').props({
-  id: types.number,
-  creationDate: types.string,
-  modificationDate: types.string,
+const Taxonomy = types.model('Taxonomy').props({
+  id: types.identifier(types.number),
+  name: types.string,
+  slug: types.string,
+  link: types.string,
+  type: types.string,
+});
+
+const Meta = types.model('Meta').props({
+  description: types.maybe(types.string),
+  canonical: types.maybe(types.string),
+});
+
+const Single = types.model('Single').props({
+  id: types.identifier(types.number),
+  creationDate: types.Date,
+  modificationDate: types.Date,
   title: types.string,
   slug: types.string,
   type: types.string,
@@ -29,18 +53,54 @@ export const Single = types.model('Post').props({
   content: types.string,
   excerpt: types.string,
   author: types.reference(Author),
-  featured: Featured,
-  taxonomies: Taxonomies,
+  featured: types.maybe(types.reference(Media)),
+  taxonomiesMap: types.map(types.array(types.reference(Taxonomy))),
+  meta: types.maybe(Meta),
+}).views(self => {
+  const taxonomies = {};
+  return {
+    get taxonomies() {
+      self.taxonomiesMap.keys().forEach(taxonomy => {
+        taxonomies[taxonomy] = self.taxonomiesMap.get(taxonomy);
+      });
+      return taxonomies;
+    }
+  }
 });
 
-export const Entities = types.model('Entities').props({
-  post: types.array(Post),
-  page: types.array(Entity),
-  category: types.array(Entity),
-  tag: types.array(Entity),
-  author: types.array(Entity),
-});
+const Any = types.union(Single, Taxonomy, Author, Media);
 
-export const Connection = types.model('Connection').props({
-  entities: Entities,
-});
+const Connection = types
+  .model('Connection')
+  .props({
+    singleMap: types.optional(types.map(types.map(Any)), {}),
+    listMap: types.optional(
+      types.map(types.map(types.array(types.array(types.reference(Any))))),
+      {},
+    ),
+  })
+  .views(self => {
+    const single = {};
+    const list = {};
+    return {
+      get single() {
+        self.singleMap.keys().forEach(type => {
+          single[type] = single[type] || [];
+          self.singleMap.get(type).keys().forEach(index => {
+            if (!single[type][index]) single[type][index] = self.singleMap.get(type).get(index);
+          });
+        });
+        return single;
+      },
+      get list() {
+        const keys = self.listMap.keys();
+        keys.reduce((acc, key) => {
+          list[key] = self.listMap.get(key);
+          return list;
+        }, list);
+        return list;
+      },
+    };
+  });
+
+export default Connection;
