@@ -1,41 +1,43 @@
-import * as types from '../types';
+import * as actionTypes from '../actionTypes';
 
 export const singleRequested = () => ({
-  type: types.SINGLE_REQUESTED,
+  type: actionTypes.SINGLE_REQUESTED,
 });
-export const singleSucceed = () => ({
-  type: types.SINGLE_SUCCEED,
+
+export const singleSucceed = ({ entity }) => ({
+  type: actionTypes.SINGLE_SUCCEED,
+  entity,
 });
 export const singleFailed = () => ({
-  type: types.SINGLE_FAILED,
+  type: actionTypes.SINGLE_FAILED,
 });
 
 export const listRequested = () => ({
-  type: types.LIST_REQUESTED,
+  type: actionTypes.LIST_REQUESTED,
 });
 export const listSucceed = () => ({
-  type: types.LIST_SUCCEED,
+  type: actionTypes.LIST_SUCCEED,
 });
 export const listFailed = () => ({
-  type: types.LIST_FAILED,
+  type: actionTypes.LIST_FAILED,
 });
 
 export const customListRequested = () => ({
-  type: types.CUSTOM_LIST_REQUESTED,
+  type: actionTypes.CUSTOM_LIST_REQUESTED,
 });
 export const customListSucceed = () => ({
-  type: types.CUSTOM_LIST_SUCCEED,
+  type: actionTypes.CUSTOM_LIST_SUCCEED,
 });
 export const customListFailed = () => ({
-  type: types.CUSTOM_LIST_FAILED,
+  type: actionTypes.CUSTOM_LIST_FAILED,
 });
 
 export const routeChangeRequested = () => ({
-  type: types.ROUTE_CHANGE_REQUESTED,
+  type: actionTypes.ROUTE_CHANGE_REQUESTED,
 });
 export const routeChangeSucceed = () => ({
-  type: types.ROUTE_CHANGE_SUCCEED,
+  type: actionTypes.ROUTE_CHANGE_SUCCEED,
 });
 export const routeChangeFailed = () => ({
-  type: types.ROUTE_CHANGE_FAILED,
+  type: actionTypes.ROUTE_CHANGE_FAILED,
 });
