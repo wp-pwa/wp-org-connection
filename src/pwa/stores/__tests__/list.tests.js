@@ -5,8 +5,8 @@ test('Check if lists are ready', () => {
   const connection = Connection.create({
     listMap: { category: { 7: { page: [{ fetching: true }] } } },
   });
-  expect(connection.list.category[7].page[0].isReady).toBe(false);
-  expect(connection.list.category[7].isReady).toBe(false);
+  expect(connection.list.category[7].page[0].ready).toBe(false);
+  expect(connection.list.category[7].ready).toBe(false);
   applySnapshot(connection, {
     singleMap: {
       post: {
@@ -35,9 +35,9 @@ test('Check if lists are ready', () => {
       },
     },
   });
-  expect(connection.list.category[7].page[0].isReady).toBe(true);
+  expect(connection.list.category[7].page[0].ready).toBe(true);
   expect(connection.list.category[7].page[0].total).toBe(1);
-  expect(connection.list.category[7].isReady).toBe(true);
+  expect(connection.list.category[7].ready).toBe(true);
 });
 
 test('Retrieve list items', () => {

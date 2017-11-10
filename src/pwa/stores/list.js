@@ -13,7 +13,7 @@ export const Page = types
     fetching: types.optional(types.boolean, false),
   })
   .views(self => ({
-    get isReady() {
+    get ready() {
       return self.entities.length > 0;
     },
     get total() {
@@ -40,7 +40,7 @@ export const List = types
         });
         return entities;
       },
-      get isReady() {
+      get ready() {
         return self.entities.length > 0;
       },
     };

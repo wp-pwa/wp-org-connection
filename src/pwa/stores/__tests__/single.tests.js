@@ -153,7 +153,7 @@ test('Add post entity', () => {
     singleId: 60,
   });
   expect(connection.single.post[60].fetching).toBe(true);
-  expect(connection.single.post[60].isReady).toBe(false);
+  expect(connection.single.post[60].ready).toBe(false);
   connection[actionTypes.SINGLE_SUCCEED]({ entity: {
     id: 60,
     creationDate: new Date('2016-11-25T18:31:11'),
@@ -170,7 +170,7 @@ test('Add post entity', () => {
       tag: [10],
     },
   } });
-  expect(connection.single.post[60].isReady).toBe(true);
+  expect(connection.single.post[60].ready).toBe(true);
   expect(connection.single.post[60].fetching).toBe(false);
   expect(connection.single.post[60].title).toBe('Post 60');
 })

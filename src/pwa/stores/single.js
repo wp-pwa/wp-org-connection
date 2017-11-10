@@ -47,7 +47,7 @@ export const Single = types
   .props({
     id: types.identifier(types.number),
     fetching: types.optional(types.boolean, false),
-    isReady: types.optional(types.boolean, false),
+    ready: types.optional(types.boolean, false),
     type: types.string,
     creationDate: types.maybe(types.Date),
     modificationDate: types.maybe(types.Date),
