@@ -1,5 +1,6 @@
 import { applySnapshot } from 'mobx-state-tree';
 import Connection from '../connection';
+import * as actionTypes from '../../actionTypes';
 
 test('Retrieve entity properties', () => {
   const connection = Connection.create({
@@ -9,7 +10,7 @@ test('Retrieve entity properties', () => {
           id: 7,
           name: 'Nature',
           slug: 'nature',
-          type: 'category',
+          taxonomy: 'category',
           link: 'http://example.com/category/nature',
         },
       },
@@ -23,14 +24,14 @@ test('Retrieve entity properties', () => {
           id: 7,
           name: 'New Nature',
           slug: 'nature',
-          type: 'category',
+          taxonomy: 'category',
           link: 'http://example.com/category/nature',
         },
         8: {
           id: 8,
           name: 'Travel',
           slug: 'travel',
-          type: 'category',
+          taxonomy: 'category',
           link: 'https://demo.worona.org/wp-cat/travel/',
         },
       },
@@ -40,7 +41,7 @@ test('Retrieve entity properties', () => {
           link: 'https://demo.worona.org/tag/gullfoss/',
           name: 'Gullfoss',
           slug: 'gullfoss',
-          type: 'tag',
+          taxonomy: 'tag',
         },
       },
     },
@@ -59,14 +60,14 @@ test('Retrieve nested entities', () => {
           link: 'https://demo.worona.org/wp-cat/photography/',
           name: 'Photography',
           slug: 'photography',
-          type: 'category',
+          taxonomy: 'category',
         },
         8: {
           id: 8,
           link: 'https://demo.worona.org/wp-cat/travel/',
           name: 'Travel',
           slug: 'travel',
-          type: 'category',
+          taxonomy: 'category',
         },
       },
       tag: {
@@ -144,3 +145,32 @@ test('Retrieve nested entities', () => {
   expect(connection.single.post[60].featured.original.height).toBe(123);
   expect(connection.single.post[60].featured.sizes[1].height).toBe(250);
 });
+
+test('Add post entity', () => {
+  const connection = Connection.create({});
+  connection[actionTypes.SINGLE_REQUESTED]({
+    singleType: 'post',
+    singleId: 60,
+  });
+  expect(connection.single.post[60].fetching).toBe(true);
+  expect(connection.single.post[60].isReady).toBe(false);
+  connection[actionTypes.SINGLE_SUCCEED]({ entity: {
+    id: 60,
+    creationDate: new Date('2016-11-25T18:31:11'),
+    modificationDate: new Date('2017-10-02T14:23:48'),
+    title: 'Post 60',
+    slug: 'post-60-slug',
+    type: 'post',
+    link: 'http://example.com/post-60-slug/',
+    content: '<p>Gullfoss is a waterfall located in the canyon of the Hvita</p>',
+    author: 4,
+    featured: 62,
+    taxonomiesMap: {
+      category: [3, 8],
+      tag: [10],
+    },
+  } });
+  expect(connection.single.post[60].isReady).toBe(true);
+  expect(connection.single.post[60].fetching).toBe(false);
+  expect(connection.single.post[60].title).toBe('Post 60');
+})

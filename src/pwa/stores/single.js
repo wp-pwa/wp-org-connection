@@ -34,7 +34,7 @@ export const Taxonomy = types.model('Taxonomy').props({
   name: types.string,
   slug: types.string,
   link: types.string,
-  type: types.string,
+  taxonomy: types.string,
 });
 
 export const Meta = types.model('Meta').props({
@@ -46,15 +46,17 @@ export const Single = types
   .model('Single')
   .props({
     id: types.identifier(types.number),
-    creationDate: types.Date,
-    modificationDate: types.Date,
-    title: types.string,
-    slug: types.string,
+    fetching: types.optional(types.boolean, false),
+    isReady: types.optional(types.boolean, false),
     type: types.string,
-    link: types.string,
-    content: types.string,
+    creationDate: types.maybe(types.Date),
+    modificationDate: types.maybe(types.Date),
+    title: types.maybe(types.string),
+    slug: types.maybe(types.string),
+    link: types.maybe(types.string),
+    content: types.maybe(types.string),
     excerpt: types.maybe(types.string),
-    author: types.reference(Author),
+    author: types.maybe(types.reference(Author)),
     featured: types.maybe(types.reference(Media)),
     taxonomiesMap: types.optional(types.map(types.array(types.reference(Taxonomy))), {}),
     meta: types.maybe(Meta),

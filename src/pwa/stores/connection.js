@@ -38,11 +38,20 @@ const Connection = types
         return list;
       },
     };
-  }).actions(self => ({
-      [actionTypes.SINGLE_SUCCEED]({ entity }) {
-        self.singleMap.get(entity.type).set(entity.id, entity);
-      }
-    })
-  );
+  })
+  .actions(self => ({
+    [actionTypes.SINGLE_REQUESTED]({ singleType, singleId }) {
+      // Init the first map (type) if it's not initializated yet.
+      if (!self.singleMap.get(singleType)) self.singleMap.set(singleType, {});
+      // Create the entity so it can be accessed (isReady = false).
+      self.singleMap
+        .get(singleType)
+        .set(singleId, { id: singleId, type: singleType, fetching: true });
+    },
+    [actionTypes.SINGLE_SUCCEED]({ entity }) {
+      // Populate the state with the entity value and set both fetching and isReady.
+      self.singleMap.get(entity.type).set(entity.id, { ...entity, fetching: false, isReady: true });
+    },
+  }));
 
 export default Connection;
