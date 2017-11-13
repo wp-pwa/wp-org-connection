@@ -1,5 +1,10 @@
 import { types } from 'mobx-state-tree';
-// import { ROUTE_CHANGE_SUCCEED } from '../types';
+import { ROUTE_CHANGE_SUCCEED } from '../types';
+
+const generateId = () =>
+  Math.random()
+    .toString(16)
+    .slice(2);
 
 export const Id = types.union(types.string, types.number);
 
@@ -54,6 +59,23 @@ export const Context = types
 
       return { x, y };
     },
+    previous: () => {
+      const { x } = self.findIndex(self.selected);
+      return x !== -1 ? self.items[x - 1] : null;
+    },
+    current: () => {
+      const { x } = self.findIndex(self.selected);
+      return x !== -1 ? self.items[x] : null;
+    },
+    next: () => {
+      const { x } = self.findIndex(self.selected);
+      return x !== -1 ? self.items[x + 1] : null;
+    },
+  }))
+  .actions(self => ({
+    setSelected: ({ x, y }) => {
+      self.selected = y > 0 ? self.items[x][y] : self.items[x];
+    },
   }));
 
 export const Router = types
@@ -80,11 +102,52 @@ export const Router = types
     //     self.activeContext.selected = self.activeContext.items[x][y].id;
     //   }
     // },
-    push: (context) => {
+    // [ROUTE_CHANGE_SUCCEED]: ({ selected, method, context }) => self[method]({ selected, context }),
+    //
+    push: ({ selected, context }) => {
+      // Creates a context if a new one is passed.
+      if (context) {
+        const index = self.contexts.push(context);
+        self.activeContext = self.contexts[index];
+      }
 
+      // Ensures that 'selected' exists inside 'activeContext'
+      // and assigns to it.
+      const { x, y } = self.activeContext.findIndex(selected);
+      if (x !== -1) self.activeContext.setSelected({ x, y });
+      else {
+        // If 'selected' doesn't exist inside 'activeContext', then a new context
+        // should be created with that item.
+        const contextId = generateId();
+        const itemId = generateId();
+        const item = { id: itemId, ...selected };
+        const index = self.contexts.push({
+          contextId,
+          selected: itemId,
+          items: [item],
+        });
+
+        self.activeContext = self.contexts[index];
+      }
     },
-
-    replace: (context) => {
-      
-    }
+    //
+    // replace: ({ selected, context }) => {
+    //   // Replaces the context if a new one is passed.
+    //   if (context) {
+    //     const index = self.contexts.findIndex(ctx => self.activeContext === ctx.id);
+    //     self.contexts.splice(index, 1, context);
+    //     self.activeContext = context.id ? context.id : (context.id = generateId());
+    //   }
+    //
+    //   // Ensures that 'selected' exists inside 'activeContext'
+    //   // and assigns to it.
+    //   const { x, y } = self.activeContext.findIndex(selected);
+    //   if (x !== -1) {
+    //     const [ item ] =
+    //       y > 0 ? self.activeContext.items[x].splice(y, 1) : self.activeContext.items.splice(x, 1);
+    //
+    //     // Current index
+    //     const currentIndex = self.activeContext.findIndex()
+    //   }
+    // }
   }));

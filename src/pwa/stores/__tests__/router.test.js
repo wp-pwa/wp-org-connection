@@ -9,6 +9,47 @@ const id = {
   }
 };
 
+const sampleStore = () => Router.create({
+  activeContext: 333,
+  contexts: [
+    {
+      id: 333,
+      selected: 123,
+      items: [
+        {
+          id: 123,
+          route: 'single',
+          singleType: 'post',
+          singleId: 1234,
+          goBack: { id: 0, listType: 'latest' },
+        },
+        {
+          id: 124,
+          route: 'list',
+        },
+        [
+          {
+            id: 125,
+            route: 'list',
+            listType: 'category',
+            listId: 5,
+            page: 1,
+          },
+          {
+            id: 126,
+            route: 'list',
+            listType: 'category',
+            listId: 5,
+            page: 2,
+          },
+        ],
+      ],
+      infinite: false,
+      options: null,
+    },
+  ],
+});
+
 test('Router store should initiate empty', () => {
   const { contexts, activeContext } = getSnapshot(Router.create({}));
   expect(contexts).toEqual([]);
@@ -58,46 +99,7 @@ test('An item of type List is populated appropriately', () => {
 });
 
 test('Context is populated appropriately', () => {
-  const store = Router.create({
-    activeContext: 333,
-    contexts: [
-      {
-        id: 333,
-        selected: 123,
-        items: [
-          {
-            id: 123,
-            route: 'single',
-            singleType: 'post',
-            singleId: 1234,
-            goBack: { id: 0, listType: 'latest' },
-          },
-          {
-            id: 124,
-            route: 'list',
-          },
-          [
-            {
-              id: 125,
-              route: 'list',
-              listType: 'category',
-              listId: 5,
-              page: 1,
-            },
-            {
-              id: 126,
-              route: 'list',
-              listType: 'category',
-              listId: 5,
-              page: 2,
-            },
-          ],
-        ],
-        infinite: false,
-        options: null,
-      },
-    ],
-  });
+  const store = sampleStore();
 
   expect(store.activeContext.selected.route).toBe('single');
   expect(store.activeContext.selected.singleType).toBe('post');
@@ -118,46 +120,7 @@ test('Context is populated appropriately', () => {
 });
 
 test('findIndex should return the correct position of an element inside context', () => {
-  const store = Router.create({
-    activeContext: 333,
-    contexts: [
-      {
-        id: 333,
-        selected: 123,
-        items: [
-          {
-            id: 123,
-            route: 'single',
-            singleType: 'post',
-            singleId: 1234,
-            goBack: { id: 0, listType: 'latest' },
-          },
-          {
-            id: 124,
-            route: 'list',
-          },
-          [
-            {
-              id: 125,
-              route: 'list',
-              listType: 'category',
-              listId: 5,
-              page: 1,
-            },
-            {
-              id: 126,
-              route: 'list',
-              listType: 'category',
-              listId: 5,
-              page: 2,
-            },
-          ],
-        ],
-        infinite: false,
-        options: null,
-      },
-    ],
-  });
+  const store = sampleStore();
 
   expect(
     store.activeContext.findIndex({
@@ -197,6 +160,17 @@ test('findIndex should return the correct position of an element inside context'
     }),
   ).toEqual({ x: -1, y: -1 });
 });
+
+test('Changing selected in a context works as expected', () => {
+  const store = sampleStore();
+
+  store.activeContext.setSelected({ x: 2, y: 1 });
+
+  expect(store.activeContext.selected.listType).toBe('category');
+  expect(store.activeContext.selected.listId).toBe(5);
+  expect(store.activeContext.selected.page).toBe(2);
+
+})
 
 test('Case 1: Change route using replace and overwriting context', () => {
   const latest = { id: 0, route: 'list', listType: 'latest' };
