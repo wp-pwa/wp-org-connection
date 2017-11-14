@@ -146,7 +146,7 @@ test('Retrieve nested entities', () => {
   expect(connection.single.post[60].featured.sizes[1].height).toBe(250);
 });
 
-test('Add post entity', () => {
+test('Add post. Request and succeed', () => {
   const connection = Connection.create({});
   connection[actionTypes.SINGLE_REQUESTED]({
     singleType: 'post',
@@ -177,7 +177,7 @@ test('Add post entity', () => {
   expect(connection.single.post[60].title).toBe('Post 60');
 });
 
-test('Add post entity', () => {
+test('Add post. Request and fail.', () => {
   const connection = Connection.create({});
   connection[actionTypes.SINGLE_REQUESTED]({
     singleType: 'post',
@@ -188,6 +188,7 @@ test('Add post entity', () => {
   connection[actionTypes.SINGLE_FAILED]({
     singleType: 'post',
     singleId: 60,
+    error: new Error('Something went wrong!'),
   });
   expect(connection.single.post[60].fetching).toBe(false);
   expect(connection.single.post[60].ready).toBe(false);

@@ -2,7 +2,7 @@ import { types } from 'mobx-state-tree';
 import { Single } from './single';
 
 export const Total = types.model('Total').props({
-  items: types.maybe(types.number),
+  entities: types.maybe(types.number),
   pages: types.maybe(types.number),
 });
 
@@ -11,11 +11,9 @@ export const Page = types
   .props({
     entities: types.optional(types.array(types.reference(Single)), []),
     fetching: types.optional(types.boolean, false),
+    ready: types.optional(types.boolean, false),
   })
   .views(self => ({
-    get ready() {
-      return self.entities.length > 0;
-    },
     get total() {
       return self.entities.length || null;
     },
@@ -24,12 +22,21 @@ export const Page = types
 export const List = types
   .model('List')
   .props({
-    page: types.array(Page),
+    pageMap: types.optional(types.map(Page), {}),
     total: types.optional(Total, {}),
+    fetching: types.optional(types.boolean, false),
+    ready: types.optional(types.boolean, false),
   })
   .views(self => {
     const entities = [];
+    const pages = [];
     return {
+      get page() {
+        self.pageMap.keys().forEach(page => {
+          pages[page] = self.pageMap.get(page);
+        });
+        return pages;
+      },
       get entities() {
         let index = 0;
         self.page.forEach(page => {
@@ -39,9 +46,6 @@ export const List = types
           });
         });
         return entities;
-      },
-      get ready() {
-        return self.entities.length > 0;
       },
     };
   });
