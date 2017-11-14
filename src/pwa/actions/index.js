@@ -10,11 +10,12 @@ export const singleSucceed = ({ entity }) => ({
   type: actionTypes.SINGLE_SUCCEED,
   entity,
 });
-export const singleFailed = ({ singleType, singleId, error }) => ({
+export const singleFailed = ({ singleType, singleId, error, endpoint }) => ({
   type: actionTypes.SINGLE_FAILED,
   singleType,
   singleId,
   error,
+  endpoint,
 });
 
 export const listRequested = ({ listType, listId, page }) => ({
@@ -32,12 +33,13 @@ export const listSucceed = ({ listType, listId, page, total, results, entities }
   results,
   entities,
 });
-export const listFailed = ({ listType, listId, page, error }) => ({
+export const listFailed = ({ listType, listId, page, error, endpoint }) => ({
   type: actionTypes.LIST_FAILED,
   listType,
   listId,
   page,
   error,
+  endpoint,
 });
 
 export const customListRequested = () => ({
