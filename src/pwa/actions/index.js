@@ -17,14 +17,27 @@ export const singleFailed = ({ singleType, singleId, error }) => ({
   error,
 });
 
-export const listRequested = () => ({
+export const listRequested = ({ listType, listId, page }) => ({
   type: actionTypes.LIST_REQUESTED,
+  listType,
+  listId,
+  page,
 });
-export const listSucceed = () => ({
+export const listSucceed = ({ listType, listId, page, total, results, entities }) => ({
   type: actionTypes.LIST_SUCCEED,
+  listType,
+  listId,
+  page,
+  total,
+  results,
+  entities,
 });
-export const listFailed = () => ({
+export const listFailed = ({ listType, listId, page, error }) => ({
   type: actionTypes.LIST_FAILED,
+  listType,
+  listId,
+  page,
+  error,
 });
 
 export const customListRequested = () => ({
