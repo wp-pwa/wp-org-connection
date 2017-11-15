@@ -1,7 +1,7 @@
 import { types } from 'mobx-state-tree';
 import { ROUTE_CHANGE_SUCCEED } from '../types';
 
-const generateId = () =>
+export const generateId = () =>
   Math.random()
     .toString(16)
     .slice(2);
@@ -59,22 +59,24 @@ export const Context = types
 
       return { x, y };
     },
-    previous: () => {
+    getPrevious: () => {
       const { x } = self.findIndex(self.selected);
-      return x !== -1 ? self.items[x - 1] : null;
+      return x > 0 ? self.items[x - 1] : null;
     },
-    current: () => {
+    getCurrent: () => {
       const { x } = self.findIndex(self.selected);
       return x !== -1 ? self.items[x] : null;
     },
-    next: () => {
+    getNext: () => {
       const { x } = self.findIndex(self.selected);
-      return x !== -1 ? self.items[x + 1] : null;
+      const nextToLast = self.items.length - 1;
+      return x !== -1 && x < nextToLast ? self.items[x + 1] : null;
     },
   }))
   .actions(self => ({
     setSelected: ({ x, y }) => {
-      self.selected = y > 0 ? self.items[x][y] : self.items[x];
+      const item = self.items[x];
+      self.selected = item instanceof Array ? item[y] : item;
     },
   }));
 
@@ -85,25 +87,8 @@ export const Router = types
     activeContext: types.optional(types.union(types.reference(Context), types.null), null),
   })
   .actions(self => ({
-    // [ROUTE_CHANGE_SUCCEED]: ({ selected, method }) => {
-    //   // const { listType, listId, page, singleType, singleId } = selected;
-    //   const currentIndex = self.activeContext.findIndex(self.activeContext.selected);
-    //   const newIndex = self.activeContext.findIndex(selected);
-    //   const { x, y } = newIndex;
-    //
-    //   if (x === -1) return; // not found
-    //
-    //   const { items } = self.activeContext; // ?
-    //   const selectedId = y === 0 ? items[x].id : items[x][y].id;
-    //
-    //   if (method === 'push') {
-    //     self.activeContext.selected = selectedId;
-    //   } else if (method === 'replace') {
-    //     self.activeContext.selected = self.activeContext.items[x][y].id;
-    //   }
-    // },
-    // [ROUTE_CHANGE_SUCCEED]: ({ selected, method, context }) => self[method]({ selected, context }),
-    //
+    [ROUTE_CHANGE_SUCCEED]: ({ selected, method, context }) => self[method]({ selected, context }),
+
     push: ({ selected, context }) => {
       // Creates a context if a new one is passed.
       if (context) {
@@ -119,35 +104,49 @@ export const Router = types
         // If 'selected' doesn't exist inside 'activeContext', then a new context
         // should be created with that item.
         const contextId = generateId();
-        const itemId = generateId();
-        const item = { id: itemId, ...selected };
-        const index = self.contexts.push({
-          contextId,
-          selected: itemId,
+        // const itemId = generateId();
+        const item = selected; // { id: itemId, ...selected };
+        const length = self.contexts.push({
+          id: contextId,
+          selected: item.id,
           items: [item],
         });
 
-        self.activeContext = self.contexts[index];
+        self.activeContext = self.contexts[length - 1];
       }
     },
-    //
-    // replace: ({ selected, context }) => {
-    //   // Replaces the context if a new one is passed.
-    //   if (context) {
-    //     const index = self.contexts.findIndex(ctx => self.activeContext === ctx.id);
-    //     self.contexts.splice(index, 1, context);
-    //     self.activeContext = context.id ? context.id : (context.id = generateId());
-    //   }
-    //
-    //   // Ensures that 'selected' exists inside 'activeContext'
-    //   // and assigns to it.
-    //   const { x, y } = self.activeContext.findIndex(selected);
-    //   if (x !== -1) {
-    //     const [ item ] =
-    //       y > 0 ? self.activeContext.items[x].splice(y, 1) : self.activeContext.items.splice(x, 1);
-    //
-    //     // Current index
-    //     const currentIndex = self.activeContext.findIndex()
-    //   }
-    // }
+
+    replace: ({ selected, context }) => {
+      // Replaces the context if a new one is passed.
+      if (context) {
+        const index = self.contexts.findIndex(ctx => self.activeContext.id === ctx.id);
+        self.contexts.splice(index, 1, context);
+        self.activeContext = context;
+      }
+
+      if (!selected) return;
+
+      // Ensures that 'selected' exists inside 'activeContext'
+      // and assigns to it.
+      const { x, y } = self.activeContext.findIndex(selected);
+      if (x !== -1) {
+        const [ item ] =
+          y > 0 ? self.activeContext.items[x].splice(y, 1) : self.activeContext.items.splice(x, 1);
+
+        // Current index
+        const currentIndex = self.activeContext.findIndex(self.activeContext.selected);
+        const current = self.activeContext.getCurrent();
+        if (current instanceof Array) {
+          if (currentIndex.x === x) {
+            // without changes
+            self.activeContext.selected = item;
+          } else {
+            // move item to current
+            current.splice(currentIndex.y, 0, item);
+          }
+        } else {
+          self.activeContext.items[current.x] = [current, item];
+        }
+      }
+    }
   }));
