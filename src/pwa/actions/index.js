@@ -5,10 +5,11 @@ export const singleRequested = ({ singleType, singleId }) => ({
   singleType,
   singleId,
 });
-
-export const singleSucceed = ({ entity }) => ({
+export const singleSucceed = ({ singleType, singleId, entities }) => ({
   type: actionTypes.SINGLE_SUCCEED,
-  entity,
+  singleType,
+  singleId,
+  entities,
 });
 export const singleFailed = ({ singleType, singleId, error, endpoint }) => ({
   type: actionTypes.SINGLE_FAILED,

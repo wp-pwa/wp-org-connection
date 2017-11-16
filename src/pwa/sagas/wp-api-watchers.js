@@ -7,7 +7,7 @@ import { dep } from 'worona-deps';
 import * as actions from '../actions';
 import * as actionTypes from '../actionTypes';
 import * as schemas from '../schemas';
-import { typesToEndpoints, typesToParams } from '../constants';
+import { typesToEndpoints, typesToParams, typesToPlural } from '../constants';
 
 const CorsAnywhere = 'https://cors.worona.io/';
 
@@ -27,7 +27,7 @@ export function* initConnection() {
   return new Wpapi({ endpoint: `${cors ? CorsAnywhere : ''}${url}?rest_route=` });
 }
 
-const getList = ({ connection, listType, listId, singleType, page }) => {
+export const getList = ({ connection, listType, listId, singleType, page }) => {
   const endpoint = typesToEndpoints[singleType];
   const paramType = ['category', 'tag', 'author'].includes(listType)
     ? typesToParams[listType]
@@ -40,8 +40,8 @@ const getList = ({ connection, listType, listId, singleType, page }) => {
   return query;
 };
 
-const getSingle = ({ connection, singleType, singleId }) =>
-  connection[wpTypesSingularToPlural[singleType]]()
+export const getSingle = ({ connection, singleType, singleId }) =>
+  connection[singleType]()
     .id(singleId)
     .embed();
 
@@ -54,7 +54,7 @@ export const listRequested = connection =>
       );
     try {
       const response = yield call(getList, { connection, listType, listId, singleType, page });
-      const normalized = normalize(response, schemas[singleType]);
+      const normalized = normalize(response, schemas[typesToPlural(singleType)]);
       const entities = response._paging ? response._paging.total : 0;
       const pages = response._paging ? response._paging.totalPages : 0;
       const total = { entities, pages };
@@ -83,8 +83,8 @@ export const singleRequested = connection =>
   function* singleRequestedSaga({ singleType, singleId }) {
     try {
       const response = yield call(getSingle, { connection, singleType, singleId });
-      const { entities: entity } = normalize(response, schemas[singleType]);
-      yield put(actions.singleSucceed({ entity }));
+      const { entities } = normalize(response, schemas[singleType]);
+      yield put(actions.singleSucceed({ singleType, singleId, entities }));
     } catch (error) {
       yield put(
         actions.singleFailed({

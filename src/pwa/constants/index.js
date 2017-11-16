@@ -17,3 +17,16 @@ export const typesToParams = {
   author: 'author',
   media: 'media',
 };
+
+export const typesToPlural = {
+  post: 'posts',
+  page: 'pages',
+  category: 'categories',
+  tag: 'tags',
+  author: 'authors',
+  media: 'media',
+  comment: 'comments',
+  taxonomy: 'taxonomies',
+  postType: 'types',
+  postStatus: 'statuses',
+}
