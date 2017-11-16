@@ -39,14 +39,13 @@ export const Context = types
     infinite: true,
   })
   .views(self => ({
-    findIndex: ({ listType, listId, page, singleType = 'post', singleId }) => {
+    findIndex: ({ listType, listId, page, singleType, singleId }) => {
       const hasSameProps = i =>
-        (listType &&
-          i.listType === listType &&
-          i.listId === listId &&
-          i.singleType === singleType &&
-          i.page === page) ||
-        (i.singleType === singleType && singleId && i.singleId === singleId);
+        (!listType || listType === i.listType) &&
+        (!listId || listId === i.listId) &&
+        (!page || page === i.page) &&
+        (!singleType || singleType === i.singleType) &&
+        (!singleId || singleId === i.singleId);
 
       let y = 0;
       const x = self.items.findIndex(item => {
@@ -121,7 +120,7 @@ export const Router = types
       if (context) {
         const index = self.contexts.findIndex(ctx => self.activeContext.id === ctx.id);
         self.contexts.splice(index, 1, context);
-        self.activeContext = context;
+        self.activeContext = self.contexts[index];
       }
 
       if (!selected) return;
@@ -130,7 +129,10 @@ export const Router = types
       // and assigns to it.
       const { x, y } = self.activeContext.findIndex(selected);
       if (x !== -1) {
-        const [ item ] =
+
+        console.log('replace', { x, y });
+
+        const [item] =
           y > 0 ? self.activeContext.items[x].splice(y, 1) : self.activeContext.items.splice(x, 1);
 
         // Current index
@@ -148,5 +150,5 @@ export const Router = types
           self.activeContext.items[current.x] = [current, item];
         }
       }
-    }
+    },
   }));

@@ -247,10 +247,10 @@ test('Case 1: Change route using push in current context', () => {
 
 test('Case 2: Change route using replace and overwriting context', () => {
   const latest = { id: 0, route: 'list', listType: 'latest' };
-  const latest1 = { id: '00', route: 'list', listType: 'latest' };
-  const list1 = { id: 0, route: 'list', listType: 'category', listId: 5 };
-  const list2 = { id: 0, route: 'list', listType: 'category', listId: 6 };
-  const list3 = { id: 0, route: 'list', listType: 'category', listId: 7 };
+  const latest1 = { id: 1, route: 'list', listType: 'latest' };
+  const list1 = { id: 2, route: 'list', listType: 'category', listId: 5 };
+  const list2 = { id: 3, route: 'list', listType: 'category', listId: 6 };
+  const list3 = { id: 4, route: 'list', listType: 'category', listId: 7 };
 
   const post = (singleId, goBack) => ({
     id: generateId(),
@@ -292,6 +292,17 @@ test('Case 2: Change route using replace and overwriting context', () => {
 
   store.replace({ context: contextLists });
 
+  console.log(getSnapshot(store.activeContext.items[0][1]));
+
+  expect(store.activeContext.items[0][1].listType).toBe('latest');
   expect(store.activeContext.findIndex({ listType: 'latest' })).toEqual({ x: 0, y: 1 });
   expect(store.activeContext.items[1].listType).toBe('category');
+
+  store.replace({ selected: list1 });
+  console.log(store.activeContext.items);
+
+  expect(store.activeContext.items[0][2].listType).toBe('category');
+  expect(store.activeContext.items[0][2].listId).toBe('5');
+  expect(store.activeContext.items[1].listType).toBe('category');
+  expect(store.activeContext.items[1].listId).toBe('6');
 });
