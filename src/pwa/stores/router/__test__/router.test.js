@@ -1,6 +1,6 @@
 import { getSnapshot } from 'mobx-state-tree';
 import uuid from 'uuid/v4';
-import Item from '../item';
+import { Item } from '../item';
 import Column from '../column';
 import Context from '../context';
 import Router from '../router';
@@ -8,20 +8,20 @@ import Router from '../router';
 const sampleStore = () => {
 
   const item1 = Item.create({
-    id: 123,
+    id: uuid(),
     route: 'single',
     singleType: 'post',
     singleId: 1234,
-    goBack: { id: 0, listType: 'latest' },
+    goBack: { id: uuid(), listType: 'latest' },
   });
 
   const item2 = Item.create({
-    id: 124,
+    id: uuid(),
     route: 'list',
   });
 
   const item3 = Item.create({
-    id: 125,
+    id: uuid(),
     route: 'list',
     listType: 'category',
     listId: 5,
@@ -29,23 +29,21 @@ const sampleStore = () => {
   });
 
   const item4 = Item.create({
-    id: 126,
+    id: uuid(),
     route: 'list',
     listType: 'category',
     listId: 5,
     page: 2,
   });
 
-  const col1 = Column.create({ id: 0, items: [item1], selected: item1 });
-  const col2 = Column.create({ id: 1, items: [item2], selected: item2 });
-  const col3 = Column.create({ id: 2, items: [item3, item4], selected: item4 });
+  const col1 = Column.create({ id: uuid(), items: [item1], selected: item1 });
+  const col2 = Column.create({ id: uuid(), items: [item2], selected: item2 });
+  const col3 = Column.create({ id: uuid(), items: [item3, item4], selected: item4 });
 
   const ctx1 = Context.create({
-    id: 333,
+    id: uuid(),
     selected: col1,
     columns: [col1, col2, col3],
-    infinite: false,
-    options: null,
   });
 
   return Router.create({
@@ -82,7 +80,7 @@ test('Context is populated appropriately', () => {
 });
 
 test('Case 1: Change route using push in current context', () => {
-  const latest = { id: 0, route: 'list', listType: 'latest' };
+  const latest = { id: uuid(), route: 'list', listType: 'latest' };
 
   const post = (singleId, goBack) => ({
     id: uuid(),
@@ -98,13 +96,13 @@ test('Case 1: Change route using push in current context', () => {
   const post4 = Item.create(post(72, latest));
   const post5 = Item.create(post(75, latest));
 
-  const col1 = Column.create({ id: 0, items: [post1], selected: post1 });
-  const col2 = Column.create({ id: 0, items: [post2], selected: post2 });
-  const col3 = Column.create({ id: 0, items: [post3], selected: post3 });
-  const col4 = Column.create({ id: 0, items: [post4, post5], selected: post4 });
+  const col1 = Column.create({ id: uuid(), items: [post1], selected: post1 });
+  const col2 = Column.create({ id: uuid(), items: [post2], selected: post2 });
+  const col3 = Column.create({ id: uuid(), items: [post3], selected: post3 });
+  const col4 = Column.create({ id: uuid(), items: [post4, post5], selected: post4 });
 
   const contextPosts = Context.create({
-    id: 0,
+    id: uuid(),
     selected: col1,
     columns: [col1, col2, col3, col4],
     infinite: false,

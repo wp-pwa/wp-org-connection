@@ -11,6 +11,8 @@ export const List = types.model('List').props({
   singleType: types.optional(types.string, 'post'),
   page: types.optional(types.number, 0),
   isReady: types.optional(types.boolean, false),
+  column: types.maybe(types.reference(types.late(() => Column))),
+  next: types.maybe(types.reference(types.late(() => Item))), // eslint-disable-line
 });
 
 export const Single = types

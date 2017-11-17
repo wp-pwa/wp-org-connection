@@ -10,6 +10,17 @@ const Context = types
     selected: types.reference(types.late(() => Column)),
     infinite: true,
   })
+  .views(self => ({
+    getItem(props) {
+      let item;
+      self.columns.find(col => {
+        const i = col.getItem(props);
+        if (i) item = i;
+        return i;
+      });
+      return item;
+    }
+  }))
   .actions(self => ({
     afterCreate() {
       const flattened = self.columns.reduce(

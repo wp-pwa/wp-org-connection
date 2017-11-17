@@ -1,15 +1,17 @@
 import { types, detach } from 'mobx-state-tree';
 import uuid from 'uuid/v4';
-import { Column } from './column';
-import { Context } from './context';
+import Column from './column';
+import Context from './context';
 
 import { ROUTE_CHANGE_SUCCEED } from '../../actionTypes';
+
+const lateContext = types.late(() => Context);
 
 const Router = types
   .model('Router')
   .props({
-    contexts: types.optional(types.array(Context), []),
-    context: types.optional(types.union(types.reference(Context), types.null), null),
+    contexts: types.optional(types.array(lateContext), []),
+    context: types.maybe(types.reference(lateContext)),
   })
   .actions(self => ({
     [ROUTE_CHANGE_SUCCEED]: ({ selected, method, context }) => self[method]({ selected, context }),
@@ -28,7 +30,10 @@ const Router = types
       // Ensures that 'selected' exists inside 'activeContext'
       // and assigns to it.
       const item = self.context.getItem(selected);
-      if (item) self.context.selected = item;
+      if (item) {
+        self.context.selected = item.column;
+        self.context.selected.selected = item;
+      }
       else {
         // If 'selected' doesn't exist inside 'activeContext', then a new context
         // should be created with that item.

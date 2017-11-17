@@ -9,15 +9,16 @@ const Column = types
     selected: types.reference(types.late(() => Item)),
   })
   .views(self => ({
-    getItem: ({ singleType, singleId, listType, listId, page }) =>
-      self.items.find(
+    getItem({ singleType, singleId, listType, listId, page }) {
+      return self.items.find(
         i =>
           (!listType || listType === i.listType) &&
           (!listId || listId === i.listId) &&
           (!page || page === i.page) &&
           (!singleType || singleType === i.singleType) &&
           (!singleId || singleId === i.singleId),
-      ),
+      )
+    },
   }))
   .actions(self => ({
     afterCreate() {
