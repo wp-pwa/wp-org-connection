@@ -9,6 +9,10 @@ test('Convert post using single', () => {
   const { entities } = normalize(post60, single);
   expect(entities.post[60].id).toBe(60);
   expect(entities.post[60].slug).toBe('the-beauties-of-gullfoss');
+  expect(entities.post[60].taxonomiesMap).toEqual({
+    category: [3, 8],
+    tag: [10, 9, 13, 11],
+  });
   expect(entities.media[62].id).toBe(62);
   expect(entities.media[62].slug).toBe('iceland-test');
   expect(entities.author[4].id).toBe(4);
@@ -27,7 +31,6 @@ test('Convert a category using single', () => {
   expect(entities.taxonomy[7].slug).toBe('nature');
   expect(entities.taxonomy[7].taxonomy).toBe('category');
 });
-
 
 test('Convert a tag using single', () => {
   const { entities } = normalize(tag10, single);
