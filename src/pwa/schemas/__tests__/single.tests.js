@@ -1,8 +1,8 @@
 import { normalize } from 'normalizr';
-import post60 from './api/post-60.json';
-import category7 from './api/category-7.json';
-import tag10 from './api/tag-10.json';
-import author4 from './api/author-4.json';
+import post60 from '../../__tests__/post-60.json';
+import category7 from '../../__tests__/category-7.json';
+import tag10 from '../../__tests__/tag-10.json';
+import author4 from '../../__tests__/author-4.json';
 import { single } from '../';
 
 test('Convert post using single', () => {
