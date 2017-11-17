@@ -1,17 +1,12 @@
 import { post, posts } from './posts';
-import { category, categories } from './categories';
+import { taxonomy, taxonomies } from './taxonomies';
 import { author, authors } from './authors';
-import { tag, tags } from './tags';
-import page from './page';
 
 export {
   post,
   posts,
-  category,
-  categories,
+  taxonomy,
+  taxonomies,
   author,
   authors,
-  page,
-  tag,
-  tags,
 };

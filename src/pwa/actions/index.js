@@ -1,41 +1,64 @@
-import * as types from '../types';
+import * as actionTypes from '../actionTypes';
 
-export const singleRequested = () => ({
-  type: types.SINGLE_REQUESTED,
+export const singleRequested = ({ singleType, singleId }) => ({
+  type: actionTypes.SINGLE_REQUESTED,
+  singleType,
+  singleId,
 });
-export const singleSucceed = () => ({
-  type: types.SINGLE_SUCCEED,
+export const singleSucceed = ({ singleType, singleId, entities }) => ({
+  type: actionTypes.SINGLE_SUCCEED,
+  singleType,
+  singleId,
+  entities,
 });
-export const singleFailed = () => ({
-  type: types.SINGLE_FAILED,
+export const singleFailed = ({ singleType, singleId, error, endpoint }) => ({
+  type: actionTypes.SINGLE_FAILED,
+  singleType,
+  singleId,
+  error,
+  endpoint,
 });
 
-export const listRequested = () => ({
-  type: types.LIST_REQUESTED,
+export const listRequested = ({ listType, listId, page }) => ({
+  type: actionTypes.LIST_REQUESTED,
+  listType,
+  listId,
+  page,
 });
-export const listSucceed = () => ({
-  type: types.LIST_SUCCEED,
+export const listSucceed = ({ listType, listId, page, total, results, entities }) => ({
+  type: actionTypes.LIST_SUCCEED,
+  listType,
+  listId,
+  page,
+  total,
+  results,
+  entities,
 });
-export const listFailed = () => ({
-  type: types.LIST_FAILED,
+export const listFailed = ({ listType, listId, page, error, endpoint }) => ({
+  type: actionTypes.LIST_FAILED,
+  listType,
+  listId,
+  page,
+  error,
+  endpoint,
 });
 
 export const customListRequested = () => ({
-  type: types.CUSTOM_LIST_REQUESTED,
+  type: actionTypes.CUSTOM_LIST_REQUESTED,
 });
 export const customListSucceed = () => ({
-  type: types.CUSTOM_LIST_SUCCEED,
+  type: actionTypes.CUSTOM_LIST_SUCCEED,
 });
 export const customListFailed = () => ({
-  type: types.CUSTOM_LIST_FAILED,
+  type: actionTypes.CUSTOM_LIST_FAILED,
 });
 
 export const routeChangeRequested = () => ({
-  type: types.ROUTE_CHANGE_REQUESTED,
+  type: actionTypes.ROUTE_CHANGE_REQUESTED,
 });
 export const routeChangeSucceed = () => ({
-  type: types.ROUTE_CHANGE_SUCCEED,
+  type: actionTypes.ROUTE_CHANGE_SUCCEED,
 });
 export const routeChangeFailed = () => ({
-  type: types.ROUTE_CHANGE_FAILED,
+  type: actionTypes.ROUTE_CHANGE_FAILED,
 });
