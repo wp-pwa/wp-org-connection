@@ -1,10 +1,10 @@
-import { single, singles } from './singles';
+import { post, posts } from './posts';
 import { taxonomy, taxonomies } from './taxonomies';
 import { author, authors } from './authors';
 
 export {
-  single,
-  singles,
+  post,
+  posts,
   taxonomy,
   taxonomies,
   author,
