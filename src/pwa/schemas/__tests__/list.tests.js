@@ -18,7 +18,7 @@ test('Convert list of posts using list', () => {
   expect(entities.taxonomy[3].taxonomy).toBe('category');
   expect(entities.taxonomy[15].id).toBe(15);
   expect(entities.taxonomy[15].slug).toBe('japan');
-  expect(entities.taxonomy[15].taxonomy).toBe('post_tag');
+  expect(entities.taxonomy[15].taxonomy).toBe('tag');
 });
 
 test('Convert a category list', () => {
@@ -32,7 +32,7 @@ test('Convert a tag list', () => {
   const { entities } = normalize(tagsList, list);
   expect(entities.taxonomy[30].id).toBe(30);
   expect(entities.taxonomy[30].slug).toBe('culture');
-  expect(entities.taxonomy[30].taxonomy).toBe('post_tag');
+  expect(entities.taxonomy[30].taxonomy).toBe('tag');
 });
 
 test('Convert a author list', () => {

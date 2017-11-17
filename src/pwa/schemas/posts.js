@@ -1,9 +1,9 @@
 /* eslint-disable no-underscore-dangle */
 import { schema } from 'normalizr';
+import { taxonomy } from './taxonomies';
+import { author } from './authors';
 
-const author = new schema.Entity('author');
 const media = new schema.Entity('media');
-const taxonomy = new schema.Entity('taxonomy');
 const taxonomies = new schema.Array(new schema.Array(taxonomy));
 export const post = new schema.Entity(
   'post',

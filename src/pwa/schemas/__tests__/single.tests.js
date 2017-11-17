@@ -22,7 +22,7 @@ test('Convert post using single', () => {
   expect(entities.taxonomy[3].taxonomy).toBe('category');
   expect(entities.taxonomy[10].id).toBe(10);
   expect(entities.taxonomy[10].slug).toBe('gullfoss');
-  expect(entities.taxonomy[10].taxonomy).toBe('post_tag');
+  expect(entities.taxonomy[10].taxonomy).toBe('tag');
 });
 
 test('Convert a category using single', () => {
@@ -36,7 +36,7 @@ test('Convert a tag using single', () => {
   const { entities } = normalize(tag10, single);
   expect(entities.taxonomy[10].id).toBe(10);
   expect(entities.taxonomy[10].slug).toBe('gullfoss');
-  expect(entities.taxonomy[10].taxonomy).toBe('post_tag');
+  expect(entities.taxonomy[10].taxonomy).toBe('tag');
 });
 
 test('Convert a author using single', () => {
