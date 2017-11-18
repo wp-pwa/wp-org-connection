@@ -14,6 +14,7 @@ export const Media = types.model('Media').props({
   slug: types.string,
   alt: types.string,
   mimeType: types.string,
+  mediaType: types.string,
   title: types.string,
   author: types.reference(types.late(() => Author)),
   original: Image,
@@ -42,8 +43,8 @@ export const Meta = types.model('Meta').props({
   canonical: types.maybe(types.string),
 });
 
-export const Single = types
-  .model('Single')
+export const Post = types
+  .model('Post')
   .props({
     id: types.identifier(types.number),
     fetching: types.optional(types.boolean, false),
@@ -73,4 +74,4 @@ export const Single = types
     };
   });
 
-export const Any = types.union(Single, Taxonomy, Author, Media);
+export const Any = types.union(Post, Taxonomy, Author, Media);

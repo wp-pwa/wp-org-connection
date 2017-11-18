@@ -1,5 +1,5 @@
 import { types } from 'mobx-state-tree';
-import { Single } from './single';
+import { Post } from './single';
 
 export const Total = types.model('Total').props({
   entities: types.maybe(types.number),
@@ -9,7 +9,7 @@ export const Total = types.model('Total').props({
 export const Page = types
   .model('Page')
   .props({
-    entities: types.optional(types.array(types.reference(Single)), []),
+    entities: types.optional(types.array(types.reference(Post)), []),
     fetching: types.optional(types.boolean, false),
     ready: types.optional(types.boolean, false),
   })
