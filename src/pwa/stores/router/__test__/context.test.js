@@ -44,7 +44,7 @@ test('Context is instatiated appropriately', () => {
     selected: col1,
   })
 
-  expect(ctx.selected.items[0].next).toEqual(ctx.columns[0].items[1]);
-  expect(ctx.selected.items[2].next).toEqual(ctx.columns[1].items[0]);
+  expect(ctx.column.items[0].next).toEqual(ctx.columns[0].items[1]);
+  expect(ctx.column.items[2].next).toEqual(ctx.columns[1].items[0]);
   expect(ctx.columns[2].items[2].next).toBe(null);
 });

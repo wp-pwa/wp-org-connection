@@ -2,11 +2,14 @@ import uuid from 'uuid/v4';
 
 import Column from '../column';
 
-test('Column is instatiated appropriately', () => {
+let column;
+beforeEach(() => {
+  const columnId = uuid();
   const item = () => ({
-    id: uuid(),
+    _id: uuid(),
     route: 'list',
     listType: 'latest',
+    column: columnId,
   });
 
   const item1 = item();
@@ -14,13 +17,19 @@ test('Column is instatiated appropriately', () => {
   const item3 = item();
   const item4 = item();
 
-  const col = Column.create({
-    id: uuid(),
+  column = Column.create({
+    _id: columnId,
     items: [item1, item2, item3, item4],
-    selected: item1.id,
-  })
+    selected: item1._id,
+  });
+});
 
-  expect(col.items[0].column).toEqual(col);
-  expect(col.items[3].column).toEqual(col);
-  expect(col.items[0].column.items[0]).toEqual(col.selected);
+test('Column is instatiated appropriately', () => {
+  expect(column.items[0].column).toEqual(column);
+  expect(column.items[3].column).toEqual(column);
+  expect(column.items[0].column.items[0]).toEqual(column.selected);
+});
+
+test('get item', () => {
+  expect(column.getItem({ singleType: 'post', singleId: 60 })).toBe(null);
 });

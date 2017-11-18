@@ -4,13 +4,17 @@ import Column from './column';
 const Context = types
   .model('Context')
   .props({
-    id: types.identifier(),
+    index: types.identifier(types.number),
     options: types.frozen,
     columns: types.optional(types.array(types.late(() => Column)), []),
-    selected: types.reference(types.late(() => Column)),
+    column: types.reference(types.late(() => Column)),
+    generator: types.frozen,
     infinite: true,
   })
   .views(self => ({
+    get selected() {
+      return self.column.selected;
+    },
     getItem(props) {
       let item;
       self.columns.find(col => {
@@ -18,7 +22,7 @@ const Context = types
         if (i) item = i;
         return i;
       });
-      return item;
+      return item || null;
     }
   }))
   .actions(self => ({

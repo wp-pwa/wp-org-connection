@@ -1,10 +1,12 @@
 import { types } from 'mobx-state-tree';
 import { Item } from './item';
 
+import Id from '../id';
+
 const Column = types
   .model('Column')
   .props({
-    id: types.identifier(types.string),
+    _id: Id,
     items: types.optional(types.array(types.late(() => Item)), []),
     selected: types.reference(types.late(() => Item)),
   })
@@ -17,14 +19,7 @@ const Column = types
           (!page || page === i.page) &&
           (!singleType || singleType === i.singleType) &&
           (!singleId || singleId === i.singleId),
-      )
-    },
-  }))
-  .actions(self => ({
-    afterCreate() {
-      self.items.forEach(item => {
-        item.column = self;
-      });
+      ) || null
     },
   }));
 

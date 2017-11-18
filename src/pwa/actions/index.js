@@ -60,11 +60,37 @@ export const customListFailed = () => ({
   type: actionTypes.CUSTOM_LIST_FAILED,
 });
 
-export const routeChangeRequested = () => ({
+export const routeChangeRequested = ({
+  selected: { listType, listId, page = 1, singleType, singleId },
+  method = 'push',
+  context = null,
+}) => ({
   type: actionTypes.ROUTE_CHANGE_REQUESTED,
+  selected: {
+    listType,
+    listId,
+    page,
+    singleType,
+    singleId,
+  },
+  method,
+  context,
 });
-export const routeChangeSucceed = () => ({
+export const routeChangeSucceed = ({
+  selected: { listType, listId, page = 1, singleType, singleId },
+  method = 'push',
+  context = null,
+}) => ({
   type: actionTypes.ROUTE_CHANGE_SUCCEED,
+  selected: {
+    listType,
+    listId,
+    page,
+    singleType,
+    singleId,
+  },
+  method,
+  context,
 });
 export const routeChangeFailed = () => ({
   type: actionTypes.ROUTE_CHANGE_FAILED,

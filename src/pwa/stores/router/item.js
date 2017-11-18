@@ -1,31 +1,43 @@
 import { types } from 'mobx-state-tree';
 import Column from './column';
 
-export const Id = types.union(types.string, types.number);
+import Id from '../id';
 
 export const List = types.model('List').props({
-  id: types.identifier(Id),
+  _id: Id,
   route: 'list',
   listType: types.optional(types.string, 'latest'),
-  listId: types.optional(Id, 0),
-  singleType: types.optional(types.string, 'post'),
+  listId: types.optional(types.union(types.string, types.number), 0),
   page: types.optional(types.number, 0),
-  isReady: types.optional(types.boolean, false),
+  ready: types.optional(types.boolean, false),
   column: types.maybe(types.reference(types.late(() => Column))),
   next: types.maybe(types.reference(types.late(() => Item))), // eslint-disable-line
-});
+}).views(self => ({
+  get type() {
+    return self.listType;
+  },
+  get id() {
+    return self.listId;
+  },
+}));
 
 export const Single = types
   .model('Single')
   .props({
-    id: types.identifier(Id),
+    _id: Id,
     route: 'single',
     singleType: types.string,
-    singleId: Id,
-    isReady: types.optional(types.boolean, false),
-    goBack: List,
+    singleId: types.number,
+    ready: types.optional(types.boolean, false),
+    fromList: types.maybe(List),
     column: types.maybe(types.reference(types.late(() => Column))),
     next: types.maybe(types.reference(types.late(() => Item))), // eslint-disable-line
-  });
-
+  }).views(self => ({
+    get type() {
+      return self.singleType;
+    },
+    get id() {
+      return self.singleId;
+    },
+  }));
 export const Item = types.union(({ route }) => (route === 'list' ? List : Single), List, Single);
