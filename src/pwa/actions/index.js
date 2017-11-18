@@ -25,13 +25,20 @@ export const listRequested = ({ listType, listId, page }) => ({
   listId,
   page,
 });
-export const listSucceed = ({ listType, listId, page, total, results, entities }) => ({
+export const listSucceed = ({
+  listType,
+  listId = null,
+  page = 1,
+  total = { entities: 0, pages: 0 },
+  result,
+  entities,
+}) => ({
   type: actionTypes.LIST_SUCCEED,
   listType,
   listId,
   page,
   total,
-  results,
+  result,
   entities,
 });
 export const listFailed = ({ listType, listId, page, error, endpoint }) => ({

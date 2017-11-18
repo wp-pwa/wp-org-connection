@@ -7,7 +7,7 @@ import { dep } from 'worona-deps';
 import * as actions from '../actions';
 import * as actionTypes from '../actionTypes';
 import * as schemas from '../schemas';
-import { typesToEndpoints, typesToParams, typesToPlural } from '../constants';
+import { typesToEndpoints, typesToParams } from '../constants';
 
 const CorsAnywhere = 'https://cors.worona.io/';
 
@@ -46,21 +46,22 @@ export const getSingle = ({ connection, singleType, singleId }) =>
     .embed();
 
 export const listRequested = connection =>
-  function* listRequestedSaga({ listType, listId, page }) {
+  function* listRequestedSaga({ listType, listId = null, page = 1 }) {
     const singleType = 'post';
-    if (!['category', 'tag', 'author'].includes(listType))
+    if (!['latest', 'category', 'tag', 'author'].includes(listType))
       throw new Error(
         'Custom taxonomies should retrieve their custom post types first. NOT IMPLEMENTED.'
       );
     try {
       const response = yield call(getList, { connection, listType, listId, singleType, page });
-      const normalized = normalize(response, schemas[typesToPlural(singleType)]);
-      const entities = response._paging ? response._paging.total : 0;
-      const pages = response._paging ? response._paging.totalPages : 0;
-      const total = { entities, pages };
+      const { entities, result } = normalize(response, schemas.list);
+      const totalEntities = response._paging ? response._paging.total : 0;
+      const totalPages = response._paging ? response._paging.totalPages : 0;
+      const total = { entities: totalEntities, pages: totalPages };
       yield put(
         actions.listSucceed({
-          ...normalized,
+          entities,
+          result: result.map(item => item.id),
           listType,
           listId,
           page,
@@ -83,7 +84,7 @@ export const singleRequested = connection =>
   function* singleRequestedSaga({ singleType, singleId }) {
     try {
       const response = yield call(getSingle, { connection, singleType, singleId });
-      const { entities } = normalize(response, schemas[singleType]);
+      const { entities } = normalize(response, schemas.single);
       yield put(actions.singleSucceed({ singleType, singleId, entities }));
     } catch (error) {
       yield put(
