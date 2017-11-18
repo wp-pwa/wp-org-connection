@@ -2,8 +2,8 @@
 export const post = entity => ({
   id: entity.id,
   type: entity.type,
-  creationDate: entity.date,
-  modificationDate: entity.modified,
+  creationDate: new Date(entity.date).getTime(),
+  modificationDate: new Date(entity.modified).getTime(),
   title: entity.title.rendered,
   slug: entity.slug,
   link: entity.link,
@@ -34,7 +34,7 @@ export const author = entity => ({
 
 export const media = entity => ({
   id: entity.id,
-  creationDate: entity.date,
+  creationDate: new Date(entity.date).getTime(),
   slug: entity.slug,
   alt: entity.alt_text,
   mimeType: entity.mime_type,

@@ -77,12 +77,12 @@ const Connection = types
         if (!list.get(listId).pageMap.get(page)) list.get(listId).pageMap.set(page, {});
         list.get(listId).pageMap.get(page).fetching = true;
       },
-      [actionTypes.LIST_SUCCEED]({ listType, listId, page, total, results, entities }) {
+      [actionTypes.LIST_SUCCEED]({ listType, listId, page, total, result, entities }) {
         // Update the list.
         const list = self.listMap.get(listType).get(listId);
         list.fetching = false;
         list.ready = true;
-        list.pageMap.get(page).entities = results;
+        list.pageMap.get(page).entities = result;
         list.pageMap.get(page).fetching = false;
         list.pageMap.get(page).ready = true;
         if (total) list.total = total;

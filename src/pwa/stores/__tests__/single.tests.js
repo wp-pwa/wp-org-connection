@@ -149,7 +149,7 @@ test('Retrieve nested entities', () => {
   expect(connection.single.post[60].featured.sizes[1].height).toBe(250);
 });
 
-test.skip('Add post. Request and succeed', () => {
+test('Add post. Request and succeed', () => {
   const connection = Connection.create({});
   connection[actionTypes.SINGLE_REQUESTED](actions.singleRequested({
     singleType: 'post',
@@ -162,7 +162,7 @@ test.skip('Add post. Request and succeed', () => {
   }));
   expect(connection.single.post[60].fetching).toBe(false);
   expect(connection.single.post[60].ready).toBe(true);
-  expect(connection.single.post[60].title).toBe('Post 60');
+  expect(connection.single.post[60].title).toBe('The Beauties of Gullfoss');
 });
 
 test('Add post. Request and fail.', () => {
@@ -173,11 +173,11 @@ test('Add post. Request and fail.', () => {
   }));
   expect(connection.single.post[60].fetching).toBe(true);
   expect(connection.single.post[60].ready).toBe(false);
-  connection[actionTypes.SINGLE_FAILED]({
+  connection[actionTypes.SINGLE_FAILED](actions.singleFailed({
     singleType: 'post',
     singleId: 60,
     error: new Error('Something went wrong!'),
-  });
+  }))
   expect(connection.single.post[60].fetching).toBe(false);
   expect(connection.single.post[60].ready).toBe(false);
 });
