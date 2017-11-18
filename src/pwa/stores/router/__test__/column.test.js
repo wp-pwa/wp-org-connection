@@ -32,4 +32,7 @@ test('Column is instatiated appropriately', () => {
 
 test('get item', () => {
   expect(column.getItem({ singleType: 'post', singleId: 60 })).toBe(null);
+  expect(column.getItem({ listType: 'latest' }).type).toBe('latest');
+  expect(column.getItem({ listType: 'latest' }).id).toBe(null);
+  expect(column.getItem({ listType: 'latest' }).column._id).toBe(column._id);
 });

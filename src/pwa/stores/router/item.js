@@ -7,7 +7,7 @@ export const List = types.model('List').props({
   _id: Id,
   route: 'list',
   listType: types.optional(types.string, 'latest'),
-  listId: types.optional(types.union(types.string, types.number), 0),
+  listId: types.maybe(types.union(types.string, types.number)),
   page: types.optional(types.number, 0),
   ready: types.optional(types.boolean, false),
   column: types.maybe(types.reference(types.late(() => Column))),
