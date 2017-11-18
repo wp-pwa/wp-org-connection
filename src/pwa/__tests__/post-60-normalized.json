@@ -152,7 +152,7 @@
       "link": "https://demo.worona.org/tag/iceland/",
       "name": "Iceland",
       "slug": "iceland",
-      "taxonomy": "post_tag",
+      "taxonomy": "tag",
       "yoast_meta": {
         "yoast_wpseo_title": "Iceland Archives - Demo Worona",
         "yoast_wpseo_metadesc": ""
@@ -170,7 +170,7 @@
       "link": "https://demo.worona.org/tag/gullfoss/",
       "name": "Gullfoss",
       "slug": "gullfoss",
-      "taxonomy": "post_tag",
+      "taxonomy": "tag",
       "yoast_meta": {
         "yoast_wpseo_title": "Gullfoss Archives - Demo Worona",
         "yoast_wpseo_metadesc": ""
@@ -188,7 +188,7 @@
       "link": "https://demo.worona.org/tag/waterfall/",
       "name": "Waterfall",
       "slug": "waterfall",
-      "taxonomy": "post_tag",
+      "taxonomy": "tag",
       "yoast_meta": {
         "yoast_wpseo_title": "Waterfall Archives - Demo Worona",
         "yoast_wpseo_metadesc": ""
@@ -206,7 +206,7 @@
       "link": "https://demo.worona.org/tag/nature/",
       "name": "Nature",
       "slug": "nature",
-      "taxonomy": "post_tag",
+      "taxonomy": "tag",
       "yoast_meta": {
         "yoast_wpseo_title": "Nature Archives - Demo Worona",
         "yoast_wpseo_metadesc": ""
@@ -327,7 +327,8 @@
         ],
         "wp:featuredmedia": [62],
         "wp:term": [[3, 8], [10, 9, 13, 11]]
-      }
+      },
+      "taxonomiesMap": { "category": [3, 8], "tag": [10, 9, 13, 11] }
     }
   }
 }
