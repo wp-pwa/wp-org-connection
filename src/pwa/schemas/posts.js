@@ -1,18 +1,38 @@
+/* eslint-disable no-underscore-dangle */
 import { schema } from 'normalizr';
+import { taxonomy } from './taxonomies';
+import { author } from './authors';
 
-const author = new schema.Entity('users');
-const featuredMedia = new schema.Entity('media');
-const category = new schema.Entity('categories');
-const categories = new schema.Array(category);
-const tag = new schema.Entity('tags');
-const tags = new schema.Array(tag);
-const term = new schema.Array({
-  category: categories,
-  post_tag: tags,
-}, input => input[0] && input[0].taxonomy);
-export const post = new schema.Entity('posts', { _embedded: {
-  author: [author],
-  'wp:featuredmedia': [featuredMedia],
-  'wp:term': term,
-} });
+const media = new schema.Entity('media');
+const taxonomies = new schema.Array(new schema.Array(taxonomy));
+export const post = new schema.Entity(
+  'post',
+  {},
+  {
+    processStrategy(entity) {
+      // Get all taxonomies and generate a map so we can now later on which props are actually
+      // taxonomies.
+      if (entity._embedded && entity._embedded['wp:term']) {
+        const taxonomiesMap = {};
+        entity._embedded['wp:term'].forEach(term =>
+          term.forEach(item => {
+            const type = item.taxonomy === 'post_tag' ? 'tag' : item.taxonomy;
+            taxonomiesMap[type] = taxonomiesMap[type] || [];
+            taxonomiesMap[type].push(item.id);
+          }),
+        );
+        return { ...entity, taxonomiesMap };
+      }
+      return entity;
+    },
+  },
+);
+post.define({
+  _embedded: {
+    author: [author],
+    'wp:featuredmedia': [media],
+    'wp:term': taxonomies,
+    up: post,
+  },
+});
 export const posts = new schema.Array(post);

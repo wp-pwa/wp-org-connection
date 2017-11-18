@@ -1,175 +1,107 @@
 /* eslint-disable no-underscore-dangle, no-undef */
 import Wpapi from 'wpapi';
 import { normalize } from 'normalizr';
-import { forOwn, capitalize } from 'lodash';
-import { toString } from 'query-parse';
+import { forOwn } from 'lodash';
 import { call, select, put, takeEvery, all } from 'redux-saga/effects';
 import { dep } from 'worona-deps';
 import * as actions from '../actions';
-import * as types from '../types';
-import * as selectorCreators from '../selectorCreators';
+import * as actionTypes from '../actionTypes';
 import * as schemas from '../schemas';
-import { wpTypesPlural, wpTypesSingular, wpTypesSingularToPlural } from '../constants';
+import { typesToEndpoints, typesToParams } from '../constants';
 
 const CorsAnywhere = 'https://cors.worona.io/';
 
-export function* initConnection() {
-  // const isCors = yield call(dep('router', 'sagaHelpers', 'isCors'));
-  const isCors = false;
+export function* isCors() {
+  // If this is the server, isCors is not needed.
+  if (typeof window === 'undefined') return false;
   const getSetting = dep('settings', 'selectorCreators', 'getSetting');
   const url = yield select(getSetting('generalSite', 'url'));
-  return new Wpapi({ endpoint: `${isCors ? CorsAnywhere : ''}${url}?rest_route=` });
+  // Only in case of a https connection and a http WordPres, cors is needed.
+  return url.startsWith('http://') && window.location.host === 'https';
 }
 
-const getList = ({ connection, wpType, params, page }) => {
-  let query = connection[wpType]().page(page);
+export function* initConnection() {
+  const cors = yield call(dep('router', 'sagaHelpers', 'isCors'));
+  const getSetting = dep('settings', 'selectorCreators', 'getSetting');
+  const url = yield select(getSetting('generalSite', 'url'));
+  return new Wpapi({ endpoint: `${cors ? CorsAnywhere : ''}${url}?rest_route=` });
+}
+
+export const getList = ({ connection, listType, listId, singleType, page }) => {
+  const endpoint = typesToEndpoints[singleType];
+  const paramType = ['category', 'tag', 'author'].includes(listType)
+    ? typesToParams[listType]
+    : listType;
+  const params = { _embed: true, [paramType]: listId };
+  let query = connection[endpoint]().page(page);
   forOwn(params, (value, key) => {
     query = query.param(key, value);
   });
   return query;
 };
 
-const getSingle = ({ connection, wpType, id }) =>
-  connection[wpTypesSingularToPlural[wpType]]()
-    .id(id)
+export const getSingle = ({ connection, singleType, singleId }) =>
+  connection[singleType]()
+    .id(singleId)
     .embed();
 
-export const newListRequested = (connection, wpType) =>
-  function* newListRequestedSaga({ params: newParams, name }) {
-    const globalParams = yield select(selectorCreators.getParams(wpType));
-    const params = { ...globalParams, ...newParams };
-    const key = toString(params);
-    yield put(actions.nameKeyChanged({ name, key, params, wpType }));
-    try {
-      const response = yield call(getList, { connection, wpType, params, page: 1 });
-      const normalized = normalize(response, schemas[wpType]);
-      response._paging = response._paging || { total: 0, totalPages: 0 };
-      yield put(
-        actions[`new${capitalize(wpType)}ListSucceed`]({
-          ...normalized,
-          params,
-          key,
-          name,
-          wpType,
-          items: response._paging.total,
-          pages: response._paging.totalPages,
-        }),
-      );
-    } catch (error) {
-      yield put(
-        actions[`new${capitalize(wpType)}ListFailed`]({
-          error,
-          params,
-          name,
-          endpoint: getList({ connection, wpType, params, page: 1 }).toString(),
-        }),
-      );
-    }
-  };
-
-export const anotherPageRequested = (connection, wpType) =>
-  function* anotherPageRequestedSage({ page: reqPage, name }) {
-    const params = yield select(selectorCreators.getListParams(name));
-    try {
-      const isListInitialisated = yield select(selectorCreators.isListInitialisated(name));
-      if (!isListInitialisated) throw new Error(`List ${name} is not initialised yet.`);
-      const page = reqPage || (yield select(selectorCreators.getNumberOfRetrievedPages(name))) + 1;
-      const response = yield call(getList, { connection, wpType, params, page });
-      const normalized = normalize(response, schemas[wpType]);
-      const key = toString(params);
-      yield put(
-        actions[`another${capitalize(wpType)}PageSucceed`]({
-          ...normalized,
-          params,
-          key,
-          page,
-          name,
-          wpType,
-        }),
-      );
-    } catch (error) {
-      yield put(
-        actions[`another${capitalize(wpType)}PageFailed`]({
-          error,
-          params,
-          name,
-          endpoint: getList({ connection, wpType, params, page: 1 }).toString(),
-        }),
-      );
-    }
-  };
-
-export const singleRequested = (connection, wpType) =>
-  function* singleRequestedSaga({ id, current }) {
-    if (current)
-      yield put(
-        actions.nameKeyChanged({
-          name: 'currentSingle',
-          wpType: wpTypesSingularToPlural[wpType],
-          id,
-        }),
+export const listRequested = connection =>
+  function* listRequestedSaga({ listType, listId = null, page = 1 }) {
+    const singleType = 'post';
+    if (!['latest', 'category', 'tag', 'author'].includes(listType))
+      throw new Error(
+        'Custom taxonomies should retrieve their custom post types first. NOT IMPLEMENTED.'
       );
     try {
-      const response = yield call(getSingle, { connection, wpType, id });
-      const { entities } = normalize(response, schemas[wpType]);
+      const response = yield call(getList, { connection, listType, listId, singleType, page });
+      const { entities, result } = normalize(response, schemas.list);
+      const totalEntities = response._paging ? response._paging.total : 0;
+      const totalPages = response._paging ? response._paging.totalPages : 0;
+      const total = { entities: totalEntities, pages: totalPages };
       yield put(
-        actions[`${wpType}Succeed`]({
+        actions.listSucceed({
           entities,
-          id,
-          wpType: wpTypesSingularToPlural[wpType],
-          current,
-        }),
+          result: result.map(item => item.id),
+          listType,
+          listId,
+          page,
+          total,
+        })
       );
     } catch (error) {
       yield put(
-        actions[`${wpType}Failed`]({
+        actions.listFailed({
+          listType,
+          listId,
           error,
-          id,
-          current,
-          wpType: wpTypesSingularToPlural[wpType],
-          endpoint: getSingle({ connection, wpType, id }).toString(),
-        }),
+          endpoint: getList({ connection, listType, listId, singleType, page }).toString(),
+        })
       );
     }
   };
 
-export const siteInfoRequested = connection =>
-  function* siteInfoRequestedSaga() {
+export const singleRequested = connection =>
+  function* singleRequestedSaga({ singleType, singleId }) {
     try {
-      const data = yield call([connection, 'siteInfo']);
-
-      yield put(
-        actions.siteInfoSucceed({ title: data.homepage_title, metadesc: data.homepage_metadesc }),
-      );
+      const response = yield call(getSingle, { connection, singleType, singleId });
+      const { entities } = normalize(response, schemas.single);
+      yield put(actions.singleSucceed({ singleType, singleId, entities }));
     } catch (error) {
-      yield put(actions.siteInfoFailed({ error }));
+      yield put(
+        actions.singleFailed({
+          singleType,
+          singleId,
+          error,
+          endpoint: getSingle({ connection, singleType, singleId }).toString(),
+        })
+      );
     }
   };
 
 export default function* wpApiWatchersSaga() {
   const connection = yield call(initConnection);
-  connection.siteInfo = connection.registerRoute('worona/v1', '/site-info');
-
-  yield all(
-    Object.keys(wpTypesPlural).map(key =>
-      takeEvery(
-        types[`NEW_${wpTypesPlural[key]}_LIST_REQUESTED`],
-        newListRequested(connection, key),
-      ),
-    ),
-  );
-  yield all(
-    Object.keys(wpTypesPlural).map(key =>
-      takeEvery(
-        types[`ANOTHER_${wpTypesPlural[key]}_PAGE_REQUESTED`],
-        anotherPageRequested(connection, key),
-      ),
-    ),
-  );
-  yield all(
-    Object.keys(wpTypesSingular).map(key =>
-      takeEvery(types[`${wpTypesSingular[key]}_REQUESTED`], singleRequested(connection, key)),
-    ),
-  );
-  yield takeEvery(types.SITE_INFO_REQUESTED, siteInfoRequested(connection));
+  yield all([
+    takeEvery(actionTypes.SINGLE_REQUESTED, singleRequested(connection)),
+    takeEvery(actionTypes.LIST_REQUESTED, listRequested(connection)),
+  ]);
 }

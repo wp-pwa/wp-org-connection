@@ -1,25 +1,53 @@
 import * as actionTypes from '../actionTypes';
 
-export const singleRequested = () => ({
+export const singleRequested = ({ singleType, singleId }) => ({
   type: actionTypes.SINGLE_REQUESTED,
+  singleType,
+  singleId,
 });
-
-export const singleSucceed = ({ entity }) => ({
+export const singleSucceed = ({ singleType, singleId, entities }) => ({
   type: actionTypes.SINGLE_SUCCEED,
-  entity,
+  singleType,
+  singleId,
+  entities,
 });
-export const singleFailed = () => ({
+export const singleFailed = ({ singleType, singleId, error, endpoint }) => ({
   type: actionTypes.SINGLE_FAILED,
+  singleType,
+  singleId,
+  error,
+  endpoint,
 });
 
-export const listRequested = () => ({
+export const listRequested = ({ listType, listId, page }) => ({
   type: actionTypes.LIST_REQUESTED,
+  listType,
+  listId,
+  page,
 });
-export const listSucceed = () => ({
+export const listSucceed = ({
+  listType,
+  listId = null,
+  page = 1,
+  total = { entities: 0, pages: 0 },
+  result,
+  entities,
+}) => ({
   type: actionTypes.LIST_SUCCEED,
+  listType,
+  listId,
+  page,
+  total,
+  result,
+  entities,
 });
-export const listFailed = () => ({
+export const listFailed = ({ listType, listId, page, error, endpoint }) => ({
   type: actionTypes.LIST_FAILED,
+  listType,
+  listId,
+  page,
+  error,
+  endpoint,
 });
 
 export const customListRequested = () => ({
