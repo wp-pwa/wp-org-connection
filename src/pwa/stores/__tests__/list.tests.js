@@ -1,5 +1,8 @@
 import Connection from '../connection';
+import * as actions from '../../actions';
 import * as actionTypes from '../../actionTypes';
+import post60normalized from '../../__tests__/post-60-normalized.json';
+import category7normalized from '../../__tests__/category-7-normalized.json';
 
 test('Check lists totals', () => {
   const connection = Connection.create({
@@ -104,63 +107,44 @@ test('Retrieve list items', () => {
 
 test('Add list. Request and succeed', () => {
   const connection = Connection.create({});
-  connection[actionTypes.LIST_REQUESTED]({
+  connection[actionTypes.LIST_REQUESTED](actions.listRequested({
     listType: 'category',
     listId: 7,
-    page: 3,
-  });
+    page: 3
+  }));
   expect(connection.list.category[7].fetching).toBe(true);
   expect(connection.list.category[7].ready).toBe(false);
   expect(connection.list.category[7].page[3].fetching).toBe(true);
   expect(connection.list.category[7].page[3].ready).toBe(false);
-  connection[actionTypes.LIST_SUCCEED]({
+  connection[actionTypes.LIST_SUCCEED](actions.listSucceed({
     listType: 'category',
     listId: 7,
     page: 3,
-    results: [60],
+    result: [60],
     total: {
       entities: 250,
       pages: 25,
     },
     entities: {
       post: {
-        60: {
-          id: 60,
-          creationDate: new Date('2016-11-25T18:31:11'),
-          modificationDate: new Date('2017-10-02T14:23:48'),
-          title: 'Post 60',
-          slug: 'post-60-slug',
-          type: 'post',
-          link: 'http://example.com/post-60-slug/',
-          content: '<p>Gullfoss is a waterfall located in the canyon of the Hvita</p>',
-          author: 4,
-          taxonomies: {
-            category: [7],
-          },
-        },
+        60: post60normalized.post[60],
       },
       category: {
-        7: {
-          id: 7,
-          name: 'Nature',
-          slug: 'nature',
-          taxonomy: 'category',
-          link: 'http://example.com/category/nature',
-        },
+        7: category7normalized.taxonomy[7],
       },
     },
-  });
+  }));
   expect(connection.list.category[7].fetching).toBe(false);
   expect(connection.list.category[7].ready).toBe(true);
   expect(connection.list.category[7].page[3].fetching).toBe(false);
   expect(connection.list.category[7].page[3].ready).toBe(true);
-  expect(connection.list.category[7].entities[0].title).toBe('Post 60');
-  expect(connection.list.category[7].page[3].entities[0].title).toBe('Post 60');
-  connection[actionTypes.LIST_REQUESTED]({
+  expect(connection.list.category[7].entities[0].title).toBe('The Beauties of Gullfoss');
+  expect(connection.list.category[7].page[3].entities[0].title).toBe('The Beauties of Gullfoss');
+  connection[actionTypes.LIST_REQUESTED](actions.listRequested({
     listType: 'category',
     listId: 7,
-    page: 3,
-  });
+    page: 3
+  }));
   expect(connection.list.category[7].fetching).toBe(true);
   expect(connection.list.category[7].ready).toBe(true);
   expect(connection.list.category[7].page[3].fetching).toBe(true);
@@ -169,21 +153,21 @@ test('Add list. Request and succeed', () => {
 
 test('Add list. Request and fail.', () => {
   const connection = Connection.create({});
-  connection[actionTypes.LIST_REQUESTED]({
+  connection[actionTypes.LIST_REQUESTED](actions.listRequested({
     listType: 'category',
     listId: 7,
-    page: 25,
-  });
+    page: 25
+  }));
   expect(connection.list.category[7].fetching).toBe(true);
   expect(connection.list.category[7].ready).toBe(false);
   expect(connection.list.category[7].page[25].fetching).toBe(true);
   expect(connection.list.category[7].page[25].ready).toBe(false);
-  connection[actionTypes.LIST_FAILED]({
+  connection[actionTypes.LIST_FAILED](actions.listRequested({
     listType: 'category',
     listId: 7,
     page: 25,
     error: new Error('Something went wrong!'),
-  });
+  }));
   expect(connection.list.category[7].fetching).toBe(false);
   expect(connection.list.category[7].ready).toBe(false);
   expect(connection.list.category[7].page[25].fetching).toBe(false);

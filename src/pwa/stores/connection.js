@@ -2,6 +2,7 @@ import { types } from 'mobx-state-tree';
 import { Any } from './single';
 import { List } from './list';
 import * as actionTypes from '../actionTypes';
+import convert from '../converters';
 
 const Connection = types
   .model('Connection')
@@ -40,24 +41,32 @@ const Connection = types
     };
   })
   .actions(self => {
-    const addSingle = ({ type, id, entity, ready = false, fetching = false }) => {
+    const addEntity = ({ type, id, entity, ready = false, fetching = false }) => {
       // Init the first map (type) if it's not initializated yet.
       if (!self.singleMap.get(type)) self.singleMap.set(type, {});
-      // Create entity if it's not set
-      const ent = entity || { id, type };
+      // Create entity if it's not set and convert it if it's set.
+      const newEntity = entity ? convert(entity) : { id, type };
       // Populate the state with the entity value and set both fetching and ready.
-      self.singleMap.get(type).set(id, { ...ent, fetching, ready });
+      self.singleMap.get(type).set(id, { ...newEntity, fetching, ready });
     }
+    const addEntities = ({ entities, ready = true, fetching = false }) => {
+      // Update the entities.
+      Object.entries(entities).map(([type, single]) => {
+        Object.entries(single).map(([id, entity]) => {
+          addEntity({ type, id, entity, ready, fetching });
+        });
+      });
+    };
     return {
       [actionTypes.SINGLE_REQUESTED]({ singleType, singleId }) {
-        addSingle({ type: singleType, id: singleId, fetching: true });
+        addEntity({ type: singleType, id: singleId, fetching: true });
       },
       [actionTypes.SINGLE_FAILED]({ singleType, singleId }) {
         // Populate the state with the entity value and set both fetching and ready.
         self.single[singleType][singleId].fetching = false;
       },
-      [actionTypes.SINGLE_SUCCEED]({ entity }) {
-        addSingle({ type: entity.type, id: entity.id, entity, fetching: false, ready: true  });
+      [actionTypes.SINGLE_SUCCEED]({ entities }) {
+        addEntities({ entities, ready: true, fetching: false });
       },
       [actionTypes.LIST_REQUESTED]({ listType, listId, page }) {
         // Init the first map (type) if it's not initializated yet.
@@ -68,21 +77,16 @@ const Connection = types
         if (!list.get(listId).pageMap.get(page)) list.get(listId).pageMap.set(page, {});
         list.get(listId).pageMap.get(page).fetching = true;
       },
-      [actionTypes.LIST_SUCCEED]({ listType, listId, page, total, results, entities }) {
+      [actionTypes.LIST_SUCCEED]({ listType, listId, page, total, result, entities }) {
         // Update the list.
         const list = self.listMap.get(listType).get(listId);
         list.fetching = false;
         list.ready = true;
-        list.pageMap.get(page).entities = results;
+        list.pageMap.get(page).entities = result;
         list.pageMap.get(page).fetching = false;
         list.pageMap.get(page).ready = true;
         if (total) list.total = total;
-        // Update the entities.
-        Object.entries(entities).map(([type, single]) => {
-          Object.entries(single).map(([id, entity]) => {
-            addSingle({ type, id, entity, ready: true, fetching: false });
-          });
-        });
+        addEntities({ entities, ready: true, fetching: false });
       },
       [actionTypes.LIST_FAILED]({ listType, listId, page }) {
         // Populate the state with the entity value and set both fetching and ready.

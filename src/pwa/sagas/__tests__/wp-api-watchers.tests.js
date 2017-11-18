@@ -8,7 +8,7 @@ import category7 from '../../__tests__/category-7.json';
 import category7normalized from '../../__tests__/category-7-normalized.json';
 import tag10 from '../../__tests__/tag-10.json';
 import tag10normalized from '../../__tests__/tag-10-normalized.json';
-import postsFromLatest from '../../__tests__/posts-from-latest';
+import postsFromLatest from '../../__tests__/posts-from-latest.json';
 import postsFromLatestNormalized from '../../__tests__/posts-from-latest-normalized.json';
 import postsFromCategory7 from '../../__tests__/posts-from-category-7.json';
 import postsFromCategory7Normalized from '../../__tests__/posts-from-category-7-normalized.json';

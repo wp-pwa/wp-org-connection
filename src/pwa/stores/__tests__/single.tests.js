@@ -1,6 +1,8 @@
 import { applySnapshot } from 'mobx-state-tree';
 import Connection from '../connection';
+import * as actions from '../../actions';
 import * as actionTypes from '../../actionTypes';
+import post60normalized from '../../__tests__/post-60-normalized.json';
 
 test('Retrieve entity properties', () => {
   const connection = Connection.create({
@@ -83,6 +85,7 @@ test('Retrieve nested entities', () => {
         62: {
           id: 62,
           mimeType: 'image/jpeg',
+          mediaType: 'image',
           title: 'iceland',
           original: {
             height: 123,
@@ -148,48 +151,33 @@ test('Retrieve nested entities', () => {
 
 test('Add post. Request and succeed', () => {
   const connection = Connection.create({});
-  connection[actionTypes.SINGLE_REQUESTED]({
+  connection[actionTypes.SINGLE_REQUESTED](actions.singleRequested({
     singleType: 'post',
     singleId: 60,
-  });
+  }));
   expect(connection.single.post[60].fetching).toBe(true);
   expect(connection.single.post[60].ready).toBe(false);
-  connection[actionTypes.SINGLE_SUCCEED]({
-    entity: {
-      id: 60,
-      creationDate: new Date('2016-11-25T18:31:11'),
-      modificationDate: new Date('2017-10-02T14:23:48'),
-      title: 'Post 60',
-      slug: 'post-60-slug',
-      type: 'post',
-      link: 'http://example.com/post-60-slug/',
-      content: '<p>Gullfoss is a waterfall located in the canyon of the Hvita</p>',
-      author: 4,
-      featured: 62,
-      taxonomiesMap: {
-        category: [3, 8],
-        tag: [10],
-      },
-    },
-  });
+  connection[actionTypes.SINGLE_SUCCEED](actions.singleSucceed({
+    entities: post60normalized
+  }));
   expect(connection.single.post[60].fetching).toBe(false);
   expect(connection.single.post[60].ready).toBe(true);
-  expect(connection.single.post[60].title).toBe('Post 60');
+  expect(connection.single.post[60].title).toBe('The Beauties of Gullfoss');
 });
 
 test('Add post. Request and fail.', () => {
   const connection = Connection.create({});
-  connection[actionTypes.SINGLE_REQUESTED]({
+  connection[actionTypes.SINGLE_REQUESTED](actions.singleRequested({
     singleType: 'post',
     singleId: 60,
-  });
+  }));
   expect(connection.single.post[60].fetching).toBe(true);
   expect(connection.single.post[60].ready).toBe(false);
-  connection[actionTypes.SINGLE_FAILED]({
+  connection[actionTypes.SINGLE_FAILED](actions.singleFailed({
     singleType: 'post',
     singleId: 60,
     error: new Error('Something went wrong!'),
-  });
+  }))
   expect(connection.single.post[60].fetching).toBe(false);
   expect(connection.single.post[60].ready).toBe(false);
 });

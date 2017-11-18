@@ -1056,7 +1056,7 @@
       "link": "https://demo.worona.org/tag/iceland/",
       "name": "Iceland",
       "slug": "iceland",
-      "taxonomy": "post_tag",
+      "taxonomy": "tag",
       "yoast_meta": {
         "yoast_wpseo_title": "Iceland Archives - Demo Worona",
         "yoast_wpseo_metadesc": ""
@@ -1074,7 +1074,7 @@
       "link": "https://demo.worona.org/tag/gullfoss/",
       "name": "Gullfoss",
       "slug": "gullfoss",
-      "taxonomy": "post_tag",
+      "taxonomy": "tag",
       "yoast_meta": {
         "yoast_wpseo_title": "Gullfoss Archives - Demo Worona",
         "yoast_wpseo_metadesc": ""
@@ -1092,7 +1092,7 @@
       "link": "https://demo.worona.org/tag/waterfall/",
       "name": "Waterfall",
       "slug": "waterfall",
-      "taxonomy": "post_tag",
+      "taxonomy": "tag",
       "yoast_meta": {
         "yoast_wpseo_title": "Waterfall Archives - Demo Worona",
         "yoast_wpseo_metadesc": ""
@@ -1110,7 +1110,7 @@
       "link": "https://demo.worona.org/tag/nature/",
       "name": "Nature",
       "slug": "nature",
-      "taxonomy": "post_tag",
+      "taxonomy": "tag",
       "yoast_meta": {
         "yoast_wpseo_title": "Nature Archives - Demo Worona",
         "yoast_wpseo_metadesc": ""
@@ -1128,7 +1128,7 @@
       "link": "https://demo.worona.org/tag/tokyo/",
       "name": "Tokyo",
       "slug": "tokyo",
-      "taxonomy": "post_tag",
+      "taxonomy": "tag",
       "yoast_meta": {
         "yoast_wpseo_title": "Tokyo Archives - Demo Worona",
         "yoast_wpseo_metadesc": ""
@@ -1146,7 +1146,7 @@
       "link": "https://demo.worona.org/tag/japan/",
       "name": "Japan",
       "slug": "japan",
-      "taxonomy": "post_tag",
+      "taxonomy": "tag",
       "yoast_meta": {
         "yoast_wpseo_title": "Japan Archives - Demo Worona",
         "yoast_wpseo_metadesc": ""
@@ -1164,7 +1164,7 @@
       "link": "https://demo.worona.org/tag/national-garden/",
       "name": "National Garden",
       "slug": "national-garden",
-      "taxonomy": "post_tag",
+      "taxonomy": "tag",
       "yoast_meta": {
         "yoast_wpseo_title": "National Garden Archives - Demo Worona",
         "yoast_wpseo_metadesc": ""
@@ -1182,7 +1182,7 @@
       "link": "https://demo.worona.org/tag/antelope-canyon/",
       "name": "Antelope Canyon",
       "slug": "antelope-canyon",
-      "taxonomy": "post_tag",
+      "taxonomy": "tag",
       "yoast_meta": {
         "yoast_wpseo_title": "Antelope Canyon Archives - Demo Worona",
         "yoast_wpseo_metadesc": ""
@@ -1200,7 +1200,7 @@
       "link": "https://demo.worona.org/tag/arizona/",
       "name": "Arizona",
       "slug": "arizona",
-      "taxonomy": "post_tag",
+      "taxonomy": "tag",
       "yoast_meta": {
         "yoast_wpseo_title": "Arizona Archives - Demo Worona",
         "yoast_wpseo_metadesc": ""
@@ -1218,7 +1218,7 @@
       "link": "https://demo.worona.org/tag/phu-quoc/",
       "name": "Phú Quốc",
       "slug": "phu-quoc",
-      "taxonomy": "post_tag",
+      "taxonomy": "tag",
       "yoast_meta": {
         "yoast_wpseo_title": "Phú Quốc Archives - Demo Worona",
         "yoast_wpseo_metadesc": ""
@@ -1236,7 +1236,7 @@
       "link": "https://demo.worona.org/tag/island/",
       "name": "Island",
       "slug": "island",
-      "taxonomy": "post_tag",
+      "taxonomy": "tag",
       "yoast_meta": {
         "yoast_wpseo_title": "Island Archives - Demo Worona",
         "yoast_wpseo_metadesc": ""
@@ -1254,7 +1254,7 @@
       "link": "https://demo.worona.org/tag/vietnam/",
       "name": "Vietnam",
       "slug": "vietnam",
-      "taxonomy": "post_tag",
+      "taxonomy": "tag",
       "yoast_meta": {
         "yoast_wpseo_title": "Vietnam Archives - Demo Worona",
         "yoast_wpseo_metadesc": ""
@@ -1272,7 +1272,7 @@
       "link": "https://demo.worona.org/tag/france/",
       "name": "France",
       "slug": "france",
-      "taxonomy": "post_tag",
+      "taxonomy": "tag",
       "yoast_meta": {
         "yoast_wpseo_title": "France Archives - Demo Worona",
         "yoast_wpseo_metadesc": ""
@@ -1290,7 +1290,7 @@
       "link": "https://demo.worona.org/tag/villages/",
       "name": "Villages",
       "slug": "villages",
-      "taxonomy": "post_tag",
+      "taxonomy": "tag",
       "yoast_meta": {
         "yoast_wpseo_title": "Villages Archives - Demo Worona",
         "yoast_wpseo_metadesc": ""
@@ -1308,7 +1308,7 @@
       "link": "https://demo.worona.org/tag/french-riviera/",
       "name": "French Riviera",
       "slug": "french-riviera",
-      "taxonomy": "post_tag",
+      "taxonomy": "tag",
       "yoast_meta": {
         "yoast_wpseo_title": "French Riviera Archives - Demo Worona",
         "yoast_wpseo_metadesc": ""
@@ -1326,7 +1326,7 @@
       "link": "https://demo.worona.org/tag/java/",
       "name": "Java",
       "slug": "java",
-      "taxonomy": "post_tag",
+      "taxonomy": "tag",
       "yoast_meta": {
         "yoast_wpseo_title": "Java Archives - Demo Worona",
         "yoast_wpseo_metadesc": ""
@@ -1344,7 +1344,7 @@
       "link": "https://demo.worona.org/tag/indonesia/",
       "name": "Indonesia",
       "slug": "indonesia",
-      "taxonomy": "post_tag",
+      "taxonomy": "tag",
       "yoast_meta": {
         "yoast_wpseo_title": "Indonesia Archives - Demo Worona",
         "yoast_wpseo_metadesc": ""
@@ -1362,7 +1362,7 @@
       "link": "https://demo.worona.org/tag/culture/",
       "name": "Culture",
       "slug": "culture",
-      "taxonomy": "post_tag",
+      "taxonomy": "tag",
       "yoast_meta": {
         "yoast_wpseo_title": "Culture Archives - Demo Worona",
         "yoast_wpseo_metadesc": ""
@@ -1380,7 +1380,7 @@
       "link": "https://demo.worona.org/tag/national-park/",
       "name": "National Park",
       "slug": "national-park",
-      "taxonomy": "post_tag",
+      "taxonomy": "tag",
       "yoast_meta": {
         "yoast_wpseo_title": "National Park Archives - Demo Worona",
         "yoast_wpseo_metadesc": ""
@@ -1398,7 +1398,7 @@
       "link": "https://demo.worona.org/tag/canada/",
       "name": "Canada",
       "slug": "canada",
-      "taxonomy": "post_tag",
+      "taxonomy": "tag",
       "yoast_meta": {
         "yoast_wpseo_title": "Canada Archives - Demo Worona",
         "yoast_wpseo_metadesc": ""
@@ -1416,7 +1416,7 @@
       "link": "https://demo.worona.org/tag/rocky-mountains/",
       "name": "Rocky Mountains",
       "slug": "rocky-mountains",
-      "taxonomy": "post_tag",
+      "taxonomy": "tag",
       "yoast_meta": {
         "yoast_wpseo_title": "Rocky Mountains Archives - Demo Worona",
         "yoast_wpseo_metadesc": ""
@@ -1434,7 +1434,7 @@
       "link": "https://demo.worona.org/tag/al-hajar-mountains/",
       "name": "Al Hajar Mountains",
       "slug": "al-hajar-mountains",
-      "taxonomy": "post_tag",
+      "taxonomy": "tag",
       "yoast_meta": {
         "yoast_wpseo_title": "Al Hajar Mountains Archives - Demo Worona",
         "yoast_wpseo_metadesc": ""
@@ -1452,7 +1452,7 @@
       "link": "https://demo.worona.org/tag/oman/",
       "name": "Oman",
       "slug": "oman",
-      "taxonomy": "post_tag",
+      "taxonomy": "tag",
       "yoast_meta": {
         "yoast_wpseo_title": "Oman Archives - Demo Worona",
         "yoast_wpseo_metadesc": ""
@@ -1470,7 +1470,7 @@
       "link": "https://demo.worona.org/tag/united-arab-emirates/",
       "name": "United Arab Emirates",
       "slug": "united-arab-emirates",
-      "taxonomy": "post_tag",
+      "taxonomy": "tag",
       "yoast_meta": {
         "yoast_wpseo_title": "United Arab Emirates Archives - Demo Worona",
         "yoast_wpseo_metadesc": ""
@@ -1488,7 +1488,7 @@
       "link": "https://demo.worona.org/tag/machu-picchu/",
       "name": "Machu Picchu",
       "slug": "machu-picchu",
-      "taxonomy": "post_tag",
+      "taxonomy": "tag",
       "yoast_meta": {
         "yoast_wpseo_title": "Machu Picchu Archives - Demo Worona",
         "yoast_wpseo_metadesc": ""
@@ -1506,7 +1506,7 @@
       "link": "https://demo.worona.org/tag/inca/",
       "name": "Inca",
       "slug": "inca",
-      "taxonomy": "post_tag",
+      "taxonomy": "tag",
       "yoast_meta": {
         "yoast_wpseo_title": "Inca Archives - Demo Worona",
         "yoast_wpseo_metadesc": ""
@@ -1524,7 +1524,7 @@
       "link": "https://demo.worona.org/tag/peru/",
       "name": "Peru",
       "slug": "peru",
-      "taxonomy": "post_tag",
+      "taxonomy": "tag",
       "yoast_meta": {
         "yoast_wpseo_title": "Peru Archives - Demo Worona",
         "yoast_wpseo_metadesc": ""
@@ -1542,7 +1542,7 @@
       "link": "https://demo.worona.org/tag/animals/",
       "name": "Animals",
       "slug": "animals",
-      "taxonomy": "post_tag",
+      "taxonomy": "tag",
       "yoast_meta": {
         "yoast_wpseo_title": "Animals Archives - Demo Worona",
         "yoast_wpseo_metadesc": ""
@@ -1619,7 +1619,8 @@
         ],
         "curies": [{ "name": "wp", "href": "https://api.w.org/{rel}", "templated": true }]
       },
-      "_embedded": { "author": [4], "wp:featuredmedia": [27], "wp:term": [[4, 7], [40, 9, 13]] }
+      "_embedded": { "author": [4], "wp:featuredmedia": [27], "wp:term": [[4, 7], [40, 9, 13]] },
+      "taxonomiesMap": { "category": [4, 7], "tag": [40, 9, 13] }
     },
     "30": {
       "id": 30,
@@ -1723,7 +1724,8 @@
         ],
         "wp:featuredmedia": [107],
         "wp:term": [[5, 6, 7], [38, 37, 39]]
-      }
+      },
+      "taxonomiesMap": { "category": [5, 6, 7], "tag": [38, 37, 39] }
     },
     "33": {
       "id": 33,
@@ -1787,7 +1789,12 @@
         ],
         "curies": [{ "name": "wp", "href": "https://api.w.org/{rel}", "templated": true }]
       },
-      "_embedded": { "author": [2], "wp:featuredmedia": [34], "wp:term": [[6, 7, 8], [34, 35, 36]] }
+      "_embedded": {
+        "author": [2],
+        "wp:featuredmedia": [34],
+        "wp:term": [[6, 7, 8], [34, 35, 36]]
+      },
+      "taxonomiesMap": { "category": [6, 7, 8], "tag": [34, 35, 36] }
     },
     "36": {
       "id": 36,
@@ -1851,7 +1858,8 @@
         ],
         "curies": [{ "name": "wp", "href": "https://api.w.org/{rel}", "templated": true }]
       },
-      "_embedded": { "author": [4], "wp:featuredmedia": [37], "wp:term": [[7, 3], [32, 31, 33]] }
+      "_embedded": { "author": [4], "wp:featuredmedia": [37], "wp:term": [[7, 3], [32, 31, 33]] },
+      "taxonomiesMap": { "category": [7, 3], "tag": [32, 31, 33] }
     },
     "42": {
       "id": 42,
@@ -1919,7 +1927,8 @@
         "author": [3],
         "wp:featuredmedia": [45],
         "wp:term": [[4, 7], [30, 29, 23, 28]]
-      }
+      },
+      "taxonomiesMap": { "category": [4, 7], "tag": [30, 29, 23, 28] }
     },
     "46": {
       "id": 46,
@@ -1983,7 +1992,8 @@
         ],
         "curies": [{ "name": "wp", "href": "https://api.w.org/{rel}", "templated": true }]
       },
-      "_embedded": { "author": [2], "wp:featuredmedia": [47], "wp:term": [[4, 8], [25, 27, 26]] }
+      "_embedded": { "author": [2], "wp:featuredmedia": [47], "wp:term": [[4, 8], [25, 27, 26]] },
+      "taxonomiesMap": { "category": [4, 8], "tag": [25, 27, 26] }
     },
     "51": {
       "id": 51,
@@ -2047,7 +2057,8 @@
         ],
         "curies": [{ "name": "wp", "href": "https://api.w.org/{rel}", "templated": true }]
       },
-      "_embedded": { "author": [4], "wp:featuredmedia": [52], "wp:term": [[6, 8], [23, 22, 24]] }
+      "_embedded": { "author": [4], "wp:featuredmedia": [52], "wp:term": [[6, 8], [23, 22, 24]] },
+      "taxonomiesMap": { "category": [6, 8], "tag": [23, 22, 24] }
     },
     "54": {
       "id": 54,
@@ -2111,7 +2122,12 @@
         ],
         "curies": [{ "name": "wp", "href": "https://api.w.org/{rel}", "templated": true }]
       },
-      "_embedded": { "author": [3], "wp:featuredmedia": [55], "wp:term": [[7, 3, 8], [18, 19, 13]] }
+      "_embedded": {
+        "author": [3],
+        "wp:featuredmedia": [55],
+        "wp:term": [[7, 3, 8], [18, 19, 13]]
+      },
+      "taxonomiesMap": { "category": [7, 3, 8], "tag": [18, 19, 13] }
     },
     "57": {
       "id": 57,
@@ -2175,7 +2191,8 @@
         ],
         "curies": [{ "name": "wp", "href": "https://api.w.org/{rel}", "templated": true }]
       },
-      "_embedded": { "author": [2], "wp:featuredmedia": [58], "wp:term": [[7, 3], [15, 16, 14]] }
+      "_embedded": { "author": [2], "wp:featuredmedia": [58], "wp:term": [[7, 3], [15, 16, 14]] },
+      "taxonomiesMap": { "category": [7, 3], "tag": [15, 16, 14] }
     },
     "60": {
       "id": 60,
@@ -2283,7 +2300,8 @@
         ],
         "wp:featuredmedia": [62],
         "wp:term": [[3, 8], [10, 9, 13, 11]]
-      }
+      },
+      "taxonomiesMap": { "category": [3, 8], "tag": [10, 9, 13, 11] }
     }
   }
 }
