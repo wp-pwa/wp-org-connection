@@ -2,20 +2,22 @@ import { getSnapshot } from 'mobx-state-tree';
 
 import Router from '../router';
 
-import * as actionTypes from '../../../actionTypes'
-import * as actions from '../../../actions'
+import * as actionTypes from '../../../actionTypes';
+import * as actions from '../../../actions';
 
 test('Initializates empty', () => {
   const store = Router.create();
   expect(getSnapshot(store.contexts)).toEqual([]);
   expect(store.context).toBe(null);
-})
+});
 
 test('Creates a new context from selected post', () => {
   const store = Router.create();
-  store[actionTypes.ROUTE_CHANGE_SUCCEED](actions.routeChangeSucceed({
-    selected: { singleType: 'post', singleId: 60 },
-  }))
+  store[actionTypes.ROUTE_CHANGE_SUCCEED](
+    actions.routeChangeSucceed({
+      selected: { singleType: 'post', singleId: 60 },
+    }),
+  );
 
   expect(store.selected.type).toBe('post');
   expect(store.selected.id).toBe(60);
@@ -30,9 +32,11 @@ test('Creates a new context from selected post', () => {
 
 test('Creates a new context from selected list', () => {
   const store = Router.create();
-  store[actionTypes.ROUTE_CHANGE_SUCCEED](actions.routeChangeSucceed({
-    selected: { listType: 'category', listId: 7 },
-  }))
+  store[actionTypes.ROUTE_CHANGE_SUCCEED](
+    actions.routeChangeSucceed({
+      selected: { listType: 'category', listId: 7 },
+    }),
+  );
 
   expect(store.selected.type).toBe('category');
   expect(store.selected.id).toBe(7);
@@ -48,15 +52,19 @@ test('Creates a new context from selected list', () => {
 
 test('Creates another context from selected', () => {
   const store = Router.create();
-  store[actionTypes.ROUTE_CHANGE_SUCCEED](actions.routeChangeSucceed({
-    selected: { singleType: 'post', singleId: 60 },
-  }))
+  store[actionTypes.ROUTE_CHANGE_SUCCEED](
+    actions.routeChangeSucceed({
+      selected: { singleType: 'post', singleId: 60 },
+    }),
+  );
 
   expect(store.context.getItem({ singleType: 'post', singleId: 70 })).toBe(null);
 
-  store[actionTypes.ROUTE_CHANGE_SUCCEED](actions.routeChangeSucceed({
-    selected: { singleType: 'post', singleId: 70 },
-  }))
+  store[actionTypes.ROUTE_CHANGE_SUCCEED](
+    actions.routeChangeSucceed({
+      selected: { singleType: 'post', singleId: 70 },
+    }),
+  );
 
   // Current item
   expect(store.context.index).toBe(1);
@@ -74,21 +82,23 @@ test('Creates another context from selected', () => {
 
 test('Creates the context and selects the item as specified', () => {
   const store = Router.create();
-  store[actionTypes.ROUTE_CHANGE_SUCCEED](actions.routeChangeSucceed({
-    selected: { singleType: 'post', singleId: 60 },
-    context: {
-      items: [
-        { singleType: 'post', singleId: 60 },
-        { singleType: 'post', singleId: 68 },
-        { singleType: 'post', singleId: 70 },
-        [
-          { singleType: 'post', singleId: 90 },
-          { singleType: 'post', singleId: 98 },
-          { singleType: 'post', singleId: 99 },
-        ]
-      ],
-    },
-  }));
+  store[actionTypes.ROUTE_CHANGE_SUCCEED](
+    actions.routeChangeSucceed({
+      selected: { singleType: 'post', singleId: 60 },
+      context: {
+        items: [
+          { singleType: 'post', singleId: 60 },
+          { singleType: 'post', singleId: 68 },
+          { singleType: 'post', singleId: 70 },
+          [
+            { singleType: 'post', singleId: 90 },
+            { singleType: 'post', singleId: 98 },
+            { singleType: 'post', singleId: 99 },
+          ],
+        ],
+      },
+    }),
+  );
 
   expect(store.selected.id).toBe(60);
   expect(store.selected.type).toBe('post');
@@ -99,68 +109,109 @@ test('Creates the context and selects the item as specified', () => {
   expect(store.context.columns[3].selected.next.id).toBe(98);
 });
 
-test('Changes selected when context exists and has \'selected\' inside', () => {
+test("Changes selected when context exists and has 'selected' inside", () => {
   const store = Router.create();
-  store[actionTypes.ROUTE_CHANGE_SUCCEED](actions.routeChangeSucceed({
-    selected: { singleType: 'post', singleId: 60 },
-    context: {
-      items: [
-        { singleType: 'post', singleId: 60 },
-        { singleType: 'post', singleId: 68 },
-        { singleType: 'post', singleId: 70 },
-        [
-          { singleType: 'post', singleId: 90 },
-          { singleType: 'post', singleId: 98 },
-          { singleType: 'post', singleId: 99 },
-        ]
-      ],
-    },
-  }));
+  store[actionTypes.ROUTE_CHANGE_SUCCEED](
+    actions.routeChangeSucceed({
+      selected: { singleType: 'post', singleId: 60 },
+      context: {
+        items: [
+          { singleType: 'post', singleId: 60 },
+          { singleType: 'post', singleId: 68 },
+          { singleType: 'post', singleId: 70 },
+          [
+            { singleType: 'post', singleId: 90 },
+            { singleType: 'post', singleId: 98 },
+            { singleType: 'post', singleId: 99 },
+          ],
+        ],
+      },
+    }),
+  );
 
-  store[actionTypes.ROUTE_CHANGE_SUCCEED](actions.routeChangeSucceed({
-    selected: { singleType: 'post', singleId: 90 },
-  }));
+  store[actionTypes.ROUTE_CHANGE_SUCCEED](
+    actions.routeChangeSucceed({
+      selected: { singleType: 'post', singleId: 90 },
+    }),
+  );
 
   expect(store.selected.id).toBe(90);
   expect(store.selected.type).toBe('post');
-
 });
 
-test('Changes selected when contexts are the same and has \'selected\' inside', () => {
+test("Changes selected when contexts are the same and has 'selected' inside", () => {
   const store = Router.create();
-  store[actionTypes.ROUTE_CHANGE_SUCCEED](actions.routeChangeSucceed({
-    selected: { singleType: 'post', singleId: 60 },
-    context: {
-      items: [
-        { singleType: 'post', singleId: 60 },
-        { singleType: 'post', singleId: 68 },
-        { singleType: 'post', singleId: 70 },
-        [
-          { singleType: 'post', singleId: 90 },
-          { singleType: 'post', singleId: 98 },
-          { singleType: 'post', singleId: 99 },
-        ]
-      ],
-    },
-  }));
+  store[actionTypes.ROUTE_CHANGE_SUCCEED](
+    actions.routeChangeSucceed({
+      selected: { singleType: 'post', singleId: 60 },
+      context: {
+        items: [
+          { singleType: 'post', singleId: 60 },
+          { singleType: 'post', singleId: 68 },
+          { singleType: 'post', singleId: 70 },
+          [
+            { singleType: 'post', singleId: 90 },
+            { singleType: 'post', singleId: 98 },
+            { singleType: 'post', singleId: 99 },
+          ],
+        ],
+      },
+    }),
+  );
 
-  store[actionTypes.ROUTE_CHANGE_SUCCEED](actions.routeChangeSucceed({
-    selected: { singleType: 'post', singleId: 90 },
-    context: {
-      items: [
-        { singleType: 'post', singleId: 60 },
-        { singleType: 'post', singleId: 68 },
-        { singleType: 'post', singleId: 70 },
-        [
-          { singleType: 'post', singleId: 90 },
-          { singleType: 'post', singleId: 98 },
-          { singleType: 'post', singleId: 99 },
-        ]
-      ],
-    },
-  }));
+  store[actionTypes.ROUTE_CHANGE_SUCCEED](
+    actions.routeChangeSucceed({
+      selected: { singleType: 'post', singleId: 90 },
+      context: {
+        items: [
+          { singleType: 'post', singleId: 60 },
+          { singleType: 'post', singleId: 68 },
+          { singleType: 'post', singleId: 70 },
+          [
+            { singleType: 'post', singleId: 90 },
+            { singleType: 'post', singleId: 98 },
+            { singleType: 'post', singleId: 99 },
+          ],
+        ],
+      },
+    }),
+  );
 
   expect(store.selected.id).toBe(90);
   expect(store.selected.type).toBe('post');
+  expect(store.contexts.length).toBe(1);
+});
 
+test("Moves selected when context exists and has 'selected' inside", () => {
+  const store = Router.create();
+  store[actionTypes.ROUTE_CHANGE_SUCCEED](
+    actions.routeChangeSucceed({
+      selected: { singleType: 'post', singleId: 60 },
+      context: {
+        items: [
+          { singleType: 'post', singleId: 60 },
+          { singleType: 'post', singleId: 68 },
+          { singleType: 'post', singleId: 70 },
+          [
+            { singleType: 'post', singleId: 90 },
+            { singleType: 'post', singleId: 98 },
+            { singleType: 'post', singleId: 99 },
+          ],
+        ],
+      },
+    }),
+  );
+
+  store[actionTypes.ROUTE_CHANGE_SUCCEED](
+    actions.routeChangeSucceed({
+      selected: { singleType: 'post', singleId: 68 },
+      method: 'replace',
+    }),
+  );
+
+  expect(store.selected.id).toBe(68);
+  expect(store.selected.type).toBe('post');
+  expect(store.context.columns.length).toBe(3);
+  expect(store.context.column._id).toBe(store.context.columns[0]._id);
+  expect(store.context.columns[0].items.length).toBe(2);
 });

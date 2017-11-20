@@ -45,6 +45,25 @@ const Router = types
       }
     };
 
+    const moveSelected = selected => {
+      const selectedItem = self.context.getItem(selected);
+      const current = self.context.selected;
+
+      if (selectedItem && current.column._id !== selectedItem.column._id) {
+        const { column } = selectedItem;
+        detach(selectedItem);
+
+        if (column.items.length === 0) detach(column);
+
+        current.column.items.push(selectedItem);
+        selectedItem.column = current.column;
+        selectedItem.column.selected = selectedItem;
+      }
+
+      // Fixes next attributes for items
+      self.context.afterCreate();
+    }
+
     const populateWhenReady = ({ listType, listId, page }, columns) =>
       when(
         () => stores.connection.list[listType][listId].page[page].ready,
@@ -115,43 +134,16 @@ const Router = types
           if (self.context === null || !self.context.getItem(selected)) {
             createContextFromSelected(selected);
           } else {
-            changeSelected(selected);
+            if (method === 'push') changeSelected(selected);
+            if (method === 'replace') moveSelected(selected);
           }
         } else if (self.context === null || !isEqual(self.context.generator, context)) {
           if (method === 'push') {
             createContext(selected, context);
           }
         } else if (isEqual(self.context.generator, context)) {
-          if (method === 'push') {
-            changeSelected(selected);
-          }
-          if (method === 'replace') {
-            // moveSelected(selected);
-          }
-        }
-      },
-
-      replace: ({ selected, context }) => {
-        // Replaces the context if a new one is passed.
-        if (context) {
-          const index = self.contexts.findIndex(ctx => self.activeContext.id === ctx.id);
-          self.contexts.splice(index, 1, context);
-          self.context = self.contexts[index];
-        }
-
-        if (!selected) return;
-
-        // Ensures that 'selected' exists inside 'context'
-        const item = self.context.getItem(selected);
-        if (item) {
-          const column = self.context.selected;
-          // item is not in the selected column.
-          if (!column.getItem(selected)) {
-            detach(item);
-            const index = column.items.findIndex(column.selected);
-            column.items.splice(index + 1, 0, item);
-          }
-          column.selected = item;
+          if (method === 'push') changeSelected(selected);
+          if (method === 'replace') moveSelected(selected);
         }
       },
     };
