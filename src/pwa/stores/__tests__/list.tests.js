@@ -1,4 +1,4 @@
-import Connection from '../connection';
+import Connection from '../';
 import * as actions from '../../actions';
 import * as actionTypes from '../../actionTypes';
 import post60normalized from '../../__tests__/post-60-normalized.json';

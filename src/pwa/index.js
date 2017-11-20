@@ -1,6 +1,7 @@
 import React from 'react';
 import * as actions from './actions';
 import * as actionTypes from './actionTypes';
+import reducers from './reducers';
 // import * as components from './components';
 // import sagas from './sagas/client';
 // import selectors from './selectors';
@@ -9,4 +10,4 @@ import * as actionTypes from './actionTypes';
 const WpOrgConnection = () => <div>hi from wp-org</div>;
 
 export default WpOrgConnection;
-export { actions, actionTypes };
+export { actions, actionTypes, reducers };
