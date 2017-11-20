@@ -21,21 +21,6 @@ const Router = types
     },
   }))
   .actions(self => {
-    const newColumn = element => {
-      const colId = uuid();
-      const column = {
-        _id: colId,
-        items: element instanceof Array ? element : [element],
-      };
-      column.items = column.items.map(item => {
-        const { _id = uuid(), ...rest } = item;
-        return { _id, ...rest, column: colId }
-      });
-      column.selected = column.items[0]._id;
-
-      return column;
-    };
-
     const changeSelected = selected => {
       const selectedItem = self.context.getItem(selected);
       if (selectedItem) {
@@ -62,7 +47,7 @@ const Router = types
 
       // Fixes next attributes for items
       self.context.afterCreate();
-    }
+    };
 
     const populateWhenReady = ({ listType, listId, page }, columns) =>
       when(
@@ -75,6 +60,21 @@ const Router = types
         },
       );
 
+    const newColumn = element => {
+      const colId = uuid();
+      const column = {
+        _id: colId,
+        items: element instanceof Array ? element : [element],
+      };
+      column.items = column.items.map(item => {
+        const { _id = uuid(), ...rest } = item;
+        return { _id, ...rest, column: colId };
+      });
+      column.selected = column.items[0]._id;
+
+      return column;
+    };
+
     const extractList = list => {
       const perPage = 5; // from where should this value be obtained?
       const columns = [];
@@ -86,9 +86,8 @@ const Router = types
       return columns;
     };
 
-    const createContext = (selected, generator) => {
+    const createContext = (selected, generator, contextIndex) => {
       const { items, options, infinite } = generator;
-      const contextIndex = self.context ? self.context.index + 1 : 0;
       const columns = items.reduce((generated, element) => {
         if (element.listType && element.extract) {
           generated.concat(extractList(element));
@@ -98,17 +97,29 @@ const Router = types
         return generated;
       }, []);
 
-      self.contexts.push({
+      return {
         index: contextIndex,
         column: columns[0]._id,
         columns,
         options,
         infinite,
         generator,
-      });
+      };
+    };
 
+    const pushContext = (selected, context) => {
+      const contextIndex = self.context ? self.context.index + 1 : 0;
+      self.contexts.push(createContext(selected, context, contextIndex));
       self.context = self.contexts[contextIndex];
+      changeSelected(selected);
+    };
 
+    const replaceContext = (selected, context) => {
+      const contextIndex = self.context ? self.context.index : 0;
+      const ctx = self.context;
+      detach(ctx);
+      self.contexts[contextIndex] = createContext(selected, context, contextIndex);
+      self.context = self.contexts[contextIndex];
       changeSelected(selected);
     };
 
@@ -138,10 +149,9 @@ const Router = types
             if (method === 'replace') moveSelected(selected);
           }
         } else if (self.context === null || !isEqual(self.context.generator, context)) {
-          if (method === 'push') {
-            createContext(selected, context);
-          }
-        } else if (isEqual(self.context.generator, context)) {
+          if (method === 'push') pushContext(selected, context);
+          if (method === 'replace') replaceContext(selected, context);
+        } else {
           if (method === 'push') changeSelected(selected);
           if (method === 'replace') moveSelected(selected);
         }
