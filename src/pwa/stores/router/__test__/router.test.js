@@ -94,4 +94,73 @@ test('Creates the context and selects the item as specified', () => {
   expect(store.selected.type).toBe('post');
   expect(store.context.columns[3].selected.id).toBe(90);
   expect(store.contexts[0].columns[3].items[2].id).toBe(99);
+  expect(store.selected.next.id).toBe(68);
+  expect(store.context.columns[2].selected.next.id).toBe(90);
+  expect(store.context.columns[3].selected.next.id).toBe(98);
+});
+
+test('Changes selected when context exists and has \'selected\' inside', () => {
+  const store = Router.create();
+  store[actionTypes.ROUTE_CHANGE_SUCCEED](actions.routeChangeSucceed({
+    selected: { singleType: 'post', singleId: 60 },
+    context: {
+      items: [
+        { singleType: 'post', singleId: 60 },
+        { singleType: 'post', singleId: 68 },
+        { singleType: 'post', singleId: 70 },
+        [
+          { singleType: 'post', singleId: 90 },
+          { singleType: 'post', singleId: 98 },
+          { singleType: 'post', singleId: 99 },
+        ]
+      ],
+    },
+  }));
+
+  store[actionTypes.ROUTE_CHANGE_SUCCEED](actions.routeChangeSucceed({
+    selected: { singleType: 'post', singleId: 90 },
+  }));
+
+  expect(store.selected.id).toBe(90);
+  expect(store.selected.type).toBe('post');
+
+});
+
+test('Changes selected when contexts are the same and has \'selected\' inside', () => {
+  const store = Router.create();
+  store[actionTypes.ROUTE_CHANGE_SUCCEED](actions.routeChangeSucceed({
+    selected: { singleType: 'post', singleId: 60 },
+    context: {
+      items: [
+        { singleType: 'post', singleId: 60 },
+        { singleType: 'post', singleId: 68 },
+        { singleType: 'post', singleId: 70 },
+        [
+          { singleType: 'post', singleId: 90 },
+          { singleType: 'post', singleId: 98 },
+          { singleType: 'post', singleId: 99 },
+        ]
+      ],
+    },
+  }));
+
+  store[actionTypes.ROUTE_CHANGE_SUCCEED](actions.routeChangeSucceed({
+    selected: { singleType: 'post', singleId: 90 },
+    context: {
+      items: [
+        { singleType: 'post', singleId: 60 },
+        { singleType: 'post', singleId: 68 },
+        { singleType: 'post', singleId: 70 },
+        [
+          { singleType: 'post', singleId: 90 },
+          { singleType: 'post', singleId: 98 },
+          { singleType: 'post', singleId: 99 },
+        ]
+      ],
+    },
+  }));
+
+  expect(store.selected.id).toBe(90);
+  expect(store.selected.type).toBe('post');
+
 });

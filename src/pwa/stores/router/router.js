@@ -114,10 +114,19 @@ const Router = types
         if (context === null) {
           if (self.context === null || !self.context.getItem(selected)) {
             createContextFromSelected(selected);
+          } else {
+            changeSelected(selected);
           }
         } else if (self.context === null || !isEqual(self.context.generator, context)) {
           if (method === 'push') {
             createContext(selected, context);
+          }
+        } else if (isEqual(self.context.generator, context)) {
+          if (method === 'push') {
+            changeSelected(selected);
+          }
+          if (method === 'replace') {
+            // moveSelected(selected);
           }
         }
       },
