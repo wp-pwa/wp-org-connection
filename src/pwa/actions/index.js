@@ -50,14 +50,32 @@ export const listFailed = ({ listType, listId, page, error, endpoint }) => ({
   endpoint,
 });
 
-export const customListRequested = () => ({
-  type: actionTypes.CUSTOM_LIST_REQUESTED,
+export const customRequested = ({ url = '/', name, params, singleType, page = 0 }) => ({
+  type: actionTypes.CUSTOM_REQUESTED,
+  url,
+  name,
+  singleType,
+  page,
+  params,
 });
-export const customListSucceed = () => ({
-  type: actionTypes.CUSTOM_LIST_SUCCEED,
+export const customSucceed = ({ url, name, singleType, total, page, result, entities }) => ({
+  type: actionTypes.CUSTOM_SUCCEED,
+  url,
+  name,
+  singleType,
+  page,
+  total,
+  result,
+  entities,
 });
-export const customListFailed = () => ({
-  type: actionTypes.CUSTOM_LIST_FAILED,
+export const customFailed = ({ url, name, singleType, page, error, endpoint }) => ({
+  type: actionTypes.CUSTOM_FAILED,
+  url,
+  name,
+  singleType,
+  page,
+  error,
+  endpoint,
 });
 
 export const routeChangeRequested = () => ({

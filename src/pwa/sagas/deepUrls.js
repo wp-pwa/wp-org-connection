@@ -2,7 +2,7 @@
 import { takeLatest } from 'redux-saga';
 import { select, put, call } from 'redux-saga/effects';
 import * as actions from '../actions';
-import * as types from '../types';
+import * as actionTypes from '../actionTypes';
 import * as deps from '../deps';
 
 const getDiscover = ({ connection, firstFolder, lastFolder }) => {
@@ -29,7 +29,7 @@ export const discoverUrl = connection =>
           firstFolder,
           lastFolder,
           endpoint: getDiscover({ connection, firstFolder, lastFolder }).toString(),
-        })
+        }),
       );
     }
   };
@@ -64,7 +64,7 @@ export default function* deepUrlsSaga(connection) {
   connection.discover = connection.registerRoute('worona/v1', 'discover', {
     params: ['first_folder', 'last_folder'],
   });
-  yield takeLatest(types.DISCOVER_URL_SUCCEED, redirectAfterDiscover);
-  yield takeLatest(types.DISCOVER_URL_REQUESTED, discoverUrl(connection));
-  yield takeLatest(deps.types.DEEP_URL_VISITED, deepUrl);
+  yield takeLatest(actionTypes.DISCOVER_URL_SUCCEED, redirectAfterDiscover);
+  yield takeLatest(actionTypes.DISCOVER_URL_REQUESTED, discoverUrl(connection));
+  yield takeLatest(deps.actionTypes.DEEP_URL_VISITED, deepUrl);
 }

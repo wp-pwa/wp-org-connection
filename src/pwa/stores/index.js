@@ -1,6 +1,7 @@
 import { types } from 'mobx-state-tree';
 import { Any } from './single';
 import { List } from './list';
+import { Custom } from './custom';
 import * as actionTypes from '../actionTypes';
 import convert from '../converters';
 
@@ -9,6 +10,7 @@ const Connection = types
   .props({
     singleMap: types.optional(types.map(types.map(Any)), {}),
     listMap: types.optional(types.map(types.map(List)), {}),
+    customMap: types.optional(types.map(types.map(Custom)), {}),
   })
   .views(self => {
     const single = {};
@@ -17,6 +19,7 @@ const Connection = types
         return (self.listMap.get('latest') && self.listMap.get('latest').get(0)) || null;
       },
     };
+    const custom = {};
     return {
       get single() {
         self.singleMap.keys().forEach(type => {
@@ -43,6 +46,18 @@ const Connection = types
           }
         });
         return list;
+      },
+      get custom() {
+        self.customMap.keys().forEach(name => {
+          custom[name] = custom[name] || [];
+          self.customMap
+            .get(name)
+            .keys()
+            .forEach(index => {
+              if (!custom[name][index]) custom[name][index] = self.customMap.get(name).get(index);
+            });
+        });
+        return custom;
       },
     };
   })
@@ -105,6 +120,22 @@ const Connection = types
           .get(listType)
           .get(listId)
           .pageMap.get(page - 1).fetching = false;
+      },
+      [actionTypes.CUSTOM_REQUESTED]({ name, page }) {
+        if (!self.customMap.get(name)) self.customMap.set(name, {});
+        const custom = self.customMap.get(name);
+        custom.fetching = true;
+        debugger;
+        if (!custom.pageMap.get(page - 1)) custom.pageMap.set(page - 1, {});
+        custom.pageMap.get(page - 1).fetching = true;
+
+        // if (!self.customMap.get(singleType))
+      },
+      [actionTypes.CUSTOM_SUCCEED](params) {
+        console.log(params);
+      },
+      [actionTypes.CUSTOM_FAILED](params) {
+        console.log(params);
       },
     };
   });
