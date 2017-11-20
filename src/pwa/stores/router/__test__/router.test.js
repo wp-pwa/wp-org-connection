@@ -1,4 +1,5 @@
 import { getSnapshot } from 'mobx-state-tree';
+
 import Router from '../router';
 
 import * as actionTypes from '../../../actionTypes'
@@ -69,4 +70,28 @@ test('Creates another context from selected', () => {
   // Previous item
   expect(store.contexts[0].columns[0].items[0].id).toBe(60);
   expect(store.contexts[0].columns[0].selected.id).toBe(60);
+});
+
+test('Creates the context and selects the item as specified', () => {
+  const store = Router.create();
+  store[actionTypes.ROUTE_CHANGE_SUCCEED](actions.routeChangeSucceed({
+    selected: { singleType: 'post', singleId: 60 },
+    context: {
+      items: [
+        { singleType: 'post', singleId: 60 },
+        { singleType: 'post', singleId: 68 },
+        { singleType: 'post', singleId: 70 },
+        [
+          { singleType: 'post', singleId: 90 },
+          { singleType: 'post', singleId: 98 },
+          { singleType: 'post', singleId: 99 },
+        ]
+      ],
+    },
+  }));
+
+  expect(store.selected.id).toBe(60);
+  expect(store.selected.type).toBe('post');
+  expect(store.context.columns[3].selected.id).toBe(90);
+  expect(store.contexts[0].columns[3].items[2].id).toBe(99);
 });
