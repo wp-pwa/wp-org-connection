@@ -1,10 +1,14 @@
-import { types } from 'mobx-state-tree';
+import { types, getParent } from 'mobx-state-tree';
 import { Post } from './single';
 
 export const Total = types.model('Total').props({
   entities: types.maybe(types.number),
   pages: types.maybe(types.number),
-});
+}).views(self => ({
+  get fetched() {
+    return getParent(self).entities.length || 0;
+  }
+}));
 
 export const Page = types
   .model('Page')
@@ -15,7 +19,7 @@ export const Page = types
   })
   .views(self => ({
     get total() {
-      return self.entities.length || null;
+      return self.entities.length || 0;
     },
   }));
 

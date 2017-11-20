@@ -21,7 +21,7 @@ export function* isCors() {
 }
 
 export function* initConnection() {
-  const cors = yield call(dep('router', 'sagaHelpers', 'isCors'));
+  const cors = yield call(isCors);
   const getSetting = dep('settings', 'selectorCreators', 'getSetting');
   const url = yield select(getSetting('generalSite', 'url'));
   return new Wpapi({ endpoint: `${cors ? CorsAnywhere : ''}${url}?rest_route=` });
@@ -41,7 +41,7 @@ export const getList = ({ connection, listType, listId, singleType, page }) => {
 };
 
 export const getSingle = ({ connection, singleType, singleId }) =>
-  connection[singleType]()
+  connection[typesToEndpoints[singleType]]()
     .id(singleId)
     .embed();
 
@@ -55,8 +55,8 @@ export const listRequested = connection =>
     try {
       const response = yield call(getList, { connection, listType, listId, singleType, page });
       const { entities, result } = normalize(response, schemas.list);
-      const totalEntities = response._paging ? response._paging.total : 0;
-      const totalPages = response._paging ? response._paging.totalPages : 0;
+      const totalEntities = response._paging ? parseInt(response._paging.total, 10) : 0;
+      const totalPages = response._paging ? parseInt(response._paging.totalPages, 10) : 0;
       const total = { entities: totalEntities, pages: totalPages };
       yield put(
         actions.listSucceed({
