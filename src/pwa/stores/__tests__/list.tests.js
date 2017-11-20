@@ -103,6 +103,7 @@ test('Retrieve list items', () => {
   expect(connection.list.category[7].page[1].entities[0].title).toBe('Post 62');
   expect(connection.list.category[7].page[8].entities[1].title).toBe('Post 63');
   expect(connection.list.category[7].entities[1].title).toBe('Post 61');
+  expect(connection.list.category[7].total.fetched).toBe(6);
 });
 
 test('Add list. Request and succeed', () => {
@@ -112,6 +113,7 @@ test('Add list. Request and succeed', () => {
     listId: 7,
     page: 3
   }));
+  expect(connection.list.category[7].total.fetched).toBe(0);
   expect(connection.list.category[7].fetching).toBe(true);
   expect(connection.list.category[7].ready).toBe(false);
   expect(connection.list.category[7].page[2].fetching).toBe(true);
