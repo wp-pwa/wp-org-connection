@@ -2,13 +2,9 @@ import { getSnapshot } from 'mobx-state-tree';
 import * as actionTypes from '../actionTypes';
 import Connection from '../stores';
 
-const connection = Connection.create({})
-if (typeof window !== 'undefined') {
-  window.worona.stores = window.worona.stores || {};
-  window.worona.stores.connection = connection;
-}
+export const store = Connection.create({})
 
-export default () => (state, { type, ...action }) => {
+export const reducers = () => (state, { type, ...action }) => {
   switch (type) {
     case actionTypes.SINGLE_REQUESTED:
     case actionTypes.SINGLE_FAILED:
@@ -16,10 +12,10 @@ export default () => (state, { type, ...action }) => {
     case actionTypes.LIST_REQUESTED:
     case actionTypes.LIST_SUCCEED:
     case actionTypes.LIST_FAILED:
-      connection[type](action)
+      store[type](action)
       break;
     default:
       break;
   }
-  return getSnapshot(connection);
+  return getSnapshot(store);
 }
