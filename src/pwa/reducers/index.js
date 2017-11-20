@@ -3,6 +3,10 @@ import * as actionTypes from '../actionTypes';
 import Connection from '../stores';
 
 const connection = Connection.create({})
+if (typeof window !== 'undefined') {
+  window.worona.stores = window.worona.stores || {};
+  window.worona.stores.connection = connection;
+}
 
 export default () => (state, { type, ...action }) => {
   switch (type) {
