@@ -12,7 +12,11 @@ const Connection = types
   })
   .views(self => {
     const single = {};
-    const list = {};
+    const list = {
+      get latest() {
+        return (self.listMap.get('latest') && self.listMap.get('latest').get(0)) || null;
+      },
+    };
     return {
       get single() {
         self.singleMap.keys().forEach(type => {
@@ -28,13 +32,15 @@ const Connection = types
       },
       get list() {
         self.listMap.keys().forEach(type => {
-          list[type] = list[type] || [];
-          self.listMap
-            .get(type)
-            .keys()
-            .forEach(index => {
-              if (!list[type][index]) list[type][index] = self.listMap.get(type).get(index);
-            });
+          if (type !== 'latest') {
+            list[type] = list[type] || [];
+            self.listMap
+              .get(type)
+              .keys()
+              .forEach(index => {
+                if (!list[type][index]) list[type][index] = self.listMap.get(type).get(index);
+              });
+          }
         });
         return list;
       },
@@ -48,7 +54,7 @@ const Connection = types
       const newEntity = entity ? convert(entity) : { id, type };
       // Populate the state with the entity value and set both fetching and ready.
       self.singleMap.get(type).set(id, { ...newEntity, fetching, ready });
-    }
+    };
     const addEntities = ({ entities, ready = true, fetching = false }) => {
       // Update the entities.
       Object.entries(entities).map(([type, single]) => {
@@ -69,6 +75,8 @@ const Connection = types
         addEntities({ entities, ready: true, fetching: false });
       },
       [actionTypes.LIST_REQUESTED]({ listType, listId, page }) {
+        // If we are using 'latest', listId doesn't make sense and we use always 0.
+        if (listType === 'latest') listId = 0;
         // Init the first map (type) if it's not initializated yet.
         if (!self.listMap.get(listType)) self.listMap.set(listType, {});
         const list = self.listMap.get(listType);
@@ -78,6 +86,8 @@ const Connection = types
         list.get(listId).pageMap.get(page).fetching = true;
       },
       [actionTypes.LIST_SUCCEED]({ listType, listId, page, total, result, entities }) {
+        // If we are using 'latest', listId doesn't make sense and we use always 0.
+        if (listType === 'latest') listId = 0;
         // Update the list.
         const list = self.listMap.get(listType).get(listId);
         list.fetching = false;
@@ -91,7 +101,10 @@ const Connection = types
       [actionTypes.LIST_FAILED]({ listType, listId, page }) {
         // Populate the state with the entity value and set both fetching and ready.
         self.listMap.get(listType).get(listId).fetching = false;
-        self.listMap.get(listType).get(listId).pageMap.get(page).fetching = false;
+        self.listMap
+          .get(listType)
+          .get(listId)
+          .pageMap.get(page).fetching = false;
       },
     };
   });
