@@ -182,7 +182,7 @@ test("Changes selected when contexts are the same and has 'selected' inside", ()
   expect(store.contexts.length).toBe(1);
 });
 
-test("Moves selected when context exists and has 'selected' inside", () => {
+test("Moves selected using replace when context exists and has 'selected' inside", () => {
   const store = Router.create();
   store[actionTypes.ROUTE_CHANGE_SUCCEED](
     actions.routeChangeSucceed({
@@ -204,13 +204,15 @@ test("Moves selected when context exists and has 'selected' inside", () => {
 
   store[actionTypes.ROUTE_CHANGE_SUCCEED](
     actions.routeChangeSucceed({
-      selected: { singleType: 'post', singleId: 68 },
+      selected: { singleType: 'post', singleId: 70 },
       method: 'replace',
     }),
   );
 
-  expect(store.selected.id).toBe(68);
+  expect(store.selected.id).toBe(70);
   expect(store.selected.type).toBe('post');
+  expect(store.selected.next.id).toBe(68);
+  expect(store.context.column.items[0].next.id).toBe(70);
   expect(store.context.columns.length).toBe(3);
   expect(store.context.column._id).toBe(store.context.columns[0]._id);
   expect(store.context.columns[0].items.length).toBe(2);
