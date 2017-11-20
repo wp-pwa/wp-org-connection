@@ -40,4 +40,5 @@ export const Single = types
       return self.singleId;
     },
   }));
-export const Item = types.union(({ route }) => (route === 'list' ? List : Single), List, Single);
+
+export const Item = types.union(({ listType }) => (listType ? List : Single), List, Single);
