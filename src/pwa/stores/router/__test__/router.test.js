@@ -217,3 +217,51 @@ test("Moves selected using replace when context exists and has 'selected' inside
   expect(store.context.column._id).toBe(store.context.columns[0]._id);
   expect(store.context.columns[0].items.length).toBe(2);
 });
+
+test("Replaces context using replace", () => {
+  const store = Router.create();
+  store[actionTypes.ROUTE_CHANGE_SUCCEED](
+    actions.routeChangeSucceed({
+      selected: { singleType: 'post', singleId: 60 },
+      context: {
+        items: [
+          [
+            { singleType: 'post', singleId: 60 },
+            { listType: 'latest' },
+          ],
+          { listType: 'category', listId: 12 },
+          { listType: 'category', listId: 13 },
+          { listType: 'category', listId: 14 },
+          { listType: 'category', listId: 20 },
+          { listType: 'category', listId: 22 },
+        ],
+      },
+    }),
+  );
+
+  store[actionTypes.ROUTE_CHANGE_SUCCEED](
+    actions.routeChangeSucceed({
+      method: 'replace',
+      selected: { listType: 'latest' },
+      context: {
+        items: [
+          [
+            { singleType: 'post', singleId: 60 },
+            { listType: 'latest' },
+          ],
+          { singleType: 'post', singleId: 68 },
+          { singleType: 'post', singleId: 70 },
+          { singleType: 'post', singleId: 90 },
+          { singleType: 'post', singleId: 98 },
+          { singleType: 'post', singleId: 99 },
+        ],
+      },
+    }),
+  );
+
+  expect(store.selected.id).toBe(null);
+  expect(store.selected.type).toBe('latest');
+  expect(store.contexts.length).toBe(1);
+  expect(store.context.column.items.length).toBe(2);
+  expect(store.selected.next.type).toBe('post');
+});
