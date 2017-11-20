@@ -55,8 +55,8 @@ export const listRequested = connection =>
     try {
       const response = yield call(getList, { connection, listType, listId, singleType, page });
       const { entities, result } = normalize(response, schemas.list);
-      const totalEntities = response._paging ? response._paging.total : 0;
-      const totalPages = response._paging ? response._paging.totalPages : 0;
+      const totalEntities = response._paging ? parseInt(response._paging.total, 10) : 0;
+      const totalPages = response._paging ? parseInt(response._paging.totalPages, 10) : 0;
       const total = { entities: totalEntities, pages: totalPages };
       yield put(
         actions.listSucceed({
