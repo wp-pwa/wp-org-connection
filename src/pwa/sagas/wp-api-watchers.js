@@ -41,7 +41,7 @@ export const getList = ({ connection, listType, listId, singleType, page }) => {
 };
 
 export const getSingle = ({ connection, singleType, singleId }) =>
-  connection[singleType]()
+  connection[typesToEndpoints[singleType]]()
     .id(singleId)
     .embed();
 
