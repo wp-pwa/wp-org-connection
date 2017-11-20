@@ -139,7 +139,7 @@ test("Changes selected when context exists and has 'selected' inside", () => {
   expect(store.selected.type).toBe('post');
 });
 
-test("Changes selected when contexts are the same and has 'selected' inside", () => {
+test("Changes selected when contexts are equal and have 'selected' inside", () => {
   const store = Router.create();
   store[actionTypes.ROUTE_CHANGE_SUCCEED](
     actions.routeChangeSucceed({

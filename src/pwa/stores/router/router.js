@@ -45,7 +45,7 @@ const Router = types
         selectedItem.column.selected = selectedItem;
       }
 
-      // Fixes next attributes for items
+      // Fixes 'next' attribute for items
       self.context.afterCreate();
     };
 
