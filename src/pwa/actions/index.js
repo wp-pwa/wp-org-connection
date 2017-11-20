@@ -61,7 +61,7 @@ export const customListFailed = () => ({
 });
 
 export const routeChangeRequested = ({
-  selected: { listType, listId, page = 1, singleType, singleId },
+  selected: { listType, listId, page, singleType, singleId },
   method = 'push',
   context = null,
 }) => ({
@@ -77,7 +77,7 @@ export const routeChangeRequested = ({
   context,
 });
 export const routeChangeSucceed = ({
-  selected: { listType, listId, page = 1, singleType, singleId },
+  selected: { listType, listId, page, singleType, singleId },
   method = 'push',
   context = null,
 }) => ({

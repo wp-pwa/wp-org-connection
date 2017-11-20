@@ -8,7 +8,7 @@ export const List = types.model('List').props({
   route: 'list',
   listType: types.optional(types.string, 'latest'),
   listId: types.maybe(types.union(types.string, types.number)),
-  page: types.optional(types.number, 0),
+  page: types.optional(types.number, 1),
   ready: types.optional(types.boolean, false),
   column: types.maybe(types.reference(types.late(() => Column))),
   next: types.maybe(types.reference(types.late(() => Item))), // eslint-disable-line
@@ -27,7 +27,7 @@ export const Single = types
     _id: Id,
     route: 'single',
     singleType: types.string,
-    singleId: types.number,
+    singleId: types.maybe(types.number),
     ready: types.optional(types.boolean, false),
     fromList: types.maybe(List),
     column: types.maybe(types.reference(types.late(() => Column))),
