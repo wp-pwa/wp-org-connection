@@ -21,7 +21,7 @@ export function* isCors() {
 }
 
 export function* initConnection() {
-  const cors = isCors();
+  const cors = yield call(isCors);
   const getSetting = dep('settings', 'selectorCreators', 'getSetting');
   const url = yield select(getSetting('generalSite', 'url'));
   return new Wpapi({ endpoint: `${cors ? CorsAnywhere : ''}${url}?rest_route=` });
