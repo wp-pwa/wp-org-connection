@@ -82,8 +82,8 @@ const Connection = types
         const list = self.listMap.get(listType);
         if (!list.get(listId)) list.set(listId, {});
         list.get(listId).fetching = true;
-        if (!list.get(listId).pageMap.get(page)) list.get(listId).pageMap.set(page, {});
-        list.get(listId).pageMap.get(page).fetching = true;
+        if (!list.get(listId).pageMap.get(page - 1)) list.get(listId).pageMap.set(page - 1, {});
+        list.get(listId).pageMap.get(page - 1).fetching = true;
       },
       [actionTypes.LIST_SUCCEED]({ listType, listId, page, total, result, entities }) {
         // If we are using 'latest', listId doesn't make sense and we use always 0.
@@ -92,9 +92,9 @@ const Connection = types
         const list = self.listMap.get(listType).get(listId);
         list.fetching = false;
         list.ready = true;
-        list.pageMap.get(page).entities = result;
-        list.pageMap.get(page).fetching = false;
-        list.pageMap.get(page).ready = true;
+        list.pageMap.get(page - 1).entities = result;
+        list.pageMap.get(page - 1).fetching = false;
+        list.pageMap.get(page - 1).ready = true;
         if (total) list.total = total;
         addEntities({ entities, ready: true, fetching: false });
       },
@@ -104,7 +104,7 @@ const Connection = types
         self.listMap
           .get(listType)
           .get(listId)
-          .pageMap.get(page).fetching = false;
+          .pageMap.get(page - 1).fetching = false;
       },
     };
   });
