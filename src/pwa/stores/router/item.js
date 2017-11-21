@@ -1,5 +1,4 @@
-import { types } from 'mobx-state-tree';
-import Column from './column';
+import { types, getParent } from 'mobx-state-tree';
 
 import Id from '../id';
 
@@ -10,7 +9,6 @@ export const List = types.model('List').props({
   listId: types.maybe(types.union(types.string, types.number)),
   page: types.optional(types.number, 1),
   ready: types.optional(types.boolean, false),
-  column: types.maybe(types.reference(types.late(() => Column))),
   next: types.maybe(types.reference(types.late(() => Item))), // eslint-disable-line
 }).views(self => ({
   get type() {
@@ -19,6 +17,9 @@ export const List = types.model('List').props({
   get id() {
     return self.listId;
   },
+  get column() {
+    return getParent(self, 2);
+  }
 }));
 
 export const Single = types
@@ -30,7 +31,6 @@ export const Single = types
     singleId: types.maybe(types.number),
     ready: types.optional(types.boolean, false),
     fromList: types.maybe(List),
-    column: types.maybe(types.reference(types.late(() => Column))),
     next: types.maybe(types.reference(types.late(() => Item))), // eslint-disable-line
   }).views(self => ({
     get type() {
@@ -39,6 +39,9 @@ export const Single = types
     get id() {
       return self.singleId;
     },
+    get column() {
+      return getParent(self, 2);
+    }
   }));
 
 export const Item = types.union(({ listType }) => (listType ? List : Single), List, Single);

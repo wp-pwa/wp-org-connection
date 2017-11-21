@@ -41,7 +41,6 @@ const Router = types
         if (column.items.length === 0) detach(column);
 
         current.column.items.push(selectedItem);
-        selectedItem.column = current.column;
         selectedItem.column.selected = selectedItem;
       }
 
@@ -61,18 +60,9 @@ const Router = types
       );
 
     const newColumn = element => {
-      const colId = uuid();
-      const column = {
-        _id: colId,
-        items: element instanceof Array ? element : [element],
-      };
-      column.items = column.items.map(item => {
-        const { _id = uuid(), ...rest } = item;
-        return { _id, ...rest, column: colId };
-      });
-      column.selected = column.items[0]._id;
-
-      return column;
+      const elements = element instanceof Array ? element : [element];
+      const items = elements.map(({ _id, ...rest }) => ({ _id: _id || uuid(), ...rest }));
+      return { _id: uuid(), selected: items[0]._id, items };
     };
 
     const extractList = list => {
