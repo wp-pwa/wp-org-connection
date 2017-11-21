@@ -12,11 +12,7 @@ const Connection = types
   })
   .views(self => {
     const single = {};
-    const list = {
-      get latest() {
-        return (self.listMap.get('latest') && self.listMap.get('latest').get(0)) || null;
-      },
-    };
+    const list = {};
     return {
       get single() {
         self.singleMap.keys().forEach(type => {
@@ -32,15 +28,13 @@ const Connection = types
       },
       get list() {
         self.listMap.keys().forEach(type => {
-          if (type !== 'latest') {
-            list[type] = list[type] || [];
-            self.listMap
-              .get(type)
-              .keys()
-              .forEach(index => {
-                if (!list[type][index]) list[type][index] = self.listMap.get(type).get(index);
-              });
-          }
+          list[type] = list[type] || {};
+          self.listMap
+            .get(type)
+            .keys()
+            .forEach(index => {
+              if (!list[type][index]) list[type][index] = self.listMap.get(type).get(index);
+            });
         });
         return list;
       },
@@ -76,7 +70,7 @@ const Connection = types
       },
       [actionTypes.LIST_REQUESTED]({ listType, listId, page }) {
         // If we are using 'latest', listId doesn't make sense and we use always 0.
-        if (listType === 'latest') listId = 0;
+        if (listType === 'latest' && !listId) listId = 'post';
         // Init the first map (type) if it's not initializated yet.
         if (!self.listMap.get(listType)) self.listMap.set(listType, {});
         const list = self.listMap.get(listType);
@@ -87,7 +81,7 @@ const Connection = types
       },
       [actionTypes.LIST_SUCCEED]({ listType, listId, page, total, result, entities }) {
         // If we are using 'latest', listId doesn't make sense and we use always 0.
-        if (listType === 'latest') listId = 0;
+        if (listType === 'latest' && !listId) listId = 'post';
         // Update the list.
         const list = self.listMap.get(listType).get(listId);
         list.fetching = false;

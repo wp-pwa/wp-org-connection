@@ -1,3 +1,4 @@
+/* eslint-disable dot-notation */
 import Connection from '../';
 import * as actions from '../../actions';
 import * as actionTypes from '../../actionTypes';
@@ -181,10 +182,11 @@ test('Add latest. Request and succeed', () => {
   connection[actionTypes.LIST_REQUESTED](actions.listRequested({
     listType: 'latest',
   }));
-  expect(connection.list.latest.fetching).toBe(true);
-  expect(connection.list.latest.ready).toBe(false);
-  expect(connection.list.latest.page[0].fetching).toBe(true);
-  expect(connection.list.latest.page[0].ready).toBe(false);
+  expect(connection.list.latest.post.fetching).toBe(true);
+  expect(connection.list.latest.post.ready).toBe(false);
+  expect(connection.list.latest.post.page[0].fetching).toBe(true);
+  expect(connection.list.latest.post.page[0].ready).toBe(false);
+
   connection[actionTypes.LIST_SUCCEED](actions.listSucceed({
     listType: 'latest',
     page: 1,
@@ -202,17 +204,62 @@ test('Add latest. Request and succeed', () => {
       },
     },
   }));
-  expect(connection.list.latest.fetching).toBe(false);
-  expect(connection.list.latest.ready).toBe(true);
-  expect(connection.list.latest.page[0].fetching).toBe(false);
-  expect(connection.list.latest.page[0].ready).toBe(true);
-  expect(connection.list.latest.entities[0].title).toBe('The Beauties of Gullfoss');
-  expect(connection.list.latest.page[0].entities[0].title).toBe('The Beauties of Gullfoss');
+  expect(connection.list.latest.post.fetching).toBe(false);
+  expect(connection.list.latest.post.ready).toBe(true);
+  expect(connection.list.latest.post.page[0].fetching).toBe(false);
+  expect(connection.list.latest.post.page[0].ready).toBe(true);
+  expect(connection.list.latest.post.entities[0].title).toBe('The Beauties of Gullfoss');
+  expect(connection.list.latest.post.page[0].entities[0].title).toBe('The Beauties of Gullfoss');
   connection[actionTypes.LIST_REQUESTED](actions.listRequested({
     listType: 'latest',
   }));
-  expect(connection.list.latest.fetching).toBe(true);
-  expect(connection.list.latest.ready).toBe(true);
-  expect(connection.list.latest.page[0].fetching).toBe(true);
-  expect(connection.list.latest.page[0].ready).toBe(true);
+  expect(connection.list.latest.post.fetching).toBe(true);
+  expect(connection.list.latest.post.ready).toBe(true);
+  expect(connection.list.latest.post.page[0].fetching).toBe(true);
+  expect(connection.list.latest.post.page[0].ready).toBe(true);
+});
+
+test('Add latest movies. Request and succeed', () => {
+  const connection = Connection.create({});
+  connection[actionTypes.LIST_REQUESTED](actions.listRequested({
+    listType: 'latest',
+    listId: 'movie'
+  }));
+  expect(connection.list.latest.movie.fetching).toBe(true);
+  expect(connection.list.latest.movie.ready).toBe(false);
+  expect(connection.list.latest.movie.page[0].fetching).toBe(true);
+  expect(connection.list.latest.movie.page[0].ready).toBe(false);
+
+  connection[actionTypes.LIST_SUCCEED](actions.listSucceed({
+    listType: 'latest',
+    listId: 'movie',
+    page: 1,
+    result: [60],
+    total: {
+      entities: 250,
+      pages: 25,
+    },
+    entities: {
+      movie: {
+        60: post60normalized.post[60],
+      },
+      category: {
+        7: category7normalized.taxonomy[7],
+      },
+    },
+  }));
+  expect(connection.list.latest.movie.fetching).toBe(false);
+  expect(connection.list.latest.movie.ready).toBe(true);
+  expect(connection.list.latest.movie.page[0].fetching).toBe(false);
+  expect(connection.list.latest.movie.page[0].ready).toBe(true);
+  expect(connection.list.latest.movie.entities[0].title).toBe('The Beauties of Gullfoss');
+  expect(connection.list.latest.movie.page[0].entities[0].title).toBe('The Beauties of Gullfoss');
+  connection[actionTypes.LIST_REQUESTED](actions.listRequested({
+    listType: 'latest',
+    listId: 'movie',
+  }));
+  expect(connection.list.latest.movie.fetching).toBe(true);
+  expect(connection.list.latest.movie.ready).toBe(true);
+  expect(connection.list.latest.movie.page[0].fetching).toBe(true);
+  expect(connection.list.latest.movie.page[0].ready).toBe(true);
 });
