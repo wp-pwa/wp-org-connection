@@ -39,9 +39,9 @@ test('Context is instatiated appropriately', () => {
   })
 
   const ctx = Context.create({
-    id: uuid(),
+    index: 0,
     columns: [col1, col2, col3],
-    selected: col1,
+    column: col1,
   })
 
   expect(ctx.column.items[0].next).toEqual(ctx.columns[0].items[1]);

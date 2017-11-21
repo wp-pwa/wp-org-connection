@@ -9,7 +9,6 @@ beforeEach(() => {
     _id: uuid(),
     route: 'list',
     listType: 'latest',
-    column: columnId,
   });
 
   const item1 = item();

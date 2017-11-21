@@ -306,8 +306,6 @@ test('Goes back and forward as expected', () => {
   expect(store.context.index).toBe(1);
   expect(store.selected.id).toBe(190);
 
-  console.log('Before going back');
-
   // Goes back
   store[actionTypes.ROUTE_CHANGE_SUCCEED](
     actions.routeChangeSucceed({
