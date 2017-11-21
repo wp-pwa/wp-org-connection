@@ -265,3 +265,102 @@ test("Replaces context using replace", () => {
   expect(store.context.column.items.length).toBe(2);
   expect(store.selected.next.type).toBe('post');
 });
+
+test('Goes back and forward as expected', () => {
+  const store = Router.create();
+  store[actionTypes.ROUTE_CHANGE_SUCCEED](
+    actions.routeChangeSucceed({
+      selected: { singleType: 'post', singleId: 60 },
+      context: {
+        items: [
+          { singleType: 'post', singleId: 60 },
+          { singleType: 'post', singleId: 68 },
+          { singleType: 'post', singleId: 70 },
+          [
+            { singleType: 'post', singleId: 90 },
+            { singleType: 'post', singleId: 98 },
+            { singleType: 'post', singleId: 99 },
+          ],
+        ],
+      },
+    }),
+  );
+
+  // Changes selected in the current context
+  store[actionTypes.ROUTE_CHANGE_SUCCEED](
+    actions.routeChangeSucceed({
+      selected: { singleType: 'post', singleId: 90 },
+    }),
+  );
+
+  expect(store.contexts.length).toBe(1);
+
+  // Creates a new context
+  store[actionTypes.ROUTE_CHANGE_SUCCEED](
+    actions.routeChangeSucceed({
+      selected: { singleType: 'post', singleId: 190 },
+    }),
+  );
+
+  expect(store.contexts.length).toBe(2);
+  expect(store.context.index).toBe(1);
+  expect(store.selected.id).toBe(190);
+
+  console.log('Before going back');
+
+  // Goes back
+  store[actionTypes.ROUTE_CHANGE_SUCCEED](
+    actions.routeChangeSucceed({
+      selected: { singleType: 'post', singleId: 90 },
+      method: 'back',
+    }),
+  );
+
+  expect(store.contexts.length).toBe(2);
+  expect(store.context.index).toBe(0);
+  expect(store.selected.id).toBe(90);
+
+  // Goes back again
+  store[actionTypes.ROUTE_CHANGE_SUCCEED](
+    actions.routeChangeSucceed({
+      selected: { singleType: 'post', singleId: 60 },
+      context: {
+        items: [
+          { singleType: 'post', singleId: 60 },
+          { singleType: 'post', singleId: 68 },
+          { singleType: 'post', singleId: 70 },
+          [
+            { singleType: 'post', singleId: 90 },
+            { singleType: 'post', singleId: 98 },
+            { singleType: 'post', singleId: 99 },
+          ],
+        ],
+      },
+    }),
+  );
+
+  expect(store.context.index).toBe(0);
+  expect(store.selected.id).toBe(60);
+
+  // Goes forward
+  store[actionTypes.ROUTE_CHANGE_SUCCEED](
+    actions.routeChangeSucceed({
+      selected: { singleType: 'post', singleId: 90 },
+      method: 'forward',
+    }),
+  );
+
+  expect(store.context.index).toBe(0);
+  expect(store.selected.id).toBe(90);
+
+  // Goes forward again
+  store[actionTypes.ROUTE_CHANGE_SUCCEED](
+    actions.routeChangeSucceed({
+      selected: { singleType: 'post', singleId: 190 },
+      method: 'forward',
+    }),
+  );
+
+  expect(store.context.index).toBe(1);
+  expect(store.selected.id).toBe(190);
+})

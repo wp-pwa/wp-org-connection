@@ -123,6 +123,15 @@ const Router = types
       changeSelected(selected);
     };
 
+    const changeToContext = (selected, relativeIndex) => {
+      const newIndex = self.context.index + relativeIndex;
+      self.context = self.contexts[newIndex];
+      changeSelected(selected);
+    };
+
+    const selectInPreviousContext = selected => changeToContext(selected, -1);
+    const selectInNextContext = selected => changeToContext(selected, 1);
+
     const createContextFromSelected = ({ listType, listId, singleType, singleId, page }) => {
       const contextIndex = self.context ? self.context.index + 1 : 0;
       const columnId = uuid();
@@ -141,19 +150,29 @@ const Router = types
 
     return {
       [actionTypes.ROUTE_CHANGE_SUCCEED]: ({ selected, method, context }) => {
-        if (context === null) {
-          if (self.context === null || !self.context.getItem(selected)) {
-            createContextFromSelected(selected);
-          } else {
-            if (method === 'push') changeSelected(selected);
+        const selectedInContext = self.context && !!self.context.getItem(selected);
+        const contextsAreEqual = self.context && isEqual(self.context.generator, context);
+
+        if (self.context) {
+          if (selectedInContext && ((context && contextsAreEqual) || !context)) {
+            if (['push', 'back', 'forward'].includes(method)) changeSelected(selected);
             if (method === 'replace') moveSelected(selected);
           }
-        } else if (self.context === null || !isEqual(self.context.generator, context)) {
-          if (method === 'push') pushContext(selected, context);
-          if (method === 'replace') replaceContext(selected, context);
+          if (context && !contextsAreEqual) {
+            if (method === 'push') pushContext(selected, context);
+            if (method === 'replace') replaceContext(selected, context);
+            if (method === 'back') selectInPreviousContext(selected);
+            if (method === 'forward') selectInNextContext(selected);
+          }
+          if (!context && !selectedInContext) {
+            if (method === 'back') selectInPreviousContext(selected);
+            if (method === 'forward') selectInNextContext(selected);
+            if (['push', 'replace'].includes(method)) createContextFromSelected(selected);
+          }
+        } else if (context) {
+          pushContext(selected, context);
         } else {
-          if (method === 'push') changeSelected(selected);
-          if (method === 'replace') moveSelected(selected);
+          createContextFromSelected(selected);
         }
       },
     };
