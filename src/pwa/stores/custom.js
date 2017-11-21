@@ -1,6 +1,6 @@
 import { types } from 'mobx-state-tree';
-import { Any } from './single';
 import { Total } from './list';
+import { Any } from './single';
 
 export const Page = types
   .model('Page')
@@ -27,13 +27,14 @@ const Custom = types
     const pages = [];
     const entities = [];
     return {
-      // Maps over pageMap and returns an array of ids
+      // Maps pageMap and returns an array of pages.
       get page() {
-        self.pageMap.keys().forEach(page => {
-          pages[page] = self.pageMap.get(page);
+        self.pageMap.keys().forEach(key => {
+          pages[key] = self.pageMap.get(key);
         });
         return pages;
       },
+      // Maps page array and retuns an array of all entities
       get entities() {
         let index = 0;
         self.page.forEach(page => {

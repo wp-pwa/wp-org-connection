@@ -50,7 +50,7 @@ export const listFailed = ({ listType, listId, page, error, endpoint }) => ({
   endpoint,
 });
 
-export const customRequested = ({ url = '/', name, params, singleType, page = 0 }) => ({
+export const customRequested = ({ url = '/', name, params = {}, singleType, page = 0 }) => ({
   type: actionTypes.CUSTOM_REQUESTED,
   url,
   name,

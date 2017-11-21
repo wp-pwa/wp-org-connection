@@ -10,7 +10,7 @@ const Connection = types
   .props({
     singleMap: types.optional(types.map(types.map(Any)), {}),
     listMap: types.optional(types.map(types.map(List)), {}),
-    customMap: types.optional(types.map(types.map(Custom)), {}),
+    customMap: types.optional(types.map(Custom), {}),
   })
   .views(self => {
     const single = {};
@@ -49,13 +49,7 @@ const Connection = types
       },
       get custom() {
         self.customMap.keys().forEach(name => {
-          custom[name] = custom[name] || [];
-          self.customMap
-            .get(name)
-            .keys()
-            .forEach(index => {
-              if (!custom[name][index]) custom[name][index] = self.customMap.get(name).get(index);
-            });
+          if (!custom[name]) custom[name] = self.customMap.get(name);
         });
         return custom;
       },
@@ -107,9 +101,9 @@ const Connection = types
         const list = self.listMap.get(listType).get(listId);
         list.fetching = false;
         list.ready = true;
-        list.pageMap.get(page - 1).entities = result;
         list.pageMap.get(page - 1).fetching = false;
         list.pageMap.get(page - 1).ready = true;
+        list.pageMap.get(page - 1).entities = result;
         if (total) list.total = total;
         addEntities({ entities, ready: true, fetching: false });
       },
@@ -125,17 +119,23 @@ const Connection = types
         if (!self.customMap.get(name)) self.customMap.set(name, {});
         const custom = self.customMap.get(name);
         custom.fetching = true;
-        debugger;
         if (!custom.pageMap.get(page - 1)) custom.pageMap.set(page - 1, {});
         custom.pageMap.get(page - 1).fetching = true;
-
-        // if (!self.customMap.get(singleType))
       },
-      [actionTypes.CUSTOM_SUCCEED](params) {
-        console.log(params);
+      [actionTypes.CUSTOM_SUCCEED]({ name, page, total, result, entities }) {
+        const custom = self.customMap.get(name);
+        custom.fetching = false;
+        custom.ready = true;
+        custom.pageMap.get(page - 1).fetching = false;
+        custom.pageMap.get(page - 1).ready = true;
+        custom.pageMap.get(page - 1).entities = result;
+        custom.total = total;
+        addEntities({ entities, ready: true, fetching: false });
       },
-      [actionTypes.CUSTOM_FAILED](params) {
-        console.log(params);
+      [actionTypes.CUSTOM_FAILED]({ name, page }) {
+        const custom = self.customMap.get(name);
+        custom.fetching = false;
+        custom.pageMap.get(page - 1).fetching = false;
       },
     };
   });
