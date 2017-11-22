@@ -50,21 +50,84 @@ export const listFailed = ({ listType, listId, page, error, endpoint }) => ({
   endpoint,
 });
 
-export const customListRequested = () => ({
-  type: actionTypes.CUSTOM_LIST_REQUESTED,
+export const customRequested = ({ url = '/', name, singleType, page = 1, params = {} }) => ({
+  type: actionTypes.CUSTOM_REQUESTED,
+  url,
+  name,
+  singleType,
+  page,
+  params,
 });
-export const customListSucceed = () => ({
-  type: actionTypes.CUSTOM_LIST_SUCCEED,
+export const customSucceed = ({
+  url = '/',
+  name,
+  singleType,
+  params = {},
+  page = 1,
+  total = { entities: 0, pages: 0 },
+  result,
+  entities,
+}) => ({
+  type: actionTypes.CUSTOM_SUCCEED,
+  url,
+  name,
+  singleType,
+  params,
+  page,
+  total,
+  result,
+  entities,
 });
-export const customListFailed = () => ({
-  type: actionTypes.CUSTOM_LIST_FAILED,
+export const customFailed = ({
+  url = '/',
+  name,
+  singleType,
+  params = {},
+  page = 1,
+  error,
+  endpoint,
+}) => ({
+  type: actionTypes.CUSTOM_FAILED,
+  url,
+  name,
+  singleType,
+  params,
+  page,
+  error,
+  endpoint,
 });
 
-export const routeChangeRequested = () => ({
+export const routeChangeRequested = ({
+  selected: { listType, listId, page, singleType, singleId },
+  method = 'push',
+  context = null,
+}) => ({
   type: actionTypes.ROUTE_CHANGE_REQUESTED,
+  selected: {
+    listType,
+    listId,
+    page,
+    singleType,
+    singleId,
+  },
+  method,
+  context,
 });
-export const routeChangeSucceed = () => ({
+export const routeChangeSucceed = ({
+  selected: { listType, listId, page, singleType, singleId },
+  method = 'push',
+  context = null,
+}) => ({
   type: actionTypes.ROUTE_CHANGE_SUCCEED,
+  selected: {
+    listType,
+    listId,
+    page,
+    singleType,
+    singleId,
+  },
+  method,
+  context,
 });
 export const routeChangeFailed = () => ({
   type: actionTypes.ROUTE_CHANGE_FAILED,
