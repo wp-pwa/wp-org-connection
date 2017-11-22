@@ -1,9 +1,16 @@
 /* eslint-disable dot-notation */
-import Connection from '../';
-import * as actions from '../../actions';
-import * as actionTypes from '../../actionTypes';
-import post60normalized from '../../__tests__/post-60-normalized.json';
-import category7normalized from '../../__tests__/category-7-normalized.json';
+import { types } from 'mobx-state-tree';
+import * as connect from '../';
+import * as actions from '../../../actions';
+import * as actionTypes from '../../../actionTypes';
+import post60normalized from '../../../__tests__/post-60-normalized.json';
+import category7normalized from '../../../__tests__/category-7-normalized.json';
+
+const Connection = types
+  .model()
+  .props(connect.props)
+  .views(connect.views)
+  .actions(connect.actions);
 
 describe('Store › List', () => {
   test('Check lists totals', () => {
@@ -188,89 +195,102 @@ describe('Store › List', () => {
     expect(connection.list.category[7].page[24].ready).toBe(false);
   });
 
-test('Add latest. Request and succeed', () => {
-  const connection = Connection.create({});
-  connection[actionTypes.LIST_REQUESTED](actions.listRequested({
-    listType: 'latest',
-  }));
-  expect(connection.list.latest.post.fetching).toBe(true);
-  expect(connection.list.latest.post.ready).toBe(false);
-  expect(connection.list.latest.post.page[0].fetching).toBe(true);
-  expect(connection.list.latest.post.page[0].ready).toBe(false);
+  test('Add latest. Request and succeed', () => {
+    const connection = Connection.create({});
+    connection[actionTypes.LIST_REQUESTED](
+      actions.listRequested({
+        listType: 'latest',
+      }),
+    );
+    expect(connection.list.latest.post.fetching).toBe(true);
+    expect(connection.list.latest.post.ready).toBe(false);
+    expect(connection.list.latest.post.page[0].fetching).toBe(true);
+    expect(connection.list.latest.post.page[0].ready).toBe(false);
 
-  connection[actionTypes.LIST_SUCCEED](actions.listSucceed({
-    listType: 'latest',
-    page: 1,
-    result: [60],
-    total: {
-      entities: 250,
-      pages: 25,
-    },
-    entities: {
-      post: {
-        60: post60normalized.post[60],
-      },
-      category: {
-        7: category7normalized.taxonomy[7],
-      },
-    },
-  }));
-  expect(connection.list.latest.post.fetching).toBe(false);
-  expect(connection.list.latest.post.ready).toBe(true);
-  expect(connection.list.latest.post.page[0].fetching).toBe(false);
-  expect(connection.list.latest.post.page[0].ready).toBe(true);
-  expect(connection.list.latest.post.entities[0].title).toBe('The Beauties of Gullfoss');
-  expect(connection.list.latest.post.page[0].entities[0].title).toBe('The Beauties of Gullfoss');
-  connection[actionTypes.LIST_REQUESTED](actions.listRequested({
-    listType: 'latest',
-  }));
-  expect(connection.list.latest.post.fetching).toBe(true);
-  expect(connection.list.latest.post.ready).toBe(true);
-  expect(connection.list.latest.post.page[0].fetching).toBe(true);
-  expect(connection.list.latest.post.page[0].ready).toBe(true);
-});
+    connection[actionTypes.LIST_SUCCEED](
+      actions.listSucceed({
+        listType: 'latest',
+        page: 1,
+        result: [60],
+        total: {
+          entities: 250,
+          pages: 25,
+        },
+        entities: {
+          post: {
+            60: post60normalized.post[60],
+          },
+          category: {
+            7: category7normalized.taxonomy[7],
+          },
+        },
+      }),
+    );
+    expect(connection.list.latest.post.fetching).toBe(false);
+    expect(connection.list.latest.post.ready).toBe(true);
+    expect(connection.list.latest.post.page[0].fetching).toBe(false);
+    expect(connection.list.latest.post.page[0].ready).toBe(true);
+    expect(connection.list.latest.post.entities[0].title).toBe('The Beauties of Gullfoss');
+    expect(connection.list.latest.post.page[0].entities[0].title).toBe('The Beauties of Gullfoss');
+    connection[actionTypes.LIST_REQUESTED](
+      actions.listRequested({
+        listType: 'latest',
+      }),
+    );
+    expect(connection.list.latest.post.fetching).toBe(true);
+    expect(connection.list.latest.post.ready).toBe(true);
+    expect(connection.list.latest.post.page[0].fetching).toBe(true);
+    expect(connection.list.latest.post.page[0].ready).toBe(true);
+  });
 
-test('Add latest movies. Request and succeed', () => {
-  const connection = Connection.create({});
-  connection[actionTypes.LIST_REQUESTED](actions.listRequested({
-    listType: 'latest',
-    listId: 'movie'
-  }));
-  expect(connection.list.latest.movie.fetching).toBe(true);
-  expect(connection.list.latest.movie.ready).toBe(false);
-  expect(connection.list.latest.movie.page[0].fetching).toBe(true);
-  expect(connection.list.latest.movie.page[0].ready).toBe(false);
+  test('Add latest movies. Request and succeed', () => {
+    const connection = Connection.create({});
+    connection[actionTypes.LIST_REQUESTED](
+      actions.listRequested({
+        listType: 'latest',
+        listId: 'movie',
+      }),
+    );
+    expect(connection.list.latest.movie.fetching).toBe(true);
+    expect(connection.list.latest.movie.ready).toBe(false);
+    expect(connection.list.latest.movie.page[0].fetching).toBe(true);
+    expect(connection.list.latest.movie.page[0].ready).toBe(false);
 
-  connection[actionTypes.LIST_SUCCEED](actions.listSucceed({
-    listType: 'latest',
-    listId: 'movie',
-    page: 1,
-    result: [60],
-    total: {
-      entities: 250,
-      pages: 25,
-    },
-    entities: {
-      movie: {
-        60: post60normalized.post[60],
-      },
-      category: {
-        7: category7normalized.taxonomy[7],
-      },
-    },
-  }));
-  expect(connection.list.latest.movie.fetching).toBe(false);
-  expect(connection.list.latest.movie.ready).toBe(true);
-  expect(connection.list.latest.movie.page[0].fetching).toBe(false);
-  expect(connection.list.latest.movie.page[0].ready).toBe(true);
-  expect(connection.list.latest.movie.entities[0].title).toBe('The Beauties of Gullfoss');
-  expect(connection.list.latest.movie.page[0].entities[0].title).toBe('The Beauties of Gullfoss');
-  connection[actionTypes.LIST_REQUESTED](actions.listRequested({
-    listType: 'latest',
-    listId: 'movie',
-  }));
-  expect(connection.list.latest.movie.fetching).toBe(true);
-  expect(connection.list.latest.movie.ready).toBe(true);
-  expect(connection.list.latest.movie.page[0].fetching).toBe(true);
-  expect(connection.list.latest.movie.page[0].ready).toBe(true);
+    connection[actionTypes.LIST_SUCCEED](
+      actions.listSucceed({
+        listType: 'latest',
+        listId: 'movie',
+        page: 1,
+        result: [60],
+        total: {
+          entities: 250,
+          pages: 25,
+        },
+        entities: {
+          movie: {
+            60: post60normalized.post[60],
+          },
+          category: {
+            7: category7normalized.taxonomy[7],
+          },
+        },
+      }),
+    );
+    expect(connection.list.latest.movie.fetching).toBe(false);
+    expect(connection.list.latest.movie.ready).toBe(true);
+    expect(connection.list.latest.movie.page[0].fetching).toBe(false);
+    expect(connection.list.latest.movie.page[0].ready).toBe(true);
+    expect(connection.list.latest.movie.entities[0].title).toBe('The Beauties of Gullfoss');
+    expect(connection.list.latest.movie.page[0].entities[0].title).toBe('The Beauties of Gullfoss');
+    connection[actionTypes.LIST_REQUESTED](
+      actions.listRequested({
+        listType: 'latest',
+        listId: 'movie',
+      }),
+    );
+    expect(connection.list.latest.movie.fetching).toBe(true);
+    expect(connection.list.latest.movie.ready).toBe(true);
+    expect(connection.list.latest.movie.page[0].fetching).toBe(true);
+    expect(connection.list.latest.movie.page[0].ready).toBe(true);
+  });
 });

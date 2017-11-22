@@ -1,7 +1,7 @@
 import { types, getParent } from 'mobx-state-tree';
 import { Item } from './item';
 
-import Id from '../id';
+import Id from './id';
 
 const Column = types
   .model('Column')

@@ -1,6 +1,14 @@
-import Connection from '../';
-import * as actions from '../../actions';
-import * as actionTypes from '../../actionTypes';
+import { types } from 'mobx-state-tree';
+
+import * as connect from '../';
+import * as actions from '../../../actions';
+import * as actionTypes from '../../../actionTypes';
+
+const Connection = types
+  .model()
+  .props(connect.props)
+  .views(connect.views)
+  .actions(connect.actions);
 
 const snapshot = {
   singleMap: {

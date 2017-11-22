@@ -1,8 +1,14 @@
-import { applySnapshot } from 'mobx-state-tree';
-import Connection from '../';
-import * as actions from '../../actions';
-import * as actionTypes from '../../actionTypes';
-import post60normalized from '../../__tests__/post-60-normalized.json';
+import { types, applySnapshot } from 'mobx-state-tree';
+import * as connect from '../';
+import * as actions from '../../../actions';
+import * as actionTypes from '../../../actionTypes';
+import post60normalized from '../../../__tests__/post-60-normalized.json';
+
+const Connection = types
+  .model()
+  .props(connect.props)
+  .views(connect.views)
+  .actions(connect.actions);
 
 describe('Store › Single', () => {
   test('Retrieve entity properties', () => {

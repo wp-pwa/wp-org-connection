@@ -1,18 +1,19 @@
-import { getSnapshot } from 'mobx-state-tree';
-
-import Router from '../router';
-
+import { types, getSnapshot } from 'mobx-state-tree';
+import * as router from '../';
 import * as actionTypes from '../../../actionTypes';
 import * as actions from '../../../actions';
 
+let store;
+beforeEach(() => {
+  store = types.model().props(router.props).views(router.views).actions(router.actions).create();
+})
+
 test('Initializates empty', () => {
-  const store = Router.create();
   expect(getSnapshot(store.contexts)).toEqual([]);
   expect(store.context).toBe(null);
 });
 
 test('Creates a new context from selected post', () => {
-  const store = Router.create();
   store[actionTypes.ROUTE_CHANGE_SUCCEED](
     actions.routeChangeSucceed({
       selected: { singleType: 'post', singleId: 60 },
@@ -31,7 +32,6 @@ test('Creates a new context from selected post', () => {
 });
 
 test('Creates a new context from selected list', () => {
-  const store = Router.create();
   store[actionTypes.ROUTE_CHANGE_SUCCEED](
     actions.routeChangeSucceed({
       selected: { listType: 'category', listId: 7 },
@@ -51,7 +51,6 @@ test('Creates a new context from selected list', () => {
 });
 
 test('Creates another context from selected', () => {
-  const store = Router.create();
   store[actionTypes.ROUTE_CHANGE_SUCCEED](
     actions.routeChangeSucceed({
       selected: { singleType: 'post', singleId: 60 },
@@ -81,7 +80,6 @@ test('Creates another context from selected', () => {
 });
 
 test('Creates the context and selects the item as specified', () => {
-  const store = Router.create();
   store[actionTypes.ROUTE_CHANGE_SUCCEED](
     actions.routeChangeSucceed({
       selected: { singleType: 'post', singleId: 60 },
@@ -110,7 +108,6 @@ test('Creates the context and selects the item as specified', () => {
 });
 
 test("Changes selected when context exists and has 'selected' inside", () => {
-  const store = Router.create();
   store[actionTypes.ROUTE_CHANGE_SUCCEED](
     actions.routeChangeSucceed({
       selected: { singleType: 'post', singleId: 60 },
@@ -140,7 +137,6 @@ test("Changes selected when context exists and has 'selected' inside", () => {
 });
 
 test("Changes selected when contexts are equal and have 'selected' inside", () => {
-  const store = Router.create();
   store[actionTypes.ROUTE_CHANGE_SUCCEED](
     actions.routeChangeSucceed({
       selected: { singleType: 'post', singleId: 60 },
@@ -183,7 +179,6 @@ test("Changes selected when contexts are equal and have 'selected' inside", () =
 });
 
 test("Moves selected using replace when context exists and has 'selected' inside", () => {
-  const store = Router.create();
   store[actionTypes.ROUTE_CHANGE_SUCCEED](
     actions.routeChangeSucceed({
       selected: { singleType: 'post', singleId: 60 },
@@ -219,7 +214,6 @@ test("Moves selected using replace when context exists and has 'selected' inside
 });
 
 test("Replaces context using replace", () => {
-  const store = Router.create();
   store[actionTypes.ROUTE_CHANGE_SUCCEED](
     actions.routeChangeSucceed({
       selected: { singleType: 'post', singleId: 60 },
@@ -267,7 +261,6 @@ test("Replaces context using replace", () => {
 });
 
 test('Goes back and forward as expected', () => {
-  const store = Router.create();
   store[actionTypes.ROUTE_CHANGE_SUCCEED](
     actions.routeChangeSucceed({
       selected: { singleType: 'post', singleId: 60 },

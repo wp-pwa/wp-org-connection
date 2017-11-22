@@ -1,5 +1,5 @@
 /* eslint-disable global-require */
-import { takeEvery, select, put } from 'redux-saga/effects';
+import { takeEvery, put } from 'redux-saga/effects';
 import { eventChannel } from 'redux-saga';
 import createHistory from 'history/createBrowserHistory';
 import * as actionTypes from '../actionTypes';
@@ -19,16 +19,14 @@ export function* handleHistoryRouteChanges(changed) {
   yield put(actions.routeChangeSucceed(changed));
 }
 
-export const requestHandler = ({ store, history }) =>
+export const requestHandlerCreator = ({ store, history }) =>
   function* handleRequest({ selected, method, context }) {
     const { listType, listId, singleType, singleId, page } = selected;
 
     // get item
-    let link;
-    if (listType === undefined)
-      link = store.connection.single[singleType][singleId].link;
-    else
-      link = `/${listType}/${listId}/${page}/${context}`;
+    const link = listType
+      ? `/${listType}/${listId}/${page}/${context}`
+      : store.connection.single[singleType][singleId].link;
 
     if (['push', 'replace'].includes(method)) {
       yield history[method](link, { selected, method, context });
@@ -51,5 +49,5 @@ export default ({ store, history = createHistory() }) =>
 
     // Track router events and dispatch them to redux.
     yield takeEvery(routeChangedEvents, handleHistoryRouteChanges);
-    yield takeEvery(actionTypes.ROUTE_CHANGE_REQUESTED, requestHandler({ store, history }));
+    yield takeEvery(actionTypes.ROUTE_CHANGE_REQUESTED, requestHandlerCreator({ store, history }));
   };

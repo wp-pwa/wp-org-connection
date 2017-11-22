@@ -1,6 +1,6 @@
 import { types, getParent } from 'mobx-state-tree';
 
-import Id from '../id';
+import Id from './id';
 
 export const List = types
   .model('List')
