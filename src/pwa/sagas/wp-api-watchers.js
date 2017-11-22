@@ -28,9 +28,9 @@ export function* initConnection() {
 }
 
 export const getList = ({ connection, listType, listId, singleType, page }) => {
-  const endpoint = typesToEndpoints[singleType];
+  const endpoint = typesToEndpoints(singleType);
   const paramType = ['category', 'tag', 'author'].includes(listType)
-    ? typesToParams[listType]
+    ? typesToParams(listType)
     : listType;
   const params = { _embed: true, [paramType]: listId };
   let query = connection[endpoint]().page(page);
@@ -41,16 +41,18 @@ export const getList = ({ connection, listType, listId, singleType, page }) => {
 };
 
 export const getSingle = ({ connection, singleType, singleId }) =>
-  connection[typesToEndpoints[singleType]]()
+  connection[typesToEndpoints(singleType)]()
     .id(singleId)
     .embed();
 
 export const getCustom = ({ connection, singleType, page, params }) => {
-  let query = connection[typesToEndpoints[singleType]]().page(page);
+  let query = connection[typesToEndpoints(singleType)]()
+    .page(page)
+    .embed();
   forOwn(params, (value, key) => {
     query = query.param(key, value);
   });
-  return query.embed();
+  return query;
 };
 
 export const listRequested = connection =>
@@ -121,6 +123,7 @@ export const customRequested = connection =>
           singleType,
           total,
           page,
+          params,
           result: result.map(item => item.id),
           entities,
         }),
@@ -131,9 +134,10 @@ export const customRequested = connection =>
           url,
           name,
           singleType,
+          params,
           page,
           error,
-          endpoint: getCustom({ connection, singleType, params }).toString(),
+          endpoint: getCustom({ connection, singleType, page, params }).toString(),
         }),
       );
     }

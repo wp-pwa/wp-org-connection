@@ -1,4 +1,5 @@
 import { expectSaga } from 'redux-saga-test-plan';
+import { throwError } from 'redux-saga-test-plan/providers';
 import { call } from 'redux-saga-test-plan/matchers';
 import { normalize } from 'normalizr';
 import {
@@ -149,7 +150,7 @@ describe('Sagas › Custom', () => {
       .run();
   });
 
-  test('Request custom list of authors', () => {
+  test('Request custom list of authors succeed', () => {
     const customRequestedSaga = customRequested(connection);
     const action = {
       url: '/',
@@ -167,6 +168,31 @@ describe('Sagas › Custom', () => {
           entities,
           result: result.map(item => item.id),
           total: { entities: 0, pages: 0 },
+        }),
+      )
+      .run();
+  });
+
+  test('Request custom list of authors failed', () => {
+    const connect = {
+      users: () => ({ page: () => ({ embed: () => ({ toString: () => '/endpoint' }) }) }),
+    };
+    const customRequestedSaga = customRequested(connect);
+    const action = {
+      url: '/',
+      name: 'allAuthors',
+      page: 1,
+      singleType: 'author',
+      params: {},
+    };
+    const error = new Error('Errorcito!');
+    return expectSaga(customRequestedSaga, action)
+      .provide([[call.fn(getCustom), throwError(new Error('Errorcito!'))]])
+      .put(
+        actions.customFailed({
+          ...action,
+          error,
+          endpoint: '/endpoint',
         }),
       )
       .run();

@@ -62,8 +62,9 @@ export const customSucceed = ({
   url = '/',
   name,
   singleType,
-  total = { entities: 0, pages: 0 },
+  params = {},
   page = 1,
+  total = { entities: 0, pages: 0 },
   result,
   entities,
 }) => ({
@@ -71,16 +72,26 @@ export const customSucceed = ({
   url,
   name,
   singleType,
+  params,
   page,
   total,
   result,
   entities,
 });
-export const customFailed = ({ url = '/', name, singleType, page = 1, error, endpoint }) => ({
+export const customFailed = ({
+  url = '/',
+  name,
+  singleType,
+  params = {},
+  page = 1,
+  error,
+  endpoint,
+}) => ({
   type: actionTypes.CUSTOM_FAILED,
   url,
   name,
   singleType,
+  params,
   page,
   error,
   endpoint,

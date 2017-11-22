@@ -2,7 +2,7 @@ import { types } from 'mobx-state-tree';
 import { Total } from './list';
 import { Any } from './single';
 
-export const Page = types
+const Page = types
   .model('Page')
   .props({
     entities: types.optional(types.array(types.reference(Any)), []),
@@ -23,6 +23,7 @@ const Custom = types
     fetching: types.optional(types.boolean, false),
     ready: types.optional(types.boolean, false),
     url: types.optional(types.string, '/'),
+    params: types.optional(types.frozen, {}),
   })
   .views(self => {
     const pages = [];
@@ -49,4 +50,4 @@ const Custom = types
     };
   });
 
-export { Custom };
+export { Custom, Page };
