@@ -253,7 +253,7 @@ test("Replaces context using replace", () => {
     }),
   );
 
-  expect(store.selected.id).toBe(null);
+  expect(store.selected.id).toBe('post');
   expect(store.selected.type).toBe('latest');
   expect(store.contexts.length).toBe(1);
   expect(store.context.column.items.length).toBe(2);

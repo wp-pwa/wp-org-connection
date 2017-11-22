@@ -8,7 +8,7 @@ export const List = types
     _id: Id,
     route: 'list',
     listType: types.optional(types.string, 'latest'),
-    listId: types.maybe(types.union(types.string, types.number)),
+    listId: types.optional(types.union(types.string, types.number), 'post'),
     page: types.optional(types.number, 1),
     ready: types.optional(types.boolean, false),
     // next: types.maybe(types.reference(types.late(() => Item))), // eslint-disable-line

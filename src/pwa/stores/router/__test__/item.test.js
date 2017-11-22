@@ -20,7 +20,7 @@ test('An item of type Single is populated appropriately', () => {
     fromList: {
       _id: item.fromList._id,
       ready: false,
-      listId: null,
+      listId: 'post',
       listType: 'latest',
       page: 1,
       route: 'list',
@@ -38,7 +38,7 @@ test('An item of type List is populated appropriately', () => {
   expect(getSnapshot(item)).toEqual({
     _id: '124',
     ready: false,
-    listId: null,
+    listId: 'post',
     listType: 'latest',
     page: 1,
     route: 'list',
