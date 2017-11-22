@@ -59,7 +59,7 @@ const Router = types
         },
       );
 
-    const newColumn = element => {
+    const columnSnapshot = element => {
       const elements = element instanceof Array ? element : [element];
       const items = elements.map(({ _id, ...rest }) => ({ _id: _id || uuid(), ...rest }));
       return { _id: uuid(), selected: items[0]._id, items };
@@ -69,7 +69,7 @@ const Router = types
       const perPage = 5; // from where should this value be obtained?
       const columns = [];
       times(perPage, () =>
-        columns.push(Column.create(newColumn({ router: 'single', singleType: 'post' }))),
+        columns.push(Column.create(columnSnapshot({ router: 'single', singleType: 'post' }))),
       );
 
       populateWhenReady(list, columns);
@@ -82,7 +82,7 @@ const Router = types
         if (element.listType && element.extract) {
           generated.concat(extractList(element));
         } else {
-          generated.push(newColumn(element));
+          generated.push(columnSnapshot(element));
         }
         return generated;
       }, []);
