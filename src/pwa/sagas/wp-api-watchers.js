@@ -28,9 +28,9 @@ export function* initConnection() {
 }
 
 export const getList = ({ connection, listType, listId, singleType, page }) => {
-  const endpoint = typesToEndpoints[singleType];
+  const endpoint = typesToEndpoints(singleType);
   const paramType = ['category', 'tag', 'author'].includes(listType)
-    ? typesToParams[listType]
+    ? typesToParams(listType)
     : listType;
   const params = { _embed: true, [paramType]: listId };
   let query = connection[endpoint]().page(page);
@@ -41,16 +41,26 @@ export const getList = ({ connection, listType, listId, singleType, page }) => {
 };
 
 export const getSingle = ({ connection, singleType, singleId }) =>
-  connection[typesToEndpoints[singleType]]()
+  connection[typesToEndpoints(singleType)]()
     .id(singleId)
     .embed();
+
+export const getCustom = ({ connection, singleType, page, params }) => {
+  let query = connection[typesToEndpoints(singleType)]()
+    .page(page)
+    .embed();
+  forOwn(params, (value, key) => {
+    query = query.param(key, value);
+  });
+  return query;
+};
 
 export const listRequested = connection =>
   function* listRequestedSaga({ listType, listId = null, page = 1 }) {
     const singleType = 'post';
     if (!['latest', 'category', 'tag', 'author'].includes(listType))
       throw new Error(
-        'Custom taxonomies should retrieve their custom post types first. NOT IMPLEMENTED.'
+        'Custom taxonomies should retrieve their custom post types first. NOT IMPLEMENTED.',
       );
     try {
       const response = yield call(getList, { connection, listType, listId, singleType, page });
@@ -66,7 +76,7 @@ export const listRequested = connection =>
           listId,
           page,
           total,
-        })
+        }),
       );
     } catch (error) {
       yield put(
@@ -75,7 +85,7 @@ export const listRequested = connection =>
           listId,
           error,
           endpoint: getList({ connection, listType, listId, singleType, page }).toString(),
-        })
+        }),
       );
     }
   };
@@ -93,7 +103,42 @@ export const singleRequested = connection =>
           singleId,
           error,
           endpoint: getSingle({ connection, singleType, singleId }).toString(),
-        })
+        }),
+      );
+    }
+  };
+
+export const customRequested = connection =>
+  function* customRequestedSaga({ url, name, singleType, page, params }) {
+    try {
+      const response = yield call(getCustom, { connection, singleType, page, params });
+      const { entities, result } = normalize(response, schemas.list);
+      const totalEntities = response._paging ? parseInt(response._paging.total, 10) : 0;
+      const totalPages = response._paging ? parseInt(response._paging.totalPages, 10) : 0;
+      const total = { entities: totalEntities, pages: totalPages };
+      yield put(
+        actions.customSucceed({
+          url,
+          name,
+          singleType,
+          total,
+          page,
+          params,
+          result: result.map(item => item.id),
+          entities,
+        }),
+      );
+    } catch (error) {
+      yield put(
+        actions.customFailed({
+          url,
+          name,
+          singleType,
+          params,
+          page,
+          error,
+          endpoint: getCustom({ connection, singleType, page, params }).toString(),
+        }),
       );
     }
   };
@@ -103,5 +148,6 @@ export default function* wpApiWatchersSaga() {
   yield all([
     takeEvery(actionTypes.SINGLE_REQUESTED, singleRequested(connection)),
     takeEvery(actionTypes.LIST_REQUESTED, listRequested(connection)),
+    takeEvery(actionTypes.CUSTOM_REQUESTED, customRequested(connection)),
   ]);
 }

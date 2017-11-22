@@ -1,49 +1,42 @@
-import { types, getParent } from 'mobx-state-tree';
-import { Post } from './single';
+import { types } from 'mobx-state-tree';
+import { Total } from './list';
+import { Any } from './single';
 
-export const Total = types
-  .model('Total')
-  .props({
-    entities: types.maybe(types.number),
-    pages: types.maybe(types.number),
-  })
-  .views(self => ({
-    get fetched() {
-      return getParent(self).entities.length || null;
-    },
-  }));
-
-export const Page = types
+const Page = types
   .model('Page')
   .props({
-    entities: types.optional(types.array(types.reference(Post)), []),
+    entities: types.optional(types.array(types.reference(Any)), []),
     fetching: types.optional(types.boolean, false),
     ready: types.optional(types.boolean, false),
   })
   .views(self => ({
     get total() {
-      return self.entities.length || null;
+      return self.entities.length || 0;
     },
   }));
 
-export const List = types
-  .model('List')
+const Custom = types
+  .model('Custom')
   .props({
     pageMap: types.optional(types.map(Page), {}),
     total: types.optional(Total, {}),
     fetching: types.optional(types.boolean, false),
     ready: types.optional(types.boolean, false),
+    url: types.optional(types.string, '/'),
+    params: types.optional(types.frozen, {}),
   })
   .views(self => {
-    const entities = [];
     const pages = [];
+    const entities = [];
     return {
+      // Maps pageMap and returns an array of pages.
       get page() {
-        self.pageMap.keys().forEach(page => {
-          pages[page] = self.pageMap.get(page);
+        self.pageMap.keys().forEach(key => {
+          pages[key] = self.pageMap.get(key);
         });
         return pages;
       },
+      // Maps page array and retuns an array of all entities
       get entities() {
         let index = 0;
         self.page.forEach(page => {
@@ -56,3 +49,5 @@ export const List = types
       },
     };
   });
+
+export { Custom, Page };
