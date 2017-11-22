@@ -23,17 +23,6 @@ const Context = types
         return i;
       });
       return item || null;
-    }
-  }))
-  .actions(self => ({
-    afterCreate() {
-      const flattened = self.columns.reduce(
-        (all, column) => all.concat(column.items.map(e => e)),
-        [],
-      );
-      flattened.forEach((item, index) => {
-        item.next = flattened[index + 1] || null;
-      });
     },
   }));
 

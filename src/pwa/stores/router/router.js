@@ -43,9 +43,6 @@ const Router = types
         current.column.items.push(selectedItem);
         selectedItem.column.selected = selectedItem;
       }
-
-      // Fixes 'next' attribute for items
-      self.context.afterCreate();
     };
 
     const populateWhenReady = ({ listType, listId, page }, columns) =>
