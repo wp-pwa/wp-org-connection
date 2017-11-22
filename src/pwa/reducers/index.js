@@ -12,6 +12,10 @@ export const reducers = () => (state, { type, ...action }) => {
     case actionTypes.LIST_REQUESTED:
     case actionTypes.LIST_SUCCEED:
     case actionTypes.LIST_FAILED:
+    case actionTypes.CUSTOM_REQUESTED:
+    case actionTypes.CUSTOM_SUCCEED:
+    case actionTypes.CUSTOM_FAILED:
+    case actionTypes.ROUTE_CHANGE_SUCCEED:
       store[type](action)
       break;
     default:
