@@ -1,177 +1,71 @@
-import { capitalize } from 'lodash';
-import { flow, mapValues, mapKeys } from 'lodash/fp';
-import * as types from '../types';
-import { wpTypesPlural, wpTypesSingular } from '../constants';
+import * as actionTypes from '../actionTypes';
 
-const paramsChange = flow(
-  mapValues(value => ({ params = {} } = {}) => ({
-    type: types[`${value}_PARAMS_CHANGED`],
-    params,
-  })),
-  mapKeys(key => `${key}ParamsChanged`),
-)(wpTypesPlural);
-
-const newListRequested = flow(
-  mapValues(value => ({ params = {}, name = 'currentList' } = {}) => ({
-    type: types[`NEW_${value}_LIST_REQUESTED`],
-    params,
-    name,
-  })),
-  mapKeys(key => `new${capitalize(key)}ListRequested`),
-)(wpTypesPlural);
-
-const nameKeyChanged = ({ name, key, wpType, params, id }) => ({
-  type: types.NAME_KEY_CHANGED,
-  name,
-  key,
-  wpType,
-  params,
-  id,
+export const singleRequested = ({ singleType, singleId }) => ({
+  type: actionTypes.SINGLE_REQUESTED,
+  singleType,
+  singleId,
 });
-
-const newListSucceed = flow(
-  mapValues(value => ({ params, entities, result, key, wpType, name, pages, items }) => ({
-    type: types[`NEW_${value}_LIST_SUCCEED`],
-    params,
-    entities,
-    result,
-    key,
-    wpType,
-    name,
-    pages,
-    items,
-  })),
-  mapKeys(key => `new${capitalize(key)}ListSucceed`),
-)(wpTypesPlural);
-
-const newListFailed = flow(
-  mapValues(value => ({ params, error, endpoint, name }) => ({
-    type: types[`NEW_${value}_LIST_FAILED`],
-    params,
-    error,
-    endpoint,
-    name,
-  })),
-  mapKeys(key => `new${capitalize(key)}ListFailed`),
-)(wpTypesPlural);
-
-const anotherPageRequested = flow(
-  mapValues(value => ({ name = 'currentList', page } = {}) => ({
-    type: types[`ANOTHER_${value}_PAGE_REQUESTED`],
-    page,
-    name,
-  })),
-  mapKeys(key => `another${capitalize(key)}PageRequested`),
-)(wpTypesPlural);
-
-const anotherPageSucceed = flow(
-  mapValues(value => ({ params, entities, result, key, wpType, name, page }) => ({
-    type: types[`ANOTHER_${value}_PAGE_SUCCEED`],
-    params,
-    entities,
-    result,
-    key,
-    wpType,
-    name,
-    page,
-  })),
-  mapKeys(key => `another${capitalize(key)}PageSucceed`),
-)(wpTypesPlural);
-
-const anotherPageFailed = flow(
-  mapValues(value => ({ params, error, endpoint, name, page }) => ({
-    type: types[`ANOTHER_${value}_PAGE_FAILED`],
-    params,
-    error,
-    endpoint,
-    name,
-    page,
-  })),
-  mapKeys(key => `another${capitalize(key)}PageFailed`),
-)(wpTypesPlural);
-
-const singleRequested = flow(
-  mapValues(value => ({ id, current = false }) => ({
-    type: types[`${value}_REQUESTED`],
-    id,
-    current,
-  })),
-  mapKeys(key => `${key}Requested`),
-)(wpTypesSingular);
-
-const singleSucceed = flow(
-  mapValues(value => ({ id, entities, current, wpType }) => ({
-    type: types[`${value}_SUCCEED`],
-    id,
-    entities,
-    current,
-    wpType,
-  })),
-  mapKeys(key => `${key}Succeed`),
-)(wpTypesSingular);
-
-const singleFailed = flow(
-  mapValues(value => ({ id, error, endpoint, current, wpType }) => ({
-    type: types[`${value}_FAILED`],
-    id,
-    error,
-    endpoint,
-    wpType,
-    current,
-  })),
-  mapKeys(key => `${key}Failed`),
-)(wpTypesSingular);
-
-const discoverUrlRequested = ({ firstFolder, lastFolder }) => ({
-  type: types.DISCOVER_URL_REQUESTED,
-  firstFolder,
-  lastFolder,
+export const singleSucceed = ({ singleType, singleId, entities }) => ({
+  type: actionTypes.SINGLE_SUCCEED,
+  singleType,
+  singleId,
+  entities,
 });
-const discoverUrlSucceed = ({ postType, taxonomy, id }) => ({
-  type: types.DISCOVER_URL_SUCCEED,
-  postType,
-  taxonomy,
-  id,
-});
-const discoverUrlFailed = ({ error, firstFolder, lastFolder, endpoint }) => ({
-  type: types.DISCOVER_URL_FAILED,
+export const singleFailed = ({ singleType, singleId, error, endpoint }) => ({
+  type: actionTypes.SINGLE_FAILED,
+  singleType,
+  singleId,
   error,
-  firstFolder,
-  lastFolder,
   endpoint,
 });
 
-const siteInfoRequested = () => ({
-  type: types.SITE_INFO_REQUESTED,
+export const listRequested = ({ listType, listId, page = 1 }) => ({
+  type: actionTypes.LIST_REQUESTED,
+  listType,
+  listId,
+  page,
 });
-
-const siteInfoSucceed = ({ title, metadesc }) => ({
-  type: types.SITE_INFO_SUCCEED,
-  title,
-  metadesc,
+export const listSucceed = ({
+  listType,
+  listId = null,
+  page = 1,
+  total = { entities: 0, pages: 0 },
+  result,
+  entities,
+}) => ({
+  type: actionTypes.LIST_SUCCEED,
+  listType,
+  listId,
+  page,
+  total,
+  result,
+  entities,
 });
-
-const siteInfoFailed = ({ error }) => ({
-  type: types.SITE_INFO_FAILED,
+export const listFailed = ({ listType, listId, page, error, endpoint }) => ({
+  type: actionTypes.LIST_FAILED,
+  listType,
+  listId,
+  page,
   error,
+  endpoint,
 });
 
-module.exports = {
-  ...paramsChange,
-  ...newListRequested,
-  nameKeyChanged,
-  ...newListSucceed,
-  ...newListFailed,
-  ...anotherPageRequested,
-  ...anotherPageSucceed,
-  ...anotherPageFailed,
-  ...singleRequested,
-  ...singleSucceed,
-  ...singleFailed,
-  discoverUrlRequested,
-  discoverUrlSucceed,
-  discoverUrlFailed,
-  siteInfoRequested,
-  siteInfoSucceed,
-  siteInfoFailed,
-};
+export const customListRequested = () => ({
+  type: actionTypes.CUSTOM_LIST_REQUESTED,
+});
+export const customListSucceed = () => ({
+  type: actionTypes.CUSTOM_LIST_SUCCEED,
+});
+export const customListFailed = () => ({
+  type: actionTypes.CUSTOM_LIST_FAILED,
+});
+
+export const routeChangeRequested = () => ({
+  type: actionTypes.ROUTE_CHANGE_REQUESTED,
+});
+export const routeChangeSucceed = () => ({
+  type: actionTypes.ROUTE_CHANGE_SUCCEED,
+});
+export const routeChangeFailed = () => ({
+  type: actionTypes.ROUTE_CHANGE_FAILED,
+});
