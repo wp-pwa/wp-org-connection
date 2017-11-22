@@ -28,7 +28,7 @@ const Connection = types
       },
       get list() {
         self.listMap.keys().forEach(type => {
-          list[type] = list[type] || [];
+          list[type] = list[type] || {};
           self.listMap
             .get(type)
             .keys()
@@ -48,7 +48,7 @@ const Connection = types
       const newEntity = entity ? convert(entity) : { id, type };
       // Populate the state with the entity value and set both fetching and ready.
       self.singleMap.get(type).set(id, { ...newEntity, fetching, ready });
-    }
+    };
     const addEntities = ({ entities, ready = true, fetching = false }) => {
       // Update the entities.
       Object.entries(entities).map(([type, single]) => {
@@ -69,29 +69,36 @@ const Connection = types
         addEntities({ entities, ready: true, fetching: false });
       },
       [actionTypes.LIST_REQUESTED]({ listType, listId, page }) {
+        // If we are using 'latest', listId doesn't make sense and we use always 0.
+        if (listType === 'latest' && !listId) listId = 'post';
         // Init the first map (type) if it's not initializated yet.
         if (!self.listMap.get(listType)) self.listMap.set(listType, {});
         const list = self.listMap.get(listType);
         if (!list.get(listId)) list.set(listId, {});
         list.get(listId).fetching = true;
-        if (!list.get(listId).pageMap.get(page)) list.get(listId).pageMap.set(page, {});
-        list.get(listId).pageMap.get(page).fetching = true;
+        if (!list.get(listId).pageMap.get(page - 1)) list.get(listId).pageMap.set(page - 1, {});
+        list.get(listId).pageMap.get(page - 1).fetching = true;
       },
       [actionTypes.LIST_SUCCEED]({ listType, listId, page, total, result, entities }) {
+        // If we are using 'latest', listId doesn't make sense and we use always 0.
+        if (listType === 'latest' && !listId) listId = 'post';
         // Update the list.
         const list = self.listMap.get(listType).get(listId);
         list.fetching = false;
         list.ready = true;
-        list.pageMap.get(page).entities = result;
-        list.pageMap.get(page).fetching = false;
-        list.pageMap.get(page).ready = true;
+        list.pageMap.get(page - 1).entities = result;
+        list.pageMap.get(page - 1).fetching = false;
+        list.pageMap.get(page - 1).ready = true;
         if (total) list.total = total;
         addEntities({ entities, ready: true, fetching: false });
       },
       [actionTypes.LIST_FAILED]({ listType, listId, page }) {
         // Populate the state with the entity value and set both fetching and ready.
         self.listMap.get(listType).get(listId).fetching = false;
-        self.listMap.get(listType).get(listId).pageMap.get(page).fetching = false;
+        self.listMap
+          .get(listType)
+          .get(listId)
+          .pageMap.get(page - 1).fetching = false;
       },
     };
   });

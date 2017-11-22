@@ -19,7 +19,7 @@ export const singleFailed = ({ singleType, singleId, error, endpoint }) => ({
   endpoint,
 });
 
-export const listRequested = ({ listType, listId, page }) => ({
+export const listRequested = ({ listType, listId, page = 1 }) => ({
   type: actionTypes.LIST_REQUESTED,
   listType,
   listId,
