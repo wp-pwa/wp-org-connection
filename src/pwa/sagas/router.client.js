@@ -20,17 +20,18 @@ export function* handleHistoryRouteChanges(changed) {
 }
 
 export const requestHandler = ({ store, history }) =>
-  function handleRequest({ selected, method, context }) {
-    const { type, id, page } = selected;
+  function* handleRequest({ selected, method, context }) {
+    const { listType, listId, singleType, singleId, page } = selected;
 
     // get item
-    const { link } =
-      page !== undefined ? store.connection.single[type][id] : `/${type}/${id}/${page}/${context}`;
-
-    console.log(link);
+    let link;
+    if (listType === undefined)
+      link = store.connection.single[singleType][singleId].link;
+    else
+      link = `/${listType}/${listId}/${page}/${context}`;
 
     if (['push', 'replace'].includes(method)) {
-      history[method](link, { selected, method, context });
+      yield history[method](link, { selected, method, context });
     }
   };
 

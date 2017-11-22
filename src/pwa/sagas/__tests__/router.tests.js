@@ -18,7 +18,7 @@ test('History gets replace with route from server', () => {
     },
   };
   const routerSaga = routerSagaCreator({ store, history });
-  expectSaga(routerSaga).run();
+  expectSaga(routerSaga).silentRun();
   expect(history.location.pathname).toBe('/latest/post/1/0');
   expect(history.location.state).toEqual({
     method: 'push',
@@ -26,7 +26,7 @@ test('History gets replace with route from server', () => {
   });
 });
 
-test('Router saga attends route change requests', () => {
+test('Router saga attends route change requests', async () => {
   const history = createHistory();
   const store = {
     router: {
@@ -49,15 +49,18 @@ test('Router saga attends route change requests', () => {
       },
     },
   };
-  const routerSaga = routerSagaCreator({ store, history });
-  expectSaga(routerSaga)
-    .put(actions.routeChangeSucceed({ selected: { singleType: 'post', singleId: 60 } }))
-    .dispatch(actions.routeChangeRequested({ selected: { singleType: 'post', singleId: 60 } }))
-    .run();
+
+  const payload = { selected: { singleType: 'post', singleId: 60 } };
+
+  await expectSaga(routerSagaCreator({ store, history }))
+    .put(actions.routeChangeSucceed(payload))
+    .dispatch(actions.routeChangeRequested(payload))
+    .silentRun();
 
   expect(history.location.pathname).toBe('/this-is-the-60th-post');
   expect(history.location.state).toEqual({
     selected: { singleType: 'post', singleId: 60 },
     method: 'push',
+    context: null,
   });
 });
