@@ -16,7 +16,7 @@ export const props = {
 
 export const views = self => ({
   get selected() {
-    return self.context.selected;
+    return self.context && self.context.selected;
   },
 });
 
