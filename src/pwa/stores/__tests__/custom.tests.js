@@ -58,6 +58,7 @@ const snapshot = {
   },
   customMap: {
     test1: {
+      url: '/pepe',
       total: {
         entities: 16,
         pages: 8,
@@ -75,6 +76,7 @@ const snapshot = {
       },
     },
     test2: {
+      url: '/papa',
       total: {
         entities: 12,
         pages: 2,
@@ -130,6 +132,7 @@ describe('Store › Custom', () => {
         params: {},
       }),
     );
+    expect(connection.custom.test.url).toBe('/pepe');
     expect(connection.custom.test.fetching).toBe(true);
     expect(connection.custom.test.ready).toBe(false);
     expect(connection.custom.test.page[0].fetching).toBe(true);

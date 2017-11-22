@@ -22,6 +22,7 @@ const Custom = types
     total: types.optional(Total, {}),
     fetching: types.optional(types.boolean, false),
     ready: types.optional(types.boolean, false),
+    url: types.optional(types.string, '/'),
   })
   .views(self => {
     const pages = [];

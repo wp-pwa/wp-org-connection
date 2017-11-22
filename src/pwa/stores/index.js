@@ -115,10 +115,11 @@ const Connection = types
           .get(listId)
           .pageMap.get(page - 1).fetching = false;
       },
-      [actionTypes.CUSTOM_REQUESTED]({ name, page }) {
+      [actionTypes.CUSTOM_REQUESTED]({ url, name, page }) {
         if (!self.customMap.get(name)) self.customMap.set(name, {});
         const custom = self.customMap.get(name);
         custom.fetching = true;
+        custom.url = url;
         if (!custom.pageMap.get(page - 1)) custom.pageMap.set(page - 1, {});
         custom.pageMap.get(page - 1).fetching = true;
       },
