@@ -1,6 +1,6 @@
 import { types, getParent } from 'mobx-state-tree';
+import { isMatch, omit, isUndefined } from 'lodash';
 import { Item } from './item';
-
 import Id from './id';
 
 const Column = types
@@ -11,17 +11,8 @@ const Column = types
     selected: types.reference(types.late(() => Item)),
   })
   .views(self => ({
-    getItem({ singleType, singleId, listType, listId, page }) {
-      return (
-        self.items.find(
-          i =>
-            (!listType || listType === i.listType) &&
-            (!listId || listId === i.listId) &&
-            (!page || page === i.page) &&
-            (!singleType || singleType === i.singleType) &&
-            (!singleId || singleId === i.singleId),
-        ) || null
-      );
+    getItem(props) {
+      return self.items.find(i => isMatch(i, omit(props, isUndefined))) || null;
     },
     get next() {
       const columns = getParent(self);
