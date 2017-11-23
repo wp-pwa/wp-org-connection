@@ -1,20 +1,22 @@
 import * as actionTypes from '../actionTypes';
 
+const parse = id => Number.isFinite(parseInt(id, 10)) ? parseInt(id, 10) : id;
+
 export const singleRequested = ({ singleType, singleId }) => ({
   type: actionTypes.SINGLE_REQUESTED,
   singleType,
-  singleId,
+  singleId: parse(singleId),
 });
 export const singleSucceed = ({ singleType, singleId, entities }) => ({
   type: actionTypes.SINGLE_SUCCEED,
   singleType,
-  singleId,
+  singleId: parse(singleId),
   entities,
 });
 export const singleFailed = ({ singleType, singleId, error, endpoint }) => ({
   type: actionTypes.SINGLE_FAILED,
   singleType,
-  singleId,
+  singleId: parse(singleId),
   error,
   endpoint,
 });
@@ -24,7 +26,7 @@ export const listRequested = ({ listType, listId, page = 1 }) => {
   return {
     type: actionTypes.LIST_REQUESTED,
     listType,
-    listId,
+    listId: parse(listId),
     page,
   };
 };
@@ -40,7 +42,7 @@ export const listSucceed = ({
   return {
     type: actionTypes.LIST_SUCCEED,
     listType,
-    listId,
+    listId: parse(listId),
     page,
     total,
     result,
@@ -50,7 +52,7 @@ export const listSucceed = ({
 export const listFailed = ({ listType, listId, page, error, endpoint }) => ({
   type: actionTypes.LIST_FAILED,
   listType,
-  listId,
+  listId: parse(listId),
   page,
   error,
   endpoint,
@@ -112,10 +114,10 @@ export const routeChangeRequested = ({
   if (listType === 'latest' && !listId) listId = 'post';
   const selected = {};
   if (listType) selected.listType = listType;
-  if (listId) selected.listId = listId;
+  if (listId) selected.listId = parse(listId);
   if (page) selected.page = page;
   if (singleType) selected.singleType = singleType;
-  if (singleId) selected.singleId = singleId;
+  if (singleId) selected.singleId = parse(singleId);
   return {
     type: actionTypes.ROUTE_CHANGE_REQUESTED,
     selected,
@@ -132,10 +134,10 @@ export const routeChangeSucceed = ({
   if (listType === 'latest' && !listId) listId = 'post';
   const selected = {};
   if (listType) selected.listType = listType;
-  if (listId) selected.listId = listId;
+  if (listId) selected.listId = parse(listId);
   if (page) selected.page = page;
   if (singleType) selected.singleType = singleType;
-  if (singleId) selected.singleId = singleId;
+  if (singleId) selected.singleId = parse(singleId);
   return {
     type: actionTypes.ROUTE_CHANGE_SUCCEED,
     selected,
