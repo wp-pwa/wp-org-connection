@@ -19,12 +19,15 @@ export const singleFailed = ({ singleType, singleId, error, endpoint }) => ({
   endpoint,
 });
 
-export const listRequested = ({ listType, listId, page = 1 }) => ({
-  type: actionTypes.LIST_REQUESTED,
-  listType,
-  listId,
-  page,
-});
+export const listRequested = ({ listType, listId, page = 1 }) => {
+  if (listType === 'latest' && !listId) listId = 'post';
+  return {
+    type: actionTypes.LIST_REQUESTED,
+    listType,
+    listId,
+    page,
+  };
+};
 export const listSucceed = ({
   listType,
   listId = null,
@@ -32,15 +35,18 @@ export const listSucceed = ({
   total = { entities: 0, pages: 0 },
   result,
   entities,
-}) => ({
-  type: actionTypes.LIST_SUCCEED,
-  listType,
-  listId,
-  page,
-  total,
-  result,
-  entities,
-});
+}) => {
+  if (listType === 'latest' && !listId) listId = 'post';
+  return {
+    type: actionTypes.LIST_SUCCEED,
+    listType,
+    listId,
+    page,
+    total,
+    result,
+    entities,
+  };
+};
 export const listFailed = ({ listType, listId, page, error, endpoint }) => ({
   type: actionTypes.LIST_FAILED,
   listType,
@@ -101,34 +107,42 @@ export const routeChangeRequested = ({
   selected: { listType, listId, page, singleType, singleId },
   method = 'push',
   context = null,
-}) => ({
-  type: actionTypes.ROUTE_CHANGE_REQUESTED,
-  selected: {
-    listType,
-    listId,
-    page,
-    singleType,
-    singleId,
-  },
-  method,
-  context,
-});
+}) => {
+  if (listType && !page) page = 1;
+  if (listType === 'latest' && !listId) listId = 'post';
+  const selected = {};
+  if (listType) selected.listType = listType;
+  if (listId) selected.listId = listId;
+  if (page) selected.page = page;
+  if (singleType) selected.singleType = singleType;
+  if (singleId) selected.singleId = singleId;
+  return {
+    type: actionTypes.ROUTE_CHANGE_REQUESTED,
+    selected,
+    method,
+    context,
+  };
+};
 export const routeChangeSucceed = ({
   selected: { listType, listId, page, singleType, singleId },
   method = 'push',
   context = null,
-}) => ({
-  type: actionTypes.ROUTE_CHANGE_SUCCEED,
-  selected: {
-    listType,
-    listId,
-    page,
-    singleType,
-    singleId,
-  },
-  method,
-  context,
-});
+}) => {
+  if (listType && !page) page = 1;
+  if (listType === 'latest' && !listId) listId = 'post';
+  const selected = {};
+  if (listType) selected.listType = listType;
+  if (listId) selected.listId = listId;
+  if (page) selected.page = page;
+  if (singleType) selected.singleType = singleType;
+  if (singleId) selected.singleId = singleId;
+  return {
+    type: actionTypes.ROUTE_CHANGE_SUCCEED,
+    selected,
+    method,
+    context,
+  };
+};
 export const routeChangeFailed = () => ({
   type: actionTypes.ROUTE_CHANGE_FAILED,
 });

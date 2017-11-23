@@ -4,8 +4,8 @@ import uuid from 'uuid/v4';
 import { times, isEqual } from 'lodash';
 import Column from './column';
 import Context from './context';
-
 import * as actionTypes from '../../actionTypes';
+import { init } from '../connection';
 
 const lateContext = types.late(() => Context);
 
@@ -137,6 +137,8 @@ export const actions = self => {
 
   return {
     [actionTypes.ROUTE_CHANGE_SUCCEED]: ({ selected, method, context }) => {
+      init({ self, ...selected, fetching: false });
+
       const selectedInContext = self.context && !!self.context.getItem(selected);
       const contextsAreEqual = self.context && isEqual(self.context.generator, context);
 
