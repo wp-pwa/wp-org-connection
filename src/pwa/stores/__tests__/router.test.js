@@ -1,11 +1,11 @@
-import { types, getSnapshot } from 'mobx-state-tree';
-import * as router from '../';
-import * as actionTypes from '../../../actionTypes';
-import * as actions from '../../../actions';
+import { getSnapshot } from 'mobx-state-tree';
+import Connection from '../';
+import * as actionTypes from '../../actionTypes';
+import * as actions from '../../actions';
 
 let store;
 beforeEach(() => {
-  store = types.model().props(router.props).views(router.views).actions(router.actions).create();
+  store = Connection.create();
 })
 
 test('Initializates empty', () => {
