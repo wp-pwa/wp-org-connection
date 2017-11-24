@@ -12,7 +12,7 @@ export const post = entity => ({
   author: entity.author,
   featured: entity.featured_media,
   taxonomiesMap: entity.taxonomiesMap,
-  meta: entity.meta,
+  meta: {},
 });
 
 export const taxonomy = entity => ({

@@ -85,7 +85,7 @@ describe('Store › Single', () => {
             link: 'https://demo.worona.org/tag/gullfoss/',
             name: 'Gullfoss',
             slug: 'gullfoss',
-            type: 'tag',
+            taxonomy: 'tag',
           },
         },
         media: {
