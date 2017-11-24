@@ -1,6 +1,6 @@
 import * as actionTypes from '../actionTypes';
 
-const parse = id => Number.isFinite(parseInt(id, 10)) ? parseInt(id, 10) : id;
+const parse = id => (Number.isFinite(parseInt(id, 10)) ? parseInt(id, 10) : id);
 
 export const singleRequested = ({ singleType, singleId }) => ({
   type: actionTypes.SINGLE_REQUESTED,
@@ -147,4 +147,22 @@ export const routeChangeSucceed = ({
 };
 export const routeChangeFailed = () => ({
   type: actionTypes.ROUTE_CHANGE_FAILED,
+});
+
+export const siteInfoRequested = () => ({
+  type: actionTypes.SITE_INFO_REQUESTED,
+});
+
+export const siteInfoSucceed = ({ home: { title, description }, perPage }) => ({
+  type: actionTypes.SITE_INFO_SUCCEED,
+  home: {
+    title,
+    description
+  },
+  perPage: parseInt(perPage, 10),
+});
+
+export const siteInfoFailed = ({ error }) => ({
+  type: actionTypes.SITE_INFO_FAILED,
+  error,
 });
