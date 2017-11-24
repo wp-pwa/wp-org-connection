@@ -1,4 +1,4 @@
-import { expectSaga } from 'redux-saga-test-plan';
+import { expectSaga, testSaga } from 'redux-saga-test-plan';
 import { throwError } from 'redux-saga-test-plan/providers';
 import { call } from 'redux-saga-test-plan/matchers';
 import { normalize } from 'normalizr';
@@ -9,6 +9,7 @@ import {
   getList,
   customRequested,
   getCustom,
+  routeChangeSucceed,
 } from '../wp-api-watchers';
 import * as actions from '../../actions';
 import * as schemas from '../../schemas';
@@ -195,6 +196,76 @@ describe('Sagas › Custom', () => {
           endpoint: '/endpoint',
         }),
       )
+      .run();
+  });
+});
+
+describe('Sagas › routeChangedSucceed', () => {
+  test("Don't ask for single if it's already there", () => {
+    const stores = { connection: { single: { post: { 60: { ready: true, fetching: false } } } } };
+    const routeChangeSucceedSaga = routeChangeSucceed(stores);
+    const action = actions.routeChangeSucceed({
+      selected: { singleType: 'post', singleId: 60 },
+    });
+    testSaga(routeChangeSucceedSaga, action)
+      .next()
+      .isDone();
+  });
+  test("Don't ask for single if it's being fetched", () => {
+    const stores = { connection: { single: { post: { 60: { ready: false, fetching: true } } } } };
+    const routeChangeSucceedSaga = routeChangeSucceed(stores);
+    const action = actions.routeChangeSucceed({
+      selected: { singleType: 'post', singleId: 60 },
+    });
+    testSaga(routeChangeSucceedSaga, action)
+      .next()
+      .isDone();
+  });
+  test("Ask for single if it's already there", () => {
+    const stores = { connection: { single: { post: { 60: { ready: false, fetching: false } } } } };
+    const routeChangeSucceedSaga = routeChangeSucceed(stores);
+    const action = actions.routeChangeSucceed({
+      selected: { singleType: 'post', singleId: 60 },
+    });
+    return expectSaga(routeChangeSucceedSaga, action)
+      .put(actions.singleRequested({ singleType: 'post', singleId: 60 }))
+      .run();
+  });
+
+  test("Don't ask for list if it's already there", () => {
+    const stores = {
+      connection: { list: { latest: { post: { page: [{ ready: true, fetching: false }] } } } },
+    };
+    const routeChangeSucceedSaga = routeChangeSucceed(stores);
+    const action = actions.routeChangeSucceed({
+      selected: { listType: 'latest', listId: 'post', page: 1 },
+    });
+    testSaga(routeChangeSucceedSaga, action)
+      .next()
+      .isDone();
+  });
+  test("Don't ask for list if it's being fetched", () => {
+    const stores = {
+      connection: { list: { latest: { post: { page: [{ ready: false, fetching: true }] } } } },
+    };
+    const routeChangeSucceedSaga = routeChangeSucceed(stores);
+    const action = actions.routeChangeSucceed({
+      selected: { listType: 'latest', listId: 'post', page: 1 },
+    });
+    testSaga(routeChangeSucceedSaga, action)
+      .next()
+      .isDone();
+  });
+  test("Ask for list if it's already there", () => {
+    const stores = {
+      connection: { list: { latest: { post: { page: [{ ready: false, fetching: false }] } } } },
+    };
+    const routeChangeSucceedSaga = routeChangeSucceed(stores);
+    const action = actions.routeChangeSucceed({
+      selected: { listType: 'latest', listId: 'post', page: 1 },
+    });
+    return expectSaga(routeChangeSucceedSaga, action)
+      .put(actions.listRequested({ listType: 'latest', listId: 'post', page: 1 }))
       .run();
   });
 });

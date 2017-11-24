@@ -143,9 +143,26 @@ export const customRequested = connection =>
     }
   };
 
-export default function* wpApiWatchersSaga() {
+export const routeChangeSucceed = stores => function* routeChangeSucceedSaga(action) {
+  if (action.selected.listType) {
+    const { selected: { listType, listId, page } } = action;
+    const listPage = stores.connection.list[listType][listId].page[page - 1];
+    if (listPage.ready === false && listPage.fetching === false) {
+      yield put(actions.listRequested({ listType, listId, page }));
+    }
+  } else {
+    const { selected: { singleType, singleId } } = action;
+    const entity = stores.connection.single[singleType][singleId];
+    if (entity.ready === false && entity.fetching === false) {
+      yield put(actions.singleRequested({ singleType, singleId }));
+    }
+  }
+}
+
+export default function* wpApiWatchersSaga(stores) {
   const connection = yield call(initConnection);
   yield all([
+    takeEvery(actionTypes.ROUTE_CHANGE_SUCCEED, routeChangeSucceedSaga(stores)),
     takeEvery(actionTypes.SINGLE_REQUESTED, singleRequested(connection)),
     takeEvery(actionTypes.LIST_REQUESTED, listRequested(connection)),
     takeEvery(actionTypes.CUSTOM_REQUESTED, customRequested(connection)),
