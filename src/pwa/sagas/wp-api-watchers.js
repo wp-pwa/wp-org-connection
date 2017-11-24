@@ -162,7 +162,7 @@ export const routeChangeSucceed = stores => function* routeChangeSucceedSaga(act
 export default function* wpApiWatchersSaga(stores) {
   const connection = yield call(initConnection);
   yield all([
-    takeEvery(actionTypes.ROUTE_CHANGE_SUCCEED, routeChangeSucceedSaga(stores)),
+    takeEvery(actionTypes.ROUTE_CHANGE_SUCCEED, routeChangeSucceed(stores)),
     takeEvery(actionTypes.SINGLE_REQUESTED, singleRequested(connection)),
     takeEvery(actionTypes.LIST_REQUESTED, listRequested(connection)),
     takeEvery(actionTypes.CUSTOM_REQUESTED, customRequested(connection)),
