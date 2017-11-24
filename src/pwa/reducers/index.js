@@ -19,6 +19,7 @@ export default store => {
       case actionTypes.CUSTOM_SUCCEED:
       case actionTypes.CUSTOM_FAILED:
       case actionTypes.ROUTE_CHANGE_SUCCEED:
+      case actionTypes.SITE_INFO_SUCCEED:
         store[type](action)
         break;
       default:

@@ -2,6 +2,7 @@ import { types } from 'mobx-state-tree';
 import { Any } from './single';
 import { List } from './list';
 import { Custom } from './custom';
+import SiteInfo from './site-info';
 import * as actionTypes from '../../actionTypes';
 import convert from '../../converters';
 
@@ -9,6 +10,7 @@ export const props = {
   singleMap: types.optional(types.map(types.map(Any)), {}),
   listMap: types.optional(types.map(types.map(List)), {}),
   customMap: types.optional(types.map(Custom), {}),
+  siteInfo: types.optional(SiteInfo, {}),
 };
 
 export const views = self => {
@@ -137,4 +139,9 @@ export const actions = self => ({
     custom.fetching = false;
     custom.pageMap.get(page - 1).fetching = false;
   },
+  [actionTypes.SITE_INFO_SUCCEED]({ home: { title, description }, perPage }) {
+    self.siteInfo.home.title = title;
+    self.siteInfo.home.description = description;
+    self.siteInfo.perPage = perPage;
+  }
 });
