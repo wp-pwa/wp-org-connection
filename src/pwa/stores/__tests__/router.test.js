@@ -407,19 +407,22 @@ test('List with extract=true should be extracted even when they are not in the s
     }),
   );
 
+  const lengthCat11p1 = store.siteInfo.perPage;
+  const lengthCat7p1 = store.list.category[7].page[0].total;
+
   store.context.columns
-    .filter((c, i) => i >= 3 && i < 8)
+    .filter((c, i) => i >= 3 && i < 3 + lengthCat11p1)
     .map(c => c.items[0].fromList)
     .forEach(fromListExpected({ listType: 'category', listId: 11, page: 1 }));
 
   store.context.columns
-    .filter((c, i) => i >= 8)
+    .filter((c, i) => i >= 3 + lengthCat11p1)
     .map(c => c.items[0].fromList)
     .forEach(fromListExpected({ listType: 'category', listId: 7, page: 1 }));
 
-  expect(store.context.columns.length).toBe(12);
+  expect(store.context.columns.length).toBe(3 + lengthCat11p1 + lengthCat7p1);
 
   expect(store.context.columns[3].items[0].id).toBe(null);
-  expect(store.context.columns[8].items[0].id).toBe(60);
-  expect(store.context.columns[11].items[0].id).toBe(63);
+  expect(store.context.columns[3 + lengthCat11p1].items[0].id).toBe(60);
+  expect(store.context.columns[2 + lengthCat11p1 + lengthCat7p1].items[0].id).toBe(63);
 });

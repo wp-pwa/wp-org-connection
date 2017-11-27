@@ -52,7 +52,6 @@ export const actions = self => {
 
   const extractList = list => {
     const { listType, listId, page = 1 } = list;
-    const perPage = 5; // TODO - from where should this value be obtained?
     const listItem = self.list[listType][listId];
     const { entities } = listItem && listItem.page[page - 1] ? listItem.page[page - 1] : {};
 
@@ -69,7 +68,7 @@ export const actions = self => {
       );
     }
 
-    return Array(perPage).fill(0).map(() =>
+    return Array(self.siteInfo.perPage).fill(0).map(() =>
       Column.create(
         columnSnapshot({
           router: 'single',
