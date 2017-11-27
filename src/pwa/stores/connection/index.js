@@ -2,6 +2,7 @@ import { types } from 'mobx-state-tree';
 import { Any } from './single';
 import { List } from './list';
 import { Custom } from './custom';
+import SiteInfo from './site-info';
 import * as actionTypes from '../../actionTypes';
 import convert from '../../converters';
 
@@ -9,6 +10,7 @@ export const props = {
   singleMap: types.optional(types.map(types.map(Any)), {}),
   listMap: types.optional(types.map(types.map(List)), {}),
   customMap: types.optional(types.map(Custom), {}),
+  siteInfo: types.optional(SiteInfo, {}),
 };
 
 export const views = self => {
@@ -50,13 +52,15 @@ export const views = self => {
 };
 
 const addEntity = ({ self, type, id, entity, ready = false, fetching = false }) => {
+  const singleType = type === 'post' ? (entity && entity.type) || type : entity.taxonomy || type;
   // Init the first map (type) if it's not initializated yet.
-  if (!self.singleMap.get(type)) self.singleMap.set(type, {});
+  if (!self.singleMap.get(singleType)) self.singleMap.set(singleType, {});
   // Create entity if it's not set and convert it if it's set.
-  const newEntity = entity ? convert(entity) : { id, type };
+  const newEntity = entity ? convert(entity) : { id, type: singleType };
   // Populate the state with the entity value and set both fetching and ready.
-  self.singleMap.get(type).set(id, { ...newEntity, fetching, ready });
+  self.singleMap.get(singleType).set(id, { ...newEntity, fetching, ready });
 };
+
 const addEntities = ({ self, entities, ready = true, fetching = false }) => {
   // Update the entities.
   Object.entries(entities).map(([type, single]) => {
@@ -136,5 +140,10 @@ export const actions = self => ({
     const custom = self.customMap.get(name);
     custom.fetching = false;
     custom.pageMap.get(page - 1).fetching = false;
+  },
+  [actionTypes.SITE_INFO_SUCCEED]({ home: { title, description }, perPage }) {
+    self.siteInfo.home.title = title;
+    self.siteInfo.home.description = description;
+    self.siteInfo.perPage = perPage;
   },
 });

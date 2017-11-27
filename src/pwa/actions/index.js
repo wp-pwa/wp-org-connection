@@ -1,20 +1,22 @@
 import * as actionTypes from '../actionTypes';
 
+const parse = id => (Number.isFinite(parseInt(id, 10)) ? parseInt(id, 10) : id);
+
 export const singleRequested = ({ singleType, singleId }) => ({
   type: actionTypes.SINGLE_REQUESTED,
   singleType,
-  singleId,
+  singleId: parse(singleId),
 });
 export const singleSucceed = ({ singleType, singleId, entities }) => ({
   type: actionTypes.SINGLE_SUCCEED,
   singleType,
-  singleId,
+  singleId: parse(singleId),
   entities,
 });
 export const singleFailed = ({ singleType, singleId, error, endpoint }) => ({
   type: actionTypes.SINGLE_FAILED,
   singleType,
-  singleId,
+  singleId: parse(singleId),
   error,
   endpoint,
 });
@@ -24,8 +26,8 @@ export const listRequested = ({ listType, listId, page = 1 }) => {
   return {
     type: actionTypes.LIST_REQUESTED,
     listType,
-    listId,
-    page,
+    listId: parse(listId),
+    page: parse(page),
   };
 };
 export const listSucceed = ({
@@ -40,8 +42,8 @@ export const listSucceed = ({
   return {
     type: actionTypes.LIST_SUCCEED,
     listType,
-    listId,
-    page,
+    listId: parse(listId),
+    page: parse(page),
     total,
     result,
     entities,
@@ -50,8 +52,8 @@ export const listSucceed = ({
 export const listFailed = ({ listType, listId, page, error, endpoint }) => ({
   type: actionTypes.LIST_FAILED,
   listType,
-  listId,
-  page,
+  listId: parse(listId),
+  page: parse(page),
   error,
   endpoint,
 });
@@ -61,7 +63,7 @@ export const customRequested = ({ url = '/', name, singleType, page = 1, params 
   url,
   name,
   singleType,
-  page,
+  page: parse(page),
   params,
 });
 export const customSucceed = ({
@@ -79,7 +81,7 @@ export const customSucceed = ({
   name,
   singleType,
   params,
-  page,
+  page: parse(page),
   total,
   result,
   entities,
@@ -98,7 +100,7 @@ export const customFailed = ({
   name,
   singleType,
   params,
-  page,
+  page: parse(page),
   error,
   endpoint,
 });
@@ -112,10 +114,10 @@ export const routeChangeRequested = ({
   if (listType === 'latest' && !listId) listId = 'post';
   const selected = {};
   if (listType) selected.listType = listType;
-  if (listId) selected.listId = listId;
-  if (page) selected.page = page;
+  if (listId) selected.listId = parse(listId);
+  if (page) selected.page = parse(page);
   if (singleType) selected.singleType = singleType;
-  if (singleId) selected.singleId = singleId;
+  if (singleId) selected.singleId = parse(singleId);
   return {
     type: actionTypes.ROUTE_CHANGE_REQUESTED,
     selected,
@@ -132,10 +134,10 @@ export const routeChangeSucceed = ({
   if (listType === 'latest' && !listId) listId = 'post';
   const selected = {};
   if (listType) selected.listType = listType;
-  if (listId) selected.listId = listId;
-  if (page) selected.page = page;
+  if (listId) selected.listId = parse(listId);
+  if (page) selected.page = parse(page);
   if (singleType) selected.singleType = singleType;
-  if (singleId) selected.singleId = singleId;
+  if (singleId) selected.singleId = parse(singleId);
   return {
     type: actionTypes.ROUTE_CHANGE_SUCCEED,
     selected,
@@ -145,4 +147,22 @@ export const routeChangeSucceed = ({
 };
 export const routeChangeFailed = () => ({
   type: actionTypes.ROUTE_CHANGE_FAILED,
+});
+
+export const siteInfoRequested = () => ({
+  type: actionTypes.SITE_INFO_REQUESTED,
+});
+
+export const siteInfoSucceed = ({ home: { title, description }, perPage }) => ({
+  type: actionTypes.SITE_INFO_SUCCEED,
+  home: {
+    title,
+    description
+  },
+  perPage: parseInt(perPage, 10),
+});
+
+export const siteInfoFailed = ({ error }) => ({
+  type: actionTypes.SITE_INFO_FAILED,
+  error,
 });

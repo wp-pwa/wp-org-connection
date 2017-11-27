@@ -139,6 +139,10 @@ export const actions = self => {
     [actionTypes.ROUTE_CHANGE_SUCCEED]: ({ selected, method, context }) => {
       init({ self, ...selected, fetching: false });
 
+      context.items.forEach(item => {
+        init({ self, ...item, fetching: false });
+      });
+
       const selectedInContext = self.context && !!self.context.getItem(selected);
       const contextsAreEqual = self.context && isEqual(self.context.generator, context);
 

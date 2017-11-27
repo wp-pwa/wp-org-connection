@@ -74,4 +74,9 @@ export const Post = types
     };
   });
 
-export const Any = types.union(Post, Taxonomy, Author, Media);
+export const Any = types.union(snapshot => {
+  if (snapshot.taxonomy) return Taxonomy;
+  if (snapshot.name) return Author;
+  if (snapshot.original) return Media;
+  return Post;
+}, Post, Taxonomy, Author, Media);

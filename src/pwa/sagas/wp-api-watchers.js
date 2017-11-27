@@ -24,7 +24,9 @@ export function* initConnection() {
   const cors = yield call(isCors);
   const getSetting = dep('settings', 'selectorCreators', 'getSetting');
   const url = yield select(getSetting('generalSite', 'url'));
-  return new Wpapi({ endpoint: `${cors ? CorsAnywhere : ''}${url}?rest_route=` });
+  const connection = new Wpapi({ endpoint: `${cors ? CorsAnywhere : ''}${url}?rest_route=` });
+  connection.siteInfo = connection.registerRoute('wp-pwa/v1', '/site-info');
+  return connection;
 }
 
 export const getList = ({ connection, listType, listId, singleType, page }) => {
@@ -143,11 +145,49 @@ export const customRequested = connection =>
     }
   };
 
-export default function* wpApiWatchersSaga() {
+export const routeChangeSucceed = stores =>
+  function* routeChangeSucceedSaga(action) {
+    if (action.selected.listType) {
+      const { selected: { listType, listId, page } } = action;
+      const listPage = stores.connection.list[listType][listId].page[page - 1];
+      if (listPage.ready === false && listPage.fetching === false) {
+        yield put(actions.listRequested({ listType, listId, page }));
+      }
+    } else {
+      const { selected: { singleType, singleId } } = action;
+      const entity = stores.connection.single[singleType][singleId];
+      if (entity.ready === false && entity.fetching === false) {
+        yield put(actions.singleRequested({ singleType, singleId }));
+      }
+    }
+  };
+
+export const siteInfoRequested = connection =>
+  function* siteInfoRequestedSaga() {
+    try {
+      const data = yield call([connection, 'siteInfo']);
+
+      yield put(
+        actions.siteInfoSucceed({
+          home: {
+            title: data.home.title,
+            description: data.home.description,
+          },
+          perPage: data.perPage,
+        }),
+      );
+    } catch (error) {
+      yield put(actions.siteInfoFailed({ error }));
+    }
+  };
+
+export default function* wpApiWatchersSaga(stores) {
   const connection = yield call(initConnection);
   yield all([
+    takeEvery(actionTypes.ROUTE_CHANGE_SUCCEED, routeChangeSucceed(stores)),
     takeEvery(actionTypes.SINGLE_REQUESTED, singleRequested(connection)),
     takeEvery(actionTypes.LIST_REQUESTED, listRequested(connection)),
     takeEvery(actionTypes.CUSTOM_REQUESTED, customRequested(connection)),
+    takeEvery(actionTypes.SITE_INFO_REQUESTED, siteInfoRequested(connection)),
   ]);
 }
