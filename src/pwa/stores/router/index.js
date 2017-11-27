@@ -1,7 +1,6 @@
 import { types, detach } from 'mobx-state-tree';
-import { when } from 'mobx';
+import { isEqual } from 'lodash';
 import uuid from 'uuid/v4';
-import { times, isEqual } from 'lodash';
 import Column from './column';
 import Context from './context';
 import * as actionTypes from '../../actionTypes';
@@ -45,17 +44,6 @@ export const actions = self => {
     }
   };
 
-  const populateWhenReady = ({ listType, listId, page }, columns) =>
-    when(
-      () => stores.connection.list[listType][listId].page[page].ready,
-      () => {
-        const { entities } = stores.connection.list[listType][listId].page[page];
-        columns.forEach((column, i) => {
-          column[0].singleId = entities[i].id;
-        });
-      },
-    );
-
   const columnSnapshot = element => {
     const elements = element instanceof Array ? element : [element];
     const items = elements.map(({ _id, ...rest }) => ({ _id: _id || uuid(), ...rest }));
@@ -63,21 +51,41 @@ export const actions = self => {
   };
 
   const extractList = list => {
-    const perPage = 5; // from where should this value be obtained?
-    const columns = [];
-    times(perPage, () =>
-      columns.push(Column.create(columnSnapshot({ router: 'single', singleType: 'post' }))),
-    );
+    const { listType, listId, page = 1 } = list;
+    const perPage = 5; // TODO - from where should this value be obtained?
+    const listItem = self.list[listType][listId];
+    const { entities } = listItem && listItem.page[page - 1] ? listItem.page[page - 1] : {};
 
-    populateWhenReady(list, columns);
-    return columns;
+    if (entities) {
+      return entities.map(e =>
+        Column.create(
+          columnSnapshot({
+            router: 'single',
+            singleType: e.type,
+            singleId: e.id,
+            fromList: list,
+          }),
+        ),
+      );
+    }
+
+    return Array(perPage).fill(0).map(() =>
+      Column.create(
+        columnSnapshot({
+          router: 'single',
+          singleType: 'post',
+          fromList: list,
+        }),
+      ),
+    );
   };
 
   const createContext = (selected, generator, contextIndex) => {
     const { items, options, infinite } = generator;
     const columns = items.reduce((generated, element) => {
       if (element.listType && element.extract) {
-        generated.concat(extractList(element));
+        const extracted = extractList(element);
+        generated = generated.concat(extracted);
       } else {
         generated.push(columnSnapshot(element));
       }
@@ -139,9 +147,11 @@ export const actions = self => {
     [actionTypes.ROUTE_CHANGE_SUCCEED]: ({ selected, method, context }) => {
       init({ self, ...selected, fetching: false });
 
-      context.items.forEach(item => {
-        init({ self, ...item, fetching: false });
-      });
+      if (context)
+        context.items.forEach(item => {
+          if (item instanceof Array) item.forEach(i => init({ self, ...i, fetching: false }));
+          else init({ self, ...item, fetching: false });
+        });
 
       const selectedInContext = self.context && !!self.context.getItem(selected);
       const contextsAreEqual = self.context && isEqual(self.context.generator, context);

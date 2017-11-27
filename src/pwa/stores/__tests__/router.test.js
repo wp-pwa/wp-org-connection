@@ -1,4 +1,4 @@
-import { getSnapshot } from 'mobx-state-tree';
+import { getSnapshot, applySnapshot } from 'mobx-state-tree';
 import Connection from '../';
 import * as actionTypes from '../../actionTypes';
 import * as actions from '../../actions';
@@ -6,7 +6,7 @@ import * as actions from '../../actions';
 let store;
 beforeEach(() => {
   store = Connection.create();
-})
+});
 
 test('Initializates empty', () => {
   expect(getSnapshot(store.contexts)).toEqual([]);
@@ -213,16 +213,13 @@ test("Moves selected using replace when context exists and has 'selected' inside
   expect(store.context.columns[0].items.length).toBe(2);
 });
 
-test("Replaces context using replace", () => {
+test('Replaces context using replace', () => {
   store[actionTypes.ROUTE_CHANGE_SUCCEED](
     actions.routeChangeSucceed({
       selected: { singleType: 'post', singleId: 60 },
       context: {
         items: [
-          [
-            { singleType: 'post', singleId: 60 },
-            { listType: 'latest' },
-          ],
+          [{ singleType: 'post', singleId: 60 }, { listType: 'latest', listId: 'post' }],
           { listType: 'category', listId: 12 },
           { listType: 'category', listId: 13 },
           { listType: 'category', listId: 14 },
@@ -236,13 +233,10 @@ test("Replaces context using replace", () => {
   store[actionTypes.ROUTE_CHANGE_SUCCEED](
     actions.routeChangeSucceed({
       method: 'replace',
-      selected: { listType: 'latest' },
+      selected: { listType: 'latest', listId: 'post' },
       context: {
         items: [
-          [
-            { singleType: 'post', singleId: 60 },
-            { listType: 'latest' },
-          ],
+          [{ singleType: 'post', singleId: 60 }, { listType: 'latest', listId: 'post' }],
           { singleType: 'post', singleId: 68 },
           { singleType: 'post', singleId: 70 },
           { singleType: 'post', singleId: 90 },
@@ -354,4 +348,78 @@ test('Goes back and forward as expected', () => {
 
   expect(store.context.index).toBe(1);
   expect(store.selected.id).toBe(190);
-})
+});
+
+test('List with extract=true should be extracted even when they are not in the store', () => {
+  const fromListExpected = ({ listType, listId, page }) => item => {
+    expect(item.listType).toBe(listType);
+    expect(item.listId).toBe(listId);
+    expect(item.page).toBe(page);
+  };
+
+  applySnapshot(store, {
+    listMap: {
+      category: {
+        7: {
+          total: {
+            entities: 17,
+            pages: 5,
+          },
+          pageMap: {
+            0: {
+              entities: [60, 61, 62, 63],
+            },
+            1: {
+              entities: [64, 65, 66],
+            },
+          },
+        },
+      },
+    },
+    singleMap: {
+      post: {
+        60: { type: 'post', id: 60 },
+        61: { type: 'post', id: 61 },
+        62: { type: 'post', id: 62 },
+        63: { type: 'post', id: 63 },
+        64: { type: 'post', id: 64 },
+        65: { type: 'post', id: 65 },
+        66: { type: 'post', id: 66 },
+      },
+      category: {
+        7: { type: 'category', id: 7 },
+      },
+    },
+  });
+
+  store[actionTypes.ROUTE_CHANGE_SUCCEED](
+    actions.routeChangeSucceed({
+      selected: { singleType: 'post', singleId: 60 },
+      context: {
+        items: [
+          { singleType: 'post', singleId: 60 },
+          { singleType: 'post', singleId: 68 },
+          { singleType: 'post', singleId: 70 },
+          { listType: 'category', listId: 11, extract: true },
+          { listType: 'category', listId: 7, extract: true },
+        ],
+      },
+    }),
+  );
+
+  store.context.columns
+    .filter((c, i) => i >= 3 && i < 8)
+    .map(c => c.items[0].fromList)
+    .forEach(fromListExpected({ listType: 'category', listId: 11, page: 1 }));
+
+  store.context.columns
+    .filter((c, i) => i >= 8)
+    .map(c => c.items[0].fromList)
+    .forEach(fromListExpected({ listType: 'category', listId: 7, page: 1 }));
+
+  expect(store.context.columns.length).toBe(12);
+
+  expect(store.context.columns[3].items[0].id).toBe(null);
+  expect(store.context.columns[8].items[0].id).toBe(60);
+  expect(store.context.columns[11].items[0].id).toBe(63);
+});
