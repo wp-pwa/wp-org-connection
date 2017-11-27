@@ -52,7 +52,8 @@ export const views = self => {
 };
 
 const addEntity = ({ self, type, id, entity, ready = false, fetching = false }) => {
-  const singleType = type === 'post' ? (entity && entity.type) || type : entity.taxonomy || type;
+  const singleType =
+    type === 'post' ? (entity && entity.type) || type : (entity && entity.taxonomy) || type;
   // Init the first map (type) if it's not initializated yet.
   if (!self.singleMap.get(singleType)) self.singleMap.set(singleType, {});
   // Create entity if it's not set and convert it if it's set.
