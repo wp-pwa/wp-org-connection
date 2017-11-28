@@ -2,6 +2,7 @@ import { getSnapshot, applySnapshot } from 'mobx-state-tree';
 import Connection from '../';
 import * as actionTypes from '../../actionTypes';
 import * as actions from '../../actions';
+import post60 from '../../__tests__/post-60-converted.json';
 
 let store;
 beforeEach(() => {
@@ -350,7 +351,7 @@ test('Goes back and forward as expected', () => {
   expect(store.selected.id).toBe(190);
 });
 
-test('List with extract=true should be extracted even when they are not in the store', () => {
+test('List with extract=true should be extracted even when they are not in the store', async () => {
   const fromListExpected = ({ listType, listId, page }) => item => {
     expect(item.listType).toBe(listType);
     expect(item.listId).toBe(listId);
@@ -425,4 +426,45 @@ test('List with extract=true should be extracted even when they are not in the s
   expect(store.context.columns[3].items[0].id).toBe(null);
   expect(store.context.columns[3 + lengthCat11p1].items[0].id).toBe(60);
   expect(store.context.columns[2 + lengthCat11p1 + lengthCat7p1].items[0].id).toBe(63);
+
+  // ----------------- List received ----------------- //
+
+  const result = Array(lengthCat11p1)
+    .fill(0)
+    .map((e, i) => 90 + i);
+
+  const post = result.reduce((all, id) => {
+    all[id] = Object.assign({}, post60, { id });
+    return all;
+  }, {});
+
+  result.map((n, i) => {
+    expect(store.context.columns[3 + i].items[0].id).toBe(null);
+  });
+
+  store[actionTypes.LIST_REQUESTED]({
+    listType: 'category',
+    listId: 11,
+    page: 1,
+  });
+
+  store[actionTypes.LIST_SUCCEED](
+    actions.listSucceed({
+      listType: 'category',
+      listId: 11,
+      page: 1,
+      result,
+      total: {
+        entities: 250,
+        pages: 25,
+      },
+      entities: {
+        post,
+      },
+    }),
+  );
+
+  result.map((n, i) => {
+    expect(store.context.columns[3 + i].items[0].id).toBe(n);
+  });
 });

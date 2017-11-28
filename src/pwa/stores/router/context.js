@@ -24,6 +24,18 @@ const Context = types
       });
       return item || null;
     },
+    get items() {
+      return {
+        [Symbol.iterator] : function* it() {
+          let item = self.columns[0].items[0];
+          while (item.next) {
+            yield item;
+            item = item.next;
+          };
+          yield item;
+        },
+      }
+    }
   }));
 
 export default Context;

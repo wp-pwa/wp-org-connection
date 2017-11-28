@@ -1,4 +1,5 @@
 import { types, detach } from 'mobx-state-tree';
+import { when } from 'mobx';
 import { isEqual } from 'lodash';
 import uuid from 'uuid/v4';
 import Column from './column';
@@ -50,6 +51,32 @@ export const actions = self => {
     return { _id: uuid(), selected: items[0]._id, items };
   };
 
+  // const populateWhenReady = ({ listType, listId, page = 1 }) => {
+  //   console.log('populateWhenReady', { listType, listId, page });
+  //   when(
+  //     () =>
+  //       self.list[listType][listId].page[page - 1] &&
+  //       self.list[listType][listId].page[page - 1].ready,
+  //     () => {
+  //       const { entities } = self.list[listType][listId].page[page - 1];
+  //       console.log('YEEEEAH');
+  //
+  //       [...self.context.items]
+  //         .filter(
+  //           ({ fromList }) =>
+  //             fromList &&
+  //             fromList.id === listId &&
+  //             fromList.type === listType &&
+  //             fromList.page === page,
+  //         )
+  //         .forEach((item, i) => {
+  //           item.singleType = entities[i].type;
+  //           item.singleId = entities[i].id;
+  //         });
+  //     },
+  //   );
+  // };
+
   const extractList = list => {
     const { listType, listId, page = 1 } = list;
     const listItem = self.list[listType][listId];
@@ -68,15 +95,19 @@ export const actions = self => {
       );
     }
 
-    return Array(self.siteInfo.perPage).fill(0).map(() =>
-      Column.create(
-        columnSnapshot({
-          router: 'single',
-          singleType: 'post',
-          fromList: list,
-        }),
-      ),
-    );
+    // populateWhenReady(list);
+
+    return Array(self.siteInfo.perPage)
+      .fill(0)
+      .map(() =>
+        Column.create(
+          columnSnapshot({
+            router: 'single',
+            singleType: 'post',
+            fromList: list,
+          }),
+        ),
+      );
   };
 
   const createContext = (selected, generator, contextIndex) => {
@@ -176,6 +207,21 @@ export const actions = self => {
       } else {
         createContextFromSelected(selected);
       }
+    },
+    [actionTypes.LIST_SUCCEED]: ({ listType, listId, page, total, result, entities }) => {
+
+      [...self.context.items]
+        .filter(
+          ({ fromList }) =>
+            fromList &&
+            fromList.id === listId &&
+            fromList.type === listType &&
+            fromList.page === page,
+        )
+        .forEach((item, i) => {
+          item.singleType = entities.post[result[i]].type;
+          item.singleId = entities.post[result[i]].id;
+        });
     },
   };
 };
