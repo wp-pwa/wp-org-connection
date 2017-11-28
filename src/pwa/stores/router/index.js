@@ -1,4 +1,4 @@
-import { types, detach } from 'mobx-state-tree';
+import { types, detach, getParent } from 'mobx-state-tree';
 import { when } from 'mobx';
 import { isEqual } from 'lodash';
 import uuid from 'uuid/v4';
@@ -51,31 +51,17 @@ export const actions = self => {
     return { _id: uuid(), selected: items[0]._id, items };
   };
 
-  // const populateWhenReady = ({ listType, listId, page = 1 }) => {
-  //   console.log('populateWhenReady', { listType, listId, page });
-  //   when(
-  //     () =>
-  //       self.list[listType][listId].page[page - 1] &&
-  //       self.list[listType][listId].page[page - 1].ready,
-  //     () => {
-  //       const { entities } = self.list[listType][listId].page[page - 1];
-  //       console.log('YEEEEAH');
-  //
-  //       [...self.context.items]
-  //         .filter(
-  //           ({ fromList }) =>
-  //             fromList &&
-  //             fromList.id === listId &&
-  //             fromList.type === listType &&
-  //             fromList.page === page,
-  //         )
-  //         .forEach((item, i) => {
-  //           item.singleType = entities[i].type;
-  //           item.singleId = entities[i].id;
-  //         });
-  //     },
-  //   );
-  // };
+  const populateWhenReady = ({ listType, listId, page = 1 }) => {
+    when(
+      () =>
+        self.list[listType][listId].page[page - 1],
+        // self.list[listType][listId].page[page - 1] &&
+        // self.list[listType][listId].page[page - 1].ready,
+      () => {
+        console.log('populateWhenReady', { listType, listId, page });
+      },
+    );
+  };
 
   const extractList = list => {
     const { listType, listId, page = 1 } = list;
@@ -95,19 +81,18 @@ export const actions = self => {
       );
     }
 
-    // populateWhenReady(list);
+    populateWhenReady(list);
 
-    return Array(self.siteInfo.perPage)
-      .fill(0)
-      .map(() =>
-        Column.create(
-          columnSnapshot({
-            router: 'single',
-            singleType: 'post',
-            fromList: list,
-          }),
-        ),
-      );
+    // Returns an empty post with the list assigned in the fromList attribute.
+    return [
+      Column.create(
+        columnSnapshot({
+          router: 'single',
+          singleType: 'post',
+          fromList: list,
+        }),
+      ),
+    ];
   };
 
   const createContext = (selected, generator, contextIndex) => {
@@ -208,20 +193,52 @@ export const actions = self => {
         createContextFromSelected(selected);
       }
     },
-    [actionTypes.LIST_SUCCEED]: ({ listType, listId, page, total, result, entities }) => {
+    [actionTypes.LIST_SUCCEED]: ({ listType, listId, page, result, entities }) => {
 
-      [...self.context.items]
-        .filter(
-          ({ fromList }) =>
-            fromList &&
-            fromList.id === listId &&
-            fromList.type === listType &&
-            fromList.page === page,
-        )
-        .forEach((item, i) => {
-          item.singleType = entities.post[result[i]].type;
-          item.singleId = entities.post[result[i]].id;
-        });
+      // [...self.context.items]
+      //   .filter(
+      //     ({ fromList }) =>
+      //       fromList &&
+      //       fromList.id === listId &&
+      //       fromList.type === listType &&
+      //       fromList.page === page,
+      //   )
+      //   .forEach((item, i) => {
+      //     item.singleType = entities.post[result[i]].type;
+      //     item.singleId = entities.post[result[i]].id;
+      //   });
+      const listToExtract = ({ selected: { fromList } }) =>
+        fromList &&
+        fromList.id === listId &&
+        fromList.type === listType &&
+        fromList.page === page;
+
+      const position = self.context.columns.findIndex(listToExtract);
+
+      // Returns if there is not such list inside context
+      if (position === -1) return;
+
+
+
+      // const elementsToPlace = [...result]; // copy results
+      // [...self.context.items].forEach(i => {
+      //   const c = i.column;
+      //   const indexOfItem = elementsToPlace.indexOf(i.id)
+      //   if (getParent(c).findIndex(c) < position && indexOfItem !== -1) {
+      //     elementsToPlace.splice(indexOfItem, 1);
+      //   }
+      // });
+
+      // 1. filtrar columns y obtener las de índice menor que position (usar slice)
+      // 2. en cada columna, buscar los elementos que hay en listToExtract (usar getItem)
+      // 3. el elemento que se encuentre se borra de listToExtract
+      // 4. los elementos que queden, se buscan en el contexto (usar getItem)
+      // 5. si no existen se van poniendo en orden uno a continuación del otro
+      //    (a partir de position y en nuevas columnas)
+      // 6. si se encuentran, se mueven (modificar moveSelected)
+
+
+
     },
   };
 };
