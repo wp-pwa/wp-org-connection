@@ -36,6 +36,7 @@ export const Taxonomy = types.model('Taxonomy').props({
   slug: types.string,
   link: types.string,
   taxonomy: types.string,
+  target: types.maybe(types.string),
 });
 
 export const Meta = types.model('Meta').props({
@@ -60,6 +61,7 @@ export const Post = types
     author: types.maybe(types.reference(Author)),
     featured: types.maybe(types.reference(Media)),
     taxonomiesMap: types.optional(types.map(types.array(types.reference(Taxonomy))), {}),
+    target: types.maybe(types.string),
     meta: types.maybe(Meta),
   })
   .views(self => {
@@ -74,9 +76,15 @@ export const Post = types
     };
   });
 
-export const Any = types.union(snapshot => {
-  if (snapshot.taxonomy) return Taxonomy;
-  if (snapshot.name) return Author;
-  if (snapshot.original) return Media;
-  return Post;
-}, Post, Taxonomy, Author, Media);
+export const Any = types.union(
+  snapshot => {
+    if (snapshot.taxonomy) return Taxonomy;
+    if (snapshot.name) return Author;
+    if (snapshot.original) return Media;
+    return Post;
+  },
+  Post,
+  Taxonomy,
+  Author,
+  Media,
+);

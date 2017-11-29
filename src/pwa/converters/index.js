@@ -12,6 +12,7 @@ export const post = entity => ({
   author: entity.author,
   featured: entity.featured_media,
   taxonomiesMap: entity.taxonomiesMap,
+  target: entity['post-target'],
   meta: {},
 });
 
@@ -21,6 +22,7 @@ export const taxonomy = entity => ({
   slug: entity.slug,
   link: entity.link,
   taxonomy: entity.taxonomy,
+  target: entity['term-target'],
 });
 
 export const author = entity => ({
