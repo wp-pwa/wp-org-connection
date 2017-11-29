@@ -1,7 +1,6 @@
 import { types, detach } from 'mobx-state-tree';
-import { when } from 'mobx';
+import { isEqual } from 'lodash';
 import uuid from 'uuid/v4';
-import { times, isEqual } from 'lodash';
 import Column from './column';
 import Context from './context';
 import * as actionTypes from '../../actionTypes';
@@ -45,41 +44,122 @@ export const actions = self => {
     }
   };
 
-  const populateWhenReady = ({ listType, listId, page }, columns) =>
-    when(
-      () => stores.connection.list[listType][listId].page[page].ready,
-      () => {
-        const { entities } = stores.connection.list[listType][listId].page[page];
-        columns.forEach((column, i) => {
-          column[0].singleId = entities[i].id;
-        });
-      },
-    );
-
   const columnSnapshot = element => {
     const elements = element instanceof Array ? element : [element];
     const items = elements.map(({ _id, ...rest }) => ({ _id: _id || uuid(), ...rest }));
     return { _id: uuid(), selected: items[0]._id, items };
   };
 
-  const extractList = list => {
-    const perPage = 5; // from where should this value be obtained?
-    const columns = [];
-    times(perPage, () =>
-      columns.push(Column.create(columnSnapshot({ router: 'single', singleType: 'post' }))),
-    );
+  const extractList = ({ listType, listId, page, result }, context) => {
+    const listToExtract = ({ selected: { singleId, fromList } }) =>
+      singleId === null &&
+      fromList &&
+      fromList.id === listId &&
+      fromList.type === listType &&
+      fromList.page === page;
 
-    populateWhenReady(list, columns);
-    return columns;
+    // Gets list's position inside context. Returns if there is not such list inside context
+    const position = context.columns.findIndex(listToExtract);
+    if (position === -1) return;
+
+    // Obtains previous columns from position
+    const firstColumns = context.columns.slice(0, position);
+
+    // Removes from 'result' the ids of those items that are already contained
+    // inside 'firstColumns'
+    let elementsToPlace = result;
+    firstColumns.forEach(col => {
+      elementsToPlace = elementsToPlace.filter(
+        id => !col.getItem({ singleId: id, singleType: 'post' }),
+      );
+    });
+
+    // Generates an array of columns to be inserted into 'context.columns'
+    const newColumns = elementsToPlace.map(id => {
+      const item = context.getItem({ singleId: id, singleType: 'post' });
+
+      // If item exist in context, moves the item...
+      if (item) {
+        item.fromList = { listType, listId, page };
+        const { column } = item;
+
+        // ... with its column, if it contains just that item.
+        if (column.items.length === 1) {
+          return detach(column);
+        }
+
+        // ... to a new column.
+        if (column.selected === item) {
+          // prevents 'column.selected' from pointing to an element in another column.
+          const index = column.items.indexOf(item);
+          if (index === 0) column.selected = column.items[index + 1];
+          else column.selected = column.items[index - 1];
+        }
+        // WARNING - Scroll may be broken as selected has changed so beware!
+        detach(item);
+        return Column.create({ selected: item._id, items: [item] });
+      }
+
+      // If item does not exist in context, returns a new column with it.
+      return Column.create(
+        columnSnapshot({
+          router: 'single',
+          singleType: 'post',
+          singleId: id,
+          fromList: { listType, listId, page },
+        }),
+      );
+    });
+
+
+    context.columns.splice(position, 1, ...newColumns);
+  };
+
+  const extractListFromStore = (generated, list) => {
+    const { listType, listId, page = 1 } = list;
+    const listItem = self.list[listType][listId];
+    const { entities } = listItem && listItem.page[page - 1] ? listItem.page[page - 1] : {};
+
+    if (entities) {
+      return generated.concat(
+        entities
+          .filter(
+            ({ type, id }) =>
+              !generated.some(col => col.getItem({ singleType: type, singleId: id })),
+          )
+          .map(({ type, id }) =>
+            Column.create(
+              columnSnapshot({
+                router: 'single',
+                singleType: type,
+                singleId: id,
+                fromList: list,
+              }),
+            ),
+          ),
+      );
+    }
+
+    // Returns an empty post with the list assigned in the fromList attribute.
+    return generated.concat([
+      Column.create(
+        columnSnapshot({
+          router: 'single',
+          singleType: 'post',
+          fromList: list,
+        }),
+      ),
+    ]);
+
   };
 
   const createContext = (selected, generator, contextIndex) => {
     const { items, options, infinite } = generator;
     const columns = items.reduce((generated, element) => {
       if (element.listType && element.extract) {
-        generated.concat(extractList(element));
+        generated = extractListFromStore(generated, element);
       } else {
-        generated.push(columnSnapshot(element));
+        generated.push(Column.create(columnSnapshot(element)));
       }
       return generated;
     }, []);
@@ -139,9 +219,11 @@ export const actions = self => {
     [actionTypes.ROUTE_CHANGE_SUCCEED]: ({ selected, method, context }) => {
       init({ self, ...selected, fetching: false });
 
-      context.items.forEach(item => {
-        init({ self, ...item, fetching: false });
-      });
+      if (context)
+        context.items.forEach(item => {
+          if (item instanceof Array) item.forEach(i => init({ self, ...i, fetching: false }));
+          else init({ self, ...item, fetching: false });
+        });
 
       const selectedInContext = self.context && !!self.context.getItem(selected);
       const contextsAreEqual = self.context && isEqual(self.context.generator, context);
@@ -168,5 +250,6 @@ export const actions = self => {
         createContextFromSelected(selected);
       }
     },
+    [actionTypes.LIST_SUCCEED]: action => extractList(action, self.context),
   };
 };

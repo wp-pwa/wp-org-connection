@@ -11,7 +11,6 @@ export const List = types
     listId: types.optional(types.union(types.string, types.number), 'post'),
     page: types.optional(types.number, 1),
     ready: types.optional(types.boolean, false),
-    // next: types.maybe(types.reference(types.late(() => Item))), // eslint-disable-line
   })
   .views(self => ({
     get type() {
@@ -42,7 +41,6 @@ export const Single = types
     singleId: types.maybe(types.number),
     ready: types.optional(types.boolean, false),
     fromList: types.maybe(List),
-    // next: types.maybe(types.reference(types.late(() => Item))), // eslint-disable-line
   })
   .views(self => ({
     get type() {

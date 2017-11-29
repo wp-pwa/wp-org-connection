@@ -24,9 +24,7 @@ test('An item of type Single is populated appropriately', () => {
       listType: 'latest',
       page: 1,
       route: 'list',
-      // next: null,
     },
-    // next: null,
   });
 });
 
@@ -42,6 +40,5 @@ test('An item of type List is populated appropriately', () => {
     listType: 'latest',
     page: 1,
     route: 'list',
-    // next: null,
   });
 });
