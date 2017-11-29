@@ -51,19 +51,82 @@ export const actions = self => {
     return { _id: uuid(), selected: items[0]._id, items };
   };
 
-  const populateWhenReady = ({ listType, listId, page = 1 }) => {
-    when(
-      () =>
-        self.list[listType][listId].page[page - 1],
-        // self.list[listType][listId].page[page - 1] &&
-        // self.list[listType][listId].page[page - 1].ready,
-      () => {
-        console.log('populateWhenReady', { listType, listId, page });
-      },
-    );
+  // const populateWhenReady = ({ listType, listId, page = 1 }) => {
+  //   when(
+  //     () => self.list[listType][listId].page[page - 1],
+  //     // self.list[listType][listId].page[page - 1] &&
+  //     // self.list[listType][listId].page[page - 1].ready,
+  //     () => {
+  //       console.log('populateWhenReady', { listType, listId, page });
+  //     },
+  //   );
+  // };
+
+  const extractList = ({ listType, listId, page, result }, context) => {
+    // [...self.context.items]
+    //   .filter(
+    //     ({ fromList }) =>
+    //       fromList &&
+    //       fromList.id === listId &&
+    //       fromList.type === listType &&
+    //       fromList.page === page,
+    //   )
+    //   .forEach((item, i) => {
+    //     item.singleType = entities.post[result[i]].type;
+    //     item.singleId = entities.post[result[i]].id;
+    //   });
+
+    const listToExtract = ({ selected: { singleId, fromList } }) =>
+      singleId === null &&
+      fromList &&
+      fromList.id === listId &&
+      fromList.type === listType &&
+      fromList.page === page;
+
+    const position = context.columns.findIndex(listToExtract);
+
+    // Returns if there is not such list inside context
+    if (position === -1) return;
+
+
+    // 1. filtrar columns y obtener las de índice menor que position (usar slice)
+    const firstColumns = context.columns.slice(0, position);
+    let elementsToPlace = result;
+    // 2. en cada columna, buscar los elementos que hay en elementsToPlace (usar getItem)
+    firstColumns.forEach(col => {
+      // 3. el elemento que se encuentre se borra de elementsToPlace
+      elementsToPlace = elementsToPlace.filter(
+        id => !col.getItem({ singleId: id, singleType: 'post' }),
+      );
+    });
+
+    // 4. los elementos que queden, se buscan en el contexto (usar getItem)
+    const newColumns = elementsToPlace.map(id => {
+      const item = context.getItem({ singleId: id, singleType: 'post' });
+      if (item) {
+        // 6. si se encuentran, se mueven (modificar moveSelected ?)
+        const { column } = item;
+
+        if (column.items.length === 1) return detach(column);
+
+        detach(item);
+        return Column.create({ selected: item._id, items: [item] });
+      }
+
+      return Column.create(
+        columnSnapshot({
+          router: 'single',
+          singleType: 'post',
+          singleId: id,
+          fromList: { listType, listId, page },
+        }),
+      );
+    });
+
+    context.columns.splice(position, 1, ...newColumns);
   };
 
-  const extractList = list => {
+  const getListFromStore = list => {
     const { listType, listId, page = 1 } = list;
     const listItem = self.list[listType][listId];
     const { entities } = listItem && listItem.page[page - 1] ? listItem.page[page - 1] : {};
@@ -81,7 +144,7 @@ export const actions = self => {
       );
     }
 
-    populateWhenReady(list);
+    // populateWhenReady(list);
 
     // Returns an empty post with the list assigned in the fromList attribute.
     return [
@@ -193,52 +256,6 @@ export const actions = self => {
         createContextFromSelected(selected);
       }
     },
-    [actionTypes.LIST_SUCCEED]: ({ listType, listId, page, result, entities }) => {
-
-      // [...self.context.items]
-      //   .filter(
-      //     ({ fromList }) =>
-      //       fromList &&
-      //       fromList.id === listId &&
-      //       fromList.type === listType &&
-      //       fromList.page === page,
-      //   )
-      //   .forEach((item, i) => {
-      //     item.singleType = entities.post[result[i]].type;
-      //     item.singleId = entities.post[result[i]].id;
-      //   });
-      const listToExtract = ({ selected: { fromList } }) =>
-        fromList &&
-        fromList.id === listId &&
-        fromList.type === listType &&
-        fromList.page === page;
-
-      const position = self.context.columns.findIndex(listToExtract);
-
-      // Returns if there is not such list inside context
-      if (position === -1) return;
-
-
-
-      // const elementsToPlace = [...result]; // copy results
-      // [...self.context.items].forEach(i => {
-      //   const c = i.column;
-      //   const indexOfItem = elementsToPlace.indexOf(i.id)
-      //   if (getParent(c).findIndex(c) < position && indexOfItem !== -1) {
-      //     elementsToPlace.splice(indexOfItem, 1);
-      //   }
-      // });
-
-      // 1. filtrar columns y obtener las de índice menor que position (usar slice)
-      // 2. en cada columna, buscar los elementos que hay en listToExtract (usar getItem)
-      // 3. el elemento que se encuentre se borra de listToExtract
-      // 4. los elementos que queden, se buscan en el contexto (usar getItem)
-      // 5. si no existen se van poniendo en orden uno a continuación del otro
-      //    (a partir de position y en nuevas columnas)
-      // 6. si se encuentran, se mueven (modificar moveSelected)
-
-
-
-    },
+    [actionTypes.LIST_SUCCEED]: action => extractList(action, self.context),
   };
 };
