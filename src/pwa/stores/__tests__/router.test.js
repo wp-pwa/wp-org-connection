@@ -1,13 +1,12 @@
-import { getSnapshot, applySnapshot } from 'mobx-state-tree';
+import { getSnapshot } from 'mobx-state-tree';
 import Connection from '../';
 import * as actionTypes from '../../actionTypes';
 import * as actions from '../../actions';
-import post60 from '../../__tests__/post-60-converted.json';
 
 let store;
 beforeEach(() => {
   store = Connection.create();
-});
+})
 
 test('Initializates empty', () => {
   expect(getSnapshot(store.contexts)).toEqual([]);
@@ -214,13 +213,16 @@ test("Moves selected using replace when context exists and has 'selected' inside
   expect(store.context.columns[0].items.length).toBe(2);
 });
 
-test('Replaces context using replace', () => {
+test("Replaces context using replace", () => {
   store[actionTypes.ROUTE_CHANGE_SUCCEED](
     actions.routeChangeSucceed({
       selected: { singleType: 'post', singleId: 60 },
       context: {
         items: [
-          [{ singleType: 'post', singleId: 60 }, { listType: 'latest', listId: 'post' }],
+          [
+            { singleType: 'post', singleId: 60 },
+            { listType: 'latest' },
+          ],
           { listType: 'category', listId: 12 },
           { listType: 'category', listId: 13 },
           { listType: 'category', listId: 14 },
@@ -234,10 +236,13 @@ test('Replaces context using replace', () => {
   store[actionTypes.ROUTE_CHANGE_SUCCEED](
     actions.routeChangeSucceed({
       method: 'replace',
-      selected: { listType: 'latest', listId: 'post' },
+      selected: { listType: 'latest' },
       context: {
         items: [
-          [{ singleType: 'post', singleId: 60 }, { listType: 'latest', listId: 'post' }],
+          [
+            { singleType: 'post', singleId: 60 },
+            { listType: 'latest' },
+          ],
           { singleType: 'post', singleId: 68 },
           { singleType: 'post', singleId: 70 },
           { singleType: 'post', singleId: 90 },
@@ -349,126 +354,4 @@ test('Goes back and forward as expected', () => {
 
   expect(store.context.index).toBe(1);
   expect(store.selected.id).toBe(190);
-});
-
-test('List with extract=true should be extracted even when they are not in the store', async () => {
-  const fromListExpected = ({ listType, listId, page }) => item => {
-    expect(item.listType).toBe(listType);
-    expect(item.listId).toBe(listId);
-    expect(item.page).toBe(page);
-  };
-
-  applySnapshot(store, {
-    listMap: {
-      category: {
-        7: {
-          total: {
-            entities: 17,
-            pages: 5,
-          },
-          pageMap: {
-            0: {
-              entities: [60, 61, 62, 63],
-            },
-            1: {
-              entities: [64, 65, 66],
-            },
-          },
-        },
-      },
-    },
-    singleMap: {
-      post: {
-        60: { type: 'post', id: 60 },
-        61: { type: 'post', id: 61 },
-        62: { type: 'post', id: 62 },
-        63: { type: 'post', id: 63 },
-        64: { type: 'post', id: 64 },
-        65: { type: 'post', id: 65 },
-        66: { type: 'post', id: 66 },
-      },
-      category: {
-        7: { type: 'category', id: 7 },
-      },
-    },
-  });
-
-  store[actionTypes.ROUTE_CHANGE_SUCCEED](
-    actions.routeChangeSucceed({
-      selected: { singleType: 'post', singleId: 60 },
-      context: {
-        items: [
-          { singleType: 'post', singleId: 60 },
-          { singleType: 'post', singleId: 68 },
-          { singleType: 'post', singleId: 70 },
-          { listType: 'category', listId: 11, extract: true },
-          { listType: 'category', listId: 7, extract: true },
-        ],
-      },
-    }),
-  );
-
-  const lengthCat11p1 = store.siteInfo.perPage;
-  const lengthCat7p1 = store.list.category[7].page[0].total;
-
-  store.context.columns
-    .filter((c, i) => i === 3)
-    .map(c => c.items[0].fromList)
-    .forEach(fromListExpected({ listType: 'category', listId: 11, page: 1 }));
-
-  store.context.columns
-    .filter((c, i) => i > 3)
-    .map(c => c.items[0].fromList)
-    .forEach(fromListExpected({ listType: 'category', listId: 7, page: 1 }));
-
-  expect(store.context.columns.length).toBe(3 + lengthCat7p1);
-
-  expect(store.context.columns[3].items[0].id).toBe(null);
-  expect(store.context.columns[4].items[0].id).toBe(61);
-  expect(store.context.columns[6].items[0].id).toBe(63);
-
-  // ----------------- List received ----------------- //
-
-  const result = Array(lengthCat11p1)
-    .fill(0)
-    .map((e, i) => 60 + i);
-
-  const post = result.reduce((all, id) => {
-    all[id] = Object.assign({}, post60, { id });
-    return all;
-  }, {});
-
-  store[actionTypes.LIST_REQUESTED]({
-    listType: 'category',
-    listId: 11,
-    page: 1,
-  });
-
-  store[actionTypes.LIST_SUCCEED](
-    actions.listSucceed({
-      listType: 'category',
-      listId: 11,
-      page: 1,
-      result,
-      total: {
-        entities: 250,
-        pages: 25,
-      },
-      entities: {
-        post,
-      },
-    }),
-  );
-
-  store.context.columns
-    .filter((c, i) => i >= 3 && i < 3 + lengthCat11p1 - 1)
-    .map(c => c.items[0].fromList)
-    .forEach(fromListExpected({ listType: 'category', listId: 11, page: 1 }));
-
-  store.context.columns
-    .filter((c, i) => i >= 3 + lengthCat11p1 - 1)
-    .map(c => c.items[0].fromList)
-    .forEach(fromListExpected({ listType: 'category', listId: 7, page: 1 }));
-
-  expect(store.context.columns.length).toBe(1 + lengthCat11p1);
-});
+})

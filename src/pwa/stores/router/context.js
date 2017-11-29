@@ -11,35 +11,19 @@ const Context = types
     generator: types.frozen,
     infinite: true,
   })
-  .views(self => {
-    const iterable = {
-      [Symbol.iterator]: function* it() {
-        let item = self.columns[0].items[0];
-        while (item.next) {
-          yield item;
-          item = item.next;
-        }
-        yield item;
-      },
-    };
-
-    return {
-      get selected() {
-        return self.column.selected;
-      },
-      getItem(props) {
-        let item;
-        self.columns.find(col => {
-          const i = col.getItem(props);
-          if (i) item = i;
-          return i;
-        });
-        return item || null;
-      },
-      get items() {
-        return [...iterable];
-      },
-    };
-  });
+  .views(self => ({
+    get selected() {
+      return self.column.selected;
+    },
+    getItem(props) {
+      let item;
+      self.columns.find(col => {
+        const i = col.getItem(props);
+        if (i) item = i;
+        return i;
+      });
+      return item || null;
+    },
+  }));
 
 export default Context;
