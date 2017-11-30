@@ -9,7 +9,10 @@ export const Total = types
   })
   .views(self => ({
     get fetched() {
-      return getParent(self).entities.length || null;
+      return {
+        entities: getParent(self).entities.length || null,
+        pages: getParent(self).page.length || null,
+      };
     },
   }));
 
