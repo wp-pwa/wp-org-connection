@@ -19,6 +19,77 @@ export const views = self => ({
   },
 });
 
+const columnSnapshot = element => {
+  const elements = element instanceof Array ? element : [element];
+  const items = elements.map(({ _id, ...rest }) => ({ _id: _id || uuid(), ...rest }));
+  return { _id: uuid(), selected: items[0]._id, items };
+};
+
+export const extractList = ({ listType, listId, page, result }, context) => {
+
+  const listToExtract = ({ selected: { singleId, fromList } }) =>
+    singleId === null &&
+    fromList &&
+    fromList.id === listId &&
+    fromList.type === listType &&
+    fromList.page === page;
+
+  // Gets list's position inside context. Returns if there is not such list inside context
+  const position = context.columns.findIndex(listToExtract);
+  if (position === -1) return;
+
+  // Obtains previous columns from position
+  const firstColumns = context.columns.slice(0, position);
+
+  // Removes from 'result' the ids of those items that are already contained
+  // inside 'firstColumns'
+  let elementsToPlace = result;
+  firstColumns.forEach(col => {
+    elementsToPlace = elementsToPlace.filter(
+      id => !col.getItem({ singleId: id, singleType: 'post' }),
+    );
+  });
+
+  // Generates an array of columns to be inserted into 'context.columns'
+  const newColumns = elementsToPlace.map(id => {
+    const item = context.getItem({ singleId: id, singleType: 'post' });
+
+    // If item exist in context, moves the item...
+    if (item) {
+      item.fromList = { listType, listId, page };
+      const { column } = item;
+
+      // ... with its column, if it contains just that item.
+      if (column.items.length === 1) {
+        return detach(column);
+      }
+
+      // ... to a new column.
+      if (column.selected === item) {
+        // prevents 'column.selected' from pointing to an element in another column.
+        const index = column.items.indexOf(item);
+        if (index === 0) column.selected = column.items[index + 1];
+        else column.selected = column.items[index - 1];
+      }
+      // WARNING - Scroll may be broken as selected has changed so beware!
+      detach(item);
+      return Column.create({ selected: item._id, items: [item] });
+    }
+
+    // If item does not exist in context, returns a new column with it.
+    return Column.create(
+      columnSnapshot({
+        router: 'single',
+        singleType: 'post',
+        singleId: id,
+        fromList: { listType, listId, page },
+      }),
+    );
+  });
+
+  context.columns.splice(position, 1, ...newColumns);
+};
+
 export const actions = self => {
   const changeSelected = selected => {
     const selectedItem = self.context.getItem(selected);
@@ -42,77 +113,6 @@ export const actions = self => {
       current.column.items.push(selectedItem);
       selectedItem.column.selected = selectedItem;
     }
-  };
-
-  const columnSnapshot = element => {
-    const elements = element instanceof Array ? element : [element];
-    const items = elements.map(({ _id, ...rest }) => ({ _id: _id || uuid(), ...rest }));
-    return { _id: uuid(), selected: items[0]._id, items };
-  };
-
-  const extractList = ({ listType, listId, page, result }, context) => {
-    const listToExtract = ({ selected: { singleId, fromList } }) =>
-      singleId === null &&
-      fromList &&
-      fromList.id === listId &&
-      fromList.type === listType &&
-      fromList.page === page;
-
-    // Gets list's position inside context. Returns if there is not such list inside context
-    const position = context.columns.findIndex(listToExtract);
-    if (position === -1) return;
-
-    // Obtains previous columns from position
-    const firstColumns = context.columns.slice(0, position);
-
-    // Removes from 'result' the ids of those items that are already contained
-    // inside 'firstColumns'
-    let elementsToPlace = result;
-    firstColumns.forEach(col => {
-      elementsToPlace = elementsToPlace.filter(
-        id => !col.getItem({ singleId: id, singleType: 'post' }),
-      );
-    });
-
-    // Generates an array of columns to be inserted into 'context.columns'
-    const newColumns = elementsToPlace.map(id => {
-      const item = context.getItem({ singleId: id, singleType: 'post' });
-
-      // If item exist in context, moves the item...
-      if (item) {
-        item.fromList = { listType, listId, page };
-        const { column } = item;
-
-        // ... with its column, if it contains just that item.
-        if (column.items.length === 1) {
-          return detach(column);
-        }
-
-        // ... to a new column.
-        if (column.selected === item) {
-          // prevents 'column.selected' from pointing to an element in another column.
-          const index = column.items.indexOf(item);
-          if (index === 0) column.selected = column.items[index + 1];
-          else column.selected = column.items[index - 1];
-        }
-        // WARNING - Scroll may be broken as selected has changed so beware!
-        detach(item);
-        return Column.create({ selected: item._id, items: [item] });
-      }
-
-      // If item does not exist in context, returns a new column with it.
-      return Column.create(
-        columnSnapshot({
-          router: 'single',
-          singleType: 'post',
-          singleId: id,
-          fromList: { listType, listId, page },
-        }),
-      );
-    });
-
-
-    context.columns.splice(position, 1, ...newColumns);
   };
 
   const extractListFromStore = (generated, list) => {
@@ -150,7 +150,6 @@ export const actions = self => {
         }),
       ),
     ]);
-
   };
 
   const createContext = (selected, generator, contextIndex) => {
@@ -250,6 +249,5 @@ export const actions = self => {
         createContextFromSelected(selected);
       }
     },
-    [actionTypes.LIST_SUCCEED]: action => extractList(action, self.context),
   };
 };

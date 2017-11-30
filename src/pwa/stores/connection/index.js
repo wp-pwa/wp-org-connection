@@ -3,6 +3,7 @@ import { Any } from './single';
 import { List } from './list';
 import { Custom } from './custom';
 import SiteInfo from './site-info';
+import { extractList } from '../router';
 import * as actionTypes from '../../actionTypes';
 import convert from '../../converters';
 
@@ -109,6 +110,7 @@ export const actions = self => ({
     list.pageMap.get(page - 1).entities = result;
     if (total) list.total = total;
     addEntities({ self, entities, ready: true, fetching: false });
+    extractList({ listType, listId, page, result }, self.context);
   },
   [actionTypes.LIST_FAILED]({ listType, listId, page }) {
     // Populate the state with the entity value and set both fetching and ready.
