@@ -37,16 +37,20 @@ export const List = types
     fetching: types.optional(types.boolean, false),
     ready: types.optional(types.boolean, false),
   })
-  .views(self => ({
-    get page() {
-      return self.pageMap
-        .keys()
-        .reduce((result, page) => result.concat(self.pageMap.get(page)), []);
-    },
-    get entities() {
-      return self.pageMap
-        .keys()
-        .map(page => self.pageMap.get(page))
-        .reduce((result, page) => result.concat(page.entities.map(entity => entity)), []);
-    },
-  }));
+  .views(self => {
+    const pages = [];
+    return {
+      get page() {
+        self.pageMap.keys().forEach(page => {
+          pages[page] = self.pageMap.get(page);
+        });
+        return pages;
+      },
+      get entities() {
+        return self.pageMap
+          .keys()
+          .map(page => self.pageMap.get(page))
+          .reduce((result, page) => result.concat(page.entities.map(entity => entity)), []);
+      },
+    };
+  });
