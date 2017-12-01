@@ -1,4 +1,4 @@
-import { types, getParent } from 'mobx-state-tree';
+import { types, getParent, getRoot } from 'mobx-state-tree';
 
 import Id from './id';
 
@@ -10,10 +10,16 @@ export const List = types
     listType: types.optional(types.string, 'latest'),
     listId: types.optional(types.union(types.string, types.number), 'post'),
     page: types.optional(types.number, 1),
-    ready: types.optional(types.boolean, false),
-    // next: types.maybe(types.reference(types.late(() => Item))), // eslint-disable-line
   })
   .views(self => ({
+    get ready() {
+      return !!self.entity && self.entity.ready;
+    },
+    get entity() {
+      const { type, id, page } = self;
+      const list = getRoot(self).list[type][id];
+      return list && list.page[page] || null;
+    },
     get type() {
       return self.listType;
     },
@@ -40,11 +46,16 @@ export const Single = types
     route: 'single',
     singleType: types.string,
     singleId: types.maybe(types.number),
-    ready: types.optional(types.boolean, false),
     fromList: types.maybe(List),
-    // next: types.maybe(types.reference(types.late(() => Item))), // eslint-disable-line
   })
   .views(self => ({
+    get ready() {
+      return !!self.entity && self.entity.ready;
+    },
+    get entity() {
+      const { type, id } = self;
+      return getRoot(self).single[type][id] || null;
+    },
     get type() {
       return self.singleType;
     },
