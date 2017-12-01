@@ -221,7 +221,7 @@ test("Replaces context using replace", () => {
         items: [
           [
             { singleType: 'post', singleId: 60 },
-            { listType: 'latest' },
+            { listType: 'latest', listId: 'post' },
           ],
           { listType: 'category', listId: 12 },
           { listType: 'category', listId: 13 },
@@ -241,7 +241,7 @@ test("Replaces context using replace", () => {
         items: [
           [
             { singleType: 'post', singleId: 60 },
-            { listType: 'latest' },
+            { listType: 'latest', listId: 'post' },
           ],
           { singleType: 'post', singleId: 68 },
           { singleType: 'post', singleId: 70 },
