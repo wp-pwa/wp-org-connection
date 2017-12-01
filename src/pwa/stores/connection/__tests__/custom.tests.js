@@ -109,8 +109,10 @@ describe('Store › Custom', () => {
     expect(connection.custom.test2.total.entities).toBe(12);
     expect(connection.custom.test1.total.pages).toBe(8);
     expect(connection.custom.test2.total.pages).toBe(2);
-    expect(connection.custom.test1.total.fetched).toBe(6);
-    expect(connection.custom.test2.total.fetched).toBe(7);
+    expect(connection.custom.test1.total.fetched.entities).toBe(6);
+    expect(connection.custom.test1.total.fetched.pages).toBe(8);
+    expect(connection.custom.test2.total.fetched.entities).toBe(7);
+    expect(connection.custom.test2.total.fetched.pages).toBe(2);
     expect(connection.custom.test1.page[0].total).toBe(2);
     expect(connection.custom.test1.page[1].total).toBe(2);
     expect(connection.custom.test1.page[7].total).toBe(2);
@@ -148,7 +150,8 @@ describe('Store › Custom', () => {
     expect(connection.custom.test.page[0].fetching).toBe(true);
     expect(connection.custom.test.page[0].ready).toBe(false);
     expect(connection.custom.test.total.entities).toBe(null);
-    expect(connection.custom.test.total.fetched).toBe(null);
+    expect(connection.custom.test.total.fetched.entities).toBeNull();
+    expect(connection.custom.test.total.fetched.pages).toBe(1);
     expect(connection.custom.test.total.pages).toBe(null);
     expect(connection.custom.test.page[0].total).toBe(0);
   });
@@ -185,7 +188,8 @@ describe('Store › Custom', () => {
     expect(connection.custom.test.page[0].fetching).toBe(false);
     expect(connection.custom.test.page[0].ready).toBe(true);
     expect(connection.custom.test.total.entities).toBe(7);
-    expect(connection.custom.test.total.fetched).toBe(7);
+    expect(connection.custom.test.total.fetched.entities).toBe(7);
+    expect(connection.custom.test.total.fetched.pages).toBe(1);
     expect(connection.custom.test.total.pages).toBe(1);
     expect(connection.custom.test.page[0].total).toBe(7);
     expect(connection.custom.test.entities[0].name).toBe('Weekend Trip');
@@ -220,7 +224,8 @@ describe('Store › Custom', () => {
     expect(connection.custom.test.page[0].fetching).toBe(false);
     expect(connection.custom.test.page[0].ready).toBe(false);
     expect(connection.custom.test.total.entities).toBe(null);
-    expect(connection.custom.test.total.fetched).toBe(null);
+    expect(connection.custom.test.total.fetched.entities).toBeNull();
+    expect(connection.custom.test.total.fetched.pages).toBe(1);
     expect(connection.custom.test.total.pages).toBe(null);
     expect(connection.custom.test.page[0].total).toBe(0);
   });
