@@ -112,7 +112,8 @@ describe('Store › List', () => {
     expect(connection.list.category[7].page[1].entities[0].title).toBe('Post 62');
     expect(connection.list.category[7].page[8].entities[1].title).toBe('Post 63');
     expect(connection.list.category[7].entities[1].title).toBe('Post 61');
-    expect(connection.list.category[7].total.fetched).toBe(6);
+    expect(connection.list.category[7].total.fetched.entities).toBe(6);
+    expect(connection.list.category[7].total.fetched.pages).toBe(9);
   });
 
   test('Add list. Request and succeed', () => {
@@ -124,7 +125,8 @@ describe('Store › List', () => {
         page: 3,
       }),
     );
-    expect(connection.list.category[7].total.fetched).toBe(null);
+    expect(connection.list.category[7].total.fetched.entities).toBeNull();
+    expect(connection.list.category[7].total.fetched.pages).toBe(3);
     expect(connection.list.category[7].fetching).toBe(true);
     expect(connection.list.category[7].ready).toBe(false);
     expect(connection.list.category[7].page[2].fetching).toBe(true);
