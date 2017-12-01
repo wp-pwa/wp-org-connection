@@ -39,7 +39,6 @@ export const getList = ({ connection, listType, listId, singleType, page }) => {
   forOwn(params, (value, key) => {
     query = query.param(key, value);
   });
-  // console.log(query.toString());
   return query;
 };
 
@@ -67,13 +66,10 @@ export const listRequested = connection =>
       );
     try {
       const response = yield call(getList, { connection, listType, listId, singleType, page });
-      // console.log({ response });
-      // console.log({ media: response.map(item => item._embedded['wp:featuredmedia'][0]) });
       const { entities, result } = normalize(response, schemas.list);
       const totalEntities = response._paging ? parseInt(response._paging.total, 10) : 0;
       const totalPages = response._paging ? parseInt(response._paging.totalPages, 10) : 0;
       const total = { entities: totalEntities, pages: totalPages };
-      // console.log({ entities });
       yield put(
         actions.listSucceed({
           entities,
