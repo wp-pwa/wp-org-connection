@@ -110,7 +110,7 @@ export const actions = self => ({
     list.pageMap.get(page - 1).entities = result;
     if (total) list.total = total;
     addEntities({ self, entities, ready: true, fetching: false });
-    extractList({ listType, listId, page, result }, self.context);
+    if (self.context) extractList({ listType, listId, page, result }, self.context);
   },
   [actionTypes.LIST_FAILED]({ listType, listId, page }) {
     // Populate the state with the entity value and set both fetching and ready.
