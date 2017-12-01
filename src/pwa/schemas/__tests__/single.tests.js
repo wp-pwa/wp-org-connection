@@ -3,6 +3,7 @@ import post60 from '../../__tests__/post-60.json';
 import category7 from '../../__tests__/category-7.json';
 import tag10 from '../../__tests__/tag-10.json';
 import author4 from '../../__tests__/author-4.json';
+import noMedia from '../../__tests__/no-media.json';
 import { single } from '../';
 
 test('Convert post using single', () => {
@@ -43,4 +44,16 @@ test('Convert a author using single', () => {
   const { entities } = normalize(author4, single);
   expect(entities.author[4].id).toBe(4);
   expect(entities.author[4].slug).toBe('alan');
+});
+
+test('Convert a post with no image', () => {
+  const { entities } = normalize(noMedia, single);
+  expect(entities.media[155228]).toBeDefined();
+  expect(entities.media[155228].id).toBe(155228);
+  expect(entities.media[155228].type).toBe('media');
+  expect(entities.media[155228].error).toEqual({
+    code: 'rest_forbidden',
+    message: 'Lo siento, no puedes hacer eso',
+    data: { status: 403 },
+  });
 });
