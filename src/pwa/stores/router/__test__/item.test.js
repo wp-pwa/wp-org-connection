@@ -16,17 +16,13 @@ test('An item of type Single is populated appropriately', () => {
     route: 'single',
     singleType: 'post',
     singleId: 1234,
-    ready: false,
     fromList: {
       _id: item.fromList._id,
-      ready: false,
       listId: 'post',
       listType: 'latest',
       page: 1,
       route: 'list',
-      // next: null,
     },
-    // next: null,
   });
 });
 
@@ -37,11 +33,9 @@ test('An item of type List is populated appropriately', () => {
   });
   expect(getSnapshot(item)).toEqual({
     _id: '124',
-    ready: false,
     listId: 'post',
     listType: 'latest',
     page: 1,
     route: 'list',
-    // next: null,
   });
 });
