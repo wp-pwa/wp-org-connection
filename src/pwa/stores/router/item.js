@@ -15,10 +15,14 @@ export const List = types
     get ready() {
       return !!self.entity && self.entity.ready;
     },
-    get entity() {
+    get list() {
       const { type, id, page } = self;
       const list = getRoot(self).list[type][id];
       return list && list.page[page] || null;
+    },
+    get single() {
+      const { type, id } = self;
+      return getRoot(self).single[type][id]
     },
     get type() {
       return self.listType;
@@ -52,7 +56,7 @@ export const Single = types
     get ready() {
       return !!self.entity && self.entity.ready;
     },
-    get entity() {
+    get single() {
       const { type, id } = self;
       return getRoot(self).single[type][id] || null;
     },
