@@ -10,15 +10,15 @@ export const Image = types.model('Image').props({
 
 export const Media = types.model('Media').props({
   id: types.identifier(types.number),
-  creationDate: types.Date,
-  slug: types.string,
-  alt: types.string,
-  mimeType: types.string,
-  mediaType: types.string,
-  title: types.string,
-  author: types.reference(types.late(() => Author)),
-  original: Image,
-  sizes: types.array(Image),
+  creationDate: types.maybe(types.Date),
+  slug: types.maybe(types.string),
+  alt: types.maybe(types.string),
+  mimeType: types.maybe(types.string),
+  mediaType: types.maybe(types.string),
+  title: types.maybe(types.string),
+  author: types.maybe(types.reference(types.late(() => Author))),
+  original: types.maybe(Image),
+  sizes: types.maybe(types.array(Image)),
 });
 
 export const Author = types.model('Author').props({
@@ -81,6 +81,7 @@ export const Any = types.union(
     if (snapshot.taxonomy) return Taxonomy;
     if (snapshot.name) return Author;
     if (snapshot.original) return Media;
+    if (snapshot.type === 'media' && snapshot.error) return Media;
     return Post;
   },
   Post,

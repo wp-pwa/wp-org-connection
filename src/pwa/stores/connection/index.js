@@ -58,7 +58,14 @@ const addEntity = ({ self, type, id, entity, ready = false, fetching = false }) 
   // Init the first map (type) if it's not initializated yet.
   if (!self.singleMap.get(singleType)) self.singleMap.set(singleType, {});
   // Create entity if it's not set and convert it if it's set.
-  const newEntity = entity ? convert(entity) : { id, type: singleType };
+  let newEntity;
+  if (entity) {
+    if (entity.error) ready = false;
+    newEntity = entity.error ? { id, type: singleType, error: entity.error } : convert(entity);
+  } else {
+    newEntity = { id, type: singleType };
+  }
+  // newEntity = entity && !entity.error ? convert(entity) : { id, type: singleType };
   // Populate the state with the entity value and set both fetching and ready.
   self.singleMap.get(singleType).set(id, { ...newEntity, fetching, ready });
 };
@@ -67,7 +74,7 @@ const addEntities = ({ self, entities, ready = true, fetching = false }) => {
   // Update the entities.
   Object.entries(entities).map(([type, single]) => {
     Object.entries(single).map(([id, entity]) => {
-      addEntity({ self, type, id, entity, ready, fetching });
+      addEntity({ self, type, id: parseInt(id, 10), entity, ready, fetching });
     });
   });
 };

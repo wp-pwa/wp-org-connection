@@ -34,33 +34,42 @@ export const author = entity => ({
   avatar: entity.avatar_urls && Object.values(entity.avatar_urls)[0].replace(/\?.*$/, ''),
 });
 
-export const media = entity => ({
-  id: entity.id,
-  creationDate: new Date(entity.date).getTime(),
-  slug: entity.slug,
-  alt: entity.alt_text,
-  mimeType: entity.mime_type,
-  mediaType: entity.media_type,
-  title: entity.title.rendered,
-  author: entity.author,
-  original: {
-    height: entity.media_details.height,
-    width: entity.media_details.width,
-    filename: entity.media_details.file,
-    url: entity.source_url,
-  },
-  sizes:
-    entity.media_details.sizes &&
-    Object.values(entity.media_details.sizes).map(image => ({
-      height: image.height,
-      width: image.width,
-      filename: image.file,
-      url: image.source_url,
-    })),
-});
+export const media = entity => {
+  if (entity.error)
+    return {
+      id: parseInt(entity.id, 10),
+      error: entity.error,
+    };
+
+  return {
+    id: entity.id,
+    creationDate: new Date(entity.date).getTime(),
+    slug: entity.slug,
+    alt: entity.alt_text,
+    mimeType: entity.mime_type,
+    mediaType: entity.media_type,
+    title: entity.title.rendered,
+    author: entity.author,
+    original: {
+      height: entity.media_details.height,
+      width: entity.media_details.width,
+      filename: entity.media_details.file,
+      url: entity.source_url,
+    },
+    sizes:
+      entity.media_details.sizes &&
+      Object.values(entity.media_details.sizes).map(image => ({
+        height: image.height,
+        width: image.width,
+        filename: image.file,
+        url: image.source_url,
+      })),
+  };
+};
 
 export default entity => {
-  if (entity.media_details) return media(entity);
+  if (entity.error && entity.type === 'media') return media(entity);
+  else if (entity.media_details) return media(entity);
   else if (entity.taxonomy) return taxonomy(entity);
   else if (entity.name) return author(entity);
   return post(entity);
