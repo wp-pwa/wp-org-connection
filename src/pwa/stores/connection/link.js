@@ -1,31 +1,39 @@
-import { types, getParent } from 'mobx-state-tree';
+import { types, getParent, getType } from 'mobx-state-tree';
+import { Media, Author, Taxonomy, Post } from './single';
 
-const Link = types.model('Link')
-.views(self => ({
+const Link = types.model('Link').views(self => ({
   get url() {
     const { _link, type, id, slug, taxonomy } = getParent(self);
+    const nodeType = getType(getParent(self));
 
     if (self.pretty) return _link;
 
-    let url;
+    // Entities with single
+    if (nodeType === Post && type === 'page') return `/?page_id=${id}`;
+    if (nodeType === Post) return `/?p=${id}`;
 
-    if (type === 'post') url = `?p=${id}`;
-    if (taxonomy === 'category') url = `?cat=${id}`;
-    if (taxonomy === 'tag') url = `?tag=${slug}`;
-    if (type === 'author') url = `?author=${slug}`; // check this
-    if (type === 'archive') url = `?m=${id}`; // check this ???
-    if (type === 'page') url = `?page_id=${id}`;
-    if (type === 'search') url = `?s=${id}`;
-    if (type === 'attachement') url = `?attachement_id=${id}`;
-    if (type === 'latest') url = `?m=${id}`;
+    if (nodeType === Author) return `/?author=${id}`;
+    if (nodeType === Media) return `/?attachement_id=${id}`; // does not work
+    
+    if (nodeType === Taxonomy && taxonomy === 'category') return `/?cat=${id}`;
+    if (nodeType === Taxonomy && taxonomy === 'tag') return `/?tag=${slug}`;
+    if (nodeType === Taxonomy) return `/?${taxonomy}=${slug}`; // for custom taxonomies
 
-    return url;
+    // List (without single)
+    if (type === 'archive') return `/?m=${id}`; // check this
+    if (type === 'search') return `/?s=${id}`;
+    if (type === 'latest') return `/?m=${id}`;
 
-    // if (page !== undefined) return `${url}&pages=${page}`;
+    return '/';
   },
+
   get pretty() {
     return !!getParent(self)._link; //  eslint-disable-line
-  }
+  },
+
+  paged(page) {
+    return self.pretty ? `${self.url}/page/${page}` : `${self.url}&paged=${page}`;
+  },
 }));
 
 export default Link;
