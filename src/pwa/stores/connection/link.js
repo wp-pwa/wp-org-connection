@@ -1,5 +1,5 @@
-/* global URL */
 import { types, getParent, getType } from 'mobx-state-tree';
+import { parse } from 'url';
 import { Media, Author, Taxonomy, Post } from '../connection/single';
 
 const Link = types.model('Link')
@@ -8,7 +8,10 @@ const Link = types.model('Link')
     const { _link, id, type, slug, taxonomy } = getParent(self);  //  eslint-disable-line
     const nodeType = getType(getParent(self));
 
-    if (self.pretty) return new URL(_link).pathname;
+    if (self.pretty) {
+      const { pathname, search } = parse(_link);
+      return `${pathname}${search || ''}`;
+    }
 
     // Entities with single
     if (nodeType === Post && type === 'page') return `/?page_id=${id}`;

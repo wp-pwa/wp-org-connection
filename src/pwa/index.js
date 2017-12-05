@@ -1,5 +1,6 @@
 import * as actions from './actions';
 import * as actionTypes from './actionTypes';
+import * as components from './components';
 import reducers from './reducers';
 import Store from './stores';
 import sagas from './sagas/client';
@@ -8,4 +9,4 @@ import sagas from './sagas/client';
 const WpOrgConnection = () => null;
 
 export default WpOrgConnection;
-export { actions, actionTypes, reducers, sagas, Store };
+export { actions, actionTypes, components, reducers, sagas, Store };
