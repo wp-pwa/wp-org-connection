@@ -85,9 +85,9 @@ class Link extends Component {
   static propTypes = {
     selected: PropTypes.shape({
       singleType: PropTypes.string,
-      singleId: PropTypes.number,
+      singleId: PropTypes.oneOfType([PropTypes.number, PropTypes.string]),
       listType: PropTypes.string,
-      listId: PropTypes.number,
+      listId: PropTypes.oneOfType([PropTypes.number, PropTypes.string]),
       page: PropTypes.number,
     }).isRequired,
     context: PropTypes.arrayOf(PropTypes.shape({})),
@@ -110,7 +110,10 @@ class Link extends Component {
     // ignore click for new tab / new window behavior
     if (
       e.currentTarget.nodeName === 'A' &&
-      (e.metaKey || e.ctrlKey || e.shiftKey || (e.nativeEvent && e.nativeEvent.which === 2))
+      (e.metaKey ||
+        e.ctrlKey ||
+        e.shiftKey ||
+        (e.nativeEvent && e.nativeEvent.which === 2))
     )
       return;
     e.preventDefault();
