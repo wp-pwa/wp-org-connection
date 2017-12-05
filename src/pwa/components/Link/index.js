@@ -2,13 +2,12 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import NProgress from 'nprogress';
+import { inject } from 'mobx-react';
 import { connect } from 'react-redux';
 import { dep } from 'worona-deps';
-import { injectGlobal } from 'styled-components';
-import { parse } from 'url';
-import * as selectors from '../../selectors';
+import { injectGlobal } from 'react-emotion';
 
-//eslint-disable-next-line
+// eslint-disable-next-line
 injectGlobal`
   #nprogress {
     pointer-events: none;
@@ -84,92 +83,69 @@ injectGlobal`
 
 class Link extends Component {
   static propTypes = {
-    id: PropTypes.number,
-    type: PropTypes.string.isRequired,
+    selected: PropTypes.shape({
+      singleType: PropTypes.string,
+      singleId: PropTypes.number,
+      listType: PropTypes.string,
+      listId: PropTypes.number,
+      page: PropTypes.number,
+    }).isRequired,
+    context: PropTypes.arrayOf(PropTypes.shape({})),
     children: PropTypes.node.isRequired,
-    entity: PropTypes.oneOfType([PropTypes.shape({}), PropTypes.bool]),
-    siteId: PropTypes.string.isRequired,
+    href: PropTypes.string.isRequired,
+    routeChangeRequested: PropTypes.func.isRequired,
+    // siteId: PropTypes.string.isRequired,
   };
 
   static defaultProps = {
-    id: 0,
-    entity: false,
-  }
+    context: null,
+  };
 
   constructor(props, ...rest) {
     super(props, ...rest);
     this.linkClicked = this.linkClicked.bind(this);
-    this.formatUrl = this.formatUrl.bind(this);
-    this.queries = {
-      post: 'p',
-      page: 'page_id',
-      category: 'cat',
-      tag: 'tag',
-      author: 'author',
-      media: 'media',
-      search: 's',
-    };
-    this.href = '/';
-    this.as = '/';
-    this.formatUrl();
   }
-
-  componentWillReceiveProps() {
-    this.formatUrl();
-  }
-
-  formatUrl() {
-    let link = '/';
-
-    if (this.props.entity && this.props.entity.link) link = this.props.entity.link;
-    else if (this.queries[this.props.type])
-      link = `/?${this.queries[this.props.type]}=${this.props.id}`;
-
-    let query = { siteId: this.props.siteId };
-
-    if (this.queries[this.props.type])
-      query = { ...query, [this.queries[this.props.type]]: this.props.id };
-
-    this.href = { pathname: '/', query };
-    this.as = parse(link).path;
-  }
-
 
   linkClicked(e) {
+    // ignore click for new tab / new window behavior
     if (
       e.currentTarget.nodeName === 'A' &&
       (e.metaKey || e.ctrlKey || e.shiftKey || (e.nativeEvent && e.nativeEvent.which === 2))
-    ) {
-      // ignore click for new tab / new window behavior
+    )
       return;
-    }
-
     e.preventDefault();
     NProgress.start();
-    // setTimeout(() => Router.push(this.href, this.as), 100);
+
+    const { routeChangeRequested, selected, context } = this.props;
+    routeChangeRequested({ selected, context });
   }
+
   render() {
-    return React.cloneElement(this.props.children, {
-      onClick: this.linkClicked,
-      href: this.as,
-    });
+    const { children, href } = this.props;
+    return React.cloneElement(children, { onClick: this.linkClicked, href });
   }
 }
 
-const mapStateToProps = (state, { type, id }) => {
-  const methods = {
-    post: 'getPostsEntities',
-    page: 'getPagesEntities',
-    category: 'getCategoriesEntities',
-    tag: 'getTagsEntities',
-    author: 'getUsersEntities',
-    media: 'getMediaEntities',
-  };
+const mapStateToProps = state => ({
+  siteId: dep('settings', 'selectors', 'getSiteId')(state),
+});
 
-  return {
-    entity: methods[type] ? selectors[methods[type]](state)[id] : false,
-    siteId: dep('settings', 'selectors', 'getSiteId')(state),
-  };
-};
+const mapDispatchToProps = dispatch => ({
+  routeChangeRequested: payload =>
+    dispatch(dep('connection', 'actions', 'routeChangeRequested')(payload)),
+});
 
-export default connect(mapStateToProps)(Link);
+export default connect(mapStateToProps, mapDispatchToProps)(
+  inject(({ connection }, { selected }) => {
+    const { singleType, singleId, listType, listId, page } = selected;
+    const type = listType || singleType;
+    const id = listType ? listId : singleId;
+    let href = '/';
+    if (type === 'latest') href = page > 1 ? `/page/${page}` : '/';
+    else if (connection.single[type] && connection.single[type][id]) {
+      const { link } = connection.single[type][id];
+      href = page > 1 ? link.paged(1) : link.url;
+    }
+    return { href };
+  })(Link),
+);
