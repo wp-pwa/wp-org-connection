@@ -85,8 +85,7 @@ export const Any = types.union(
   snapshot => {
     if (snapshot.taxonomy) return Taxonomy;
     if (snapshot.name) return Author;
-    if (snapshot.original) return Media;
-    if (snapshot.type === 'media' && snapshot.error) return Media;
+    if (snapshot.original || (snapshot.type === 'media' && snapshot.error)) return Media;
     return Post;
   },
   Post,

@@ -63,7 +63,8 @@ const addEntity = ({ self, type, id, entity, ready = false, fetching = false }) 
     if (entity.error) ready = false;
     newEntity = entity.error ? { id, type: singleType, error: entity.error } : convert(entity);
   } else {
-    newEntity = { id, type: singleType };
+    newEntity =
+      !entity && type === 'post' ? { id, type: singleType } : { id, taxonomy: singleType };
   }
   // newEntity = entity && !entity.error ? convert(entity) : { id, type: singleType };
   // Populate the state with the entity value and set both fetching and ready.
