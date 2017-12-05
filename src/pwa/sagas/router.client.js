@@ -42,6 +42,19 @@ export function* handleHistoryRouteChanges(changed) {
 
 export const requestHandlerCreator = ({ connection, history }) =>
   function* handleRequest({ selected, method, context }) {
+    const { listType, listId, singleType, singleId, page } = selected;
+
+    if (listType && listType !== 'latest' && !connection.single[listType][listId]) {
+      console.log('LIST', listType, listId);
+      yield put(actions.singleRequested({ singleType: listType, singleId: listId }));
+      yield put(actions.listRequested({ listType, listId, page }));
+    }
+
+    if (!listType && !connection.single[singleType][singleId]) {
+      console.log('SINGLE');
+      yield put(actions.singleRequested({ singleType, singleId }));
+    }
+
     const url = getUrl(selected, connection);
     if (['push', 'replace'].includes(method)) {
       yield call(() => history[method](url, { selected, method, context }));
