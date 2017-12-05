@@ -1,7 +1,6 @@
 import { types, getParent, getType } from 'mobx-state-tree';
 
 import Id from './id';
-import Link from './link';
 import Connection from '../'
 
 const getConnection = element => {
@@ -18,12 +17,8 @@ export const List = types
     listType: types.optional(types.string, 'latest'),
     listId: types.optional(types.union(types.string, types.number), 'post'),
     page: types.optional(types.number, 1),
-    link: types.optional(Link, Link.create()),
   })
   .views(self => ({
-    get connection() {
-      return getConnection(self);
-    },
     get ready() {
       return !!self.entity && self.entity.ready;
     },
@@ -64,7 +59,6 @@ export const Single = types
     singleType: types.string,
     singleId: types.maybe(types.number),
     fromList: types.maybe(List),
-    link: Link,
   })
   .views(self => ({
     get ready() {

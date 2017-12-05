@@ -1,10 +1,8 @@
+/* global URL */
 import { types, getParent, getType } from 'mobx-state-tree';
 import { Media, Author, Taxonomy, Post } from '../connection/single';
 
 const Link = types.model('Link')
-.props({
-  _link: types.maybe(types.string),
-})
 .views(self => ({
   get url() {
     const { type } = getParent(self);
@@ -18,10 +16,11 @@ const Link = types.model('Link')
       return '/';
     }
 
-    const { link, id, slug, taxonomy } = getParent(self).single;
-    const nodeType = getType(getParent(self).single);
 
-    // if (self.pretty) return link;
+    const { _link, id, slug, taxonomy } = getParent(self);  //  eslint-disable-line
+    const nodeType = getType(getParent(self));
+
+    if (self.pretty) return new URL(_link).pathname;
 
     // Entities with single
     if (nodeType === Post && type === 'page') return `/?page_id=${id}`;
@@ -39,7 +38,7 @@ const Link = types.model('Link')
   },
 
   get pretty() {
-    return !!getParent(self).single.link; //  eslint-disable-line
+    return !!getParent(self)._link; //  eslint-disable-line
   },
 
   paged(page) {
