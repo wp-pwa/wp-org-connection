@@ -34,8 +34,8 @@ export const Author = types.model('Author').props({
 
 export const Taxonomy = types.model('Taxonomy').props({
   id: types.identifier(types.number),
-  name: types.string,
-  slug: types.string,
+  name: types.maybe(types.string),
+  slug: types.maybe(types.string),
   link: types.optional(Link, () => Link.create()),
   _link: types.maybe(types.string),
   taxonomy: types.string,

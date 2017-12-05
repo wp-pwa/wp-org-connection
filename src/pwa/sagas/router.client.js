@@ -42,9 +42,20 @@ export function* handleHistoryRouteChanges(changed) {
 
 export const requestHandlerCreator = ({ connection, history }) =>
   function* handleRequest({ selected, method, context }) {
+    const { listType, listId, singleType, singleId, page } = selected;
+
+    if (listType && listType !== 'latest' && !connection.single[listType][listId]) {
+      yield put(actions.singleRequested({ singleType: listType, singleId: listId }));
+      yield put(actions.listRequested({ listType, listId, page }));
+    }
+
+    if (!listType && !connection.single[singleType][singleId]) {
+      yield put(actions.singleRequested({ singleType, singleId }));
+    }
+
     const url = getUrl(selected, connection);
     if (['push', 'replace'].includes(method)) {
-      yield call(() => history[method](url, { selected, method, context }));
+      yield call(history[method], url, { selected, method, context });
     }
   };
 
