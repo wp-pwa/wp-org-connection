@@ -25,7 +25,7 @@ export const List = types
     get list() {
       const { type, id, page } = self;
       const list = getConnection(self).list[type][id];
-      return list && list.page[page] || null;
+      return list && list.page[page - 1] || null;
     },
     get single() {
       const { type, id } = self;
