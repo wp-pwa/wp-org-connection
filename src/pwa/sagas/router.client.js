@@ -1,16 +1,37 @@
 /* eslint-disable global-require */
-import { takeEvery, put } from 'redux-saga/effects';
+import { when } from 'mobx';
+import { isMatch } from 'lodash';
+import { takeEvery, put, call } from 'redux-saga/effects';
 import { eventChannel } from 'redux-saga';
 import createHistory from 'history/createBrowserHistory';
 import * as actionTypes from '../actionTypes';
 
 import * as actions from '../actions';
 
-const routeChanged = history =>
+const getUrl = (selected, connection) => {
+  const { listType, listId, singleType, singleId, page } = selected;
+  const type = listType || singleType;
+  const id = listType ? listId : singleId;
+
+  let url;
+
+  if (type === 'latest') url = page > 1 ? `/page/${page}` : '/';
+  else {
+    const { link } = connection.single[type][id];
+    url = page > 1 ? link.paged(1) : link.url;
+  }
+
+  return url;
+}
+
+const routeChanged = ({ connection, history }) =>
   eventChannel(emitter => {
-    const unlisten = history.listen(location => {
+    const unlisten = history.listen((location, action) => {
       const { pathname, state } = location;
-      emitter({ pathname, ...state });
+
+      // Prevents an event emission when just replacing the URL
+      if (!(isMatch(connection.selected, state.selected) && action === 'REPLACE'))
+        emitter({ pathname, ...state });
     });
     return unlisten;
   });
@@ -19,35 +40,49 @@ export function* handleHistoryRouteChanges(changed) {
   yield put(actions.routeChangeSucceed(changed));
 }
 
-export const requestHandlerCreator = ({ store, history }) =>
+export const requestHandlerCreator = ({ connection, history }) =>
   function* handleRequest({ selected, method, context }) {
-    const { listType, listId, singleType, singleId, page } = selected;
-
-    // get item
-    const link = listType
-      ? `/${listType}/${listId}/${page}/${context}`
-      : store.connection.single[singleType][singleId].link;
-
+    const url = getUrl(selected, connection);
     if (['push', 'replace'].includes(method)) {
-      yield history[method](link, { selected, method, context });
+      yield call(() => history[method](url, { selected, method, context }));
     }
   };
 
-export default ({ store, history = createHistory() }) =>
-  function* routerSaga() {
-    const { type, id, listType, listId, singleType, singleId, page } = store.router.selected;
-    const context = store.router.context.id;
-    const { generator } = store.router.context;
-    history.replace(`/${type}/${id}/${page}/${context}`, {
-      selected: { listType, listId, page, singleType, singleId },
-      method: 'push',
-      context: generator,
+export const succeedHandlerCreator = ({ connection, history }) =>
+  function* handleRequest({ selected: { singleType, singleId, listType, listId, page } }) {
+    yield call(() => {
+      const type = listType || singleType;
+      const id = listType ? listId : singleId;
+
+      if (type === 'latest') return;
+
+      // Update value if it was not pretty before
+      const { link } = connection.single[type][id];
+      when(
+        () => link.pretty,
+        () => history.replace(page > 1 ? link.paged(1) : link.url, history.location.state),
+      );
     });
-
-    // Initializate router event channels.
-    const routeChangedEvents = routeChanged(history);
-
-    // Track router events and dispatch them to redux.
-    yield takeEvery(routeChangedEvents, handleHistoryRouteChanges);
-    yield takeEvery(actionTypes.ROUTE_CHANGE_REQUESTED, requestHandlerCreator({ store, history }));
   };
+
+export default function* routerSaga(stores, history = createHistory()) {
+  const { connection } = stores;
+  const { selected } = connection;
+  const { generator } = connection.context;
+  history.replace(getUrl(connection.selected, connection), {
+    selected,
+    method: 'push',
+    context: generator,
+  });
+
+  // Initializate router event channels.
+  const routeChangedEvents = routeChanged({ connection, history });
+
+  // Track router events and dispatch them to redux.
+  yield takeEvery(routeChangedEvents, handleHistoryRouteChanges);
+  yield takeEvery(
+    actionTypes.ROUTE_CHANGE_REQUESTED,
+    requestHandlerCreator({ connection, history }),
+  );
+  yield takeEvery(actionTypes.ROUTE_CHANGE_SUCCEED, succeedHandlerCreator({ connection, history }));
+}

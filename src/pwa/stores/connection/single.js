@@ -1,5 +1,6 @@
 /* eslint-disable no-use-before-define */
 import { types } from 'mobx-state-tree';
+import Link from './link';
 
 export const Image = types.model('Image').props({
   height: types.number,
@@ -26,7 +27,8 @@ export const Author = types.model('Author').props({
   name: types.string,
   slug: types.string,
   description: types.string,
-  link: types.string,
+  link: types.optional(Link, () => Link.create()),
+  _link: types.maybe(types.string),
   avatar: types.maybe(types.union(Media, types.string)),
 });
 
@@ -34,7 +36,8 @@ export const Taxonomy = types.model('Taxonomy').props({
   id: types.identifier(types.number),
   name: types.string,
   slug: types.string,
-  link: types.string,
+  link: types.optional(Link, () => Link.create()),
+  _link: types.maybe(types.string),
   taxonomy: types.string,
   target: types.maybe(types.string),
 });
@@ -55,7 +58,8 @@ export const Post = types
     modificationDate: types.maybe(types.Date),
     title: types.maybe(types.string),
     slug: types.maybe(types.string),
-    link: types.maybe(types.string),
+    link: types.optional(Link, () => Link.create()),
+    _link: types.maybe(types.string),
     guid: types.maybe(types.string),
     content: types.maybe(types.string),
     excerpt: types.maybe(types.string),

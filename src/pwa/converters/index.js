@@ -6,7 +6,7 @@ export const post = entity => ({
   modificationDate: new Date(entity.modified).getTime(),
   title: entity.title.rendered,
   slug: entity.slug,
-  link: entity.link,
+  _link: entity.link,
   guid: entity.guid.rendered,
   content: entity.content.rendered,
   excerpt: entity.excerpt.rendered,
@@ -21,7 +21,7 @@ export const taxonomy = entity => ({
   id: entity.id,
   name: entity.name,
   slug: entity.slug,
-  link: entity.link,
+  _link: entity.link,
   taxonomy: entity.taxonomy,
   target: entity['term-target'],
 });
@@ -31,7 +31,7 @@ export const author = entity => ({
   name: entity.name,
   slug: entity.slug,
   description: entity.description,
-  link: entity.link,
+  _link: entity.link,
   avatar: entity.avatar_urls && Object.values(entity.avatar_urls)[0].replace(/\?.*$/, ''),
 });
 
