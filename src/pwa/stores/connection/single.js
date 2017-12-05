@@ -60,6 +60,7 @@ export const Post = types
     slug: types.maybe(types.string),
     link: types.optional(Link, () => Link.create()),
     _link: types.maybe(types.string),
+    guid: types.maybe(types.string),
     content: types.maybe(types.string),
     excerpt: types.maybe(types.string),
     author: types.maybe(types.reference(Author)),
