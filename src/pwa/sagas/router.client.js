@@ -11,18 +11,16 @@ import * as actions from '../actions';
 const getUrl = (selected, connection) => {
   const { listType, listId, singleType, singleId, page } = selected;
   const type = listType || singleType;
-  const id = listType ? listId : singleId;
 
-  let url;
-
-  if (type === 'latest') url = page > 1 ? `/page/${page}` : '/';
-  else {
-    const { link } = connection.single[type][id];
-    url = page > 1 ? link.paged(1) : link.url;
+  if (type === 'latest') {
+    return page > 1 ? `/page/${page}` : '/';
   }
 
-  return url;
-}
+  const id = listType ? listId : singleId;
+  const { link } = connection.single[type][id];
+
+  return page > 1 ? link.paged(1) : link.url;
+};
 
 const routeChanged = ({ connection, history }) =>
   eventChannel(emitter => {
@@ -44,16 +42,21 @@ export const requestHandlerCreator = ({ connection, history }) =>
   function* handleRequest({ selected, method, context }) {
     const { listType, listId, singleType, singleId, page } = selected;
 
-    if (listType && listType !== 'latest' && !connection.single[listType][listId]) {
-      yield put(actions.singleRequested({ singleType: listType, singleId: listId }));
-      yield put(actions.listRequested({ listType, listId, page }));
+    if (listType) {
+      if (!connection.list[listType][listId]) {
+        yield put(actions.listRequested({ listType, listId, page }));
+      }
+      if (listType !== 'latest' && !connection.single[listType][listId]) {
+        yield put(actions.singleRequested({ singleType: listType, singleId: listId }));
+      }
     }
 
-    if (!listType && !connection.single[singleType][singleId]) {
+    if (singleType && !connection.single[singleType][singleId]) {
       yield put(actions.singleRequested({ singleType, singleId }));
     }
 
     const url = getUrl(selected, connection);
+
     if (['push', 'replace'].includes(method)) {
       yield call(history[method], url, { selected, method, context });
     }
