@@ -26,7 +26,6 @@ const columnSnapshot = element => {
 };
 
 export const extractList = ({ listType, listId, page, result }, context) => {
-
   const listToExtract = ({ selected: { singleId, fromList } }) =>
     singleId === null &&
     fromList &&
@@ -214,15 +213,33 @@ export const actions = self => {
     self.context = contextIndex;
   };
 
+  const shouldInit = ({ listType, listId, singleType, singleId }) => {
+    if (listType) {
+      const list = self.listMap.get(listType) && self.listMap.get(listType).get(listId);
+      if (list) return false;
+    }
+
+    if (singleType) {
+      const single = self.singleMap.get(singleType) && self.singleMap.get(singleType).get(singleId);
+      if (single) return false;
+    }
+
+    return true;
+  };
+
   return {
     [actionTypes.ROUTE_CHANGE_SUCCEED]: ({ selected, method, context }) => {
-      init({ self, ...selected, fetching: false });
+      if (shouldInit(selected)) init({ self, ...selected, fetching: false });
 
-      if (context)
+      if (context) {
         context.items.forEach(item => {
-          if (item instanceof Array) item.forEach(i => init({ self, ...i, fetching: false }));
-          else init({ self, ...item, fetching: false });
+          if (item instanceof Array) {
+            item.forEach(i => shouldInit(i) && init({ self, ...i, fetching: false }));
+          } else if (shouldInit(item)) {
+            init({ self, ...item, fetching: false });
+          }
         });
+      }
 
       const selectedInContext = self.context && !!self.context.getItem(selected);
       const contextsAreEqual = self.context && isEqual(self.context.generator, context);

@@ -64,11 +64,11 @@ const addEntity = ({ self, type, id, entity, ready = false, fetching = false }) 
     newEntity = entity.error ? { id, type: singleType, error: entity.error } : convert(entity);
   } else {
     newEntity =
-      !entity && type === 'post' ? { id, type: singleType } : { id, taxonomy: singleType };
+      !entity && (type === 'post' || type === 'page')
+        ? { id, type: singleType }
+        : { id, taxonomy: singleType };
   }
-  // newEntity = entity && !entity.error ? convert(entity) : { id, type: singleType };
   // Populate the state with the entity value and set both fetching and ready.
-  // if (newEntity.taxonomy === 'tag' && newEntity.id === 20) debugger;
   const node = self.singleMap.get(singleType).get(id) || {};
   self.singleMap.get(singleType).set(id, Object.assign(node, { ...newEntity, fetching, ready }));
 };

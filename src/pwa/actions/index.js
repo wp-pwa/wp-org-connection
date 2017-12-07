@@ -157,7 +157,7 @@ export const siteInfoSucceed = ({ home: { title, description }, perPage }) => ({
   type: actionTypes.SITE_INFO_SUCCEED,
   home: {
     title,
-    description
+    description,
   },
   perPage: parseInt(perPage, 10),
 });
