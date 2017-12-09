@@ -90,7 +90,7 @@ class Link extends Component {
       listId: PropTypes.oneOfType([PropTypes.number, PropTypes.string]),
       page: PropTypes.number,
     }).isRequired,
-    context: PropTypes.arrayOf(PropTypes.shape({})),
+    context: PropTypes.shape({}),
     children: PropTypes.node.isRequired,
     href: PropTypes.string.isRequired,
     routeChangeRequested: PropTypes.func.isRequired,
@@ -110,10 +110,7 @@ class Link extends Component {
     // ignore click for new tab / new window behavior
     if (
       e.currentTarget.nodeName === 'A' &&
-      (e.metaKey ||
-        e.ctrlKey ||
-        e.shiftKey ||
-        (e.nativeEvent && e.nativeEvent.which === 2))
+      (e.metaKey || e.ctrlKey || e.shiftKey || (e.nativeEvent && e.nativeEvent.which === 2))
     )
       return;
     e.preventDefault();
