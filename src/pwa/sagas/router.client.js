@@ -41,9 +41,8 @@ export function* handleHistoryRouteChanges(changed) {
 export const requestHandlerCreator = ({ connection, history }) =>
   function* handleRequest({ selected, method, context }) {
     const { listType, listId, singleType, singleId, page } = selected;
-
     if (listType) {
-      if (!connection.list[listType][listId]) {
+      if (!(connection.list[listType] && connection.list[listType][listId])) {
         yield put(actions.listRequested({ listType, listId, page }));
       }
       if (listType !== 'latest' && !connection.single[listType][listId]) {
