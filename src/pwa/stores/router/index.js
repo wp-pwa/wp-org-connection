@@ -90,12 +90,80 @@ export const extractList = ({ listType, listId, page, result }, context) => {
 };
 
 export const actions = self => {
+  const shouldInit = ({ listType, listId, singleType, singleId }) => {
+    if (listType) {
+      const list = self.listMap.get(listType) && self.listMap.get(listType).get(listId);
+      if (list) return false;
+    }
+
+    if (singleType) {
+      const single = self.singleMap.get(singleType) && self.singleMap.get(singleType).get(singleId);
+      if (single) return false;
+    }
+
+    return true;
+  };
+
+  const getExtractedColumns = (generated, list) => {
+    const { listType, listId, page = 1 } = list;
+    const listItem = self.list[listType][listId];
+    const { entities, fetching } =
+      listItem && listItem.page[page - 1] ? listItem.page[page - 1] : {};
+
+    if (entities && !fetching) {
+      return entities
+        .filter(
+          ({ type, id }) => !generated.some(col => col.getItem({ singleType: type, singleId: id })),
+        )
+        .map(({ type, id }) =>
+          Column.create(
+            columnSnapshot({
+              router: 'single',
+              singleType: type,
+              singleId: id,
+              fromList: list,
+            }),
+          ),
+        );
+    }
+
+    // Returns an empty post with the list assigned in the fromList attribute.
+    return [
+      Column.create(
+        columnSnapshot({
+          router: 'single',
+          singleType: 'post',
+          fromList: list,
+        }),
+      ),
+    ];
+  };
+
+  const extractListFromStore = (generated, list) =>
+    generated.concat(getExtractedColumns(generated, list));
+
   const changeSelected = selected => {
     const selectedItem = self.context.getItem(selected);
     if (selectedItem) {
-      const { column } = selectedItem;
+      const { column, fromList } = selectedItem;
       column.selected = selectedItem;
       self.context.column = column;
+
+      if (self.context.infinite) {
+        const { columns } = self.context;
+
+        if (columns.indexOf(column) >= columns.length - 1 && fromList) {
+          const nextList = {
+            listType: fromList.type,
+            listId: fromList.id,
+            page: fromList.page + 1,
+          };
+
+          getExtractedColumns(self.context, nextList).forEach(col =>
+            self.context.columns.push(col),
+          );
+        }
+      }
     }
   };
 
@@ -112,43 +180,6 @@ export const actions = self => {
       current.column.items.push(selectedItem);
       selectedItem.column.selected = selectedItem;
     }
-  };
-
-  const extractListFromStore = (generated, list) => {
-    const { listType, listId, page = 1 } = list;
-    const listItem = self.list[listType][listId];
-    const { entities } = listItem && listItem.page[page - 1] ? listItem.page[page - 1] : {};
-
-    if (entities) {
-      return generated.concat(
-        entities
-          .filter(
-            ({ type, id }) =>
-              !generated.some(col => col.getItem({ singleType: type, singleId: id })),
-          )
-          .map(({ type, id }) =>
-            Column.create(
-              columnSnapshot({
-                router: 'single',
-                singleType: type,
-                singleId: id,
-                fromList: list,
-              }),
-            ),
-          ),
-      );
-    }
-
-    // Returns an empty post with the list assigned in the fromList attribute.
-    return generated.concat([
-      Column.create(
-        columnSnapshot({
-          router: 'single',
-          singleType: 'post',
-          fromList: list,
-        }),
-      ),
-    ]);
   };
 
   const createContext = (selected, generator, contextIndex) => {
@@ -211,20 +242,6 @@ export const actions = self => {
     });
 
     self.context = contextIndex;
-  };
-
-  const shouldInit = ({ listType, listId, singleType, singleId }) => {
-    if (listType) {
-      const list = self.listMap.get(listType) && self.listMap.get(listType).get(listId);
-      if (list) return false;
-    }
-
-    if (singleType) {
-      const single = self.singleMap.get(singleType) && self.singleMap.get(singleType).get(singleId);
-      if (single) return false;
-    }
-
-    return true;
   };
 
   return {

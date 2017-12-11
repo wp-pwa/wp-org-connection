@@ -56,6 +56,18 @@ export const requestHandlerCreator = ({ connection, history }) =>
 
     const url = getUrl(selected, connection);
 
+    // Request the next list when infinite
+    if (connection.context.infinite) {
+      const { columns } = connection.context;
+      const nextSelected = connection.context.getItem({ singleType, singleId });
+      const { column, fromList } = nextSelected;
+
+      if (columns.indexOf(column) >= columns.length - 1 && fromList) {
+        const nextList = { listType: fromList.type, listId: fromList.id, page: fromList.page + 1 };
+        yield put(actions.listRequested(nextList));
+      }
+    }
+
     if (['push', 'replace'].includes(method)) {
       yield call(history[method], url, { selected, method, context });
     }
