@@ -17,8 +17,7 @@ const getUrl = (selected, connection) => {
   }
 
   const id = listType ? listId : singleId;
-  const single = connection.single[type][id]
-  const link = single ? single.link : { url: '/', pretty: false };
+  const { link } = connection.single[type][id];
 
   return page > 1 ? link.paged(1) : link.url;
 };
@@ -58,13 +57,12 @@ export const requestHandlerCreator = ({ connection, history }) =>
     const url = getUrl(selected, connection);
 
     // Request the next list when infinite
-    if (singleType && connection.context.infinite) {
+    if (connection.context.infinite) {
       const { columns } = connection.context;
       const nextSelected = connection.context.getItem({ singleType, singleId });
       const { column, fromList } = nextSelected;
 
       if (columns.indexOf(column) >= columns.length - 1 && fromList) {
-        console.log('fromlist', fromList.page);
         const nextList = { listType: fromList.type, listId: fromList.id, page: fromList.page + 1 };
         yield put(actions.listRequested(nextList));
       }
@@ -76,7 +74,7 @@ export const requestHandlerCreator = ({ connection, history }) =>
   };
 
 export const succeedHandlerCreator = ({ connection, history }) =>
-  function* handleSucceed({ selected: { singleType, singleId, listType, listId, page } }) {
+  function* handleRequest({ selected: { singleType, singleId, listType, listId, page } }) {
     yield call(() => {
       const type = listType || singleType;
       const id = listType ? listId : singleId;

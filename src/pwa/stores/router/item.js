@@ -16,7 +16,6 @@ export const List = types
     route: 'list',
     listType: types.optional(types.string, 'latest'),
     listId: types.optional(types.union(types.string, types.number), 'post'),
-    extract: types.optional(types.boolean, false),
     page: types.optional(types.number, 1),
   })
   .views(self => ({

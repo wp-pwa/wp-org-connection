@@ -26,14 +26,14 @@ const columnSnapshot = element => {
 };
 
 export const extractList = ({ listType, listId, page, result }, context) => {
-  const listToExtract = ({ selected }) =>
-    selected.id === listId &&
-    selected.type === listType &&
-    selected.page === page &&
-    selected.extract;
+  const listToExtract = ({ selected: { singleId, fromList } }) =>
+    singleId === null &&
+    fromList &&
+    fromList.id === listId &&
+    fromList.type === listType &&
+    fromList.page === page;
 
   // Gets list's position inside context. Returns if there is not such list inside context
-  // WARNING - currently, it's assumed a single element for each column.
   const position = context.columns.findIndex(listToExtract);
   if (position === -1) return;
 
@@ -58,12 +58,12 @@ export const extractList = ({ listType, listId, page, result }, context) => {
       item.fromList = { listType, listId, page };
       const { column } = item;
 
-      // ... with its column, if it contains just that item, ...
+      // ... with its column, if it contains just that item.
       if (column.items.length === 1) {
         return detach(column);
       }
 
-      // ... or to a new column, otherwise.
+      // ... to a new column.
       if (column.selected === item) {
         // prevents 'column.selected' from pointing to an element in another column.
         const index = column.items.indexOf(item);
@@ -106,7 +106,6 @@ export const actions = self => {
 
   const getExtractedColumns = (generated, list) => {
     const { listType, listId, page = 1 } = list;
-    console.log(page, list.page);
     const listItem = self.list[listType][listId];
     const { entities, fetching } =
       listItem && listItem.page[page - 1] ? listItem.page[page - 1] : {};
@@ -132,11 +131,9 @@ export const actions = self => {
     return [
       Column.create(
         columnSnapshot({
-          router: 'list',
-          listType,
-          listId,
-          page,
-          extract: true,
+          router: 'single',
+          singleType: 'post',
+          fromList: list,
         }),
       ),
     ];
@@ -156,7 +153,6 @@ export const actions = self => {
         const { columns } = self.context;
 
         if (columns.indexOf(column) >= columns.length - 1 && fromList) {
-          console.log('TO EXTRACT');
           const nextList = {
             listType: fromList.type,
             listId: fromList.id,
@@ -271,14 +267,12 @@ export const actions = self => {
           if (method === 'replace') moveSelected(selected);
         }
         if (context && !contextsAreEqual) {
-          debugger
           if (method === 'push') pushContext(selected, context);
           if (method === 'replace') replaceContext(selected, context);
           if (method === 'back') selectInPreviousContext(selected);
           if (method === 'forward') selectInNextContext(selected);
         }
         if (!context && !selectedInContext) {
-          debugger
           if (method === 'back') selectInPreviousContext(selected);
           if (method === 'forward') selectInNextContext(selected);
           if (['push', 'replace'].includes(method)) createContextFromSelected(selected);
