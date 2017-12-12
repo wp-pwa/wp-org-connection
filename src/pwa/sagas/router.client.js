@@ -1,5 +1,5 @@
 /* eslint-disable global-require */
-import { when } from 'mobx';
+import { autorun } from 'mobx';
 import { isMatch } from 'lodash';
 import { takeEvery, put, call } from 'redux-saga/effects';
 import { eventChannel } from 'redux-saga';
@@ -12,8 +12,6 @@ const getUrl = (selected, connection) => {
   const { listType, listId, singleType, singleId, page } = selected;
   const type = listType || singleType;
   const id = listType ? listId : singleId;
-
-  console.log('IIIIIDDDD', id);
 
   if (type === 'latest' || !id) {
     return page > 1 ? `/page/${page}` : '/';
@@ -75,42 +73,6 @@ export const requestHandlerCreator = ({ connection, history }) =>
     }
   };
 
-export const succeedHandlerCreator = ({ connection, history }) =>
-  function* handleSucceed({
-    selected: { singleType, singleId, listType, listId, page },
-  }) {
-    yield call(() => {
-      const type = listType || singleType;
-      const id = listType ? listId : singleId;
-      console.log(id);
-      if (type === 'latest') return;
-
-      // Handle extract case
-      if (!id) {
-
-        when(
-          () => connection.context.selected.id,
-          () => {
-            const { link } = connection.context.selected.single;
-            history.replace(page > 1 ? link.paged(1) : link.url, history.location.state)
-            when(
-              () => link.pretty,
-              () => history.replace(page > 1 ? link.paged(1) : link.url, history.location.state),
-            );
-          },
-        );
-        return;
-      }
-
-      // Update value if it was not pretty before
-      const { link } = connection.single[type][id];
-      when(
-        () => link.pretty,
-        () => history.replace(page > 1 ? link.paged(1) : link.url, history.location.state),
-      );
-    });
-  };
-
 export default function* routerSaga(stores, history = createHistory()) {
   const { connection } = stores;
   const { selected } = connection;
@@ -130,5 +92,9 @@ export default function* routerSaga(stores, history = createHistory()) {
     actionTypes.ROUTE_CHANGE_REQUESTED,
     requestHandlerCreator({ connection, history }),
   );
-  yield takeEvery(actionTypes.ROUTE_CHANGE_SUCCEED, succeedHandlerCreator({ connection, history }));
+
+  // Sets the appropriate url when available
+  autorun(() => {
+    history.replace(getUrl(connection.context.selected, connection), history.location.state);
+  });
 }
