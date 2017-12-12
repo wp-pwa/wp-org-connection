@@ -117,7 +117,7 @@ export const routeChangeRequested = ({
   if (listId) selected.listId = parse(listId);
   if (page) selected.page = parse(page);
   if (singleType) selected.singleType = singleType;
-  if (singleId) selected.singleId = parse(singleId);
+  if (singleId !== undefined) selected.singleId = parse(singleId);
   return {
     type: actionTypes.ROUTE_CHANGE_REQUESTED,
     selected,
@@ -137,7 +137,7 @@ export const routeChangeSucceed = ({
   if (listId) selected.listId = parse(listId);
   if (page) selected.page = parse(page);
   if (singleType) selected.singleType = singleType;
-  if (singleId) selected.singleId = parse(singleId);
+  if (singleId !== undefined) selected.singleId = parse(singleId);
   return {
     type: actionTypes.ROUTE_CHANGE_SUCCEED,
     selected,
