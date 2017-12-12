@@ -230,13 +230,22 @@ export const actions = self => {
   return {
     [actionTypes.ROUTE_CHANGE_SUCCEED]: ({ selected, method, context }) => {
       if (shouldInit(selected)) init({ self, ...selected, fetching: false });
+      if (selected.fromList && shouldInit(selected.fromList)) {
+        init({ self, ...selected.fromList, fetching: false });
+      }
 
       if (context) {
-        context.items.forEach(item => {
-          if (item instanceof Array) {
-            item.forEach(i => shouldInit(i) && init({ self, ...i, fetching: false }));
-          } else if (shouldInit(item)) {
-            init({ self, ...item, fetching: false });
+        context.items.forEach(column => {
+          if (column instanceof Array) {
+            column.forEach(item => {
+              const { fromList } = item;
+              if (shouldInit(item)) init({ self, ...item, fetching: false });
+              if (fromList && shouldInit(fromList)) init({ self, ...fromList, fetching: false });
+            });
+          } else {
+            const { fromList } = column;
+            if (shouldInit(column)) init({ self, ...column, fetching: false });
+            if (fromList && shouldInit(fromList)) init({ self, ...fromList, fetching: false });
           }
         });
       }
