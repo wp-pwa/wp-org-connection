@@ -154,7 +154,7 @@ export const routeChangeSucceed = stores =>
       if (listPage.ready === false && listPage.fetching === false) {
         yield put(actions.listRequested({ listType, listId, page }));
       }
-    } else {
+    } else if (action.selected.singleId) {
       const { selected: { singleType, singleId } } = action;
       const entity = stores.connection.single[singleType][singleId];
       if (entity.ready === false && entity.fetching === false) {

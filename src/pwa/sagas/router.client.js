@@ -11,12 +11,14 @@ import * as actions from '../actions';
 const getUrl = (selected, connection) => {
   const { listType, listId, singleType, singleId, page } = selected;
   const type = listType || singleType;
+  const id = listType ? listId : singleId;
 
-  if (type === 'latest') {
+  console.log('IIIIIDDDD', id);
+
+  if (type === 'latest' || !id) {
     return page > 1 ? `/page/${page}` : '/';
   }
 
-  const id = listType ? listId : singleId;
   const { link } = connection.single[type][id];
 
   return page > 1 ? link.paged(1) : link.url;
@@ -50,7 +52,7 @@ export const requestHandlerCreator = ({ connection, history }) =>
       }
     }
 
-    if (singleType && !connection.single[singleType][singleId]) {
+    if (singleType && singleId && !connection.single[singleType][singleId]) {
       yield put(actions.singleRequested({ singleType, singleId }));
     }
 
@@ -74,12 +76,31 @@ export const requestHandlerCreator = ({ connection, history }) =>
   };
 
 export const succeedHandlerCreator = ({ connection, history }) =>
-  function* handleRequest({ selected: { singleType, singleId, listType, listId, page } }) {
+  function* handleSucceed({
+    selected: { singleType, singleId, listType, listId, page },
+  }) {
     yield call(() => {
       const type = listType || singleType;
       const id = listType ? listId : singleId;
-
+      console.log(id);
       if (type === 'latest') return;
+
+      // Handle extract case
+      if (!id) {
+
+        when(
+          () => connection.context.selected.id,
+          () => {
+            const { link } = connection.context.selected.single;
+            history.replace(page > 1 ? link.paged(1) : link.url, history.location.state)
+            when(
+              () => link.pretty,
+              () => history.replace(page > 1 ? link.paged(1) : link.url, history.location.state),
+            );
+          },
+        );
+        return;
+      }
 
       // Update value if it was not pretty before
       const { link } = connection.single[type][id];

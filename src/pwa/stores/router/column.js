@@ -11,7 +11,7 @@ const Column = types
     selected: types.reference(types.late(() => Item)),
   })
   .views(self => ({
-    getItem({ singleType, singleId, listType, listId, page }) {
+    getItem({ singleType, singleId, listType, listId, page, fromList }) {
       return (
         self.items.find(
           i =>
@@ -19,7 +19,12 @@ const Column = types
             (!listId || listId === i.listId) &&
             (!page || page === i.page) &&
             (!singleType || singleType === i.singleType) &&
-            (!singleId || singleId === i.singleId),
+            (!singleId || singleId === i.singleId) &&
+            (!fromList || (
+              fromList.listType === i.fromList.listType &&
+              fromList.listid === i.fromList.listid &&
+              fromList.page === i.fromList.page
+            )),
         ) || null
       );
     },
@@ -28,6 +33,10 @@ const Column = types
       const index = columns.indexOf(self);
       return index < columns.length - 1 ? columns[index + 1] : null;
     },
+    get index() {
+      const columns = getParent(self);
+      return columns && columns.indexOf(self) || -1;
+    }
   }));
 
 export default Column;
