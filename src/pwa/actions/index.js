@@ -49,7 +49,7 @@ export const listSucceed = ({
     entities,
   };
 };
-export const listFailed = ({ listType, listId, page, error, endpoint }) => ({
+export const listFailed = ({ listType, listId, page = 1, error, endpoint }) => ({
   type: actionTypes.LIST_FAILED,
   listType,
   listId: parse(listId),
