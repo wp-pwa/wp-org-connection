@@ -82,7 +82,7 @@ const addEntities = ({ self, entities, ready = true, fetching = false }) => {
   });
 };
 
-export const init = ({ self, listType, listId, page = 1, singleType, singleId, fetching }) => {
+export const init = ({ self, listType, listId, page, singleType, singleId, fetching }) => {
   if (listType) {
     // Init the first map (type) if it's not initializated yet.
     if (!self.listMap.get(listType)) self.listMap.set(listType, {});
