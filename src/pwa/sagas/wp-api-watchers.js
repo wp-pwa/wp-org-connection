@@ -85,6 +85,7 @@ export const listRequested = connection =>
         actions.listFailed({
           listType,
           listId,
+          page,
           error,
           endpoint: getList({ connection, listType, listId, singleType, page }).toString(),
         }),
