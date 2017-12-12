@@ -230,9 +230,6 @@ export const actions = self => {
   return {
     [actionTypes.ROUTE_CHANGE_SUCCEED]: ({ selected, method, context }) => {
       if (shouldInit(selected)) init({ self, ...selected, fetching: false });
-      if (selected.fromList && shouldInit(selected.fromList)) {
-        init({ self, ...selected.fromList, fetching: false });
-      }
 
       if (context) {
         context.items.forEach(column => {
