@@ -1,5 +1,5 @@
 /* eslint-disable global-require */
-import { when } from 'mobx';
+import { autorun } from 'mobx';
 import { isMatch } from 'lodash';
 import { takeEvery, put, call } from 'redux-saga/effects';
 import { eventChannel } from 'redux-saga';
@@ -11,12 +11,12 @@ import * as actions from '../actions';
 const getUrl = (selected, connection) => {
   const { listType, listId, singleType, singleId, page } = selected;
   const type = listType || singleType;
+  const id = listType ? listId : singleId;
 
-  if (type === 'latest') {
+  if (type === 'latest' || !id) {
     return page > 1 ? `/page/${page}` : '/';
   }
 
-  const id = listType ? listId : singleId;
   const { link } = connection.single[type][id];
 
   return page > 1 ? link.paged(1) : link.url;
@@ -50,32 +50,27 @@ export const requestHandlerCreator = ({ connection, history }) =>
       }
     }
 
-    if (singleType && !connection.single[singleType][singleId]) {
+    if (singleType && singleId && !connection.single[singleType][singleId]) {
       yield put(actions.singleRequested({ singleType, singleId }));
     }
 
     const url = getUrl(selected, connection);
 
+    // Request the next list when infinite
+    if (connection.context.infinite) {
+      const { columns } = connection.context;
+      const nextSelected = connection.context.getItem({ singleType, singleId });
+      const { column, fromList } = nextSelected;
+
+      if (columns.indexOf(column) >= columns.length - 1 && fromList) {
+        const nextList = { listType: fromList.type, listId: fromList.id, page: fromList.page + 1 };
+        yield put(actions.listRequested(nextList));
+      }
+    }
+
     if (['push', 'replace'].includes(method)) {
       yield call(history[method], url, { selected, method, context });
     }
-  };
-
-export const succeedHandlerCreator = ({ connection, history }) =>
-  function* handleRequest({ selected: { singleType, singleId, listType, listId, page } }) {
-    yield call(() => {
-      const type = listType || singleType;
-      const id = listType ? listId : singleId;
-
-      if (type === 'latest') return;
-
-      // Update value if it was not pretty before
-      const { link } = connection.single[type][id];
-      when(
-        () => link.pretty,
-        () => history.replace(page > 1 ? link.paged(1) : link.url, history.location.state),
-      );
-    });
   };
 
 export default function* routerSaga(stores, history = createHistory()) {
@@ -97,5 +92,9 @@ export default function* routerSaga(stores, history = createHistory()) {
     actionTypes.ROUTE_CHANGE_REQUESTED,
     requestHandlerCreator({ connection, history }),
   );
-  yield takeEvery(actionTypes.ROUTE_CHANGE_SUCCEED, succeedHandlerCreator({ connection, history }));
+
+  // Sets the appropriate url when available
+  autorun(() => {
+    history.replace(getUrl(connection.context.selected, connection), history.location.state);
+  });
 }

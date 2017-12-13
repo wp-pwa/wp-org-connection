@@ -85,6 +85,7 @@ export const listRequested = connection =>
         actions.listFailed({
           listType,
           listId,
+          page,
           error,
           endpoint: getList({ connection, listType, listId, singleType, page }).toString(),
         }),
@@ -153,7 +154,7 @@ export const routeChangeSucceed = stores =>
       if (listPage.ready === false && listPage.fetching === false) {
         yield put(actions.listRequested({ listType, listId, page }));
       }
-    } else {
+    } else if (action.selected.singleId) {
       const { selected: { singleType, singleId } } = action;
       const entity = stores.connection.single[singleType][singleId];
       if (entity.ready === false && entity.fetching === false) {

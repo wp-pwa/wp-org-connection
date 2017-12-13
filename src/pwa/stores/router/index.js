@@ -1,4 +1,4 @@
-import { types, detach } from 'mobx-state-tree';
+import { types, detach, applySnapshot, getSnapshot } from 'mobx-state-tree';
 import { isEqual } from 'lodash';
 import uuid from 'uuid/v4';
 import Column from './column';
@@ -58,12 +58,12 @@ export const extractList = ({ listType, listId, page, result }, context) => {
       item.fromList = { listType, listId, page };
       const { column } = item;
 
-      // ... with its column, if it contains just that item.
+      // ... with its column, if it contains just that item, ...
       if (column.items.length === 1) {
         return detach(column);
       }
 
-      // ... to a new column.
+      // ... or to a new column, otherwise.
       if (column.selected === item) {
         // prevents 'column.selected' from pointing to an element in another column.
         const index = column.items.indexOf(item);
@@ -86,16 +86,91 @@ export const extractList = ({ listType, listId, page, result }, context) => {
     );
   });
 
-  context.columns.splice(position, 1, ...newColumns);
+  // Reutilizes current column
+  const { singleType, singleId } = newColumns[0].items[0];
+  context.columns[position].items[0].singleType = singleType;
+  context.columns[position].items[0].singleId = singleId;
+  context.columns[position].selected = newColumns[0].selected;
+  context.columns.splice(position + 1, 0, ...newColumns.slice(1));
 };
 
 export const actions = self => {
+  const shouldInit = ({ listType, listId, singleType, singleId }) => {
+    if (listType) {
+      const list = self.listMap.get(listType) && self.listMap.get(listType).get(listId);
+      if (list) return false;
+    }
+
+    if (singleType && singleId) {
+      const single = self.singleMap.get(singleType) && self.singleMap.get(singleType).get(singleId);
+      if (single) return false;
+    }
+
+    if (singleType && !singleId) return false;
+
+    return true;
+  };
+
+  const getExtractedColumns = (generated, list) => {
+    const { listType, listId, page = 1 } = list;
+    const listItem = self.list[listType][listId];
+    const { entities, fetching } =
+      listItem && listItem.page[page - 1] ? listItem.page[page - 1] : {};
+
+    if (entities && !fetching) {
+      return entities
+        .filter(
+          ({ type, id }) => !generated.some(col => col.getItem({ singleType: type, singleId: id })),
+        )
+        .map(({ type, id }) =>
+          Column.create(
+            columnSnapshot({
+              router: 'single',
+              singleType: type,
+              singleId: id,
+              fromList: list,
+            }),
+          ),
+        );
+    }
+
+    // Returns an empty post with the list assigned in the fromList attribute.
+    return [
+      Column.create(
+        columnSnapshot({
+          router: 'single',
+          singleType: 'post',
+          fromList: list,
+        }),
+      ),
+    ];
+  };
+
+  const extractListFromStore = (generated, list) =>
+    generated.concat(getExtractedColumns(generated, list));
+
   const changeSelected = selected => {
     const selectedItem = self.context.getItem(selected);
     if (selectedItem) {
-      const { column } = selectedItem;
+      const { column, fromList } = selectedItem;
       column.selected = selectedItem;
       self.context.column = column;
+
+      if (self.context.infinite) {
+        const { columns } = self.context;
+
+        if (columns.indexOf(column) >= columns.length - 1 && fromList) {
+          const nextList = {
+            listType: fromList.type,
+            listId: fromList.id,
+            page: fromList.page + 1,
+          };
+
+          getExtractedColumns(self.context.columns, nextList).forEach(col =>
+            self.context.columns.push(col),
+          );
+        }
+      }
     }
   };
 
@@ -112,43 +187,6 @@ export const actions = self => {
       current.column.items.push(selectedItem);
       selectedItem.column.selected = selectedItem;
     }
-  };
-
-  const extractListFromStore = (generated, list) => {
-    const { listType, listId, page = 1 } = list;
-    const listItem = self.list[listType][listId];
-    const { entities } = listItem && listItem.page[page - 1] ? listItem.page[page - 1] : {};
-
-    if (entities) {
-      return generated.concat(
-        entities
-          .filter(
-            ({ type, id }) =>
-              !generated.some(col => col.getItem({ singleType: type, singleId: id })),
-          )
-          .map(({ type, id }) =>
-            Column.create(
-              columnSnapshot({
-                router: 'single',
-                singleType: type,
-                singleId: id,
-                fromList: list,
-              }),
-            ),
-          ),
-      );
-    }
-
-    // Returns an empty post with the list assigned in the fromList attribute.
-    return generated.concat([
-      Column.create(
-        columnSnapshot({
-          router: 'single',
-          singleType: 'post',
-          fromList: list,
-        }),
-      ),
-    ]);
   };
 
   const createContext = (selected, generator, contextIndex) => {
@@ -211,20 +249,6 @@ export const actions = self => {
     });
 
     self.context = contextIndex;
-  };
-
-  const shouldInit = ({ listType, listId, singleType, singleId }) => {
-    if (listType) {
-      const list = self.listMap.get(listType) && self.listMap.get(listType).get(listId);
-      if (list) return false;
-    }
-
-    if (singleType) {
-      const single = self.singleMap.get(singleType) && self.singleMap.get(singleType).get(singleId);
-      if (single) return false;
-    }
-
-    return true;
   };
 
   return {
