@@ -166,7 +166,7 @@ export const actions = self => {
             page: fromList.page + 1,
           };
 
-          getExtractedColumns(self.context, nextList).forEach(col =>
+          getExtractedColumns(self.context.columns, nextList).forEach(col =>
             self.context.columns.push(col),
           );
         }
