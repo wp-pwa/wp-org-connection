@@ -117,7 +117,7 @@ class Link extends Component {
     NProgress.start();
 
     const { routeChangeRequested, selected, context } = this.props;
-    routeChangeRequested({ selected, context });
+    setTimeout(() => routeChangeRequested({ selected, context }), 100);
   }
 
   render() {
