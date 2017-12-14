@@ -1,3 +1,4 @@
+/* eslint-disable no-underscore-dangle */
 import { types, getParent, getType } from 'mobx-state-tree';
 import { parse } from 'url';
 import { Media, Author, Taxonomy, Post } from '../connection/single';
@@ -5,7 +6,7 @@ import { Media, Author, Taxonomy, Post } from '../connection/single';
 const Link = types.model('Link')
 .views(self => ({
   get url() {
-    const { _link, id, type, slug, taxonomy } = getParent(self);  //  eslint-disable-line
+    const { _link, id, type, taxonomy } = getParent(self);
     const nodeType = getType(getParent(self));
 
     if (self.pretty) {
@@ -24,7 +25,7 @@ const Link = types.model('Link')
   },
 
   get pretty() {
-    return !!getParent(self)._link; //  eslint-disable-line
+    return !!getParent(self)._link;
   },
 
   paged(page) {
