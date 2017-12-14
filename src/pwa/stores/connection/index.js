@@ -91,6 +91,7 @@ export const init = ({ self, listType, listId, page, singleType, singleId, fetch
     list.get(listId).fetching = fetching;
     if (!list.get(listId).pageMap.get(page - 1)) list.get(listId).pageMap.set(page - 1, {});
     list.get(listId).pageMap.get(page - 1).fetching = fetching;
+    if (listType !== 'latest') addEntity({ self, type: listType, id: listId, fetching });
   } else {
     addEntity({ self, type: singleType, id: singleId, fetching });
   }

@@ -40,21 +40,7 @@ export function* handleHistoryRouteChanges(changed) {
 
 export const requestHandlerCreator = ({ connection, history }) =>
   function* handleRequest({ selected, method, context }) {
-    const { listType, listId, singleType, singleId, page } = selected;
-    if (listType) {
-      if (!(connection.list[listType] && connection.list[listType][listId])) {
-        yield put(actions.listRequested({ listType, listId, page }));
-      }
-      if (listType !== 'latest' && !connection.single[listType][listId]) {
-        yield put(actions.singleRequested({ singleType: listType, singleId: listId }));
-      }
-    }
-
-    if (singleType && singleId && !connection.single[singleType][singleId]) {
-      yield put(actions.singleRequested({ singleType, singleId }));
-    }
-
-    const url = getUrl(selected, connection);
+    const { singleType, singleId } = selected;
 
     // Request the next list when infinite
     if (connection.context.infinite) {
@@ -69,7 +55,7 @@ export const requestHandlerCreator = ({ connection, history }) =>
     }
 
     if (['push', 'replace'].includes(method)) {
-      yield call(history[method], url, { selected, method, context });
+      yield call(history[method], getUrl(selected, connection), { selected, method, context });
     }
   };
 

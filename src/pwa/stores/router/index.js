@@ -98,7 +98,8 @@ export const actions = self => {
   const shouldInit = ({ listType, listId, singleType, singleId }) => {
     if (listType) {
       const list = self.listMap.get(listType) && self.listMap.get(listType).get(listId);
-      if (list) return false;
+      const single = self.singleMap.get(listType) && self.singleMap.get(listType).get(listId);
+      if (list && single) return false;
     }
 
     if (singleType && singleId) {
@@ -257,7 +258,7 @@ export const actions = self => {
   };
 
   return {
-    [actionTypes.ROUTE_CHANGE_SUCCEED]: ({ selected, method, context }) => {
+    [actionTypes.ROUTE_CHANGE_REQUESTED]: ({ selected, context }) => {
       if (shouldInit(selected)) init({ self, ...selected, fetching: false });
 
       if (context) {
@@ -275,7 +276,8 @@ export const actions = self => {
           }
         });
       }
-
+    },
+    [actionTypes.ROUTE_CHANGE_SUCCEED]: ({ selected, method, context }) => {
       const selectedInContext = self.context && !!self.context.getItem(selected);
       const contextsAreEqual = self.context && isEqual(self.context.generator, context);
 
