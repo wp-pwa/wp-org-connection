@@ -1,5 +1,5 @@
 /* eslint-disable global-require */
-import { autorun } from 'mobx';
+import { when } from 'mobx';
 import { isMatch } from 'lodash';
 import { takeEvery, put, call } from 'redux-saga/effects';
 import { eventChannel } from 'redux-saga';
@@ -73,11 +73,25 @@ export const requestHandlerCreator = ({ connection, history }) =>
     }
   };
 
+let disposer = () => {};
+const replaceHistory = ({ connection, history }) => () => {
+  disposer();
+  // Sets the appropriate url when available
+  disposer = when(
+    () =>
+      getUrl(connection.context.selected, connection) !==
+      window.location.pathname + window.location.search,
+    () => {
+      history.replace(getUrl(connection.context.selected, connection), history.location.state);
+    },
+  );
+};
+
 export default function* routerSaga(stores, history = createHistory()) {
   const { connection } = stores;
   const { selected } = connection;
   const { generator } = connection.context;
-  history.replace(getUrl(connection.selected, connection), {
+  history.replace(window.location.pathname + window.location.search, {
     selected,
     method: 'push',
     context: generator,
@@ -92,9 +106,5 @@ export default function* routerSaga(stores, history = createHistory()) {
     actionTypes.ROUTE_CHANGE_REQUESTED,
     requestHandlerCreator({ connection, history }),
   );
-
-  // Sets the appropriate url when available
-  autorun(() => {
-    history.replace(getUrl(connection.context.selected, connection), history.location.state);
-  });
+  yield takeEvery(actionTypes.ROUTE_CHANGE_REQUESTED, replaceHistory({ connection, history }));
 }
