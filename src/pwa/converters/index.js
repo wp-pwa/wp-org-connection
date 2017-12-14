@@ -14,7 +14,12 @@ export const post = entity => ({
   featured: entity.featured_media,
   taxonomiesMap: entity.taxonomiesMap,
   target: entity['post-target'],
-  meta: {},
+  meta: {
+    title: entity.yoast_meta && entity.yoast_meta.yoast_wpseo_title || entity.title.rendered,
+    description: entity.yoast_meta && entity.yoast_meta.yoast_wpseo_desc || '',
+    canonical: entity.yoast_meta && entity.yoast_meta.yoast_wpseo_canonical || '',
+    pretty: true,
+  },
 });
 
 export const taxonomy = entity => ({
@@ -24,6 +29,12 @@ export const taxonomy = entity => ({
   _link: entity.link,
   taxonomy: entity.taxonomy,
   target: entity['term-target'],
+  meta: {
+    title: entity.yoast_meta && entity.yoast_meta.yoast_wpseo_title || entity.name,
+    description: entity.yoast_meta && entity.yoast_meta.yoast_wpseo_desc || '',
+    canonical: entity.yoast_meta && entity.yoast_meta.yoast_wpseo_canonical || '',
+    pretty: true,
+  }
 });
 
 export const author = entity => ({
