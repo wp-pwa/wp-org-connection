@@ -1,4 +1,4 @@
-import { types, detach, applySnapshot, getSnapshot } from 'mobx-state-tree';
+import { types, detach } from 'mobx-state-tree';
 import { isEqual } from 'lodash';
 import uuid from 'uuid/v4';
 import Column from './column';
@@ -171,6 +171,11 @@ export const actions = self => {
           );
         }
       }
+    } else {
+      // Creates a new element at first position
+      const newColumn = Column.create(columnSnapshot(selected));
+      self.context.columns.unshift(newColumn);
+      self.context.column = newColumn;
     }
   };
 

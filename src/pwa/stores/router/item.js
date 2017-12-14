@@ -58,7 +58,7 @@ export const Single = types
     route: 'single',
     singleType: types.string,
     singleId: types.maybe(types.number),
-    fromList: types.maybe(List),
+    fromList: types.optional(List, { listType: 'latest', listId: 'post' }),
   })
   .views(self => ({
     get ready() {
