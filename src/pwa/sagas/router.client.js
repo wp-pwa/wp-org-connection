@@ -106,5 +106,5 @@ export default function* routerSaga(stores, history = createHistory()) {
     actionTypes.ROUTE_CHANGE_REQUESTED,
     requestHandlerCreator({ connection, history }),
   );
-  yield takeEvery(actionTypes.ROUTE_CHANGE_REQUESTED, replaceHistory({ connection, history }));
+  yield takeEvery(actionTypes.ROUTE_CHANGE_SUCCEED, replaceHistory({ connection, history }));
 }
