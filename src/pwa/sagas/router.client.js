@@ -22,10 +22,26 @@ const getUrl = (selected, connection) => {
   return page > 1 ? link.paged(1) : link.url;
 };
 
-const routeChanged = ({ connection, history }) =>
-  eventChannel(emitter => {
+const routeChanged = ({ connection, history }) => {
+  const historyKeys = [];
+  let currentKey = -1;
+
+  return eventChannel(emitter => {
     const unlisten = history.listen((location, action) => {
-      const { pathname, state } = location;
+      const { pathname, state, key } = location;
+      if (action === 'PUSH') {
+        currentKey += 1;
+        historyKeys[currentKey] = key;
+      }
+      if (action === 'REPLACE') {
+        historyKeys[currentKey] = key;
+      }
+      if (action === 'POP') {
+        const newIndex = historyKeys.indexOf(key);
+        if (newIndex > currentKey) state.method = 'forward';
+        else state.method = 'back';
+        currentKey = newIndex;
+      }
 
       // Prevents an event emission when just replacing the URL
       if (!(isMatch(connection.selected, state.selected) && action === 'REPLACE'))
@@ -33,6 +49,7 @@ const routeChanged = ({ connection, history }) =>
     });
     return unlisten;
   });
+}
 
 export function* handleHistoryRouteChanges(changed) {
   yield put(actions.routeChangeSucceed(changed));
