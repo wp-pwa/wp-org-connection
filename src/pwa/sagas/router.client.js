@@ -42,10 +42,11 @@ export const requestHandlerCreator = ({ connection, history }) =>
   function* handleRequest({ selected, method, context }) {
     const { singleType, singleId } = selected;
 
+    const nextSelected = connection.context.getItem({ singleType, singleId });
+
     // Request the next list when infinite
-    if (connection.context.infinite) {
+    if (connection.context.infinite && nextSelected) {
       const { columns } = connection.context;
-      const nextSelected = connection.context.getItem({ singleType, singleId });
       const { column, fromList } = nextSelected;
 
       if (columns.indexOf(column) >= columns.length - 1 && fromList) {
