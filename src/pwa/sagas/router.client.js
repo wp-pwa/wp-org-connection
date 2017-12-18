@@ -67,8 +67,15 @@ export const requestHandlerCreator = ({ connection, history }) =>
       const { column, fromList } = nextSelected;
 
       if (columns.indexOf(column) >= columns.length - 1 && fromList) {
-        const nextList = { listType: fromList.type, listId: fromList.id, page: fromList.page + 1 };
-        yield put(actions.listRequested(nextList));
+        const { listType, listId, page } = fromList;
+        const { pages } = connection.list[listType][listId].total;
+
+        if (page < pages) {
+          const nextList = { listType, listId, page: page + 1 };
+          yield put(actions.listRequested(nextList));
+        } else {
+          console.log('NOT MORE');
+        }
       }
     }
 
