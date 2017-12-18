@@ -1,4 +1,6 @@
 /* eslint-disable no-underscore-dangle */
+import { decode } from 'he';
+
 export const post = entity => ({
   id: entity.id,
   type: entity.type,
@@ -15,9 +17,11 @@ export const post = entity => ({
   taxonomiesMap: entity.taxonomiesMap,
   target: entity['post-target'],
   meta: {
-    title: entity.yoast_meta && entity.yoast_meta.yoast_wpseo_title || entity.title.rendered,
-    description: entity.yoast_meta && entity.yoast_meta.yoast_wpseo_desc || '',
-    canonical: entity.yoast_meta && entity.yoast_meta.yoast_wpseo_canonical || '',
+    title: decode(
+      (entity.yoast_meta && entity.yoast_meta.yoast_wpseo_title) || entity.title.rendered,
+    ),
+    description: (entity.yoast_meta && entity.yoast_meta.yoast_wpseo_desc) || '',
+    canonical: (entity.yoast_meta && entity.yoast_meta.yoast_wpseo_canonical) || '',
     pretty: true,
   },
 });
@@ -30,11 +34,11 @@ export const taxonomy = entity => ({
   taxonomy: entity.taxonomy,
   target: entity['term-target'],
   meta: {
-    title: entity.yoast_meta && entity.yoast_meta.yoast_wpseo_title || entity.name,
-    description: entity.yoast_meta && entity.yoast_meta.yoast_wpseo_desc || '',
-    canonical: entity.yoast_meta && entity.yoast_meta.yoast_wpseo_canonical || '',
+    title: decode((entity.yoast_meta && entity.yoast_meta.yoast_wpseo_title) || entity.name),
+    description: (entity.yoast_meta && entity.yoast_meta.yoast_wpseo_desc) || '',
+    canonical: (entity.yoast_meta && entity.yoast_meta.yoast_wpseo_canonical) || '',
     pretty: true,
-  }
+  },
 });
 
 export const author = entity => ({
