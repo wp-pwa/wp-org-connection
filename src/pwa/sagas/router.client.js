@@ -66,11 +66,11 @@ export const requestHandlerCreator = ({ connection, history }) =>
       const { columns } = connection.context;
       const { column, fromList } = nextSelected;
 
-      if (columns.indexOf(column) >= columns.length - 1 && fromList) {
+      if (columns.indexOf(column) >= columns.length - 2 && fromList) {
         const { listType, listId, page } = fromList;
         const { pages } = connection.list[listType][listId].total;
 
-        if (page < pages) {
+        if (page < pages && !connection.list[listType][listId].page[page]) {
           const nextList = { listType, listId, page: page + 1 };
           yield put(actions.listRequested(nextList));
         }
