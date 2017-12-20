@@ -1,0 +1,53 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Router > Context > Column > Item Item props are populated appropriately 1`] = `
+Object {
+  "_id": "c0dab071-a251-4dac-9801-a2792a3bb362",
+  "fromList": Object {
+    "_id": "e5571d38-b4c9-4c9e-bb7a-404954cad292",
+    "listId": "post",
+    "listType": "latest",
+    "page": 1,
+    "route": "list",
+  },
+  "route": "single",
+  "singleId": 1234,
+  "singleType": "post",
+}
+`;
+
+exports[`Router > Context > Column > Item Item props are populated appropriately 2`] = `
+Object {
+  "_id": "b783bfa6-9ff7-43dd-b7d3-8cf6d215ef7f",
+  "fromList": Object {
+    "_id": "7ee66289-df96-4b2b-a08b-5527cacfc266",
+    "listId": "post",
+    "listType": "latest",
+    "page": 1,
+    "route": "list",
+  },
+  "route": "single",
+  "singleId": 1234,
+  "singleType": "page",
+}
+`;
+
+exports[`Router > Context > Column > Item Item props are populated appropriately 3`] = `
+Object {
+  "_id": "c8bf4c53-370d-4e75-b023-917ec3a4a3b5",
+  "listId": "post",
+  "listType": "latest",
+  "page": 1,
+  "route": "list",
+}
+`;
+
+exports[`Router > Context > Column > Item Item props are populated appropriately 4`] = `
+Object {
+  "_id": "2fbd1661-41fe-40d2-8df5-009f293ada41",
+  "listId": "12",
+  "listType": "category",
+  "page": 1,
+  "route": "list",
+}
+`;
