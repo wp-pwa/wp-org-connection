@@ -11,7 +11,7 @@ Object {
     "route": "list",
   },
   "route": "single",
-  "singleId": 1234,
+  "singleId": 60,
   "singleType": "post",
 }
 `;
@@ -27,7 +27,7 @@ Object {
     "route": "list",
   },
   "route": "single",
-  "singleId": 1234,
+  "singleId": 30,
   "singleType": "page",
 }
 `;

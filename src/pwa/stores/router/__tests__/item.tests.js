@@ -6,7 +6,7 @@ describe('Router > Context > Column > Item', () => {
       _id: 'c0dab071-a251-4dac-9801-a2792a3bb362',
       route: 'single',
       singleType: 'post',
-      singleId: 1234,
+      singleId: 60,
       fromList: {
         _id: 'e5571d38-b4c9-4c9e-bb7a-404954cad292',
         listType: 'latest',
@@ -17,7 +17,7 @@ describe('Router > Context > Column > Item', () => {
       _id: 'b783bfa6-9ff7-43dd-b7d3-8cf6d215ef7f',
       route: 'single',
       singleType: 'page',
-      singleId: 1234,
+      singleId: 30,
       fromList: {
         _id: '7ee66289-df96-4b2b-a08b-5527cacfc266',
         listType: 'latest',
