@@ -34,10 +34,7 @@ describe('Store › List', () => {
         },
       },
     });
-    expect(connection.list.category[7].page[0].total).toBe(4);
-    expect(connection.list.category[7].page[1].total).toBe(3);
-    expect(connection.list.category[7].total.entities).toBe(17);
-    expect(connection.list.category[7].total.pages).toBe(5);
+    expect(connection.list.category[7]).toMatchSnapshot();
   });
 
   test('Retrieve list items', () => {
@@ -51,7 +48,7 @@ describe('Store › List', () => {
             title: 'Post 60',
             slug: 'post-60-slug',
             type: 'post',
-            link: 'http://example.com/post-60-slug/',
+            _link: 'http://example.com/post-60-slug/',
             content: '<p>Gullfoss is a waterfall located in the canyon of the Hvita</p>',
             author: 4,
           },
@@ -62,7 +59,7 @@ describe('Store › List', () => {
             title: 'Post 61',
             slug: 'post-61-slug',
             type: 'post',
-            link: 'http://example.com/post-61-slug/',
+            _link: 'http://example.com/post-61-slug/',
             content: '<p>Gullfoss is a waterfall located in the canyon of the Hvita</p>',
             author: 4,
           },
@@ -73,7 +70,7 @@ describe('Store › List', () => {
             title: 'Post 62',
             slug: 'post-62-slug',
             type: 'post',
-            link: 'http://example.com/post-62-slug/',
+            _link: 'http://example.com/post-62-slug/',
             content: '<p>Gullfoss is a waterfall located in the canyon of the Hvita</p>',
             author: 4,
           },
@@ -84,7 +81,7 @@ describe('Store › List', () => {
             title: 'Post 63',
             slug: 'post-63-slug',
             type: 'post',
-            link: 'http://example.com/post-63-slug/',
+            _link: 'http://example.com/post-63-slug/',
             content: '<p>Gullfoss is a waterfall located in the canyon of the Hvita</p>',
             author: 4,
           },
@@ -108,9 +105,11 @@ describe('Store › List', () => {
         },
       },
     });
-    expect(connection.list.category[7].page[0].entities[1].title).toBe('Post 61');
-    expect(connection.list.category[7].page[1].entities[0].title).toBe('Post 62');
-    expect(connection.list.category[7].page[8].entities[1].title).toBe('Post 63');
+    // expect(connection.list.category[7].page[0]).toMatchSnapshot();
+    // expect(connection.list.category[7].page[1]).toMatchSnapshot();
+    // expect(connection.list.category[7].page[8]).toMatchSnapshot();
+    expect(connection.list.category[7]).toMatchSnapshot();
+
     expect(connection.list.category[7].entities[1].title).toBe('Post 61');
     expect(connection.list.category[7].total.fetched.entities).toBe(6);
     expect(connection.list.category[7].total.fetched.pages).toBe(9);
@@ -127,10 +126,11 @@ describe('Store › List', () => {
     );
     expect(connection.list.category[7].total.fetched.entities).toBeNull();
     expect(connection.list.category[7].total.fetched.pages).toBe(3);
-    expect(connection.list.category[7].fetching).toBe(true);
-    expect(connection.list.category[7].ready).toBe(false);
-    expect(connection.list.category[7].page[2].fetching).toBe(true);
-    expect(connection.list.category[7].page[2].ready).toBe(false);
+    // expect(connection.list.category[7].fetching).toBe(true);
+    // expect(connection.list.category[7].ready).toBe(false);
+    // expect(connection.list.category[7].page[2].fetching).toBe(true);
+    // expect(connection.list.category[7].page[2].ready).toBe(false);
+    expect(connection.list.category[7]).toMatchSnapshot();
     connection[actionTypes.LIST_SUCCEED](
       actions.listSucceed({
         listType: 'category',
@@ -151,10 +151,12 @@ describe('Store › List', () => {
         },
       }),
     );
-    expect(connection.list.category[7].fetching).toBe(false);
-    expect(connection.list.category[7].ready).toBe(true);
-    expect(connection.list.category[7].page[2].fetching).toBe(false);
-    expect(connection.list.category[7].page[2].ready).toBe(true);
+    // expect(connection.list.category[7].fetching).toBe(false);
+    // expect(connection.list.category[7].ready).toBe(true);
+    // expect(connection.list.category[7].page[2].fetching).toBe(false);
+    // expect(connection.list.category[7].page[2].ready).toBe(true);
+    expect(connection.list.category[7]).toMatchSnapshot();
+    
     expect(connection.list.category[7].entities[0].title).toBe('The Beauties of Gullfoss');
     expect(connection.list.category[7].page[2].entities[0].title).toBe('The Beauties of Gullfoss');
     connection[actionTypes.LIST_REQUESTED](

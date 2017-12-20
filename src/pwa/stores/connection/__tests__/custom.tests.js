@@ -18,49 +18,49 @@ const snapshot = {
         name: 'Weekend Trip',
         slug: 'weekend-trip',
         taxonomy: 'category',
-        link: 'http://example.com/category/weekend-trip',
+        _link: 'http://example.com/category/weekend-trip',
       },
       3: {
         id: 3,
         name: 'Photography',
         slug: 'photography',
         taxonomy: 'category',
-        link: 'http://example.com/category/photography',
+        _link: 'http://example.com/category/photography',
       },
       4: {
         id: 4,
         name: 'Cities',
         slug: 'cities',
         taxonomy: 'category',
-        link: 'http://example.com/category/cities',
+        _link: 'http://example.com/category/cities',
       },
       5: {
         id: 5,
         name: 'Architecture',
         slug: 'architecture',
         taxonomy: 'category',
-        link: 'http://example.com/category/architecture',
+        _link: 'http://example.com/category/architecture',
       },
       6: {
         id: 6,
         name: 'Culture',
         slug: 'culture',
         taxonomy: 'category',
-        link: 'http://example.com/category/culture',
+        _link: 'http://example.com/category/culture',
       },
       7: {
         id: 7,
         name: 'Nature',
         slug: 'nature',
         taxonomy: 'category',
-        link: 'http://example.com/category/nature',
+        _link: 'http://example.com/category/nature',
       },
       8: {
         id: 8,
         name: 'Travel',
         slug: 'travel',
         taxonomy: 'category',
-        link: 'https://demo.worona.org/wp-cat/travel/',
+        _link: 'https://demo.worona.org/wp-cat/travel/',
       },
     },
   },
@@ -105,31 +105,33 @@ const snapshot = {
 describe('Store › Custom', () => {
   test('Check custom and page totals', () => {
     const connection = Connection.create(snapshot);
-    expect(connection.custom.test1.total.entities).toBe(16);
-    expect(connection.custom.test2.total.entities).toBe(12);
-    expect(connection.custom.test1.total.pages).toBe(8);
-    expect(connection.custom.test2.total.pages).toBe(2);
-    expect(connection.custom.test1.total.fetched.entities).toBe(6);
-    expect(connection.custom.test1.total.fetched.pages).toBe(8);
-    expect(connection.custom.test2.total.fetched.entities).toBe(7);
-    expect(connection.custom.test2.total.fetched.pages).toBe(2);
+    expect(connection.custom.test1).toMatchSnapshot();
+    expect(connection.custom.test2).toMatchSnapshot();
+
+    // Views
     expect(connection.custom.test1.page[0].total).toBe(2);
     expect(connection.custom.test1.page[1].total).toBe(2);
     expect(connection.custom.test1.page[7].total).toBe(2);
     expect(connection.custom.test2.page[0].total).toBe(4);
     expect(connection.custom.test2.page[1].total).toBe(3);
+
+    expect(connection.custom.test1.total.fetched.entities).toBe(6);
+    expect(connection.custom.test1.total.fetched.pages).toBe(8);
+    expect(connection.custom.test2.total.fetched.entities).toBe(7);
+    expect(connection.custom.test2.total.fetched.pages).toBe(2);
   });
 
   test('Check entities and page entities names', () => {
     const connection = Connection.create(snapshot);
-    expect(connection.custom.test1.entities[0].name).toBe('Weekend Trip');
-    expect(connection.custom.test1.entities[5].name).toBe('Nature');
-    expect(connection.custom.test2.entities[1].name).toBe('Photography');
-    expect(connection.custom.test2.entities[6].name).toBe('Travel');
-    expect(connection.custom.test1.page[0].entities[0].name).toBe('Weekend Trip');
-    expect(connection.custom.test1.page[7].entities[1].name).toBe('Nature');
-    expect(connection.custom.test2.page[0].entities[3].name).toBe('Architecture');
-    expect(connection.custom.test2.page[1].entities[2].name).toBe('Travel');
+    const testEntities = ({ entities }) => entities.forEach(e => expect(e).toMatchSnapshot());
+
+    testEntities(connection.custom.test1);
+    testEntities(connection.custom.test2);
+
+    testEntities(connection.custom.test1.page[0]);
+    testEntities(connection.custom.test1.page[7]);
+    testEntities(connection.custom.test2.page[0]);
+    testEntities(connection.custom.test2.page[1]);
   });
 
   test('Check CUSTOM_REQUESTED action', () => {
