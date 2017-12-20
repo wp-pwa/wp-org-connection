@@ -39,10 +39,19 @@ export const List = types
       return self.listId;
     },
     get column() {
-      return getParent(self, 2);
+      try {
+        return getParent(self, 2);
+      } catch (e) {
+        return null;
+      }
     },
     get next() {
-      const items = getParent(self);
+      let items;
+      try {
+        items = getParent(self);
+      } catch (e) {
+        return null;
+      }
       const index = items.indexOf(self);
 
       return index === items.length - 1
@@ -75,10 +84,19 @@ export const Single = types
       return self.singleId;
     },
     get column() {
-      return getParent(self, 2);
+      try {
+        return getParent(self, 2);
+      } catch (e) {
+        return null;
+      }
     },
     get next() {
-      const items = getParent(self);
+      let items;
+      try {
+        items = getParent(self);
+      } catch (e) {
+        return null;
+      }
       const index = items.indexOf(self);
 
       return index === items.length - 1
