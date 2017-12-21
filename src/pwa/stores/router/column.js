@@ -26,7 +26,7 @@ const Column = types
     },
     get index() {
       const columns = getParent(self);
-      return columns && columns.indexOf(self) || -1;
+      return columns ? columns.indexOf(self) : -1;
     }
   }));
 
