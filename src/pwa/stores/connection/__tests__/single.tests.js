@@ -20,12 +20,12 @@ describe('Store › Single', () => {
             name: 'Nature',
             slug: 'nature',
             taxonomy: 'category',
-            link: 'http://example.com/category/nature',
+            _link: 'http://example.com/category/nature',
           },
         },
       },
     });
-    expect(connection.single.category[7].name).toBe('Nature');
+    expect(connection.single.category[7]).toMatchSnapshot();
     applySnapshot(connection, {
       singleMap: {
         category: {
@@ -34,20 +34,20 @@ describe('Store › Single', () => {
             name: 'New Nature',
             slug: 'nature',
             taxonomy: 'category',
-            link: 'http://example.com/category/nature',
+            _link: 'http://example.com/category/nature',
           },
           8: {
             id: 8,
             name: 'Travel',
             slug: 'travel',
             taxonomy: 'category',
-            link: 'https://demo.worona.org/wp-cat/travel/',
+            _link: 'https://demo.worona.org/wp-cat/travel/',
           },
         },
         tag: {
           10: {
             id: 10,
-            link: 'https://demo.worona.org/tag/gullfoss/',
+            _link: 'https://demo.worona.org/tag/gullfoss/',
             name: 'Gullfoss',
             slug: 'gullfoss',
             taxonomy: 'tag',
@@ -55,9 +55,9 @@ describe('Store › Single', () => {
         },
       },
     });
-    expect(connection.single.category[7].name).toBe('New Nature');
-    expect(connection.single.category[8].slug).toBe('travel');
-    expect(connection.single.tag[10].name).toBe('Gullfoss');
+    expect(connection.single.category[7]).toMatchSnapshot();
+    expect(connection.single.category[8]).toMatchSnapshot();
+    expect(connection.single.tag[10]).toMatchSnapshot();
   });
 
   test('Retrieve nested entities', () => {
@@ -66,14 +66,14 @@ describe('Store › Single', () => {
         category: {
           3: {
             id: 3,
-            link: 'https://demo.worona.org/wp-cat/photography/',
+            _link: 'https://demo.worona.org/wp-cat/photography/',
             name: 'Photography',
             slug: 'photography',
             taxonomy: 'category',
           },
           8: {
             id: 8,
-            link: 'https://demo.worona.org/wp-cat/travel/',
+            _link: 'https://demo.worona.org/wp-cat/travel/',
             name: 'Travel',
             slug: 'travel',
             taxonomy: 'category',
@@ -82,7 +82,7 @@ describe('Store › Single', () => {
         tag: {
           10: {
             id: 10,
-            link: 'https://demo.worona.org/tag/gullfoss/',
+            _link: 'https://demo.worona.org/tag/gullfoss/',
             name: 'Gullfoss',
             slug: 'gullfoss',
             taxonomy: 'tag',
@@ -116,7 +116,7 @@ describe('Store › Single', () => {
             ],
             creationDate: new Date('2016-11-25T18:33:33'),
             slug: 'iceland-test',
-            link: 'https://demo.worona.org/post-60-slug/iceland-test/',
+            _link: 'https://demo.worona.org/post-60-slug/iceland-test/',
             author: 2,
             alt: 'iceland',
           },
@@ -127,7 +127,7 @@ describe('Store › Single', () => {
             name: 'Alan',
             slug: 'alan',
             description: 'Alan is a WordPress enthusiast who enjoys travelling, music and pizza.',
-            link: 'http://example.com/author/alan/',
+            _link: 'http://example.com/author/alan/',
           },
         },
         post: {
@@ -138,7 +138,7 @@ describe('Store › Single', () => {
             title: 'Post 60',
             slug: 'post-60-slug',
             type: 'post',
-            link: 'http://example.com/post-60-slug/',
+            _link: 'http://example.com/post-60-slug/',
             content: '<p>Gullfoss is a waterfall located in the canyon of the Hvita</p>',
             author: 4,
             featured: 62,
@@ -150,10 +150,7 @@ describe('Store › Single', () => {
         },
       },
     });
-    expect(connection.single.post[60].author.name).toBe('Alan');
-    expect(connection.single.post[60].taxonomies.category[0].name).toBe('Photography');
-    expect(connection.single.post[60].featured.original.height).toBe(123);
-    expect(connection.single.post[60].featured.sizes[1].height).toBe(250);
+    expect(connection.single.post[60]).toMatchSnapshot();
   });
 
   test('Add post. Request and succeed', () => {

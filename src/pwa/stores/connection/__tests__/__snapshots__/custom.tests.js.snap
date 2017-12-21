@@ -1,0 +1,506 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Store › Custom Check custom and page totals 1`] = `
+Object {
+  "fetching": false,
+  "pageMap": Object {
+    "0": Object {
+      "entities": Array [
+        1,
+        3,
+      ],
+      "fetching": false,
+      "ready": false,
+    },
+    "1": Object {
+      "entities": Array [
+        4,
+        5,
+      ],
+      "fetching": false,
+      "ready": false,
+    },
+    "7": Object {
+      "entities": Array [
+        6,
+        7,
+      ],
+      "fetching": false,
+      "ready": false,
+    },
+  },
+  "params": Object {},
+  "ready": false,
+  "total": Object {
+    "entities": 16,
+    "pages": 8,
+  },
+  "url": "/pepe",
+}
+`;
+
+exports[`Store › Custom Check custom and page totals 2`] = `
+Object {
+  "fetching": false,
+  "pageMap": Object {
+    "0": Object {
+      "entities": Array [
+        1,
+        3,
+        4,
+        5,
+      ],
+      "fetching": false,
+      "ready": false,
+    },
+    "1": Object {
+      "entities": Array [
+        6,
+        7,
+        8,
+      ],
+      "fetching": false,
+      "ready": false,
+    },
+  },
+  "params": Object {},
+  "ready": false,
+  "total": Object {
+    "entities": 12,
+    "pages": 2,
+  },
+  "url": "/papa",
+}
+`;
+
+exports[`Store › Custom Check entities and page entities names 1`] = `
+Object {
+  "_link": "http://example.com/category/weekend-trip",
+  "id": 1,
+  "link": Object {},
+  "meta": Object {
+    "canonical": null,
+    "description": null,
+    "pretty": false,
+    "title": null,
+  },
+  "name": "Weekend Trip",
+  "slug": "weekend-trip",
+  "target": null,
+  "taxonomy": "category",
+}
+`;
+
+exports[`Store › Custom Check entities and page entities names 2`] = `
+Object {
+  "_link": "http://example.com/category/photography",
+  "id": 3,
+  "link": Object {},
+  "meta": Object {
+    "canonical": null,
+    "description": null,
+    "pretty": false,
+    "title": null,
+  },
+  "name": "Photography",
+  "slug": "photography",
+  "target": null,
+  "taxonomy": "category",
+}
+`;
+
+exports[`Store › Custom Check entities and page entities names 3`] = `
+Object {
+  "_link": "http://example.com/category/cities",
+  "id": 4,
+  "link": Object {},
+  "meta": Object {
+    "canonical": null,
+    "description": null,
+    "pretty": false,
+    "title": null,
+  },
+  "name": "Cities",
+  "slug": "cities",
+  "target": null,
+  "taxonomy": "category",
+}
+`;
+
+exports[`Store › Custom Check entities and page entities names 4`] = `
+Object {
+  "_link": "http://example.com/category/architecture",
+  "id": 5,
+  "link": Object {},
+  "meta": Object {
+    "canonical": null,
+    "description": null,
+    "pretty": false,
+    "title": null,
+  },
+  "name": "Architecture",
+  "slug": "architecture",
+  "target": null,
+  "taxonomy": "category",
+}
+`;
+
+exports[`Store › Custom Check entities and page entities names 5`] = `
+Object {
+  "_link": "http://example.com/category/culture",
+  "id": 6,
+  "link": Object {},
+  "meta": Object {
+    "canonical": null,
+    "description": null,
+    "pretty": false,
+    "title": null,
+  },
+  "name": "Culture",
+  "slug": "culture",
+  "target": null,
+  "taxonomy": "category",
+}
+`;
+
+exports[`Store › Custom Check entities and page entities names 6`] = `
+Object {
+  "_link": "http://example.com/category/nature",
+  "id": 7,
+  "link": Object {},
+  "meta": Object {
+    "canonical": null,
+    "description": null,
+    "pretty": false,
+    "title": null,
+  },
+  "name": "Nature",
+  "slug": "nature",
+  "target": null,
+  "taxonomy": "category",
+}
+`;
+
+exports[`Store › Custom Check entities and page entities names 7`] = `
+Object {
+  "_link": "http://example.com/category/weekend-trip",
+  "id": 1,
+  "link": Object {},
+  "meta": Object {
+    "canonical": null,
+    "description": null,
+    "pretty": false,
+    "title": null,
+  },
+  "name": "Weekend Trip",
+  "slug": "weekend-trip",
+  "target": null,
+  "taxonomy": "category",
+}
+`;
+
+exports[`Store › Custom Check entities and page entities names 8`] = `
+Object {
+  "_link": "http://example.com/category/photography",
+  "id": 3,
+  "link": Object {},
+  "meta": Object {
+    "canonical": null,
+    "description": null,
+    "pretty": false,
+    "title": null,
+  },
+  "name": "Photography",
+  "slug": "photography",
+  "target": null,
+  "taxonomy": "category",
+}
+`;
+
+exports[`Store › Custom Check entities and page entities names 9`] = `
+Object {
+  "_link": "http://example.com/category/cities",
+  "id": 4,
+  "link": Object {},
+  "meta": Object {
+    "canonical": null,
+    "description": null,
+    "pretty": false,
+    "title": null,
+  },
+  "name": "Cities",
+  "slug": "cities",
+  "target": null,
+  "taxonomy": "category",
+}
+`;
+
+exports[`Store › Custom Check entities and page entities names 10`] = `
+Object {
+  "_link": "http://example.com/category/architecture",
+  "id": 5,
+  "link": Object {},
+  "meta": Object {
+    "canonical": null,
+    "description": null,
+    "pretty": false,
+    "title": null,
+  },
+  "name": "Architecture",
+  "slug": "architecture",
+  "target": null,
+  "taxonomy": "category",
+}
+`;
+
+exports[`Store › Custom Check entities and page entities names 11`] = `
+Object {
+  "_link": "http://example.com/category/culture",
+  "id": 6,
+  "link": Object {},
+  "meta": Object {
+    "canonical": null,
+    "description": null,
+    "pretty": false,
+    "title": null,
+  },
+  "name": "Culture",
+  "slug": "culture",
+  "target": null,
+  "taxonomy": "category",
+}
+`;
+
+exports[`Store › Custom Check entities and page entities names 12`] = `
+Object {
+  "_link": "http://example.com/category/nature",
+  "id": 7,
+  "link": Object {},
+  "meta": Object {
+    "canonical": null,
+    "description": null,
+    "pretty": false,
+    "title": null,
+  },
+  "name": "Nature",
+  "slug": "nature",
+  "target": null,
+  "taxonomy": "category",
+}
+`;
+
+exports[`Store › Custom Check entities and page entities names 13`] = `
+Object {
+  "_link": "https://demo.worona.org/wp-cat/travel/",
+  "id": 8,
+  "link": Object {},
+  "meta": Object {
+    "canonical": null,
+    "description": null,
+    "pretty": false,
+    "title": null,
+  },
+  "name": "Travel",
+  "slug": "travel",
+  "target": null,
+  "taxonomy": "category",
+}
+`;
+
+exports[`Store › Custom Check entities and page entities names 14`] = `
+Object {
+  "_link": "http://example.com/category/weekend-trip",
+  "id": 1,
+  "link": Object {},
+  "meta": Object {
+    "canonical": null,
+    "description": null,
+    "pretty": false,
+    "title": null,
+  },
+  "name": "Weekend Trip",
+  "slug": "weekend-trip",
+  "target": null,
+  "taxonomy": "category",
+}
+`;
+
+exports[`Store › Custom Check entities and page entities names 15`] = `
+Object {
+  "_link": "http://example.com/category/photography",
+  "id": 3,
+  "link": Object {},
+  "meta": Object {
+    "canonical": null,
+    "description": null,
+    "pretty": false,
+    "title": null,
+  },
+  "name": "Photography",
+  "slug": "photography",
+  "target": null,
+  "taxonomy": "category",
+}
+`;
+
+exports[`Store › Custom Check entities and page entities names 16`] = `
+Object {
+  "_link": "http://example.com/category/culture",
+  "id": 6,
+  "link": Object {},
+  "meta": Object {
+    "canonical": null,
+    "description": null,
+    "pretty": false,
+    "title": null,
+  },
+  "name": "Culture",
+  "slug": "culture",
+  "target": null,
+  "taxonomy": "category",
+}
+`;
+
+exports[`Store › Custom Check entities and page entities names 17`] = `
+Object {
+  "_link": "http://example.com/category/nature",
+  "id": 7,
+  "link": Object {},
+  "meta": Object {
+    "canonical": null,
+    "description": null,
+    "pretty": false,
+    "title": null,
+  },
+  "name": "Nature",
+  "slug": "nature",
+  "target": null,
+  "taxonomy": "category",
+}
+`;
+
+exports[`Store › Custom Check entities and page entities names 18`] = `
+Object {
+  "_link": "http://example.com/category/weekend-trip",
+  "id": 1,
+  "link": Object {},
+  "meta": Object {
+    "canonical": null,
+    "description": null,
+    "pretty": false,
+    "title": null,
+  },
+  "name": "Weekend Trip",
+  "slug": "weekend-trip",
+  "target": null,
+  "taxonomy": "category",
+}
+`;
+
+exports[`Store › Custom Check entities and page entities names 19`] = `
+Object {
+  "_link": "http://example.com/category/photography",
+  "id": 3,
+  "link": Object {},
+  "meta": Object {
+    "canonical": null,
+    "description": null,
+    "pretty": false,
+    "title": null,
+  },
+  "name": "Photography",
+  "slug": "photography",
+  "target": null,
+  "taxonomy": "category",
+}
+`;
+
+exports[`Store › Custom Check entities and page entities names 20`] = `
+Object {
+  "_link": "http://example.com/category/cities",
+  "id": 4,
+  "link": Object {},
+  "meta": Object {
+    "canonical": null,
+    "description": null,
+    "pretty": false,
+    "title": null,
+  },
+  "name": "Cities",
+  "slug": "cities",
+  "target": null,
+  "taxonomy": "category",
+}
+`;
+
+exports[`Store › Custom Check entities and page entities names 21`] = `
+Object {
+  "_link": "http://example.com/category/architecture",
+  "id": 5,
+  "link": Object {},
+  "meta": Object {
+    "canonical": null,
+    "description": null,
+    "pretty": false,
+    "title": null,
+  },
+  "name": "Architecture",
+  "slug": "architecture",
+  "target": null,
+  "taxonomy": "category",
+}
+`;
+
+exports[`Store › Custom Check entities and page entities names 22`] = `
+Object {
+  "_link": "http://example.com/category/culture",
+  "id": 6,
+  "link": Object {},
+  "meta": Object {
+    "canonical": null,
+    "description": null,
+    "pretty": false,
+    "title": null,
+  },
+  "name": "Culture",
+  "slug": "culture",
+  "target": null,
+  "taxonomy": "category",
+}
+`;
+
+exports[`Store › Custom Check entities and page entities names 23`] = `
+Object {
+  "_link": "http://example.com/category/nature",
+  "id": 7,
+  "link": Object {},
+  "meta": Object {
+    "canonical": null,
+    "description": null,
+    "pretty": false,
+    "title": null,
+  },
+  "name": "Nature",
+  "slug": "nature",
+  "target": null,
+  "taxonomy": "category",
+}
+`;
+
+exports[`Store › Custom Check entities and page entities names 24`] = `
+Object {
+  "_link": "https://demo.worona.org/wp-cat/travel/",
+  "id": 8,
+  "link": Object {},
+  "meta": Object {
+    "canonical": null,
+    "description": null,
+    "pretty": false,
+    "title": null,
+  },
+  "name": "Travel",
+  "slug": "travel",
+  "target": null,
+  "taxonomy": "category",
+}
+`;
