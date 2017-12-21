@@ -2,7 +2,6 @@ import Column from '../column';
 import Connection from '../..';
 
 describe('Store > Context > Column ', () => {
-
   const item1 = {
     _id: 'item-snapshot-001',
     listType: 'category',
@@ -41,10 +40,7 @@ describe('Store > Context > Column ', () => {
       {
         index: 0,
         column: column1,
-        columns: [
-          column1,
-          column2,
-        ],
+        columns: [column1, column2],
       },
     ],
   });
@@ -71,5 +67,5 @@ describe('Store > Context > Column ', () => {
   test('index', () => {
     expect(column1.index).toBe(0);
     expect(column2.index).toBe(1);
-  })
+  });
 });

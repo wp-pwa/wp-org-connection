@@ -82,10 +82,7 @@ describe('Store > Context > Column > Item', () => {
       {
         index: 0,
         column: column1,
-        columns: [
-          column1,
-          column2,
-        ],
+        columns: [column1, column2],
       },
     ],
   });
