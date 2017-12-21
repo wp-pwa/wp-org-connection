@@ -206,6 +206,9 @@ export const actions = self => {
       return generated;
     }, []);
 
+    // Adds selected if columns is empty
+    if (columns.length === 0) columns.push(Column.create(columnSnapshot(selected)));
+
     return {
       index: contextIndex,
       column: columns[0]._id,
