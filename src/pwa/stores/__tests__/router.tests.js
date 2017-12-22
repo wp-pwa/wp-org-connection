@@ -60,6 +60,14 @@ describe('Router', () => {
     ],
   };
 
+  const contextAll = {
+    infinite: false,
+    items: [
+      [{ singleType: 'post', singleId: 60 }, { listType: 'latest', listId: 'post' }],
+      { listType: 'category', listId: 12, extract: true },
+    ],
+  };
+
   const contextEmpty = {
     infinite: false,
     items: [],
@@ -68,6 +76,15 @@ describe('Router', () => {
   test('initializes empty', () => {
     expect(connection.contexts).toMatchSnapshot();
     expect(connection.context).toBeNull();
+  });
+
+  test('initializes items from context and selected', () => {
+    connection[actionTypes.ROUTE_CHANGE_REQUESTED](toPost({ id: 160, context: contextAll }));
+    expect(connection.single.post[160]).toMatchSnapshot();
+    expect(connection.single.post[60]).toMatchSnapshot();
+    expect(connection.single.category[12]).toMatchSnapshot();
+    expect(connection.list.category[12].page[0]).toMatchSnapshot();
+    expect(connection.list.latest.post.page[0]).toMatchSnapshot();
   });
 
   test('creates a new context from selected post', () => {
