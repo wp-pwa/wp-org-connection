@@ -3,10 +3,9 @@ import * as actionTypes from '../../actionTypes';
 import * as actions from '../../actions';
 
 describe('Router', () => {
-  let store;
+  let connection;
   beforeEach(() => {
-    // Restart store for each test
-    store = Connection.create();
+    connection = Connection.create({});
   });
 
   const toPost = ({ id, type, method, context }) => {
@@ -67,138 +66,128 @@ describe('Router', () => {
   };
 
   test('initializes empty', () => {
-    expect(store.contexts).toMatchSnapshot();
-    expect(store.context).toBeNull();
+    expect(connection.contexts).toMatchSnapshot();
+    expect(connection.context).toBeNull();
   });
 
   test('creates a new context from selected post', () => {
-    store[actionTypes.ROUTE_CHANGE_SUCCEED](toPost({ id: 60 }));
-    expect(store.selected.type).toBe('post');
-    expect(store.selected.id).toBe(60);
-    expect(store.context.index).toBe(0);
-    expect(store.context.column.selected.id).toBe(60);
-    expect(store.context.columns[0].selected.id).toBe(60);
-    expect(store.context.columns[0].items[0].id).toBe(60);
-    expect(store.contexts[0].columns[0].items[0].id).toBe(60);
-    expect(store.contexts[0].columns[0].selected.id).toBe(60);
-    expect(store.contexts[0].columns[0].selected.column).toBe(store.contexts[0].columns[0]);
+    connection[actionTypes.ROUTE_CHANGE_SUCCEED](toPost({ id: 60 }));
+    expect(connection.selected.type).toBe('post');
+    expect(connection.selected.id).toBe(60);
+    expect(connection.context.index).toBe(0);
+    expect(connection.context.column.selected.id).toBe(60);
+    expect(connection.context.columns[0].selected.id).toBe(60);
+    expect(connection.contexts[0].columns[0].selected.id).toBe(60);
   });
 
   test('creates a new context from selected list', () => {
-    store[actionTypes.ROUTE_CHANGE_SUCCEED](toList({ id: 7 }));
-    expect(store.selected.type).toBe('category');
-    expect(store.selected.id).toBe(7);
-    expect(store.selected.page).toBe(1);
-    expect(store.context.index).toBe(0);
-    expect(store.context.column.selected.id).toBe(7);
-    expect(store.context.columns[0].selected.id).toBe(7);
-    expect(store.context.columns[0].items[0].id).toBe(7);
-    expect(store.contexts[0].columns[0].items[0].id).toBe(7);
-    expect(store.contexts[0].columns[0].selected.id).toBe(7);
-    expect(store.contexts[0].columns[0].selected.column).toBe(store.contexts[0].columns[0]);
+    connection[actionTypes.ROUTE_CHANGE_SUCCEED](toList({ id: 7 }));
+    expect(connection.selected.type).toBe('category');
+    expect(connection.selected.id).toBe(7);
+    expect(connection.selected.page).toBe(1);
+    expect(connection.context.index).toBe(0);
+    expect(connection.context.column.selected.id).toBe(7);
+    expect(connection.context.columns[0].selected.id).toBe(7);
+    expect(connection.contexts[0].columns[0].selected.id).toBe(7);
   });
 
   test('creates another context from selected', () => {
-    store[actionTypes.ROUTE_CHANGE_SUCCEED](toPost({ id: 60 }));
-    store[actionTypes.ROUTE_CHANGE_SUCCEED](toPost({ id: 70 }));
+    connection[actionTypes.ROUTE_CHANGE_SUCCEED](toPost({ id: 60 }));
+    connection[actionTypes.ROUTE_CHANGE_SUCCEED](toPost({ id: 70 }));
     // Current item
-    expect(store.context.index).toBe(1);
-    expect(store.selected.id).toBe(70);
-    expect(store.selected.type).toBe('post');
-    expect(store.context.column.selected.id).toBe(70);
-    expect(store.context.columns[0].selected.id).toBe(70);
-    expect(store.context.columns[0].items[0].id).toBe(70);
-    expect(store.contexts[1].columns[0].items[0].id).toBe(70);
-    expect(store.contexts[1].columns[0].selected.id).toBe(70);
+    expect(connection.context.index).toBe(1);
+    expect(connection.selected.id).toBe(70);
+    expect(connection.selected.type).toBe('post');
+    expect(connection.context.column.selected.id).toBe(70);
+    expect(connection.context.columns[0].selected.id).toBe(70);
+    expect(connection.contexts[1].columns[0].selected.id).toBe(70);
     // Previous item
-    expect(store.contexts[0].columns[0].items[0].id).toBe(60);
-    expect(store.contexts[0].columns[0].selected.id).toBe(60);
+    expect(connection.contexts[0].columns[0].selected.id).toBe(60);
   });
 
   test('creates the context and selects the item as specified', () => {
-    store[actionTypes.ROUTE_CHANGE_SUCCEED](toPost({ id: 60, context: context1 }));
-    expect(store.selected.id).toBe(60);
-    expect(store.selected.type).toBe('post');
-    expect(store.context.columns[3].selected.id).toBe(90);
-    expect(store.contexts[0].columns[3].items[2].id).toBe(99);
-    expect(store.selected.next.id).toBe(68);
-    expect(store.context.columns[2].selected.next.id).toBe(90);
-    expect(store.context.columns[3].selected.next.id).toBe(98);
+    connection[actionTypes.ROUTE_CHANGE_SUCCEED](toPost({ id: 60, context: context1 }));
+    expect(connection.selected.id).toBe(60);
+    expect(connection.selected.type).toBe('post');
+    expect(connection.context.columns[3].selected.id).toBe(90);
+    expect(connection.contexts[0].columns[3].items[2].id).toBe(99);
+    expect(connection.selected.next.id).toBe(68);
+    expect(connection.context.columns[2].selected.next.id).toBe(90);
+    expect(connection.context.columns[3].selected.next.id).toBe(98);
   });
 
   test("changes selected when context exists and has 'selected' inside", () => {
-    store[actionTypes.ROUTE_CHANGE_SUCCEED](toPost({ id: 60, context: context1 }));
-    store[actionTypes.ROUTE_CHANGE_SUCCEED](toPost({ id: 90 }));
-    expect(store.selected.id).toBe(90);
-    expect(store.selected.type).toBe('post');
+    connection[actionTypes.ROUTE_CHANGE_SUCCEED](toPost({ id: 60, context: context1 }));
+    connection[actionTypes.ROUTE_CHANGE_SUCCEED](toPost({ id: 90 }));
+    expect(connection.selected.id).toBe(90);
+    expect(connection.selected.type).toBe('post');
   });
 
   test("changes selected when contexts are equal and have 'selected' inside", () => {
-    store[actionTypes.ROUTE_CHANGE_SUCCEED](toPost({ id: 60, context: context1 }));
-    store[actionTypes.ROUTE_CHANGE_SUCCEED](toPost({ id: 90, context: context1 }));
-    expect(store.selected.id).toBe(90);
-    expect(store.selected.type).toBe('post');
-    expect(store.contexts.length).toBe(1);
+    connection[actionTypes.ROUTE_CHANGE_SUCCEED](toPost({ id: 60, context: context1 }));
+    connection[actionTypes.ROUTE_CHANGE_SUCCEED](toPost({ id: 90, context: context1 }));
+    expect(connection.selected.id).toBe(90);
+    expect(connection.selected.type).toBe('post');
+    expect(connection.contexts.length).toBe(1);
   });
 
   test("Moves selected using replace when context exists and has 'selected' inside", () => {
-    store[actionTypes.ROUTE_CHANGE_SUCCEED](toPost({ id: 60, context: context1 }));
-    store[actionTypes.ROUTE_CHANGE_SUCCEED](toPost({ id: 70, method: 'replace' }));
-    expect(store.selected.id).toBe(70);
-    expect(store.selected.type).toBe('post');
-    expect(store.selected.next.id).toBe(68);
-    expect(store.context.column.items[0].next.id).toBe(70);
-    expect(store.context.columns.length).toBe(3);
-    expect(store.context.column._id).toBe(store.context.columns[0]._id);
-    expect(store.context.columns[0].items.length).toBe(2);
+    connection[actionTypes.ROUTE_CHANGE_SUCCEED](toPost({ id: 60, context: context1 }));
+    connection[actionTypes.ROUTE_CHANGE_SUCCEED](toPost({ id: 70, method: 'replace' }));
+    expect(connection.selected.id).toBe(70);
+    expect(connection.selected.type).toBe('post');
+    expect(connection.selected.next.id).toBe(68);
+    expect(connection.context.column.items[0].next.id).toBe(70);
+    expect(connection.context.columns.length).toBe(3);
+    expect(connection.context.column).toBe(connection.context.columns[0]);
+    expect(connection.context.columns[0].items.length).toBe(2);
   });
 
   test('Replaces context using replace', () => {
-    store[actionTypes.ROUTE_CHANGE_SUCCEED](toPost({ id: 60, context: context2 }));
-    store[actionTypes.ROUTE_CHANGE_SUCCEED](
+    connection[actionTypes.ROUTE_CHANGE_SUCCEED](toPost({ id: 60, context: context2 }));
+    connection[actionTypes.ROUTE_CHANGE_SUCCEED](
       toList({ id: 'post', type: 'latest', method: 'replace', context: context3 }),
     );
-    expect(store.selected.id).toBe('post');
-    expect(store.selected.type).toBe('latest');
-    expect(store.contexts.length).toBe(1);
-    expect(store.context.column.items.length).toBe(2);
-    expect(store.selected.next.type).toBe('post');
+    expect(connection.selected.id).toBe('post');
+    expect(connection.selected.type).toBe('latest');
+    expect(connection.contexts.length).toBe(1);
+    expect(connection.context.column.items.length).toBe(2);
+    expect(connection.selected.next.type).toBe('post');
   });
 
   test('Goes back and forward as expected', () => {
-    // Init context
-    store[actionTypes.ROUTE_CHANGE_SUCCEED](toPost({ id: 60, context: context1 }));
-    // Changes selected in the current context
-    store[actionTypes.ROUTE_CHANGE_SUCCEED](toPost({ id: 90 }));
-    expect(store.contexts.length).toBe(1);
+    // Init context and then changes selected in the current context
+    connection[actionTypes.ROUTE_CHANGE_SUCCEED](toPost({ id: 60, context: context1 }));
+    connection[actionTypes.ROUTE_CHANGE_SUCCEED](toPost({ id: 90 }));
+    expect(connection.contexts.length).toBe(1);
 
     // Creates a new context
-    store[actionTypes.ROUTE_CHANGE_SUCCEED](toPost({ id: 190, context: contextEmpty }));
-    expect(store.contexts.length).toBe(2);
-    expect(store.context.index).toBe(1);
-    expect(store.selected.id).toBe(190);
+    connection[actionTypes.ROUTE_CHANGE_SUCCEED](toPost({ id: 190, context: contextEmpty }));
+    expect(connection.contexts.length).toBe(2);
+    expect(connection.context.index).toBe(1);
+    expect(connection.selected.id).toBe(190);
 
     // Goes back
-    store[actionTypes.ROUTE_CHANGE_SUCCEED](toPost({ id: 90, method: 'back' }));
-    expect(store.contexts.length).toBe(2);
-    expect(store.context.index).toBe(0);
-    expect(store.selected.id).toBe(90);
+    connection[actionTypes.ROUTE_CHANGE_SUCCEED](toPost({ id: 90, method: 'back' }));
+    expect(connection.contexts.length).toBe(2);
+    expect(connection.context.index).toBe(0);
+    expect(connection.selected.id).toBe(90);
 
     // Goes back again
-    store[actionTypes.ROUTE_CHANGE_SUCCEED](toPost({ id: 60, context: context1 }));
-    expect(store.context.index).toBe(0);
-    expect(store.selected.id).toBe(60);
+    connection[actionTypes.ROUTE_CHANGE_SUCCEED](toPost({ id: 60, context: context1 }));
+    expect(connection.context.index).toBe(0);
+    expect(connection.selected.id).toBe(60);
 
     // Goes forward
-    store[actionTypes.ROUTE_CHANGE_SUCCEED](toPost({ id: 90, method: 'forward' }));
-    expect(store.context.index).toBe(0);
-    expect(store.selected.id).toBe(90);
+    connection[actionTypes.ROUTE_CHANGE_SUCCEED](toPost({ id: 90, method: 'forward' }));
+    expect(connection.context.index).toBe(0);
+    expect(connection.selected.id).toBe(90);
 
     // Goes forward again
-    store[actionTypes.ROUTE_CHANGE_SUCCEED](
+    connection[actionTypes.ROUTE_CHANGE_SUCCEED](
       toPost({ id: 190, method: 'forward', context: contextEmpty }),
     );
-    expect(store.context.index).toBe(1);
-    expect(store.selected.id).toBe(190);
+    expect(connection.context.index).toBe(1);
+    expect(connection.selected.id).toBe(190);
   });
 });
