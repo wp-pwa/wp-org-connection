@@ -3,7 +3,16 @@ import { schema } from 'normalizr';
 import { taxonomy } from './taxonomies';
 import { author } from './authors';
 
-const media = new schema.Entity('media');
+const media = new schema.Entity(
+  'media',
+  {},
+  {
+    processStrategy(entity) {
+      entity.mst = 'media';
+      return entity;
+    },
+  },
+);
 
 const taxonomies = new schema.Array(new schema.Array(taxonomy));
 
@@ -12,7 +21,7 @@ export const post = new schema.Entity(
   {},
   {
     processStrategy(entity) {
-      const result = { ...entity };
+      const result = { ...entity, mst: 'post' };
 
       if (entity._embedded) {
         // Get all taxonomies and generate a map so we can know later on which props
@@ -27,23 +36,7 @@ export const post = new schema.Entity(
             }),
           );
         }
-
-        // Check if there is any media missing and build an object with
-        // id, type and an error message containing the original item,
-        // to be able to populate the store.
-        if (entity._embedded['wp:featuredmedia']) {
-          entity._embedded['wp:featuredmedia'].forEach((item, index) => {
-            if (!item.id) {
-              result._embedded['wp:featuredmedia'][index] = {
-                id: entity.featured_media,
-                type: 'media',
-                error: item,
-              };
-            }
-          });
-        }
       }
-
       return result;
     },
   },
