@@ -2,23 +2,37 @@ import { types } from 'mobx-state-tree';
 import { Total } from './list';
 import { Any } from './single';
 
-const Page = types
-  .model('Page')
-  .props({
-    entities: types.optional(types.array(types.reference(Any)), []),
-    fetching: types.optional(types.boolean, false),
-    ready: types.optional(types.boolean, false),
-  })
-  .views(self => ({
-    get total() {
-      return self.entities.length || 0;
-    },
-  }));
+// const PageTaxonomy = types
+//   .model('Page')
+//   .props({
+//     type: 'taxonomy',
+//     entities: types.optional(types.array(types.reference(Taxonomy)), []),
+//     fetching: types.optional(types.boolean, false),
+//     ready: types.optional(types.boolean, false),
+//   })
+//   .views(self => ({
+//     get total() {
+//       return self.entities.length || 0;
+//     },
+//   }));
+// const PagePost = types
+//   .model('Page')
+//   .props({
+//     type: 'post',
+//     entities: types.optional(types.array(types.reference(Post)), []),
+//     fetching: types.optional(types.boolean, false),
+//     ready: types.optional(types.boolean, false),
+//   })
+//   .views(self => ({
+//     get total() {
+//       return self.entities.length || 0;
+//     },
+//   }));
 
 const Custom = types
   .model('Custom')
   .props({
-    pageMap: types.optional(types.map(Page), {}),
+    // pageMap: types.optional(types.map(Page), {}),
     total: types.optional(Total, {}),
     fetching: types.optional(types.boolean, false),
     ready: types.optional(types.boolean, false),
@@ -50,4 +64,4 @@ const Custom = types
     };
   });
 
-export { Custom, Page };
+export { Custom };

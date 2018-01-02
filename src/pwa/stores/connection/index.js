@@ -1,5 +1,5 @@
 import { types } from 'mobx-state-tree';
-import { Any } from './single';
+import { Single, Any } from './single';
 import { List } from './list';
 import { Custom } from './custom';
 import SiteInfo from './site-info';
@@ -8,158 +8,117 @@ import * as actionTypes from '../../actionTypes';
 import convert from '../../converters';
 
 export const props = {
-  singleMap: types.optional(types.map(types.map(Any)), {}),
+  entitiesMap: types.optional(types.map(types.map(Any)), {}),
+  singleMap: types.optional(types.map(Single), {}),
   listMap: types.optional(types.map(types.map(List)), {}),
   customMap: types.optional(types.map(Custom), {}),
   siteInfo: types.optional(SiteInfo, {}),
 };
 
-export const views = self => {
-  const single = {};
-  const list = {};
-  const custom = {};
-  return {
-    get single() {
-      self.singleMap.keys().forEach(type => {
-        single[type] = single[type] || [];
-        self.singleMap
-          .get(type)
-          .keys()
-          .forEach(index => {
-            if (!single[type][index]) single[type][index] = self.singleMap.get(type).get(index);
-          });
-      });
-      return single;
-    },
-    get list() {
-      self.listMap.keys().forEach(type => {
-        list[type] = list[type] || {};
-        self.listMap
-          .get(type)
-          .keys()
-          .forEach(index => {
-            if (!list[type][index]) list[type][index] = self.listMap.get(type).get(index);
-          });
-      });
-      return list;
-    },
-    get custom() {
-      self.customMap.keys().forEach(name => {
-        if (!custom[name]) custom[name] = self.customMap.get(name);
-      });
-      return custom;
-    },
-  };
-};
-
-const addEntity = ({ self, type, id, entity, ready = false, fetching = false }) => {
-  const singleType =
-    type === 'post' ? (entity && entity.type) || type : (entity && entity.taxonomy) || type;
-  // Init the first map (type) if it's not initializated yet.
-  if (!self.singleMap.get(singleType)) self.singleMap.set(singleType, {});
-  // Create entity if it's not set and convert it if it's set.
-  let newEntity;
-  if (entity) {
-    if (entity.error) ready = false;
-    newEntity = entity.error ? { id, type: singleType, error: entity.error } : convert(entity);
-  } else {
-    newEntity =
-      !entity && (type === 'post' || type === 'page')
-        ? { id, type: singleType }
-        : { id, taxonomy: singleType };
-  }
-  // Populate the state with the entity value and set both fetching and ready.
-  const node = self.singleMap.get(singleType).get(id) || {};
-  self.singleMap.get(singleType).set(id, Object.assign(node, { ...newEntity, fetching, ready }));
-};
-
-const addEntities = ({ self, entities, ready = true, fetching = false }) => {
-  // Update the entities.
-  Object.entries(entities).map(([type, single]) => {
-    Object.entries(single).map(([id, entity]) => {
-      addEntity({ self, type, id: parseInt(id, 10), entity, ready, fetching });
-    });
-  });
-};
-
-export const init = ({ self, listType, listId, page, singleType, singleId, fetching }) => {
-  if (listType) {
-    if (!page) page = 1;
-    // Init the first map (type) if it's not initializated yet.
-    if (!self.listMap.get(listType)) self.listMap.set(listType, {});
-    const list = self.listMap.get(listType);
-    if (!list.get(listId)) list.set(listId, {});
-    list.get(listId).fetching = fetching;
-    if (!list.get(listId).pageMap.get(page - 1)) list.get(listId).pageMap.set(page - 1, {});
-    list.get(listId).pageMap.get(page - 1).fetching = fetching;
-    if (listType !== 'latest') addEntity({ self, type: listType, id: listId, fetching });
-  } else {
-    addEntity({ self, type: singleType, id: singleId, fetching });
-  }
-};
+export const views = self => ({
+  single(singleType, singleId) {
+    self.initSingle({ singleType, singleId });
+    return self.singleMap.get(`${singleType}_${singleId}`);
+  },
+  list(listType, listId) {
+    self.initList({ listType, listId });
+    return self.listMap.get(listType).get(listId);
+  },
+  custom(name) {
+    self.initCustom({ name });
+    return self.listMap.get(name);
+  },
+});
 
 export const actions = self => ({
+  addEntity({ type, id, entity }) {
+    // Create entity map if it's not created yet.
+    if (!self.entitiesMap.get(type)) self.entitiesMap.set(type, {});
+    // Add the entity.
+    self.entitiesMap.get(type).set(id, convert(entity));
+  },
+  addEntities({ entities }) {
+    // Update the entities.
+    Object.entries(entities).map(([type, single]) => {
+      Object.entries(single).map(([id, entity]) => {
+        self.addEntity({ type, id, entity });
+      });
+    });
+  },
+  initList({ listType, listId }) {
+    if (!self.listMap.get(listType)) self.listMap.set(listType, {});
+    if (!self.listMap.get(listType).get(listId)) self.listMap.get(listType).set(listId, {});
+  },
+  initSingle({ singleType, singleId }) {
+    const mstId = `${singleType}_${singleId}`;
+    if (!self.singleMap.get(mstId))
+      self.singleMap.set(mstId, { mstId, id: singleId, type: singleType });
+  },
+  initCustom({ name }) {
+    if (!self.customMap.get(name)) self.customMap.set(name, {});
+  },
   [actionTypes.SINGLE_REQUESTED]({ singleType, singleId }) {
-    init({ self, singleType, singleId, fetching: true });
+    // self.single(singleType, singleId).fetching = true;
   },
   [actionTypes.SINGLE_FAILED]({ singleType, singleId }) {
-    // Populate the state with the entity value and set both fetching and ready.
-    self.single[singleType][singleId].fetching = false;
+    // self.single(singleType, singleId).fetching = false;
   },
   [actionTypes.SINGLE_SUCCEED]({ entities }) {
-    addEntities({ self, entities, ready: true, fetching: false });
+    // self.addEntities({ entities, ready: true, fetching: false });
   },
   [actionTypes.LIST_REQUESTED]({ listType, listId, page }) {
-    init({ self, listType, listId, page, fetching: true });
+    // self.list(listType, listId).fetching = true;
+    // self.list(listType, listId).page(page);
+    // init({ self, listType, listId, page, fetching: true });
   },
   [actionTypes.LIST_SUCCEED]({ listType, listId, page, total, result, entities }) {
     // Update the list.
-    const list = self.listMap.get(listType).get(listId);
-    list.fetching = false;
-    list.ready = true;
-    list.pageMap.get(page - 1).fetching = false;
-    list.pageMap.get(page - 1).ready = true;
-    list.pageMap.get(page - 1).entities = result;
-    if (total) list.total = total;
-
-    addEntities({ self, entities, ready: true, fetching: false });
-    if (self.context) extractList({ listType, listId, page, result }, self.context);
+    // const list = self.listMap.get(listType).get(listId);
+    // list.fetching = false;
+    // list.ready = true;
+    // list.pageMap.get(page - 1).fetching = false;
+    // list.pageMap.get(page - 1).ready = true;
+    // list.pageMap.get(page - 1).entities = result;
+    // if (total) list.total = total;
+    //
+    // addEntities({ self, entities, ready: true, fetching: false });
+    // if (self.context) extractList({ listType, listId, page, result }, self.context);
   },
   [actionTypes.LIST_FAILED]({ listType, listId, page }) {
     // Populate the state with the entity value and set both fetching and ready.
-    self.listMap.get(listType).get(listId).fetching = false;
-    self.listMap
-      .get(listType)
-      .get(listId)
-      .pageMap.get(page - 1).fetching = false;
+    // self.listMap.get(listType).get(listId).fetching = false;
+    // self.listMap
+    //   .get(listType)
+    //   .get(listId)
+    //   .pageMap.get(page - 1).fetching = false;
   },
   [actionTypes.CUSTOM_REQUESTED]({ url, params, name, page }) {
-    if (!self.customMap.get(name)) self.customMap.set(name, {});
-    const custom = self.customMap.get(name);
-    custom.fetching = true;
-    custom.url = url;
-    custom.params = params;
-    if (!custom.pageMap.get(page - 1)) custom.pageMap.set(page - 1, {});
-    custom.pageMap.get(page - 1).fetching = true;
+    // if (!self.customMap.get(name)) self.customMap.set(name, {});
+    // const custom = self.customMap.get(name);
+    // custom.fetching = true;
+    // custom.url = url;
+    // custom.params = params;
+    // if (!custom.pageMap.get(page - 1)) custom.pageMap.set(page - 1, {});
+    // custom.pageMap.get(page - 1).fetching = true;
   },
   [actionTypes.CUSTOM_SUCCEED]({ name, page, total, result, entities }) {
-    const custom = self.customMap.get(name);
-    custom.fetching = false;
-    custom.ready = true;
-    custom.pageMap.get(page - 1).fetching = false;
-    custom.pageMap.get(page - 1).ready = true;
-    custom.pageMap.get(page - 1).entities = result;
-    custom.total = total;
-    addEntities({ self, entities, ready: true, fetching: false });
+    // const custom = self.customMap.get(name);
+    // custom.fetching = false;
+    // custom.ready = true;
+    // custom.pageMap.get(page - 1).fetching = false;
+    // custom.pageMap.get(page - 1).ready = true;
+    // custom.pageMap.get(page - 1).entities = result;
+    // custom.total = total;
+    // addEntities({ self, entities, ready: true, fetching: false });
   },
   [actionTypes.CUSTOM_FAILED]({ name, page }) {
-    const custom = self.customMap.get(name);
-    custom.fetching = false;
-    custom.pageMap.get(page - 1).fetching = false;
+    // const custom = self.customMap.get(name);
+    // custom.fetching = false;
+    // custom.pageMap.get(page - 1).fetching = false;
   },
   [actionTypes.SITE_INFO_SUCCEED]({ home: { title, description }, perPage }) {
-    self.siteInfo.home.title = title;
-    self.siteInfo.home.description = description;
-    self.siteInfo.perPage = perPage;
+    // self.siteInfo.home.title = title;
+    // self.siteInfo.home.description = description;
+    // self.siteInfo.perPage = perPage;
   },
 });

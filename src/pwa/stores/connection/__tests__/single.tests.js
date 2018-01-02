@@ -1,3 +1,4 @@
+import { autorun } from 'mobx';
 import { types, applySnapshot } from 'mobx-state-tree';
 import * as connect from '../';
 import * as actions from '../../../actions';
@@ -11,6 +12,29 @@ const Connection = types
   .actions(connect.actions);
 
 describe('Store › Single', () => {
+  test('Access single without initializating', () => {
+    const connection = Connection.create({});
+    expect(connection.single('post', 60).title).toBe(null);
+    expect(connection.single('post', 60).fetching).toBe(false);
+    expect(connection.single('post', 60).ready).toBe(false);
+  });
+
+  test.only('Subscribe to single fields without initializating', done => {
+    const connection = Connection.create({});
+    autorun(() => {
+      if (connection.single('post', 60).title) done();
+    })
+    connection[actionTypes.SINGLE_SUCCEED](actions.singleSucceed({
+      entities: {
+        'post': {
+          60: {
+            title: 'The Beauties of'
+          }
+        }
+      }
+    }))
+  });
+
   test('Retrieve entity properties', () => {
     const connection = Connection.create({
       singleMap: {
@@ -25,7 +49,7 @@ describe('Store › Single', () => {
         },
       },
     });
-    expect(connection.single.category[7]).toMatchSnapshot();
+    expect(connection.single('category', 7)).toMatchSnapshot();
     applySnapshot(connection, {
       singleMap: {
         category: {
@@ -55,9 +79,9 @@ describe('Store › Single', () => {
         },
       },
     });
-    expect(connection.single.category[7]).toMatchSnapshot();
-    expect(connection.single.category[8]).toMatchSnapshot();
-    expect(connection.single.tag[10]).toMatchSnapshot();
+    expect(connection.single('category', 7)).toMatchSnapshot();
+    expect(connection.single('category', 8)).toMatchSnapshot();
+    expect(connection.single('tag', 10)).toMatchSnapshot();
   });
 
   test('Retrieve nested entities', () => {
@@ -150,7 +174,7 @@ describe('Store › Single', () => {
         },
       },
     });
-    expect(connection.single.post[60]).toMatchSnapshot();
+    expect(connection.single('post', 60)).toMatchSnapshot();
   });
 
   test('Add post. Request and succeed', () => {
@@ -161,16 +185,16 @@ describe('Store › Single', () => {
         singleId: 60,
       }),
     );
-    expect(connection.single.post[60].fetching).toBe(true);
-    expect(connection.single.post[60].ready).toBe(false);
+    expect(connection.single('post', 60).fetching).toBe(true);
+    expect(connection.single('post', 60).ready).toBe(false);
     connection[actionTypes.SINGLE_SUCCEED](
       actions.singleSucceed({
         entities: post60normalized,
       }),
     );
-    expect(connection.single.post[60].fetching).toBe(false);
-    expect(connection.single.post[60].ready).toBe(true);
-    expect(connection.single.post[60].title).toBe('The Beauties of Gullfoss');
+    expect(connection.single('post', 60).fetching).toBe(false);
+    expect(connection.single('post', 60).ready).toBe(true);
+    expect(connection.single('post', 60).title).toBe('The Beauties of Gullfoss');
   });
 
   test('Add post. Request and fail.', () => {
@@ -181,8 +205,8 @@ describe('Store › Single', () => {
         singleId: 60,
       }),
     );
-    expect(connection.single.post[60].fetching).toBe(true);
-    expect(connection.single.post[60].ready).toBe(false);
+    expect(connection.single('post', 60).fetching).toBe(true);
+    expect(connection.single('post', 60).ready).toBe(false);
     connection[actionTypes.SINGLE_FAILED](
       actions.singleFailed({
         singleType: 'post',
@@ -190,7 +214,7 @@ describe('Store › Single', () => {
         error: new Error('Something went wrong!'),
       }),
     );
-    expect(connection.single.post[60].fetching).toBe(false);
-    expect(connection.single.post[60].ready).toBe(false);
+    expect(connection.single('post', 60).fetching).toBe(false);
+    expect(connection.single('post', 60).ready).toBe(false);
   });
 });

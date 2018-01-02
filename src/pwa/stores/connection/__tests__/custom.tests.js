@@ -105,33 +105,33 @@ const snapshot = {
 describe('Store › Custom', () => {
   test('Check custom and page totals', () => {
     const connection = Connection.create(snapshot);
-    expect(connection.custom.test1).toMatchSnapshot();
-    expect(connection.custom.test2).toMatchSnapshot();
+    expect(connection.custom('test1')).toMatchSnapshot();
+    expect(connection.custom('test2')).toMatchSnapshot();
 
     // Views
-    expect(connection.custom.test1.page[0].total).toBe(2);
-    expect(connection.custom.test1.page[1].total).toBe(2);
-    expect(connection.custom.test1.page[7].total).toBe(2);
-    expect(connection.custom.test2.page[0].total).toBe(4);
-    expect(connection.custom.test2.page[1].total).toBe(3);
+    expect(connection.custom('test1').page[0].total).toBe(2);
+    expect(connection.custom('test1').page[1].total).toBe(2);
+    expect(connection.custom('test1').page[7].total).toBe(2);
+    expect(connection.custom('test2').page[0].total).toBe(4);
+    expect(connection.custom('test2').page[1].total).toBe(3);
 
-    expect(connection.custom.test1.total.fetched.entities).toBe(6);
-    expect(connection.custom.test1.total.fetched.pages).toBe(8);
-    expect(connection.custom.test2.total.fetched.entities).toBe(7);
-    expect(connection.custom.test2.total.fetched.pages).toBe(2);
+    expect(connection.custom('test1').total.fetched.entities).toBe(6);
+    expect(connection.custom('test1').total.fetched.pages).toBe(8);
+    expect(connection.custom('test2').total.fetched.entities).toBe(7);
+    expect(connection.custom('test2').total.fetched.pages).toBe(2);
   });
 
   test('Check entities and page entities names', () => {
     const connection = Connection.create(snapshot);
     const testEntities = ({ entities }) => entities.forEach(e => expect(e).toMatchSnapshot());
 
-    testEntities(connection.custom.test1);
-    testEntities(connection.custom.test2);
+    testEntities(connection.custom('test1'));
+    testEntities(connection.custom('test2'));
 
-    testEntities(connection.custom.test1.page[0]);
-    testEntities(connection.custom.test1.page[7]);
-    testEntities(connection.custom.test2.page[0]);
-    testEntities(connection.custom.test2.page[1]);
+    testEntities(connection.custom('test1').page[0]);
+    testEntities(connection.custom('test1').page[7]);
+    testEntities(connection.custom('test2').page[0]);
+    testEntities(connection.custom('test2').page[1]);
   });
 
   test('Check CUSTOM_REQUESTED action', () => {
@@ -145,17 +145,17 @@ describe('Store › Custom', () => {
         params: {},
       }),
     );
-    expect(connection.custom.test.url).toBe('/pepe');
-    expect(connection.custom.test.params).toEqual({});
-    expect(connection.custom.test.fetching).toBe(true);
-    expect(connection.custom.test.ready).toBe(false);
-    expect(connection.custom.test.page[0].fetching).toBe(true);
-    expect(connection.custom.test.page[0].ready).toBe(false);
-    expect(connection.custom.test.total.entities).toBe(null);
-    expect(connection.custom.test.total.fetched.entities).toBeNull();
-    expect(connection.custom.test.total.fetched.pages).toBe(1);
-    expect(connection.custom.test.total.pages).toBe(null);
-    expect(connection.custom.test.page[0].total).toBe(0);
+    expect(connection.custom('test').url).toBe('/pepe');
+    expect(connection.custom('test').params).toEqual({});
+    expect(connection.custom('test').fetching).toBe(true);
+    expect(connection.custom('test').ready).toBe(false);
+    expect(connection.custom('test').page[0].fetching).toBe(true);
+    expect(connection.custom('test').page[0].ready).toBe(false);
+    expect(connection.custom('test').total.entities).toBe(null);
+    expect(connection.custom('test').total.fetched.entities).toBeNull();
+    expect(connection.custom('test').total.fetched.pages).toBe(1);
+    expect(connection.custom('test').total.pages).toBe(null);
+    expect(connection.custom('test').page[0].total).toBe(0);
   });
 
   test('Check CUSTOM_SUCCEED action', () => {
@@ -185,19 +185,19 @@ describe('Store › Custom', () => {
         },
       }),
     );
-    expect(connection.custom.test.fetching).toBe(false);
-    expect(connection.custom.test.ready).toBe(true);
-    expect(connection.custom.test.page[0].fetching).toBe(false);
-    expect(connection.custom.test.page[0].ready).toBe(true);
-    expect(connection.custom.test.total.entities).toBe(7);
-    expect(connection.custom.test.total.fetched.entities).toBe(7);
-    expect(connection.custom.test.total.fetched.pages).toBe(1);
-    expect(connection.custom.test.total.pages).toBe(1);
-    expect(connection.custom.test.page[0].total).toBe(7);
-    expect(connection.custom.test.entities[0].name).toBe('Weekend Trip');
-    expect(connection.custom.test.entities[6].name).toBe('Travel');
-    expect(connection.custom.test.page[0].entities[0].name).toBe('Weekend Trip');
-    expect(connection.custom.test.page[0].entities[6].name).toBe('Travel');
+    expect(connection.custom('test').fetching).toBe(false);
+    expect(connection.custom('test').ready).toBe(true);
+    expect(connection.custom('test').page[0].fetching).toBe(false);
+    expect(connection.custom('test').page[0].ready).toBe(true);
+    expect(connection.custom('test').total.entities).toBe(7);
+    expect(connection.custom('test').total.fetched.entities).toBe(7);
+    expect(connection.custom('test').total.fetched.pages).toBe(1);
+    expect(connection.custom('test').total.pages).toBe(1);
+    expect(connection.custom('test').page[0].total).toBe(7);
+    expect(connection.custom('test').entities[0].name).toBe('Weekend Trip');
+    expect(connection.custom('test').entities[6].name).toBe('Travel');
+    expect(connection.custom('test').page[0].entities[0].name).toBe('Weekend Trip');
+    expect(connection.custom('test').page[0].entities[6].name).toBe('Travel');
   });
 
   test('Check CUSTOM_FAILED action', () => {
@@ -221,14 +221,14 @@ describe('Store › Custom', () => {
         endpoint: '/pepe',
       }),
     );
-    expect(connection.custom.test.fetching).toBe(false);
-    expect(connection.custom.test.ready).toBe(false);
-    expect(connection.custom.test.page[0].fetching).toBe(false);
-    expect(connection.custom.test.page[0].ready).toBe(false);
-    expect(connection.custom.test.total.entities).toBe(null);
-    expect(connection.custom.test.total.fetched.entities).toBeNull();
-    expect(connection.custom.test.total.fetched.pages).toBe(1);
-    expect(connection.custom.test.total.pages).toBe(null);
-    expect(connection.custom.test.page[0].total).toBe(0);
+    expect(connection.custom('test').fetching).toBe(false);
+    expect(connection.custom('test').ready).toBe(false);
+    expect(connection.custom('test').page[0].fetching).toBe(false);
+    expect(connection.custom('test').page[0].ready).toBe(false);
+    expect(connection.custom('test').total.entities).toBe(null);
+    expect(connection.custom('test').total.fetched.entities).toBeNull();
+    expect(connection.custom('test').total.fetched.pages).toBe(1);
+    expect(connection.custom('test').total.pages).toBe(null);
+    expect(connection.custom('test').page[0].total).toBe(0);
   });
 });

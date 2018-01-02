@@ -84,6 +84,41 @@ export const Post = types
     };
   });
 
+const PostRef = types.model({ type: 'post', entity: types.reference(Post) });
+const TaxonomyRef = types.model({ type: 'taxonomy', entity: types.reference(Taxonomy) });
+const AuthorRef = types.model({ type: 'author', entity: types.reference(Author) });
+const MediaRef = types.model({ type: 'media', entity: types.reference(Media) });
+
+const references = { post: PostRef, taxonomy: TaxonomyRef, author: AuthorRef, media: MediaRef };
+
+const AnyRef = types.union(
+  snapshot => snapshot && snapshot.mst && references[snapshot.mst],
+  PostRef,
+  TaxonomyRef,
+  AuthorRef,
+  MediaRef,
+);
+
+export const Single = types
+  .model('Single')
+  .props({
+    mstId: types.identifier(types.string), // post_60, category_7, movie_34, author_3, media_35
+    type: types.string, // post, category, movie, author, media
+    id: types.number, // 60, 7, 34, 3, 35
+    ready: false,
+    fetching: false,
+    reference: types.maybe(types.reference(AnyRef)), // Post, Taxonomy, Author, Media
+  })
+  .views(self => ({
+    get entity() {
+      return self.reference && self.reference.entity || {};
+    },
+    get title() {
+      return (self.entity && self.entity.title) || null;
+    },
+    // [...] All other properties from Post, Taxonomy, Author and Media
+  }));
+
 export const Any = types.union(
   snapshot => {
     if (snapshot.taxonomy) return Taxonomy;
