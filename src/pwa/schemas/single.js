@@ -16,12 +16,12 @@ const media = new schema.Entity(
 
 const taxonomies = new schema.Array(new schema.Array(taxonomy));
 
-export const post = new schema.Entity(
-  'post',
+export const single = new schema.Entity(
+  'single',
   {},
   {
     processStrategy(entity) {
-      const result = { ...entity, mst: 'post' };
+      const result = { ...entity, mst: 'single' };
 
       if (entity._embedded) {
         // Get all taxonomies and generate a map so we can know later on which props
@@ -42,13 +42,13 @@ export const post = new schema.Entity(
   },
 );
 
-post.define({
+single.define({
   _embedded: {
     author: [author],
     'wp:featuredmedia': [media],
     'wp:term': taxonomies,
-    up: post,
+    up: single,
   },
 });
 
-export const posts = new schema.Array(post);
+export const singles = new schema.Array(single);

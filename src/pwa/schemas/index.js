@@ -1,19 +1,19 @@
 import { schema } from 'normalizr';
-import { post } from './posts';
+import { single } from './single';
 import { taxonomy } from './taxonomies';
 import { author } from './authors';
 
-export const single = new schema.Union(
+export const entity = new schema.Union(
   {
-    post,
+    single,
     taxonomy,
     author,
   },
   val => {
     if (val.taxonomy) return 'taxonomy';
     else if (val.name) return 'author';
-    return 'post';
+    return 'single';
   }
 );
 
-export const list = new schema.Array(single);
+export const list = new schema.Array(entity);

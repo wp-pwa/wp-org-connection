@@ -1,6 +1,6 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`Convert a author using single 1`] = `
+exports[`Convert a author using entity 1`] = `
 Object {
   "_links": Object {
     "collection": Array [
@@ -30,7 +30,7 @@ Object {
 }
 `;
 
-exports[`Convert a category using single 1`] = `
+exports[`Convert a category using entity 1`] = `
 Object {
   "_links": Object {
     "about": Array [
@@ -78,7 +78,7 @@ Object {
 }
 `;
 
-exports[`Convert a tag using single 1`] = `
+exports[`Convert a tag using entity 1`] = `
 Object {
   "_links": Object {
     "about": Array [
@@ -125,7 +125,7 @@ Object {
 }
 `;
 
-exports[`Convert post using single 1`] = `
+exports[`Convert post using entity 1`] = `
 Object {
   "_embedded": Object {
     "author": Array [
@@ -320,7 +320,7 @@ Category: <a href=\\"https://demo.worona.org/wp-cat/travel/\\">Travel</a></p>
   "meta": Object {},
   "modified": "2017-11-10T14:51:46",
   "modified_gmt": "2017-11-10T14:51:46",
-  "mst": "post",
+  "mst": "single",
   "ping_status": "open",
   "slug": "the-beauties-of-gullfoss",
   "sticky": false,
@@ -354,7 +354,7 @@ Category: <a href=\\"https://demo.worona.org/wp-cat/travel/\\">Travel</a></p>
 }
 `;
 
-exports[`Convert post using single 2`] = `
+exports[`Convert post using entity 2`] = `
 Object {
   "_links": Object {
     "about": Array [
@@ -465,7 +465,7 @@ Object {
 }
 `;
 
-exports[`Convert post using single 3`] = `
+exports[`Convert post using entity 3`] = `
 Object {
   "_links": Object {
     "about": Array [
@@ -509,7 +509,7 @@ Object {
 }
 `;
 
-exports[`Convert post using single 4`] = `
+exports[`Convert post using entity 4`] = `
 Object {
   "_links": Object {
     "about": Array [
@@ -553,7 +553,7 @@ Object {
 }
 `;
 
-exports[`Convert post using single 5`] = `
+exports[`Convert post using entity 5`] = `
 Object {
   "_links": Object {
     "collection": Array [
