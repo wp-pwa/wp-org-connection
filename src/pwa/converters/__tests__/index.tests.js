@@ -1,37 +1,26 @@
-import convert, { post, taxonomy, author, media } from '../';
-import post60normalized from '../../__tests__/post-60-normalized.json';
-import post60converted from '../../__tests__/post-60-converted.json';
-import category3converted from '../../__tests__/category-3-converted.json';
-import tag9converted from '../../__tests__/tag-9-converted.json';
-import author4converted from '../../__tests__/author-4-converted.json';
-import media62converted from '../../__tests__/media-62-converted.json';
+import { normalize } from 'normalizr';
+import convert from '../';
+import post60 from '../../__tests__/post-60.json';
+import { entity } from '../../schemas';
+
+const { entities } = normalize(post60, entity);
 
 test('Convert post', () => {
-  const post60 = post60normalized.post[60];
-  expect(post(post60)).toEqual(post60converted);
-  expect(convert(post60)).toEqual(post60converted);
+  expect(convert(entities.single[60])).toMatchSnapshot();
 });
 
 test('Convert category', () => {
-  const category = post60normalized.taxonomy[3];
-  expect(taxonomy(category)).toEqual(category3converted);
-  expect(convert(category)).toEqual(category3converted);
+  expect(convert(entities.taxonomy[3])).toMatchSnapshot();
 });
 
 test('Convert tag', () => {
-  const tag = post60normalized.taxonomy[9];
-  expect(taxonomy(tag)).toEqual(tag9converted);
-  expect(convert(tag)).toEqual(tag9converted);
+  expect(convert(entities.taxonomy[9])).toMatchSnapshot();
 });
 
 test('Convert author', () => {
-  const author4 = post60normalized.author[4];
-  expect(author(author4)).toEqual(author4converted);
-  expect(convert(author4)).toEqual(author4converted);
+  expect(convert(entities.author[4])).toMatchSnapshot();
 });
 
 test('Convert media', () => {
-  const media62 = post60normalized.media[62];
-  expect(media(media62)).toEqual(media62converted);
-  expect(convert(media62)).toEqual(media62converted);
+  expect(convert(entities.media[62])).toMatchSnapshot();
 });

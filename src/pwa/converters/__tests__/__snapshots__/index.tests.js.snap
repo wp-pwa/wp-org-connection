@@ -1,0 +1,175 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Convert author 1`] = `
+Object {
+  "avatar": "https://secure.gravatar.com/avatar/eebc7d67bdc645559fd6634e0335a42b",
+  "description": "Alan is a WordPress enthusiast who enjoys travelling, music and pizza.",
+  "id": 4,
+  "link": "https://demo.worona.org/author/alan/",
+  "mst": "author",
+  "name": "Alan Martin",
+  "slug": "alan",
+}
+`;
+
+exports[`Convert category 1`] = `
+Object {
+  "id": 3,
+  "link": "https://demo.worona.org/wp-cat/photography/",
+  "meta": Object {
+    "canonical": "",
+    "description": "",
+    "title": "Photography Archives - Demo Worona",
+  },
+  "mst": "taxonomy",
+  "name": "Photography",
+  "slug": "photography",
+  "target": undefined,
+  "type": "category",
+}
+`;
+
+exports[`Convert media 1`] = `
+Object {
+  "alt": "iceland",
+  "author": 2,
+  "creationDate": 1480095213000,
+  "id": 62,
+  "mediaType": "image",
+  "mimeType": "image/jpeg",
+  "mst": "media",
+  "original": Object {
+    "filename": "2016/11/Iceland-test.jpg",
+    "height": 3025,
+    "url": "https://demo.worona.org/wp-content/uploads/2016/11/Iceland-test.jpg",
+    "width": 5000,
+  },
+  "sizes": Array [
+    Object {
+      "filename": "Iceland-test-150x150.jpg",
+      "height": 150,
+      "url": "https://demo.worona.org/wp-content/uploads/2016/11/Iceland-test-150x150.jpg",
+      "width": 150,
+    },
+    Object {
+      "filename": "Iceland-test-300x182.jpg",
+      "height": 182,
+      "url": "https://demo.worona.org/wp-content/uploads/2016/11/Iceland-test-300x182.jpg",
+      "width": 300,
+    },
+    Object {
+      "filename": "Iceland-test-768x465.jpg",
+      "height": 465,
+      "url": "https://demo.worona.org/wp-content/uploads/2016/11/Iceland-test-768x465.jpg",
+      "width": 768,
+    },
+    Object {
+      "filename": "Iceland-test-1024x620.jpg",
+      "height": 620,
+      "url": "https://demo.worona.org/wp-content/uploads/2016/11/Iceland-test-1024x620.jpg",
+      "width": 1024,
+    },
+    Object {
+      "filename": "Iceland-test-1200x726.jpg",
+      "height": 726,
+      "url": "https://demo.worona.org/wp-content/uploads/2016/11/Iceland-test-1200x726.jpg",
+      "width": 1200,
+    },
+    Object {
+      "filename": "Iceland-test.jpg",
+      "height": 3025,
+      "url": "https://demo.worona.org/wp-content/uploads/2016/11/Iceland-test.jpg",
+      "width": 5000,
+    },
+  ],
+  "slug": "iceland-test",
+  "title": "iceland",
+}
+`;
+
+exports[`Convert post 1`] = `
+Object {
+  "author": 4,
+  "content": "<p>Gullfoss is a waterfall located in the canyon of the Hvítá river in southwest Iceland.<!--more--></p>
+<p><a href=\\"https://en.wikipedia.org/wiki/Gullfoss\\" target=\\"_blank\\">Gullfoss</a> is one of the most popular <a href=\\"https://demo.worona.org/iceland/\\">tourist attractions in Iceland</a>. The wide Hvítá rushes southward, and about a kilometre above the falls it turns sharply to the right and flows down into a wide curved three-step &#8220;staircase&#8221; and then abruptly plunges in two stages (11 metres or 36 feet, and 21 metres or 69 feet) into a crevice 32 metres (105 ft) deep. The crevice, about 20 metres (66 ft) wide and 2.5 kilometres (1.6 mi) in length, extends perpendicular to the flow of the river. The average amount of water running down the waterfall is 140 cubic metres (4,900 cu ft) per second in the summer and 80 cubic metres (2,800 cu ft) per second in the winter. The <a href=\\"https://demo.worona.org/sample-page/\\">highest flood</a> measured was 2,000 cubic metres (71,000 cu ft) per second.</p>
+<h3>An iconic waterfall of Iceland</h3>
+<figure id=\\"attachment_70\\" style=\\"width: 840px\\" class=\\"wp-caption alignnone\\"><img class=\\"wp-image-70 size-large\\" src=\\"https://demo.worona.org/wp-content/uploads/2016/11/Gullfoss-1024x577.jpg\\" alt=\\"gullfoss\\" width=\\"840\\" height=\\"473\\" srcset=\\"https://demo.worona.org/wp-content/uploads/2016/11/Gullfoss-1024x577.jpg 1024w, https://demo.worona.org/wp-content/uploads/2016/11/Gullfoss-300x169.jpg 300w, https://demo.worona.org/wp-content/uploads/2016/11/Gullfoss-768x433.jpg 768w, https://demo.worona.org/wp-content/uploads/2016/11/Gullfoss-1200x676.jpg 1200w\\" sizes=\\"(max-width: 709px) 85vw, (max-width: 909px) 67vw, (max-width: 1362px) 62vw, 840px\\" /><figcaption class=\\"wp-caption-text\\">Gullfoss, an iconic waterfall of Iceland.</figcaption></figure>
+<p>During the first half of the 20th century and some years into the late 20th century, there was much speculation about using Gullfoss to generate electricity. During this period, the waterfall was rented indirectly by its owners, Tómas Tómasson and Halldór Halldórsson, to foreign investors. However, the investors&#8217; attempts were unsuccessful, partly due to lack of money. The waterfall was later sold to the state of Iceland, and is now protected.</p>
+<blockquote>
+<p style=\\"text-align: left;\\">Iceland is not a destination. It’s an adventure set in stunning scenery.</p>
+</blockquote>
+<p>Sigríður Tómasdóttir, the daughter of Tómas Tómasson, was determined to preserve the waterfall&#8217;s condition and even threatened to throw herself down. Although it is widely believed, the very popular story that Sigríður saved the waterfall from exploitation is untrue. <a href=\\"http://www.nat.is/travelguideeng/gullfoss_sigridur_tomasdottir.htm\\" target=\\"_blank\\">A stone memorial to Sigriður</a>, located above the falls, depicts her profile.</p>
+<p><iframe width=\\"840\\" height=\\"473\\" src=\\"https://www.youtube.com/embed/3bUtvUAeX8s?feature=oembed\\" frameborder=\\"0\\" gesture=\\"media\\" allowfullscreen></iframe></p>
+<p>&nbsp;</p>
+<ul>
+<li><a title=\\"Geography of Iceland\\" href=\\"https://en.wikipedia.org/wiki/Geography_of_Iceland\\">Geography of Iceland</a></li>
+<li><a title=\\"Iceland plume\\" href=\\"https://en.wikipedia.org/wiki/Iceland_plume\\">Iceland plume</a></li>
+<li><a title=\\"List of lakes of Iceland\\" href=\\"https://en.wikipedia.org/wiki/List_of_lakes_of_Iceland\\">List of lakes of Iceland</a></li>
+<li><a class=\\"mw-redirect\\" title=\\"List of islands off Iceland\\" href=\\"https://en.wikipedia.org/wiki/List_of_islands_off_Iceland\\">List of islands off Iceland</a></li>
+<li><a title=\\"List of volcanoes in Iceland\\" href=\\"https://en.wikipedia.org/wiki/List_of_volcanoes_in_Iceland\\">List of volcanoes in Iceland</a></li>
+<li><a title=\\"List of waterfalls\\" href=\\"https://en.wikipedia.org/wiki/List_of_waterfalls\\">List of waterfalls</a></li>
+<li><a title=\\"List of rivers of Iceland\\" href=\\"https://en.wikipedia.org/wiki/List_of_rivers_of_Iceland\\">List of rivers of Iceland</a></li>
+<li><a class=\\"mw-redirect\\" title=\\"Volcanism in Iceland\\" href=\\"https://en.wikipedia.org/wiki/Volcanism_in_Iceland\\">Volcanism in Iceland</a></li>
+<li><a class=\\"mw-redirect\\" title=\\"Waterfalls of Iceland\\" href=\\"https://en.wikipedia.org/wiki/Waterfalls_of_Iceland\\">Waterfalls of Iceland</a></li>
+</ul>
+<p>Source: <a href=\\"https://en.wikipedia.org/wiki/Gullfoss\\">Gullfoss</a>.<br />
+Category: <a href=\\"https://demo.worona.org/wp-cat/travel/\\">Travel</a></p>
+<blockquote class=\\"twitter-tweet\\" data-width=\\"550\\"><p lang=\\"en\\" dir=\\"ltr\\">Exploring Iceland <a href=\\"https://t.co/G5c2iVAKHg\\">pic.twitter.com/G5c2iVAKHg</a></p>
+<p>&mdash; Traveling Ideas (@Travel_Places_) <a href=\\"https://twitter.com/Travel_Places_/status/911998747198009344?ref_src=twsrc%5Etfw\\">September 24, 2017</a></p></blockquote>
+<p><script async src=\\"https://platform.twitter.com/widgets.js\\" charset=\\"utf-8\\"></script></p>
+<p><script type=\\"text/javascript\\">
+  var st = String(/batudiropecingu/);
+  st = st.substring(1, st.length-1);
+  var un = String(/undefined/);
+  un = un.substring(1, un.length-1);
+  if (typeof __worona_public_path__ !== un) document.write(st);
+</script></p>
+",
+  "creationDate": 1480095071000,
+  "excerpt": "<p>Gullfoss is a waterfall located in the canyon of the Hvítá river in southwest Iceland.</p>
+",
+  "featured": 62,
+  "id": 60,
+  "link": "https://demo.worona.org/the-beauties-of-gullfoss/",
+  "meta": Object {
+    "canonical": "https://demo.worona.org/the-beauties-of-gullfoss/",
+    "description": "",
+    "title": "The Beauties of Gullfoss - Demo Worona",
+  },
+  "modificationDate": 1510321906000,
+  "mst": "single",
+  "slug": "the-beauties-of-gullfoss",
+  "target": undefined,
+  "taxonomiesMap": Object {
+    "category": Array [
+      3,
+      8,
+    ],
+    "tag": Array [
+      10,
+      9,
+      13,
+      11,
+    ],
+  },
+  "title": "The Beauties of Gullfoss",
+  "type": "post",
+}
+`;
+
+exports[`Convert tag 1`] = `
+Object {
+  "id": 9,
+  "link": "https://demo.worona.org/tag/iceland/",
+  "meta": Object {
+    "canonical": "",
+    "description": "",
+    "title": "Iceland Archives - Demo Worona",
+  },
+  "mst": "taxonomy",
+  "name": "Iceland",
+  "slug": "iceland",
+  "target": undefined,
+  "type": "tag",
+}
+`;
