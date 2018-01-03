@@ -1,5 +1,6 @@
 import { types } from 'mobx-state-tree';
-import { Single, Any } from './single';
+import { Resources } from './resources';
+import { Entity } from './entity';
 import { List } from './list';
 import { Custom } from './custom';
 import SiteInfo from './site-info';
@@ -8,60 +9,58 @@ import * as actionTypes from '../../actionTypes';
 import convert from '../../converters';
 
 export const props = {
-  entitiesMap: types.optional(types.map(types.map(Any)), {}),
-  singleMap: types.optional(types.map(Single), {}),
-  listMap: types.optional(types.map(types.map(List)), {}),
-  customMap: types.optional(types.map(Custom), {}),
+  resources: types.optional(types.map(types.map(Resources)), {}),
+  entities: types.optional(types.map(Entity), {}),
+  lists: types.optional(types.map(List), {}),
+  customs: types.optional(types.map(Custom), {}),
   siteInfo: types.optional(SiteInfo, {}),
 };
 
 export const views = self => ({
-  single(singleType, singleId) {
-    self.initSingle({ singleType, singleId });
-    return self.singleMap.get(`${singleType}_${singleId}`);
+  entity(entityType, entityId) {
+    self.initEntity({ entityType, entityId });
+    return self.entities.get(`${entityType}_${entityId}`);
   },
   list(listType, listId) {
     self.initList({ listType, listId });
-    return self.listMap.get(listType).get(listId);
+    return self.lists.get(`${listType}_${listId}`);
   },
   custom(name) {
     self.initCustom({ name });
-    return self.listMap.get(name);
+    return self.customs.get(name);
   },
 });
 
 export const actions = self => ({
-  addEntity({ type, id, entity }) {
-    // Create entity map if it's not created yet.
-    if (!self.entitiesMap.get(type)) self.entitiesMap.set(type, {});
-    // Add the entity.
-    self.entitiesMap.get(type).set(id, convert(entity));
+  initEntity({ entityType, entityId }) {
+    const mstId = `${entityType}_${entityId}`;
+    if (!self.entities.get(mstId))
+      self.entities.put({ mstId, id: entityId, type: entityType });
   },
-  addEntities({ entities }) {
-    // Update the entities.
+  initList({ listType, listId }) {
+    const mstId = `${listType}_${listId}`;
+    if (!self.lists.get(mstId))
+      self.lists.put({ mstId, id: listId, type: listType });
+  },
+  addResource({ type, id, entity }) {
+    if (!self.resources.get(type)) self.resources.set(type, {});
+    self.resources.get(type).set(id, convert(entity));
+  },
+  addResources({ entities }) {
     Object.entries(entities).map(([type, single]) => {
       Object.entries(single).map(([id, entity]) => {
-        self.addEntity({ type, id, entity });
+        self.addResource({ type, id, entity });
       });
     });
   },
-  initList({ listType, listId }) {
-    if (!self.listMap.get(listType)) self.listMap.set(listType, {});
-    if (!self.listMap.get(listType).get(listId)) self.listMap.get(listType).set(listId, {});
-  },
-  initSingle({ singleType, singleId }) {
-    const mstId = `${singleType}_${singleId}`;
-    if (!self.singleMap.get(mstId))
-      self.singleMap.set(mstId, { mstId, id: singleId, type: singleType });
-  },
   initCustom({ name }) {
-    if (!self.customMap.get(name)) self.customMap.set(name, {});
+    if (!self.customs.get(name)) self.customs.set(name, {});
   },
-  [actionTypes.SINGLE_REQUESTED]({ singleType, singleId }) {
-    // self.single(singleType, singleId).fetching = true;
+  [actionTypes.SINGLE_REQUESTED]({ entityType, entityId }) {
+    // self.single(entityType, entityId).fetching = true;
   },
-  [actionTypes.SINGLE_FAILED]({ singleType, singleId }) {
-    // self.single(singleType, singleId).fetching = false;
+  [actionTypes.SINGLE_FAILED]({ entityType, entityId }) {
+    // self.single(entityType, entityId).fetching = false;
   },
   [actionTypes.SINGLE_SUCCEED]({ entities }) {
     // self.addEntities({ entities, ready: true, fetching: false });

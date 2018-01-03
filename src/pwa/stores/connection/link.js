@@ -6,7 +6,7 @@ import { Media, Author, Taxonomy, Post } from '../connection/single';
 const Link = types.model('Link')
 .views(self => ({
   get url() {
-    const { _link, id, type, taxonomy } = getParent(self);
+    const { _link, id, taxonomy } = getParent(self);
     const nodeType = getType(getParent(self));
 
     if (self.pretty) {
@@ -15,7 +15,6 @@ const Link = types.model('Link')
     }
 
     // Entities with single
-    if (nodeType === Post && type === 'page') return `/?page_id=${id}`;
     if (nodeType === Post) return `/?p=${id}`;
     if (nodeType === Author) return `/?author=${id}`;
     if (nodeType === Media) return `/?attachement_id=${id}`; // does not work

@@ -2,6 +2,7 @@
 import { decode } from 'he';
 
 export const single = entity => ({
+  mst: 'single',
   id: entity.id,
   type: entity.type,
   creationDate: new Date(entity.date).getTime(),
@@ -22,12 +23,11 @@ export const single = entity => ({
     description: (entity.yoast_meta && entity.yoast_meta.yoast_wpseo_desc) || '',
     canonical: (entity.yoast_meta && entity.yoast_meta.yoast_wpseo_canonical) || '',
   },
-  mst: 'single',
 });
 
 export const taxonomy = entity => ({
-  id: entity.id,
   mst: 'taxonomy',
+  id: entity.id,
   name: entity.name,
   slug: entity.slug,
   link: entity.link,
@@ -41,8 +41,8 @@ export const taxonomy = entity => ({
 });
 
 export const author = entity => ({
-  id: entity.id,
   mst: 'author',
+  id: entity.id,
   name: entity.name,
   slug: entity.slug,
   description: entity.description,
@@ -51,6 +51,7 @@ export const author = entity => ({
 });
 
 export const media = entity => ({
+  mst: 'media',
   id: entity.id,
   creationDate: new Date(entity.date).getTime(),
   slug: entity.slug,
@@ -73,7 +74,6 @@ export const media = entity => ({
       filename: image.file,
       url: image.source_url,
     })),
-  mst: 'media',
 });
 
 export default entity => {
