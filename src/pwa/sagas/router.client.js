@@ -23,11 +23,13 @@ const getUrl = (selected, connection) => {
 };
 
 const routeChanged = ({ connection, history }) => {
-  const historyKeys = [];
-  let currentKey = -1;
+  // Initialize historyKeys
+  const historyKeys = [history.location.key];
+  let currentKey = 0;
 
   return eventChannel(emitter => {
     const unlisten = history.listen((location, action) => {
+
       const { pathname, state, key } = location;
       if (action === 'PUSH') {
         currentKey += 1;
@@ -38,10 +40,12 @@ const routeChanged = ({ connection, history }) => {
       }
       if (action === 'POP') {
         const newIndex = historyKeys.indexOf(key);
+        console.log(newIndex);
         if (newIndex > currentKey) state.method = 'forward';
         else state.method = 'back';
         currentKey = newIndex;
       }
+      console.log(historyKeys);
 
       // Prevents an event emission when just replacing the URL
       if (!(isMatch(connection.selected, state.selected) && action === 'REPLACE'))
@@ -106,7 +110,7 @@ export default function* routerSaga(stores, history = createHistory()) {
     context: generator,
   });
 
-  // Initializate router event channels.
+  // Initialize router event channels.
   const routeChangedEvents = routeChanged({ connection, history });
 
   // Track router events and dispatch them to redux.
