@@ -221,7 +221,7 @@ export const actions = self => {
 
   const pushContext = (selected, context) => {
     const contextIndex = self.context ? self.context.index + 1 : 0;
-    self.contexts.push(createContext(selected, context, contextIndex));
+    self.contexts[contextIndex] = createContext(selected, context, contextIndex);
     self.context = self.contexts[contextIndex];
     changeSelected(selected);
   };
