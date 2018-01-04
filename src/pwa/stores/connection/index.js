@@ -1,6 +1,5 @@
 import { types } from 'mobx-state-tree';
-import { Resources } from './resources';
-import { Entity } from './entity';
+import { Entity, Entities } from './entity';
 import { List } from './list';
 import { Custom } from './custom';
 import SiteInfo from './site-info';
@@ -9,8 +8,11 @@ import * as actionTypes from '../../actionTypes';
 import convert from '../../converters';
 
 export const props = {
-  resources: types.optional(types.map(types.map(Resources)), {}),
-  entities: types.optional(types.map(Entity), {}),
+  // Used to initalizate entities before they exist.
+  entityInits: types.optional(types.map(Entity), {}),
+  // Used to store entities when they are retrieved from the API.
+  entities: types.optional(types.map(types.map(Entities)), {}),
+  // Used to 
   lists: types.optional(types.map(List), {}),
   customs: types.optional(types.map(Custom), {}),
   siteInfo: types.optional(SiteInfo, {}),
