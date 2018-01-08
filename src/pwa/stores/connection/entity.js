@@ -1,6 +1,8 @@
 /* eslint-disable no-use-before-define */
 import { types, getParent } from 'mobx-state-tree';
 
+const parse = id => (Number.isFinite(parseInt(id, 10)) ? parseInt(id, 10) : id);
+
 export const Image = types.model('Image').props({
   height: types.number,
   width: types.number,
@@ -55,14 +57,11 @@ export const Single = types
     mst: 'single',
     id: types.identifier(types.number),
     type: types.string,
-    fetching: types.optional(types.boolean, false),
-    ready: types.optional(types.boolean, false),
     creationDate: types.Date,
     modificationDate: types.Date,
     title: types.string,
     slug: types.string,
     link: types.string,
-    guid: types.string,
     content: types.string,
     excerpt: types.string,
     author: types.reference(Author),
@@ -83,32 +82,7 @@ export const Single = types
     };
   });
 
-const PostRef = types.model({
-  mst: 'post',
-  entity: types.reference(Post, {
-    get(identifier, parent) {
-      return getParent(parent).getOrLoadUser(identifier);
-    },
-    set(value) {
-      return value.name;
-    },
-  }),
-});
-const TaxonomyRef = types.model({ mst: 'taxonomy', entity: types.reference(Taxonomy) });
-const AuthorRef = types.model({ mst: 'author', entity: types.reference(Author) });
-const MediaRef = types.model({ mst: 'media', entity: types.reference(Media) });
-
-const references = { post: PostRef, taxonomy: TaxonomyRef, author: AuthorRef, media: MediaRef };
-
-const AnyRef = types.union(
-  snapshot => snapshot && snapshot.mst && references[snapshot.mst],
-  PostRef,
-  TaxonomyRef,
-  AuthorRef,
-  MediaRef,
-);
-
-export const AnyEntity = types.union(
+export const Entities = types.union(
   snapshot => {
     if (snapshot.mst === 'taxonomy') return Taxonomy;
     if (snapshot.mst === 'author') return Author;
@@ -121,26 +95,61 @@ export const AnyEntity = types.union(
   Media,
 );
 
-
 export const Entity = types
   .model('Entity')
   .props({
     mstId: types.identifier(types.string), // post_60, category_7, movie_34, author_3, media_35
     type: types.string, // post, category, movie, author, media
     id: types.number, // 60, 7, 34, 3, 35
-    ready: false,
     fetching: false,
-    reference: types.maybe(types.reference(Resources, )), // Post, Taxonomy, Author, Media
+    entity: types.reference(Entities, {
+      get(identifier, parent) {
+        return parent.root.entities.get(parent.type).get(parent.id) || {};
+      },
+      set(value) {
+        return value;
+      },
+    }), // Post, Taxonomy, Author, Media
   })
   .views(self => ({
-    get ready() {
-      return getParent(self).resources.get(self.type)
+    get root() {
+      return getParent(self, 2);
     },
-    get entity() {
-      return (self.reference && self.reference.entity) || {};
+    get ready() {
+      return !!self.root.entities.get(self.type).get(self.id);
     },
     get title() {
       return (self.entity && self.entity.title) || null;
     },
+    get creationDate() {
+      return (self.entity && self.entity.creationDate) || null;
+    },
+    get modificationDate() {
+      return (self.entity && self.entity.modificationDate) || null;
+    },
+    get slug() {
+      return (self.entity && self.entity.slug) || null;
+    },
+    get isSingle() {
+      return (
+        (self.entity && self.entity.mst === 'single') ||
+        self.root.typeRelations.get(self.type) === 'single'
+      );
+    },
+    get isTaxonomy() {
+      return (
+        (self.entity && self.entity.mst === 'taxonomy') ||
+        self.root.typeRelations.get(self.type) === 'taxonomy'
+      );
+    },
+    get link() {
+      if (self.entity && self.entity.link) return self.entity.link;
+      if (self.type === 'category') return `/?cat=${self.id}`;
+      if (self.type === 'author') return `/?author=${self.id}`;
+      if (self.type === 'media') return `/?attachement_id=${self.id}`;
+      if (self.isSingle) return `/?p=${self.id}`;
+      return '/';
+    },
+    pagedLink() {},
     // [...] All other properties from Post, Taxonomy, Author and Media
   }));

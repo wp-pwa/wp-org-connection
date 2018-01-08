@@ -1,6 +1,6 @@
 import { types } from 'mobx-state-tree';
 import { Total } from './list';
-import { Any } from './single';
+// import { Entities } from './entity';
 
 // const PageTaxonomy = types
 //   .model('Page')

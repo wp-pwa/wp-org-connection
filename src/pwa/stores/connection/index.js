@@ -8,55 +8,63 @@ import * as actionTypes from '../../actionTypes';
 import convert from '../../converters';
 
 export const props = {
-  // Used to initalizate entities before they exist.
-  entityInits: types.optional(types.map(Entity), {}),
   // Used to store entities when they are retrieved from the API.
   entities: types.optional(types.map(types.map(Entities)), {}),
-  // Used to 
-  lists: types.optional(types.map(List), {}),
-  customs: types.optional(types.map(Custom), {}),
+  // Used to initalizate entities even before they exist.
+  entityMap: types.optional(types.map(Entity), {}),
+  // Used to store lists.
+  listMap: types.optional(types.map(List), {}),
+  // Used to store custom lists.
+  customMap: types.optional(types.map(Custom), {}),
+  // Used to general info related to the site.
   siteInfo: types.optional(SiteInfo, {}),
+  // Used to store mst <-> type relations
+  typeRelations: types.optional(types.map(types.string), {
+    'post': 'single',
+    'page': 'single',
+    'category': 'taxonomy',
+    'tag': 'taxonomy',
+  }),
 };
 
 export const views = self => ({
-  entity(entityType, entityId) {
-    self.initEntity({ entityType, entityId });
-    return self.entities.get(`${entityType}_${entityId}`);
+  entity(type, id) {
+    self.initEntityMap({ type, id });
+    return self.entityMap.get(`${type}_${id}`);
   },
-  list(listType, listId) {
-    self.initList({ listType, listId });
-    return self.lists.get(`${listType}_${listId}`);
+  list(type, id) {
+    self.initListMap({ type, id });
+    return self.listMap.get(`${type}_${id}`);
   },
   custom(name) {
-    self.initCustom({ name });
-    return self.customs.get(name);
+    self.initCustomMap({ name });
+    return self.customMap.get(name);
   },
 });
 
 export const actions = self => ({
-  initEntity({ entityType, entityId }) {
-    const mstId = `${entityType}_${entityId}`;
-    if (!self.entities.get(mstId))
-      self.entities.put({ mstId, id: entityId, type: entityType });
+  initEntityMap({ type, id }) {
+    const mstId = `${type}_${id}`;
+    if (!self.entities.get(type)) self.entities.set(type, {});
+    if (!self.entityMap.get(mstId)) self.entityMap.put({ mstId, type, id, entity: mstId });
   },
-  initList({ listType, listId }) {
-    const mstId = `${listType}_${listId}`;
-    if (!self.lists.get(mstId))
-      self.lists.put({ mstId, id: listId, type: listType });
+  initListMap({ type, id }) {
+    const mstId = `${type}_${id}`;
+    if (!self.listMap.get(mstId)) self.listMap.put({ mstId, type, id });
   },
-  addResource({ type, id, entity }) {
-    if (!self.resources.get(type)) self.resources.set(type, {});
-    self.resources.get(type).set(id, convert(entity));
+  initCustomMap({ name }) {
+    if (!self.customMap.get(name)) self.customMap.put({ name });
   },
-  addResources({ entities }) {
+  addEntity({ type, entity }) {
+    if (!self.entities.get(type)) self.entities.set(type, {});
+    self.entities.get(type).put(convert(entity));
+  },
+  addEntities({ entities }) {
     Object.entries(entities).map(([type, single]) => {
       Object.entries(single).map(([id, entity]) => {
-        self.addResource({ type, id, entity });
+        self.addEntity({ type, id, entity });
       });
     });
-  },
-  initCustom({ name }) {
-    if (!self.customs.get(name)) self.customs.set(name, {});
   },
   [actionTypes.SINGLE_REQUESTED]({ entityType, entityId }) {
     // self.single(entityType, entityId).fetching = true;
