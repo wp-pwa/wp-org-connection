@@ -55,14 +55,14 @@ Category: <a href=\\"https://demo.worona.org/wp-cat/travel/\\">Travel</a></p>
   "target": null,
   "taxonomiesMap": Object {
     "category": Array [
-      3,
-      8,
+      "category_3",
+      "category_8",
     ],
     "tag": Array [
-      10,
-      9,
-      13,
-      11,
+      "tag_10",
+      "tag_9",
+      "tag_13",
+      "tag_11",
     ],
   },
   "title": "The Beauties of Gullfoss",

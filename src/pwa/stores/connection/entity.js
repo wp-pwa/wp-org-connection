@@ -66,7 +66,16 @@ export const Single = types
     excerpt: types.string,
     author: types.reference(Author),
     featured: types.maybe(types.reference(Media)),
-    taxonomiesMap: types.optional(types.map(types.array(types.reference(Taxonomy))), {}),
+    taxonomiesMap: types.optional(types.map(types.array(types.reference(Taxonomy, {
+      get(identifier, parent) {
+        const [, type, id] = /(\w+)_(\d+)/.exec(identifier);
+        const root = getParent(parent, 5);
+        return root.entity(type, parse(id));
+      },
+      set(value) {
+        return value;
+      },
+    }))), {}),
     target: types.maybe(types.string),
     meta: types.optional(Meta, {}),
   })
@@ -130,6 +139,12 @@ export const Entity = types
     get slug() {
       return (self.entity && self.entity.slug) || null;
     },
+    get content() {
+      return (self.entity && self.entity.content) || null;
+    },
+    get excerpt() {
+      return (self.entity && self.entity.excerpt) || null;
+    },
     get isSingle() {
       return (
         (self.entity && self.entity.mst === 'single') ||
@@ -150,6 +165,12 @@ export const Entity = types
       if (self.isSingle) return `/?p=${self.id}`;
       return '/';
     },
-    pagedLink() {},
+    pagedLink(page = 1) {
+      if (self.isSingle) throw new Error(`Can't add a page to a single entity (${self.mstId})`);
+      return self.ready ? `${self.link}/page/${page}` : `${self.link}&paged=${page}`;
+    },
+    taxonomies(taxonomy) {
+      return self.entity.taxonomies && self.entity.taxonomies[taxonomy] || [];
+    }
     // [...] All other properties from Post, Taxonomy, Author and Media
   }));

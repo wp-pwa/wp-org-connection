@@ -1,5 +1,5 @@
 import { autorun } from 'mobx';
-import { types, applySnapshot, getSnapshot, unprotect } from 'mobx-state-tree';
+import { types, getSnapshot, unprotect } from 'mobx-state-tree';
 import { normalize } from 'normalizr';
 import * as connect from '../';
 import * as actions from '../../../actions';
@@ -49,13 +49,51 @@ describe('Store › Entity', () => {
     expect(connection.entity('post', 60).creationDate).toBe(null);
     expect(connection.entity('post', 60).modificationDate).toBe(null);
     expect(connection.entity('post', 60).slug).toBe(null);
-    expect(connection.entity('post', 60).link).toBe('/');
+    expect(connection.entity('post', 60).link).toBe('/?p=60');
     expect(connection.entity('post', 60).content).toBe(null);
     expect(connection.entity('post', 60).excerpt).toBe(null);
   });
 
-  test('Recognice a Custom Post Type before itself is added (by adding another previously)')
-  test('Recognice a Custom Taxonomy before itself is added (by adding another previously)')
+  test.only('Access post properties after they are ready', () => {
+    expect(connection.entity('post', 60).ready).toBe(false);
+    connection.entities.get('post').put(post60converted);
+    expect(connection.entity('post', 60).ready).toBe(true);
+    expect(connection.entity('post', 60).title).toBe(post60converted.title);
+    expect(connection.entity('post', 60).creationDate).toEqual(
+      new Date(post60converted.creationDate),
+    );
+    expect(connection.entity('post', 60).modificationDate).toEqual(
+      new Date(post60converted.modificationDate),
+    );
+    expect(connection.entity('post', 60).slug).toBe(post60converted.slug);
+    expect(connection.entity('post', 60).link).toBe(post60converted.link);
+    expect(connection.entity('post', 60).content).toBe(post60converted.content);
+    expect(connection.entity('post', 60).excerpt).toBe(post60converted.excerpt);
+  });
+
+  test.only('Access taxonomies array before ready', () => {
+    expect(connection.entity('post', 60).taxonomies('category')).toEqual([]);
+    expect(connection.entity('post', 60).taxonomies('tag')).toEqual([]);
+    connection.entities.get('post').put(post60converted);
+    connection.entity('post', 60).taxonomies('category').map(category => {
+      expect(category.ready).toBe(false);
+      expect([3, 8]).toEqual(expect.arrayContaining([category.id]));
+    });
+    connection.entity('post', 60).taxonomies('tag').map(tag => {
+      expect(tag.ready).toBe(false);
+      expect([10, 9, 13, 11]).toEqual(expect.arrayContaining([tag.id]));
+    });
+  });
+
+  test('Subscribto to taxonomies array', done => {
+    autorun(() => {
+      if (connection.entity('post', 60).taxonomies === 'The Beauties of Gullfoss') done();
+    });
+    connection.entities.get('post').put(post60converted);
+  });
+
+  test('Recognice a Custom Post Type before itself is added (by adding another previously)');
+  test('Recognice a Custom Taxonomy before itself is added (by adding another previously)');
 
   test('Add post. Request and succeed', () => {
     // const connection = Connection.create({});
