@@ -10,6 +10,8 @@ import convert from '../../../converters';
 
 const { entities } = normalize(post60, entity);
 const post60converted = convert(entities.single[60]);
+const category3converted = convert(entities.taxonomy[3]);
+const tag10converted = convert(entities.taxonomy[10]);
 
 const Connection = types
   .model()
@@ -82,6 +84,31 @@ describe('Store › Entity', () => {
     connection.entity('post', 60).taxonomies('tag').map(tag => {
       expect(tag.ready).toBe(false);
       expect([10, 9, 13, 11]).toEqual(expect.arrayContaining([tag.id]));
+    });
+  });
+
+  test.only('Access taxonomies array after ready', () => {
+    expect(connection.entity('post', 60).ready).toBe(false);
+    expect(connection.entity('category', 3).ready).toBe(false);
+    expect(connection.entity('tag', 10).ready).toBe(false);
+    connection.entities.get('post').put(post60converted);
+    connection.entities.get('category').put(category3converted);
+    connection.entities.get('tag').put(tag10converted);
+    connection.entity('post', 60).taxonomies('category').map(category => {
+      expect(category.ready).toBe(true);
+      if (category.id === 3) {
+        expect(category.ready).toBe(true);
+      } else {
+        expect(category.ready).toBe(false);
+      }
+    });
+    connection.entity('post', 60).taxonomies('tag').map(tag => {
+      expect(tag.ready).toBe(false);
+      if (tag.id === 10) {
+        expect(tag.ready).toBe(true);
+      } else {
+        expect(tag.ready).toBe(false);
+      }
     });
   });
 
