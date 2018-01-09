@@ -47,49 +47,43 @@ export const Taxonomy = types.model('Taxonomy').props({
   slug: types.string,
   link: types.string,
   type: types.string,
-  target: types.string,
+  target: types.maybe(types.string),
   meta: types.optional(Meta, {}),
 });
 
-export const Single = types
-  .model('Single')
-  .props({
-    mst: 'single',
-    id: types.identifier(types.number),
-    type: types.string,
-    creationDate: types.Date,
-    modificationDate: types.Date,
-    title: types.string,
-    slug: types.string,
-    link: types.string,
-    content: types.string,
-    excerpt: types.string,
-    author: types.reference(Author),
-    featured: types.maybe(types.reference(Media)),
-    taxonomiesMap: types.optional(types.map(types.array(types.reference(Taxonomy, {
-      get(identifier, parent) {
-        const [, type, id] = /(\w+)_(\d+)/.exec(identifier);
-        const root = getParent(parent, 5);
-        return root.entity(type, parse(id));
-      },
-      set(value) {
-        return value;
-      },
-    }))), {}),
-    target: types.maybe(types.string),
-    meta: types.optional(Meta, {}),
-  })
-  .views(self => {
-    const taxonomies = {};
-    return {
-      get taxonomies() {
-        self.taxonomiesMap.keys().forEach(taxonomy => {
-          taxonomies[taxonomy] = self.taxonomiesMap.get(taxonomy);
-        });
-        return taxonomies;
-      },
-    };
-  });
+export const Single = types.model('Single').props({
+  mst: 'single',
+  id: types.identifier(types.number),
+  type: types.string,
+  creationDate: types.Date,
+  modificationDate: types.Date,
+  title: types.string,
+  slug: types.string,
+  link: types.string,
+  content: types.string,
+  excerpt: types.string,
+  author: types.reference(Author),
+  featured: types.maybe(types.reference(Media)),
+  taxonomies: types.optional(
+    types.map(
+      types.array(
+        types.reference(Taxonomy, {
+          get(identifier, parent) {
+            const [, type, id] = /(\w+)_(\d+)/.exec(identifier);
+            const root = getParent(parent, 5);
+            return root.entity(type, parse(id));
+          },
+          set(value) {
+            return value;
+          },
+        }),
+      ),
+    ),
+    {},
+  ),
+  target: types.maybe(types.string),
+  meta: types.optional(Meta, {}),
+});
 
 export const Entities = types.union(
   snapshot => {
@@ -170,7 +164,10 @@ export const Entity = types
       return self.ready ? `${self.link}/page/${page}` : `${self.link}&paged=${page}`;
     },
     taxonomies(taxonomy) {
-      return self.entity.taxonomies && self.entity.taxonomies[taxonomy] || [];
-    }
-    // [...] All other properties from Post, Taxonomy, Author and Media
+      return (self.entity && self.entity.taxonomies && self.entity.taxonomies.get(taxonomy)) || [];
+    },
+    // Taxonomies
+    get name() {
+      return (self.entity && self.entity.name) || null;
+    },
   }));

@@ -1,5 +1,7 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
+exports[`Store › Entity Access Media in a post before it is added 1`] = `undefined`;
+
 exports[`Store › Entity Access entity after adding real entity 1`] = `
 Object {
   "author": 4,
@@ -53,7 +55,7 @@ Category: <a href=\\"https://demo.worona.org/wp-cat/travel/\\">Travel</a></p>
   "mst": "single",
   "slug": "the-beauties-of-gullfoss",
   "target": null,
-  "taxonomiesMap": Object {
+  "taxonomies": Object {
     "category": Array [
       "category_3",
       "category_8",
@@ -77,5 +79,25 @@ Object {
   "id": 60,
   "mstId": "post_60",
   "type": "post",
+}
+`;
+
+exports[`Store › Entity Access taxonomies array after ready 1`] = `
+Object {
+  "entity": "category_3",
+  "fetching": false,
+  "id": 3,
+  "mstId": "category_3",
+  "type": "category",
+}
+`;
+
+exports[`Store › Entity Access taxonomies array after ready 2`] = `
+Object {
+  "entity": "tag_10",
+  "fetching": false,
+  "id": 10,
+  "mstId": "tag_10",
+  "type": "tag",
 }
 `;

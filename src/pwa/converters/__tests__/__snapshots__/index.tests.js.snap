@@ -140,7 +140,7 @@ Category: <a href=\\"https://demo.worona.org/wp-cat/travel/\\">Travel</a></p>
   "mst": "single",
   "slug": "the-beauties-of-gullfoss",
   "target": undefined,
-  "taxonomiesMap": Object {
+  "taxonomies": Object {
     "category": Array [
       "category_3",
       "category_8",

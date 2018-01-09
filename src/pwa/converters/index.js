@@ -14,7 +14,7 @@ export const single = entity => ({
   excerpt: entity.excerpt.rendered,
   author: entity.author,
   featured: entity.featured_media,
-  taxonomiesMap: entity.taxonomiesMap,
+  taxonomies: entity.taxonomiesMap,
   target: entity['post-target'],
   meta: {
     title: decode(

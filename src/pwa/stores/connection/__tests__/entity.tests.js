@@ -1,3 +1,4 @@
+/* eslint-disable no-restricted-syntax */
 import { autorun } from 'mobx';
 import { types, getSnapshot, unprotect } from 'mobx-state-tree';
 import { normalize } from 'normalizr';
@@ -76,15 +77,6 @@ describe('Store › Entity', () => {
   test.only('Access taxonomies array before ready', () => {
     expect(connection.entity('post', 60).taxonomies('category')).toEqual([]);
     expect(connection.entity('post', 60).taxonomies('tag')).toEqual([]);
-    connection.entities.get('post').put(post60converted);
-    connection.entity('post', 60).taxonomies('category').map(category => {
-      expect(category.ready).toBe(false);
-      expect([3, 8]).toEqual(expect.arrayContaining([category.id]));
-    });
-    connection.entity('post', 60).taxonomies('tag').map(tag => {
-      expect(tag.ready).toBe(false);
-      expect([10, 9, 13, 11]).toEqual(expect.arrayContaining([tag.id]));
-    });
   });
 
   test.only('Access taxonomies array after ready', () => {
@@ -95,28 +87,41 @@ describe('Store › Entity', () => {
     connection.entities.get('category').put(category3converted);
     connection.entities.get('tag').put(tag10converted);
     connection.entity('post', 60).taxonomies('category').map(category => {
-      expect(category.ready).toBe(true);
       if (category.id === 3) {
         expect(category.ready).toBe(true);
+        expect(category).toMatchSnapshot();
+        expect(category.name).toBe('Photography');
       } else {
         expect(category.ready).toBe(false);
+        expect(category.name).toBe(null);
       }
     });
     connection.entity('post', 60).taxonomies('tag').map(tag => {
-      expect(tag.ready).toBe(false);
       if (tag.id === 10) {
         expect(tag.ready).toBe(true);
+        expect(tag).toMatchSnapshot();
+        expect(tag.name).toBe('Gullfoss');
       } else {
         expect(tag.ready).toBe(false);
+        expect(tag.name).toBe(null);
       }
     });
   });
 
-  test('Subscribto to taxonomies array', done => {
+  test.only('Subscribto to taxonomies array', done => {
     autorun(() => {
-      if (connection.entity('post', 60).taxonomies === 'The Beauties of Gullfoss') done();
+      for (const category of connection.entity('post', 60).taxonomies('category')) {
+        if (category.name === 'Photography') done();
+      }
     });
     connection.entities.get('post').put(post60converted);
+    connection.entities.get('category').put(category3converted);
+  });
+
+  test.only('Access Media in a post before it is added', () => {
+    expect(connection.entity('post', 60).ready).toBe(false);
+    connection.entities.get('post').put(post60converted);
+    expect(connection.entity('post', 60).featured).toMatchSnapshot();
   });
 
   test('Recognice a Custom Post Type before itself is added (by adding another previously)');
