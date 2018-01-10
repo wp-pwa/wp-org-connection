@@ -1,7 +1,5 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`Store › Entity Access Media in a post before it is added 1`] = `undefined`;
-
 exports[`Store › Entity Access entity after adding real entity 1`] = `
 Object {
   "author": 4,
@@ -43,7 +41,7 @@ Category: <a href=\\"https://demo.worona.org/wp-cat/travel/\\">Travel</a></p>
   "creationDate": 1480095071000,
   "excerpt": "<p>Gullfoss is a waterfall located in the canyon of the Hvítá river in southwest Iceland.</p>
 ",
-  "featured": 62,
+  "featured": "media_62",
   "id": 60,
   "link": "https://demo.worona.org/the-beauties-of-gullfoss/",
   "meta": Object {

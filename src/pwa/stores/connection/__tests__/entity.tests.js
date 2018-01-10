@@ -13,6 +13,7 @@ const { entities } = normalize(post60, entity);
 const post60converted = convert(entities.single[60]);
 const category3converted = convert(entities.taxonomy[3]);
 const tag10converted = convert(entities.taxonomy[10]);
+const media62converted = convert(entities.media[62]);
 
 const Connection = types
   .model()
@@ -27,27 +28,27 @@ beforeEach(() => {
 });
 
 describe('Store › Entity', () => {
-  test.only('Access entity without initializating', () => {
+  test('Access entity without initializating', () => {
     expect(getSnapshot(connection.entity('post', 60))).toMatchSnapshot();
     expect(connection.entity('post', 60).title).toBe(null);
     expect(connection.entity('post', 60).entity).toEqual({});
     expect(connection.entity('post', 60).ready).toBe(false);
   });
-  test.only('Access entity after adding real entity', () => {
+  test('Access entity after adding real entity', () => {
     expect(connection.entity('post', 60).ready).toBe(false);
     connection.entities.get('post').put(post60converted);
     expect(connection.entity('post', 60).ready).toBe(true);
     expect(getSnapshot(connection.entity('post', 60).entity)).toMatchSnapshot();
   });
 
-  test.only('Subscribe to single fields without initializating', done => {
+  test('Subscribe to single fields without initializating', done => {
     autorun(() => {
       if (connection.entity('post', 60).title === 'The Beauties of Gullfoss') done();
     });
     connection.entities.get('post').put(post60converted);
   });
 
-  test.only('Access post properties before ready', () => {
+  test('Access post properties before ready', () => {
     expect(connection.entity('post', 60).title).toBe(null);
     expect(connection.entity('post', 60).creationDate).toBe(null);
     expect(connection.entity('post', 60).modificationDate).toBe(null);
@@ -57,7 +58,7 @@ describe('Store › Entity', () => {
     expect(connection.entity('post', 60).excerpt).toBe(null);
   });
 
-  test.only('Access post properties after they are ready', () => {
+  test('Access post properties after they are ready', () => {
     expect(connection.entity('post', 60).ready).toBe(false);
     connection.entities.get('post').put(post60converted);
     expect(connection.entity('post', 60).ready).toBe(true);
@@ -74,12 +75,12 @@ describe('Store › Entity', () => {
     expect(connection.entity('post', 60).excerpt).toBe(post60converted.excerpt);
   });
 
-  test.only('Access taxonomies array before ready', () => {
+  test('Access taxonomies array before ready', () => {
     expect(connection.entity('post', 60).taxonomies('category')).toEqual([]);
     expect(connection.entity('post', 60).taxonomies('tag')).toEqual([]);
   });
 
-  test.only('Access taxonomies array after ready', () => {
+  test('Access taxonomies array after ready', () => {
     expect(connection.entity('post', 60).ready).toBe(false);
     expect(connection.entity('category', 3).ready).toBe(false);
     expect(connection.entity('tag', 10).ready).toBe(false);
@@ -108,7 +109,7 @@ describe('Store › Entity', () => {
     });
   });
 
-  test.only('Subscribto to taxonomies array', done => {
+  test('Subscribto to taxonomies array', done => {
     autorun(() => {
       for (const category of connection.entity('post', 60).taxonomies('category')) {
         if (category.name === 'Photography') done();
@@ -120,7 +121,9 @@ describe('Store › Entity', () => {
 
   test.only('Access Media in a post before it is added', () => {
     expect(connection.entity('post', 60).ready).toBe(false);
+    connection.entities.set('media', {});
     connection.entities.get('post').put(post60converted);
+    // connection.entities.get('post').put(media62converted);
     expect(connection.entity('post', 60).featured).toMatchSnapshot();
   });
 
