@@ -9,7 +9,14 @@ import convert from '../../converters';
 
 export const props = {
   // Used to store entities when they are retrieved from the API.
-  entities: types.optional(types.map(types.map(Entities)), {}),
+  entities: types.optional(types.map(types.map(Entities)), {
+    post: {},
+    page: {},
+    category: {},
+    tag: {},
+    author: {},
+    media: {},
+  }),
   // Used to initalizate entities even before they exist.
   entityMap: types.optional(types.map(Entity), {}),
   // Used to store lists.
@@ -20,10 +27,10 @@ export const props = {
   siteInfo: types.optional(SiteInfo, {}),
   // Used to store mst <-> type relations
   typeRelations: types.optional(types.map(types.string), {
-    'post': 'single',
-    'page': 'single',
-    'category': 'taxonomy',
-    'tag': 'taxonomy',
+    post: 'single',
+    page: 'single',
+    category: 'taxonomy',
+    tag: 'taxonomy',
   }),
 };
 
@@ -44,6 +51,7 @@ export const views = self => ({
 
 export const actions = self => ({
   initEntityMap({ type, id }) {
+    // debugger;
     const mstId = `${type}_${id}`;
     if (!self.entities.get(type)) self.entities.set(type, {});
     if (!self.entityMap.get(mstId)) self.entityMap.put({ mstId, type, id, entity: mstId });

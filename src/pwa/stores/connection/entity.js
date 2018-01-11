@@ -69,7 +69,7 @@ export const Entity = types
       return self.ready ? `${self.link}/page/${page}` : `${self.link}&paged=${page}`;
     },
     get featured() {
-      return (self.entity && self.entity.featured) || null;
+      return (self.entity && self.entity.featured) || { ready: false, original: {}, sizes: [] };
     },
     taxonomies(taxonomy) {
       return (self.entity && self.entity.taxonomies && self.entity.taxonomies.get(taxonomy)) || [];
@@ -79,7 +79,6 @@ export const Entity = types
       return (self.entity && self.entity.name) || null;
     },
   }));
-
 
 export const Image = types.model('Image').props({
   height: types.number,
@@ -93,13 +92,19 @@ export const Media = types.model('Media').props({
   id: types.identifier(types.number),
   creationDate: types.Date,
   slug: types.string,
+  title: types.string,
+  author: types.reference(types.late(() => Author)),
   alt: types.string,
   mimeType: types.string,
   mediaType: types.string,
-  title: types.string,
-  author: types.reference(types.late(() => Author)),
   original: Image,
   sizes: types.array(Image),
+});
+
+export const Meta = types.model('Meta').props({
+  title: types.maybe(types.string),
+  description: types.maybe(types.string),
+  canonical: types.maybe(types.string),
 });
 
 export const Author = types.model('Author').props({
@@ -110,12 +115,6 @@ export const Author = types.model('Author').props({
   description: types.string,
   link: types.string,
   avatar: types.maybe(types.string),
-});
-
-export const Meta = types.model('Meta').props({
-  title: types.maybe(types.string),
-  description: types.maybe(types.string),
-  canonical: types.maybe(types.string),
 });
 
 export const Taxonomy = types.model('Taxonomy').props({
@@ -129,6 +128,52 @@ export const Taxonomy = types.model('Taxonomy').props({
   meta: types.optional(Meta, {}),
 });
 
+const Featured = types
+  .model('Featured')
+  .props({
+    entity: types.maybe(
+      types.reference(Media, {
+        get: (identifier, parent) =>
+          getParent(parent, 4)
+            .entities.get('media')
+            .get(identifier) || null,
+        set: value => value,
+      }),
+    ),
+  })
+  .views(self => ({
+    get ready() {
+      return !!self.entity;
+    },
+    get id() {
+      return (self.entity && self.entity.id) || null;
+    },
+    get creationDate() {
+      return (self.entity && self.entity.creationDate) || null;
+    },
+    get slug() {
+      return (self.entity && self.entity.slug) || null;
+    },
+    get title() {
+      return (self.entity && self.entity.title) || null;
+    },
+    get alt() {
+      return (self.entity && self.entity.alt) || null;
+    },
+    get mimeType() {
+      return (self.entity && self.entity.mimeType) || null;
+    },
+    get mediaType() {
+      return (self.entity && self.entity.mediaType) || null;
+    },
+    get original() {
+      return (self.entity && self.entity.original) || {};
+    },
+    get sizes() {
+      return (self.entity && self.entity.sizes) || [];
+    },
+  }));
+
 export const Single = types.model('Single').props({
   mst: 'single',
   id: types.identifier(types.number),
@@ -141,18 +186,7 @@ export const Single = types.model('Single').props({
   content: types.string,
   excerpt: types.string,
   author: types.reference(Author),
-  featured: types.maybe(
-    types.reference(Entity, {
-      get(identifier, parent) {
-        const [, type, id] = /(\w+)_(\d+)/.exec(identifier);
-        const root = getParent(parent, 3);
-        return root.entity(type, parse(id));
-      },
-      set(value) {
-        return value;
-      },
-    }),
-  ),
+  featured: Featured,
   taxonomies: types.optional(
     types.map(
       types.array(

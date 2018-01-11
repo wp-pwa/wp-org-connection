@@ -87,26 +87,32 @@ describe('Store › Entity', () => {
     connection.entities.get('post').put(post60converted);
     connection.entities.get('category').put(category3converted);
     connection.entities.get('tag').put(tag10converted);
-    connection.entity('post', 60).taxonomies('category').map(category => {
-      if (category.id === 3) {
-        expect(category.ready).toBe(true);
-        expect(category).toMatchSnapshot();
-        expect(category.name).toBe('Photography');
-      } else {
-        expect(category.ready).toBe(false);
-        expect(category.name).toBe(null);
-      }
-    });
-    connection.entity('post', 60).taxonomies('tag').map(tag => {
-      if (tag.id === 10) {
-        expect(tag.ready).toBe(true);
-        expect(tag).toMatchSnapshot();
-        expect(tag.name).toBe('Gullfoss');
-      } else {
-        expect(tag.ready).toBe(false);
-        expect(tag.name).toBe(null);
-      }
-    });
+    connection
+      .entity('post', 60)
+      .taxonomies('category')
+      .map(category => {
+        if (category.id === 3) {
+          expect(category.ready).toBe(true);
+          expect(category).toMatchSnapshot();
+          expect(category.name).toBe('Photography');
+        } else {
+          expect(category.ready).toBe(false);
+          expect(category.name).toBe(null);
+        }
+      });
+    connection
+      .entity('post', 60)
+      .taxonomies('tag')
+      .map(tag => {
+        if (tag.id === 10) {
+          expect(tag.ready).toBe(true);
+          expect(tag).toMatchSnapshot();
+          expect(tag.name).toBe('Gullfoss');
+        } else {
+          expect(tag.ready).toBe(false);
+          expect(tag.name).toBe(null);
+        }
+      });
   });
 
   test('Subscribto to taxonomies array', done => {
@@ -119,55 +125,96 @@ describe('Store › Entity', () => {
     connection.entities.get('category').put(category3converted);
   });
 
-  test.only('Access Media in a post before it is added', () => {
-    expect(connection.entity('post', 60).ready).toBe(false);
-    connection.entities.set('media', {});
+  test('Featured ready', () => {
+    expect(connection.entity('post', 60).featured.ready).toBe(false);
     connection.entities.get('post').put(post60converted);
-    // connection.entities.get('post').put(media62converted);
+    expect(connection.entity('post', 60).featured.ready).toBe(false);
+    connection.entities.get('media').put(media62converted);
+    expect(connection.entity('post', 60).featured.ready).toBe(true);
+  });
+
+  test('Featured ready upside down', () => {
+    expect(connection.entity('post', 60).featured.ready).toBe(false);
+    connection.entities.get('media').put(media62converted);
+    expect(connection.entity('post', 60).featured.ready).toBe(false);
+    connection.entities.get('post').put(post60converted);
+    expect(connection.entity('post', 60).featured.ready).toBe(true);
+  });
+
+  test('Subscribe to featured ready', done => {
+    autorun(() => {
+      if (connection.entity('post', 60).featured.ready) done();
+    });
+    connection.entities.get('post').put(post60converted);
+    connection.entities.get('media').put(media62converted);
+  });
+
+  test('Subscribe to featured original and sizes', done => {
+    autorun(() => {
+      if (
+        connection.entity('post', 60).featured.original.width === 5000 &&
+        connection.entity('post', 60).featured.sizes.length === 6
+      )
+        done();
+    });
+    connection.entities.get('post').put(post60converted);
+    connection.entities.get('media').put(media62converted);
+  });
+
+  test('Other to featured properties', () => {
+    connection.entities.get('post').put(post60converted);
+    connection.entities.get('media').put(media62converted);
+    expect(connection.entity('post', 60).featured.entity).toMatchSnapshot();
+  });
+
+  test('Access Media in a post before it is added', () => {
+    connection.entities.set('post', {});
+    connection.entities.get('post').put(post60converted);
+    // connection.entity('media', 62);
     expect(connection.entity('post', 60).featured).toMatchSnapshot();
   });
 
-  test('Recognice a Custom Post Type before itself is added (by adding another previously)');
-  test('Recognice a Custom Taxonomy before itself is added (by adding another previously)');
-
-  test('Add post. Request and succeed', () => {
-    // const connection = Connection.create({});
-    connection[actionTypes.SINGLE_REQUESTED](
-      actions.singleRequested({
-        singleType: 'post',
-        singleId: 60,
-      }),
-    );
-    expect(connection.entity('post', 60).fetching).toBe(true);
-    expect(connection.entity('post', 60).ready).toBe(false);
-    connection[actionTypes.SINGLE_SUCCEED](
-      actions.singleSucceed({
-        entities: post60normalized,
-      }),
-    );
-    expect(connection.entity('post', 60).fetching).toBe(false);
-    expect(connection.entity('post', 60).ready).toBe(true);
-    expect(connection.entity('post', 60).title).toBe('The Beauties of Gullfoss');
-  });
-
-  test('Add post. Request and fail.', () => {
-    // const connection = Connection.create({});
-    connection[actionTypes.SINGLE_REQUESTED](
-      actions.singleRequested({
-        singleType: 'post',
-        singleId: 60,
-      }),
-    );
-    expect(connection.entity('post', 60).fetching).toBe(true);
-    expect(connection.entity('post', 60).ready).toBe(false);
-    connection[actionTypes.SINGLE_FAILED](
-      actions.singleFailed({
-        singleType: 'post',
-        singleId: 60,
-        error: new Error('Something went wrong!'),
-      }),
-    );
-    expect(connection.entity('post', 60).fetching).toBe(false);
-    expect(connection.entity('post', 60).ready).toBe(false);
-  });
+  // test('Recognice a Custom Post Type before itself is added (by adding another previously)');
+  // test('Recognice a Custom Taxonomy before itself is added (by adding another previously)');
+  //
+  // test('Add post. Request and succeed', () => {
+  //   // const connection = Connection.create({});
+  //   connection[actionTypes.SINGLE_REQUESTED](
+  //     actions.singleRequested({
+  //       singleType: 'post',
+  //       singleId: 60,
+  //     }),
+  //   );
+  //   expect(connection.entity('post', 60).fetching).toBe(true);
+  //   expect(connection.entity('post', 60).ready).toBe(false);
+  //   connection[actionTypes.SINGLE_SUCCEED](
+  //     actions.singleSucceed({
+  //       entities: post60normalized,
+  //     }),
+  //   );
+  //   expect(connection.entity('post', 60).fetching).toBe(false);
+  //   expect(connection.entity('post', 60).ready).toBe(true);
+  //   expect(connection.entity('post', 60).title).toBe('The Beauties of Gullfoss');
+  // });
+  //
+  // test('Add post. Request and fail.', () => {
+  //   // const connection = Connection.create({});
+  //   connection[actionTypes.SINGLE_REQUESTED](
+  //     actions.singleRequested({
+  //       singleType: 'post',
+  //       singleId: 60,
+  //     }),
+  //   );
+  //   expect(connection.entity('post', 60).fetching).toBe(true);
+  //   expect(connection.entity('post', 60).ready).toBe(false);
+  //   connection[actionTypes.SINGLE_FAILED](
+  //     actions.singleFailed({
+  //       singleType: 'post',
+  //       singleId: 60,
+  //       error: new Error('Something went wrong!'),
+  //     }),
+  //   );
+  //   expect(connection.entity('post', 60).fetching).toBe(false);
+  //   expect(connection.entity('post', 60).ready).toBe(false);
+  // });
 });

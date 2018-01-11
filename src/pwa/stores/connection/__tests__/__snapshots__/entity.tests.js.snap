@@ -1,5 +1,11 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
+exports[`Store › Entity Access Media in a post before it is added 1`] = `
+Object {
+  "entity": 62,
+}
+`;
+
 exports[`Store › Entity Access entity after adding real entity 1`] = `
 Object {
   "author": 4,
@@ -41,7 +47,9 @@ Category: <a href=\\"https://demo.worona.org/wp-cat/travel/\\">Travel</a></p>
   "creationDate": 1480095071000,
   "excerpt": "<p>Gullfoss is a waterfall located in the canyon of the Hvítá river in southwest Iceland.</p>
 ",
-  "featured": "media_62",
+  "featured": Object {
+    "entity": 62,
+  },
   "id": 60,
   "link": "https://demo.worona.org/the-beauties-of-gullfoss/",
   "meta": Object {
@@ -97,5 +105,63 @@ Object {
   "id": 10,
   "mstId": "tag_10",
   "type": "tag",
+}
+`;
+
+exports[`Store › Entity Other to featured properties 1`] = `
+Object {
+  "alt": "iceland",
+  "author": 2,
+  "creationDate": 1480095213000,
+  "id": 62,
+  "mediaType": "image",
+  "mimeType": "image/jpeg",
+  "mst": "media",
+  "original": Object {
+    "filename": "2016/11/Iceland-test.jpg",
+    "height": 3025,
+    "url": "https://demo.worona.org/wp-content/uploads/2016/11/Iceland-test.jpg",
+    "width": 5000,
+  },
+  "sizes": Array [
+    Object {
+      "filename": "Iceland-test-150x150.jpg",
+      "height": 150,
+      "url": "https://demo.worona.org/wp-content/uploads/2016/11/Iceland-test-150x150.jpg",
+      "width": 150,
+    },
+    Object {
+      "filename": "Iceland-test-300x182.jpg",
+      "height": 182,
+      "url": "https://demo.worona.org/wp-content/uploads/2016/11/Iceland-test-300x182.jpg",
+      "width": 300,
+    },
+    Object {
+      "filename": "Iceland-test-768x465.jpg",
+      "height": 465,
+      "url": "https://demo.worona.org/wp-content/uploads/2016/11/Iceland-test-768x465.jpg",
+      "width": 768,
+    },
+    Object {
+      "filename": "Iceland-test-1024x620.jpg",
+      "height": 620,
+      "url": "https://demo.worona.org/wp-content/uploads/2016/11/Iceland-test-1024x620.jpg",
+      "width": 1024,
+    },
+    Object {
+      "filename": "Iceland-test-1200x726.jpg",
+      "height": 726,
+      "url": "https://demo.worona.org/wp-content/uploads/2016/11/Iceland-test-1200x726.jpg",
+      "width": 1200,
+    },
+    Object {
+      "filename": "Iceland-test.jpg",
+      "height": 3025,
+      "url": "https://demo.worona.org/wp-content/uploads/2016/11/Iceland-test.jpg",
+      "width": 5000,
+    },
+  ],
+  "slug": "iceland-test",
+  "title": "iceland",
 }
 `;
