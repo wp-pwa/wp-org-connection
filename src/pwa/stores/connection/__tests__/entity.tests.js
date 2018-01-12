@@ -28,12 +28,46 @@ beforeEach(() => {
 });
 
 describe('Store › Entity', () => {
-  test('Access entity without initializating', () => {
-    expect(getSnapshot(connection.entity('post', 60))).toMatchSnapshot();
-    expect(connection.entity('post', 60).title).toBe(null);
-    expect(connection.entity('post', 60).entity).toEqual({});
-    expect(connection.entity('post', 60).ready).toBe(false);
+  test.only('Get entity shape when entity is not ready', () => {
+    expect(connection.entity('someType', 'someId')).toMatchSnapshot();
   });
+
+  test.only('Get single shape when entity is not ready', () => {
+    expect(connection.entity('post', 60).ready).toBe(false);
+    expect(connection.entity('post', 60).title).toBe(null);
+    expect(connection.entity('post', 60).taxonomies).toEqual([]);
+    expect(connection.entity('post', 60).featured.ready).toBe(false);
+    expect(connection.entity('post', 60).featured.sizes).toEqual([]);
+    expect(connection.entity('post', 60).author.name).toBe(null);
+  });
+
+  test.only('Get taxonomy shape when entity is not ready', () => {
+    expect(connection.entity('category', 3).ready).toBe(false);
+    expect(connection.entity('category', 3).name).toBe(null);
+    expect(connection.entity('category', 3).link).toBe(null);
+  });
+
+  test.only('Get author shape when entity is not ready', () => {
+    expect(connection.entity('author', 4).ready).toBe(false);
+    expect(connection.entity('author', 4).name).toBe(null);
+    expect(connection.entity('author', 4).avatar).toBe(null);
+  });
+
+  test.only('Get media shape when entity is not ready', () => {
+    expect(connection.entity('media', 62).ready).toBe(false);
+    expect(connection.entity('media', 62).link).toBe(null);
+    expect(connection.entity('media', 62).author.name).toBe(null);
+    expect(connection.entity('media', 62).original.height).toBe(null);
+    expect(connection.entity('media', 62).sizes).toEqual([]);
+  });
+
+  test('Subscribe to single fields before entity is ready', done => {
+    autorun(() => {
+      if (connection.entity('post', 60).title === 'The Beauties of Gullfoss') done();
+    });
+    connection.entities.set('post_60', post60converted);
+  });
+
   test('Access entity after adding real entity', () => {
     expect(connection.entity('post', 60).ready).toBe(false);
     connection.entities.get('post').put(post60converted);
@@ -41,12 +75,6 @@ describe('Store › Entity', () => {
     expect(getSnapshot(connection.entity('post', 60).entity)).toMatchSnapshot();
   });
 
-  test('Subscribe to single fields without initializating', done => {
-    autorun(() => {
-      if (connection.entity('post', 60).title === 'The Beauties of Gullfoss') done();
-    });
-    connection.entities.get('post').put(post60converted);
-  });
 
   test('Access post properties before ready', () => {
     expect(connection.entity('post', 60).title).toBe(null);

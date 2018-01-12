@@ -78,16 +78,6 @@ Category: <a href=\\"https://demo.worona.org/wp-cat/travel/\\">Travel</a></p>
 }
 `;
 
-exports[`Store › Entity Access entity without initializating 1`] = `
-Object {
-  "entity": "post_60",
-  "fetching": false,
-  "id": 60,
-  "mstId": "post_60",
-  "type": "post",
-}
-`;
-
 exports[`Store › Entity Access taxonomies array after ready 1`] = `
 Object {
   "entity": "category_3",
@@ -105,6 +95,83 @@ Object {
   "id": 10,
   "mstId": "tag_10",
   "type": "tag",
+}
+`;
+
+exports[`Store › Entity Get entity shape when entity is not ready 1`] = `
+Object {
+  "alt": null,
+  "author": Object {
+    "avatar": null,
+    "description": null,
+    "fetching": false,
+    "id": null,
+    "link": null,
+    "name": null,
+    "ready": false,
+    "slug": null,
+    "type": "author",
+  },
+  "avatar": null,
+  "content": null,
+  "creationDate": null,
+  "description": null,
+  "excerpt": null,
+  "featured": Object {
+    "alt": null,
+    "author": Object {
+      "avatar": null,
+      "description": null,
+      "fetching": false,
+      "id": null,
+      "link": null,
+      "name": null,
+      "ready": false,
+      "slug": null,
+      "type": "author",
+    },
+    "creationDate": null,
+    "fetching": false,
+    "id": null,
+    "mediaType": null,
+    "mimeType": null,
+    "original": Object {
+      "filename": null,
+      "height": null,
+      "url": null,
+      "width": null,
+    },
+    "ready": false,
+    "sizes": Array [],
+    "slug": null,
+    "title": null,
+    "type": "media",
+  },
+  "fetching": false,
+  "id": null,
+  "link": null,
+  "mediaType": null,
+  "meta": Object {
+    "canonical": null,
+    "description": null,
+    "title": null,
+  },
+  "mimeType": null,
+  "modificationDate": null,
+  "name": null,
+  "original": Object {
+    "filename": null,
+    "height": null,
+    "url": null,
+    "width": null,
+  },
+  "ready": false,
+  "sizes": Array [],
+  "slug": null,
+  "target": null,
+  "taxonomies": Array [],
+  "title": null,
+  "type": null,
 }
 `;
 

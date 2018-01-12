@@ -1,5 +1,7 @@
 import { types } from 'mobx-state-tree';
-import { Entity, Entities } from './entity';
+import { join , extract } from './utils';
+import { Entity } from './entity';
+import entityShape from './entity-shape';
 import { List } from './list';
 import { Custom } from './custom';
 import SiteInfo from './site-info';
@@ -8,24 +10,10 @@ import * as actionTypes from '../../actionTypes';
 import convert from '../../converters';
 
 export const props = {
-  // Used to store entities when they are retrieved from the API.
-  entities: types.optional(types.map(types.map(Entities)), {
-    post: {},
-    page: {},
-    category: {},
-    tag: {},
-    author: {},
-    media: {},
-  }),
-  // Used to initalizate entities even before they exist.
-  entityMap: types.optional(types.map(Entity), {}),
-  // Used to store lists.
-  listMap: types.optional(types.map(List), {}),
-  // Used to store custom lists.
-  customMap: types.optional(types.map(Custom), {}),
-  // Used to general info related to the site.
+  entities: types.optional(types.map(Entity), {}),
+  lists: types.optional(types.map(List), {}),
+  customs: types.optional(types.map(Custom), {}),
   siteInfo: types.optional(SiteInfo, {}),
-  // Used to store mst <-> type relations
   typeRelations: types.optional(types.map(types.string), {
     post: 'single',
     page: 'single',
@@ -36,8 +24,8 @@ export const props = {
 
 export const views = self => ({
   entity(type, id) {
-    self.initEntityMap({ type, id });
-    return self.entityMap.get(`${type}_${id}`);
+    const mstId = join(type, id);
+    return self.entities.has(mstId) ? self.entities.get(mstId) : entityShape;
   },
   list(type, id) {
     self.initListMap({ type, id });
