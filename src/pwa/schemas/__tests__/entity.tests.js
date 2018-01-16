@@ -3,6 +3,7 @@ import post60 from '../../__tests__/post-60.json';
 import category7 from '../../__tests__/category-7.json';
 import tag10 from '../../__tests__/tag-10.json';
 import author4 from '../../__tests__/author-4.json';
+import media2687 from '../../__tests__/media-2687.json';
 import { entity } from '../';
 
 test('Convert post using entity', () => {
@@ -27,4 +28,9 @@ test('Convert a tag using entity', () => {
 test('Convert a author using entity', () => {
   const { entities } = normalize(author4, entity);
   expect(entities.author[4]).toMatchSnapshot();
+});
+
+test('Convert a media using entity', () => {
+  const { entities } = normalize(media2687, entity);
+  expect(entities.media[2687]).toMatchSnapshot();
 });

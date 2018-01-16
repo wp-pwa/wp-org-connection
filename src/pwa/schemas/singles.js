@@ -2,17 +2,7 @@
 import { schema } from 'normalizr';
 import { taxonomy } from './taxonomies';
 import { author } from './authors';
-
-const media = new schema.Entity(
-  'media',
-  {},
-  {
-    processStrategy(entity) {
-      entity.mst = 'media';
-      return entity;
-    },
-  },
-);
+import { media } from './medias';
 
 const taxonomies = new schema.Array(new schema.Array(taxonomy));
 
