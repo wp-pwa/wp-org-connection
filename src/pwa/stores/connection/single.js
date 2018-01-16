@@ -20,6 +20,8 @@ export const Media = types.model('Media').props({
   author: types.maybe(types.reference(types.late(() => Author))),
   original: types.maybe(Image),
   sizes: types.maybe(types.array(Image)),
+  link: types.optional(Link, {}),
+  _link: types.maybe(types.string),
 });
 
 export const Author = types.model('Author').props({

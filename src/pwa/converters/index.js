@@ -66,6 +66,7 @@ export const media = entity => {
     mediaType: entity.media_type,
     title: entity.title.rendered,
     author: entity.author,
+    _link: entity.link,
     original: {
       height: entity.media_details.height,
       width: entity.media_details.width,
