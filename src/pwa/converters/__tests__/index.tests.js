@@ -1,26 +1,32 @@
 import { normalize } from 'normalizr';
 import convert from '../';
 import post60 from '../../__tests__/post-60.json';
+import media2687 from '../../__tests__/media-2687.json';
 import { entity } from '../../schemas';
 
-const { entities } = normalize(post60, entity);
+const { entities: entitiesFromPost60 } = normalize(post60, entity);
 
 test('Convert post', () => {
-  expect(convert(entities.single[60])).toMatchSnapshot();
+  expect(convert(entitiesFromPost60.single[60])).toMatchSnapshot();
 });
 
 test('Convert category', () => {
-  expect(convert(entities.taxonomy[3])).toMatchSnapshot();
+  expect(convert(entitiesFromPost60.taxonomy[3])).toMatchSnapshot();
 });
 
 test('Convert tag', () => {
-  expect(convert(entities.taxonomy[9])).toMatchSnapshot();
+  expect(convert(entitiesFromPost60.taxonomy[9])).toMatchSnapshot();
 });
 
 test('Convert author', () => {
-  expect(convert(entities.author[4])).toMatchSnapshot();
+  expect(convert(entitiesFromPost60.author[4])).toMatchSnapshot();
 });
 
+test('Convert media from post', () => {
+  expect(convert(entitiesFromPost60.media[62])).toMatchSnapshot();
+});
+
+const { entities: entitiesFromMedia2687 } = normalize(media2687, entity);
 test('Convert media', () => {
-  expect(convert(entities.media[62])).toMatchSnapshot();
+  expect(convert(entitiesFromMedia2687.media[2687])).toMatchSnapshot();
 });

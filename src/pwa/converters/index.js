@@ -56,9 +56,12 @@ export const media = entity => ({
   creationDate: new Date(entity.date).getTime(),
   slug: entity.slug,
   alt: entity.alt_text,
+  link: entity.link,
   mimeType: entity.mime_type,
   mediaType: entity.media_type,
   title: entity.title.rendered,
+  description: entity.description && entity.description.rendered,
+  caption: entity.caption && entity.caption.rendered,
   author: entity.author,
   original: {
     height: entity.media_details.height,
