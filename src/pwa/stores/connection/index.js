@@ -1,4 +1,4 @@
-import { types, resolveIdentifier } from 'mobx-state-tree';
+import { types, resolveIdentifier, getParent } from 'mobx-state-tree';
 import { join , extract } from './utils';
 import { Entity } from './entity';
 import entityShape from './entity-shape';
@@ -38,27 +38,14 @@ export const views = self => ({
 });
 
 export const actions = self => ({
-  initEntityMap({ type, id }) {
-    // debugger;
-    const mstId = `${type}_${id}`;
-    if (!self.entities.get(type)) self.entities.set(type, {});
-    if (!self.entityMap.get(mstId)) self.entityMap.put({ mstId, type, id, entity: mstId });
-  },
-  initListMap({ type, id }) {
-    const mstId = `${type}_${id}`;
-    if (!self.listMap.get(mstId)) self.listMap.put({ mstId, type, id });
-  },
-  initCustomMap({ name }) {
-    if (!self.customMap.get(name)) self.customMap.put({ name });
-  },
-  addEntity({ type, entity }) {
-    if (!self.entities.get(type)) self.entities.set(type, {});
-    self.entities.get(type).put(convert(entity));
+  addEntity({ entity }) {
+    const mstId = join(entity.type, entity.id);
+    self.entities.put({ mstId, entity: convert(entity) });
   },
   addEntities({ entities }) {
-    Object.entries(entities).map(([type, single]) => {
-      Object.entries(single).map(([id, entity]) => {
-        self.addEntity({ type, id, entity });
+    Object.entries(entities).map(([, single]) => {
+      Object.entries(single).map(([, entity]) => {
+        self.addEntity({ entity });
       });
     });
   },

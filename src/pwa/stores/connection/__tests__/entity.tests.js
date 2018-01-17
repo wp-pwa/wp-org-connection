@@ -61,11 +61,18 @@ describe('Store › Entity', () => {
     expect(connection.entity('media', 62).sizes).toEqual([]);
   });
 
+  test.only('Subscribe to ready before entity is ready', done => {
+    autorun(() => {
+      if (connection.entity('post', 60).ready) done();
+    });
+    connection.addEntity({ entity: entities.single[60] });
+  });
+
   test('Subscribe to single fields before entity is ready', done => {
     autorun(() => {
       if (connection.entity('post', 60).title === 'The Beauties of Gullfoss') done();
     });
-    connection.entities.set('post_60', post60converted);
+    connection.addEntity({ entity: entities.single[60] });
   });
 
   test('Access entity after adding real entity', () => {

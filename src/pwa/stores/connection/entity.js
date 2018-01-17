@@ -53,11 +53,11 @@ export const Entity = types
   .model('Entity')
   .props({
     mstId: types.identifier(types.string), // post_60, category_7, movie_34, author_3, media_35
-    type: types.string, // post, category, movie, author, media
-    id: types.union(types.number, types.string), // 60, 7, 34, 3, 35, 'post', 'Some search'
     fetching: false,
-    entity: types.optional(types.frozen, null),
+    entity: types.frozen,
   })
+  .views(common)
+  // .views(single)
   .views(self => ({
     get featured() {
       return (self.entity && self.entity.featured) || { ready: false, original: {}, sizes: [] };
