@@ -18,6 +18,8 @@ export const Image = types.model('Image').props({
 
 export const Media = types.model('Media').props({
   id: types.identifier(types.number),
+  fetching: types.optional(types.boolean, false),
+  ready: types.optional(types.boolean, false),
   creationDate: types.maybe(types.Date),
   slug: types.maybe(types.string),
   alt: types.maybe(types.string),
