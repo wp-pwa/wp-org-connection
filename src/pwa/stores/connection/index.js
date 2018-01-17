@@ -1,4 +1,4 @@
-import { types } from 'mobx-state-tree';
+import { types, resolveIdentifier } from 'mobx-state-tree';
 import { join , extract } from './utils';
 import { Entity } from './entity';
 import entityShape from './entity-shape';
@@ -25,7 +25,7 @@ export const props = {
 export const views = self => ({
   entity(type, id) {
     const mstId = join(type, id);
-    return self.entities.has(mstId) ? self.entities.get(mstId) : entityShape;
+    return resolveIdentifier(Entity, self, mstId) || entityShape;
   },
   list(type, id) {
     self.initListMap({ type, id });
