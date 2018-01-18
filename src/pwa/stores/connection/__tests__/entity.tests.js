@@ -34,29 +34,29 @@ describe('Store › Entity', () => {
 
   test.only('Get single shape when entity is not ready', () => {
     expect(connection.entity('post', 60).ready).toBe(false);
-    expect(connection.entity('post', 60).title).toBe(null);
+    expect(connection.entity('post', 60).title).toBe('');
     expect(connection.entity('post', 60).taxonomies).toEqual([]);
     expect(connection.entity('post', 60).featured.ready).toBe(false);
     expect(connection.entity('post', 60).featured.sizes).toEqual([]);
-    expect(connection.entity('post', 60).author.name).toBe(null);
+    expect(connection.entity('post', 60).author.name).toBe('');
   });
 
   test.only('Get taxonomy shape when entity is not ready', () => {
     expect(connection.entity('category', 3).ready).toBe(false);
-    expect(connection.entity('category', 3).name).toBe(null);
-    expect(connection.entity('category', 3).link).toBe(null);
+    expect(connection.entity('category', 3).name).toBe('');
+    expect(connection.entity('category', 3).link).toBe('/');
   });
 
   test.only('Get author shape when entity is not ready', () => {
     expect(connection.entity('author', 4).ready).toBe(false);
-    expect(connection.entity('author', 4).name).toBe(null);
-    expect(connection.entity('author', 4).avatar).toBe(null);
+    expect(connection.entity('author', 4).name).toBe('');
+    expect(connection.entity('author', 4).avatar).toBe('');
   });
 
   test.only('Get media shape when entity is not ready', () => {
     expect(connection.entity('media', 62).ready).toBe(false);
-    expect(connection.entity('media', 62).link).toBe(null);
-    expect(connection.entity('media', 62).author.name).toBe(null);
+    expect(connection.entity('media', 62).link).toBe('/');
+    expect(connection.entity('media', 62).author.name).toBe('');
     expect(connection.entity('media', 62).original.height).toBe(null);
     expect(connection.entity('media', 62).sizes).toEqual([]);
   });

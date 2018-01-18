@@ -3,11 +3,17 @@ const author = {
   fetching: false,
   id: null,
   type: 'author',
-  name: null,
-  slug: null,
-  description: null,
-  link: null,
-  avatar: null,
+  name: '',
+  slug: '',
+  description: '',
+  link: '/',
+  avatar: '',
+};
+
+const meta = {
+  title: '',
+  description: '',
+  canonical: '',
 };
 
 const media = {
@@ -16,28 +22,23 @@ const media = {
   id: null,
   type: 'media',
   creationDate: null,
-  slug: null,
-  title: null,
-  caption: null,
-  description: null,
-  link: null,
+  slug: '',
+  title: '',
+  caption: '',
+  description: '',
+  link: '/',
   author,
-  alt: null,
-  mimeType: null,
-  mediaType: null,
+  alt: '',
+  mimeType: '',
+  mediaType: '',
   original: {
     height: null,
     width: null,
-    filename: null,
-    url: null,
+    filename: '',
+    url: '',
   },
+  meta,
   sizes: [],
-};
-
-const meta = {
-  title: null,
-  description: null,
-  canonical: null,
 };
 
 const single = {
@@ -45,17 +46,17 @@ const single = {
   fetching: false,
   type: null,
   id: null,
-  title: null,
+  title: '',
   creationDate: null,
   modificationDate: null,
-  slug: null,
-  content: null,
-  excerpt: null,
-  link: null,
+  slug: '',
+  content: '',
+  excerpt: '',
+  link: '/',
   taxonomies: [],
   featured: media,
   author,
-  target: null,
+  target: '',
   meta,
 };
 
@@ -64,10 +65,10 @@ const taxonomy = {
   fetching: false,
   id: null,
   type: null,
-  name: null,
-  slug: null,
-  link: null,
-  target: null,
+  name: '',
+  slug: '',
+  link: '/',
+  target: '',
   meta,
 };
 
