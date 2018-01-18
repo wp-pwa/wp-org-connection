@@ -1,12 +1,17 @@
 /* eslint-disable global-require */
 import { when } from 'mobx';
-import { isMatch } from 'lodash';
+import { isMatch, isEqual } from 'lodash';
 import { takeEvery, put, call } from 'redux-saga/effects';
 import { eventChannel } from 'redux-saga';
 import createHistory from 'history/createBrowserHistory';
 import * as actionTypes from '../actionTypes';
 
 import * as actions from '../actions';
+
+// Initialize historyKeys
+const historyKeys = [];
+const contextKeys = [];
+let currentKey = 0;
 
 const getUrl = (selected, connection) => {
   const { listType, listId, singleType, singleId, page } = selected;
@@ -23,14 +28,18 @@ const getUrl = (selected, connection) => {
 };
 
 const routeChanged = ({ connection, history }) => {
-  // Initialize historyKeys
-  const historyKeys = [history.location.key];
-  let currentKey = 0;
+  if (window) window.routerHistory = history;
+
+  historyKeys.push(history.location.key);
+  contextKeys.push(history.location.key);
 
   return eventChannel(emitter => {
     const unlisten = history.listen((location, action) => {
-
       const { pathname, state, key } = location;
+      if (state.context && !isEqual(connection.context.generator, state.context)) {
+        contextKeys.push(historyKeys[currentKey]);
+      }
+
       if (action === 'PUSH') {
         currentKey += 1;
         historyKeys[currentKey] = key;
@@ -40,12 +49,10 @@ const routeChanged = ({ connection, history }) => {
       }
       if (action === 'POP') {
         const newIndex = historyKeys.indexOf(key);
-        console.log(newIndex);
         if (newIndex > currentKey) state.method = 'forward';
         else state.method = 'back';
         currentKey = newIndex;
       }
-      console.log(historyKeys);
 
       // Prevents an event emission when just replacing the URL
       if (!(isMatch(connection.selected, state.selected) && action === 'REPLACE'))
@@ -53,7 +60,7 @@ const routeChanged = ({ connection, history }) => {
     });
     return unlisten;
   });
-}
+};
 
 export function* handleHistoryRouteChanges(changed) {
   yield put(actions.routeChangeSucceed(changed));
@@ -61,6 +68,12 @@ export function* handleHistoryRouteChanges(changed) {
 
 export const requestHandlerCreator = ({ connection, history }) =>
   function* handleRequest({ selected, method, context }) {
+    if (method === 'previousContext') {
+      const pagesBack = currentKey - historyKeys.indexOf(contextKeys.pop());
+      if (pagesBack <= currentKey) history.go(-pagesBack);
+      return;
+    }
+
     const { singleType, singleId } = selected;
 
     const nextSelected = connection.context.getItem({ singleType, singleId });

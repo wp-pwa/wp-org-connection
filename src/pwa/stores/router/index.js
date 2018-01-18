@@ -262,7 +262,7 @@ export const actions = self => {
 
   return {
     [actionTypes.ROUTE_CHANGE_REQUESTED]: ({ selected, context }) => {
-      if (shouldInit(selected)) init({ self, ...selected, fetching: false });
+      if (selected && shouldInit(selected)) init({ self, ...selected, fetching: false });
 
       if (context) {
         context.items.forEach(column => {
