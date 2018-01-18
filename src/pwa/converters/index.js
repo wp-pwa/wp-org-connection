@@ -63,6 +63,13 @@ export const media = entity => ({
   description: entity.description && entity.description.rendered,
   caption: entity.caption && entity.caption.rendered,
   author: entity.author,
+  meta: {
+    title: decode(
+      (entity.yoast_meta && entity.yoast_meta.yoast_wpseo_title) || entity.title.rendered,
+    ),
+    description: (entity.yoast_meta && entity.yoast_meta.yoast_wpseo_desc) || '',
+    canonical: (entity.yoast_meta && entity.yoast_meta.yoast_wpseo_canonical) || '',
+  },
   original: {
     height: entity.media_details.height,
     width: entity.media_details.width,

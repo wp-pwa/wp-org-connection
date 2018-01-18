@@ -40,6 +40,11 @@ Object {
   "id": 2687,
   "link": "https://blog.worona.org/the-google-amp-phenomenon/faq-questions-answers/",
   "mediaType": "image",
+  "meta": Object {
+    "canonical": "",
+    "description": "",
+    "title": "faq-questions-answers",
+  },
   "mimeType": "image/jpeg",
   "mst": "media",
   "original": Object {
@@ -107,6 +112,11 @@ Object {
   "id": 62,
   "link": "https://demo.worona.org/the-beauties-of-gullfoss/iceland-test/",
   "mediaType": "image",
+  "meta": Object {
+    "canonical": "",
+    "description": "",
+    "title": "iceland",
+  },
   "mimeType": "image/jpeg",
   "mst": "media",
   "original": Object {
