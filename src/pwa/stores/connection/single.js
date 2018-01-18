@@ -2,6 +2,13 @@
 import { types } from 'mobx-state-tree';
 import Link from './link';
 
+export const Meta = types.model('Meta').props({
+  title: types.maybe(types.string),
+  description: types.maybe(types.string),
+  canonical: types.maybe(types.string),
+  pretty: false,
+});
+
 export const Image = types.model('Image').props({
   height: types.number,
   width: types.number,
@@ -11,6 +18,8 @@ export const Image = types.model('Image').props({
 
 export const Media = types.model('Media').props({
   id: types.identifier(types.number),
+  fetching: types.optional(types.boolean, false),
+  ready: types.optional(types.boolean, false),
   creationDate: types.maybe(types.Date),
   slug: types.maybe(types.string),
   alt: types.maybe(types.string),
@@ -18,8 +27,11 @@ export const Media = types.model('Media').props({
   mediaType: types.maybe(types.string),
   title: types.maybe(types.string),
   author: types.maybe(types.reference(types.late(() => Author))),
+  meta: types.optional(Meta, {}),
   original: types.maybe(Image),
   sizes: types.maybe(types.array(Image)),
+  link: types.optional(Link, {}),
+  _link: types.maybe(types.string),
 });
 
 export const Author = types.model('Author').props({
@@ -30,13 +42,6 @@ export const Author = types.model('Author').props({
   link: types.optional(Link, {}),
   _link: types.maybe(types.string),
   avatar: types.maybe(types.union(Media, types.string)),
-});
-
-export const Meta = types.model('Meta').props({
-  title: types.maybe(types.string),
-  description: types.maybe(types.string),
-  canonical: types.maybe(types.string),
-  pretty: false,
 });
 
 export const Taxonomy = types.model('Taxonomy').props({
