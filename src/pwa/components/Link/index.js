@@ -92,12 +92,14 @@ class Link extends Component {
       page: PropTypes.number,
     }).isRequired,
     context: PropTypes.shape({}),
+    method: PropTypes.string,
     children: PropTypes.node.isRequired,
     href: PropTypes.string.isRequired,
     routeChangeRequested: PropTypes.func.isRequired,
   };
 
   static defaultProps = {
+    method: 'push',
     context: null,
   };
 
@@ -116,8 +118,8 @@ class Link extends Component {
     e.preventDefault();
     NProgress.start();
 
-    const { routeChangeRequested, selected, context } = this.props;
-    setTimeout(() => routeChangeRequested({ selected, context }), 100);
+    const { routeChangeRequested, selected, context, method } = this.props;
+    setTimeout(() => routeChangeRequested({ selected, context, method }), 100);
   }
 
   render() {
