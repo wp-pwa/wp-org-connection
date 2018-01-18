@@ -1,5 +1,5 @@
 import { types, resolveIdentifier, getParent } from 'mobx-state-tree';
-import { join , extract } from './utils';
+import { join } from './utils';
 import { Entity } from './entity';
 import entityShape from './entity-shape';
 import { List } from './list';

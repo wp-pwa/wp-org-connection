@@ -1,5 +1,6 @@
 /* eslint-disable no-use-before-define */
 import { types, getParent } from 'mobx-state-tree';
+import { extract } from './utils';
 
 const common = self => ({
   get ready() {
@@ -7,15 +8,16 @@ const common = self => ({
   },
   get link() {
     if (self.entity && self.entity.link) return self.entity.link;
-    if (self.type === 'category') return `/?cat=${self.id}`;
-    if (self.type === 'author') return `/?author=${self.id}`;
-    if (self.type === 'media') return `/?attachement_id=${self.id}`;
-    if (self.entity.mst === 'single') return `/?p=${self.id}`;
+    const { type, id } = extract(self.mstId);
+    if (type === 'category') return `/?cat=${id}`;
+    if (type === 'author') return `/?author=${id}`;
+    if (type === 'media') return `/?attachement_id=${id}`;
+    if (type === 'post' || type === 'page') return `/?p=${id}`;
     return '/';
   },
   pagedLink(page = 1) {
-    if (self.entity.mst === 'single')
-      throw new Error(`Can't add a page to a single entity (${self.mstId})`);
+    if (self.entity && (self.entity.mst === 'single' || self.entity.mst === 'media'))
+      throw new Error(`Can't add a page to a ${self.entity.mst} entity (${self.mstId})`);
     return self.ready ? `${self.link}/page/${page}` : `${self.link}&paged=${page}`;
   },
 });
