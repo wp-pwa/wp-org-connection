@@ -66,17 +66,26 @@ export const media = entity => {
     mediaType: entity.media_type,
     title: entity.title.rendered,
     author: entity.author,
+    _link: entity.link,
+    meta: {
+      title: decode(
+        (entity.yoast_meta && entity.yoast_meta.yoast_wpseo_title) || entity.title.rendered,
+      ),
+      description: (entity.yoast_meta && entity.yoast_meta.yoast_wpseo_desc) || '',
+      canonical: (entity.yoast_meta && entity.yoast_meta.yoast_wpseo_canonical) || '',
+      pretty: true,
+    },
     original: {
-      height: entity.media_details.height,
-      width: entity.media_details.width,
+      height: parseInt(entity.media_details.height, 10),
+      width: parseInt(entity.media_details.width, 10),
       filename: entity.media_details.file,
       url: entity.source_url,
     },
     sizes:
       entity.media_details.sizes &&
       Object.values(entity.media_details.sizes).map(image => ({
-        height: image.height,
-        width: image.width,
+        height: parseInt(image.height, 10),
+        width: parseInt(image.width, 10),
         filename: image.file,
         url: image.source_url,
       })),

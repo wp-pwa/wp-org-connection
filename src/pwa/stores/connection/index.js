@@ -64,7 +64,7 @@ const addEntity = ({ self, type, id, entity, ready = false, fetching = false }) 
     newEntity = entity.error ? { id, type: singleType, error: entity.error } : convert(entity);
   } else {
     newEntity =
-      !entity && (type === 'post' || type === 'page')
+      !entity && (type === 'post' || type === 'page' || type === 'media')
         ? { id, type: singleType }
         : { id, taxonomy: singleType };
   }
