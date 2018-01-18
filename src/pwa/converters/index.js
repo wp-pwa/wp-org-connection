@@ -64,6 +64,7 @@ export const media = entity => {
     alt: entity.alt_text,
     mimeType: entity.mime_type,
     mediaType: entity.media_type,
+    title: entity.title.rendered,
     author: entity.author,
     _link: entity.link,
     meta: {

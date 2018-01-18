@@ -25,6 +25,7 @@ export const Media = types.model('Media').props({
   alt: types.maybe(types.string),
   mimeType: types.maybe(types.string),
   mediaType: types.maybe(types.string),
+  title: types.maybe(types.string),
   author: types.maybe(types.reference(types.late(() => Author))),
   meta: types.optional(Meta, {}),
   original: types.maybe(Image),
