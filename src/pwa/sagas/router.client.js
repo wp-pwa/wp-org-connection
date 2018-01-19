@@ -1,12 +1,17 @@
 /* eslint-disable global-require */
 import { when } from 'mobx';
-import { isMatch } from 'lodash';
+import { isMatch, isEqual } from 'lodash';
 import { takeEvery, put, call } from 'redux-saga/effects';
 import { eventChannel } from 'redux-saga';
 import createHistory from 'history/createBrowserHistory';
 import * as actionTypes from '../actionTypes';
 
 import * as actions from '../actions';
+
+// Initialize historyKeys
+const historyKeys = [];
+const contextKeys = [];
+let currentKey = 0;
 
 const getUrl = (selected, connection) => {
   const { listType, listId, singleType, singleId, page } = selected;
@@ -23,12 +28,18 @@ const getUrl = (selected, connection) => {
 };
 
 const routeChanged = ({ connection, history }) => {
-  const historyKeys = [];
-  let currentKey = -1;
+  if (window) window.routerHistory = history;
+
+  historyKeys.push(history.location.key);
+  contextKeys.push(history.location.key);
 
   return eventChannel(emitter => {
     const unlisten = history.listen((location, action) => {
       const { pathname, state, key } = location;
+      if (state.context && !isEqual(connection.context.generator, state.context)) {
+        contextKeys.push(historyKeys[currentKey]);
+      }
+
       if (action === 'PUSH') {
         currentKey += 1;
         historyKeys[currentKey] = key;
@@ -49,7 +60,7 @@ const routeChanged = ({ connection, history }) => {
     });
     return unlisten;
   });
-}
+};
 
 export function* handleHistoryRouteChanges(changed) {
   yield put(actions.routeChangeSucceed(changed));
@@ -57,6 +68,12 @@ export function* handleHistoryRouteChanges(changed) {
 
 export const requestHandlerCreator = ({ connection, history }) =>
   function* handleRequest({ selected, method, context }) {
+    if (method === 'previousContext') {
+      const pagesBack = currentKey - historyKeys.indexOf(contextKeys.pop());
+      if (pagesBack <= currentKey) history.go(-pagesBack);
+      return;
+    }
+
     const { singleType, singleId } = selected;
 
     const nextSelected = connection.context.getItem({ singleType, singleId });
@@ -106,7 +123,7 @@ export default function* routerSaga(stores, history = createHistory()) {
     context: generator,
   });
 
-  // Initializate router event channels.
+  // Initialize router event channels.
   const routeChangedEvents = routeChanged({ connection, history });
 
   // Track router events and dispatch them to redux.
