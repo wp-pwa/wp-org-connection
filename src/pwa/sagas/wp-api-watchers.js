@@ -60,7 +60,7 @@ export const listRequested = connection =>
     const singleType = 'post';
     if (!['latest', 'category', 'tag', 'author'].includes(listType))
       throw new Error(
-        'Custom taxonomies should retrieve their custom post types first. NOT IMPLEMENTED.',
+        'Custom taxonomies should retrieve their custom post types first. NOT IMPLEMENTED.'
       );
     try {
       const response = yield call(getList, { connection, listType, listId, singleType, page });
@@ -86,8 +86,8 @@ export const listRequested = connection =>
           listId,
           page,
           error,
-          endpoint: getList({ connection, listType, listId, singleType, page }).toString(),
-        }),
+          endpoint: getList({ connection, listType, listId, singleType, page }).toString()
+        })
       );
     }
   };
@@ -104,8 +104,8 @@ export const singleRequested = connection =>
           singleType,
           singleId,
           error,
-          endpoint: getSingle({ connection, singleType, singleId }).toString(),
-        }),
+          endpoint: getSingle({ connection, singleType, singleId }).toString()
+        })
       );
     }
   };
@@ -127,8 +127,8 @@ export const customRequested = connection =>
           page,
           params,
           result: result.map(item => item.id),
-          entities,
-        }),
+          entities
+        })
       );
     } catch (error) {
       yield put(
@@ -139,8 +139,8 @@ export const customRequested = connection =>
           params,
           page,
           error,
-          endpoint: getCustom({ connection, singleType, page, params }).toString(),
-        }),
+          endpoint: getCustom({ connection, singleType, page, params }).toString()
+        })
       );
     }
   };
@@ -172,9 +172,10 @@ export const siteInfoRequested = connection =>
           home: {
             title: data.home.title,
             description: data.home.description,
+            canonical: data.home.canonical
           },
-          perPage: data.perPage,
-        }),
+          perPage: data.perPage
+        })
       );
     } catch (error) {
       yield put(actions.siteInfoFailed({ error }));
@@ -188,6 +189,6 @@ export default function* wpApiWatchersSaga(stores) {
     takeEvery(actionTypes.SINGLE_REQUESTED, singleRequested(connection)),
     takeEvery(actionTypes.LIST_REQUESTED, listRequested(connection)),
     takeEvery(actionTypes.CUSTOM_REQUESTED, customRequested(connection)),
-    takeEvery(actionTypes.SITE_INFO_REQUESTED, siteInfoRequested(connection)),
+    takeEvery(actionTypes.SITE_INFO_REQUESTED, siteInfoRequested(connection))
   ]);
 }
