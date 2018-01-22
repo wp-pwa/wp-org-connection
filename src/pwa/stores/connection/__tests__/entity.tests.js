@@ -35,7 +35,9 @@ describe('Store › Entity', () => {
   test.only('Get single shape when entity is not ready', () => {
     expect(connection.entity('post', 60).ready).toBe(false);
     expect(connection.entity('post', 60).title).toBe('');
-    expect(connection.entity('post', 60).taxonomies).toEqual([]);
+    expect(connection.entity('post', 60).link).toBe('/?p=60');
+    expect(() => connection.entity('post', 60).pagedLink(3)).toThrow();
+    expect(connection.entity('post', 60).taxonomies('category')).toEqual([]);
     expect(connection.entity('post', 60).featured.ready).toBe(false);
     expect(connection.entity('post', 60).featured.sizes).toEqual([]);
     expect(connection.entity('post', 60).author.name).toBe('');
@@ -44,18 +46,29 @@ describe('Store › Entity', () => {
   test.only('Get taxonomy shape when entity is not ready', () => {
     expect(connection.entity('category', 3).ready).toBe(false);
     expect(connection.entity('category', 3).name).toBe('');
-    expect(connection.entity('category', 3).link).toBe('/');
+    expect(connection.entity('category', 3).link).toBe('/?cat=3');
+    expect(connection.entity('category', 3).pagedLink(3)).toBe('/?cat=3&paged=3');
+  });
+
+  test.only('Get taxonomy shape when entity is not ready', () => {
+    expect(connection.entity('tag', 10).ready).toBe(false);
+    expect(connection.entity('tag', 10).name).toBe('');
+    expect(connection.entity('tag', 10).link).toBe('/?tag_ID=10');
+    expect(connection.entity('tag', 10).pagedLink(3)).toBe('/?tag_ID=10&paged=3');
   });
 
   test.only('Get author shape when entity is not ready', () => {
     expect(connection.entity('author', 4).ready).toBe(false);
     expect(connection.entity('author', 4).name).toBe('');
     expect(connection.entity('author', 4).avatar).toBe('');
+    expect(connection.entity('author', 4).link).toBe('/?author=4');
+    expect(connection.entity('author', 4).pagedLink(2)).toBe('/?author=4&paged=2');
   });
 
   test.only('Get media shape when entity is not ready', () => {
     expect(connection.entity('media', 62).ready).toBe(false);
-    expect(connection.entity('media', 62).link).toBe('/');
+    expect(connection.entity('media', 62).link).toBe('/?attachement_id=62');
+    expect(() => connection.entity('media', 62).pagedLink(2)).toThrow();
     expect(connection.entity('media', 62).author.name).toBe('');
     expect(connection.entity('media', 62).original.height).toBe(null);
     expect(connection.entity('media', 62).sizes).toEqual([]);
@@ -68,9 +81,42 @@ describe('Store › Entity', () => {
     connection.addEntity({ entity: entities.single[60] });
   });
 
-  test('Subscribe to single fields before entity is ready', done => {
+  test.only('Subscribe to link before entity is ready', done => {
     autorun(() => {
-      if (connection.entity('post', 60).title === 'The Beauties of Gullfoss') done();
+      if (connection.entity('post', 60).link === convert(entities.single[60]).link) done();
+    });
+    connection.addEntity({ entity: entities.single[60] });
+  });
+
+  test.only('Subscribe to paged link before entity is ready', done => {
+    autorun(() => {
+      if (
+        connection.entity('category', 3).pagedLink(2) ===
+        `${convert(entities.taxonomy[3]).link}page/2`
+      )
+        done();
+    });
+    connection.addEntity({ entity: entities.taxonomy[3] });
+  });
+
+  test.only('Subscribe to single fields before entity is ready', done => {
+    autorun(() => {
+      if (connection.entity('post', 60).title === convert(entities.single[60]).title) done();
+    });
+    connection.addEntity({ entity: entities.single[60] });
+  });
+
+  test.only('Subscribe to taxonomies before entity is ready', () => {
+    expect(connection.entity('post', 60).taxonomies('category').length).toBe(0);
+    expect(connection.entity('post', 60).taxonomies('tag').length).toBe(0);
+    connection.addEntity({ entity: entities.single[60] });
+    expect(connection.entity('post', 60).taxonomies('category').length).toBe(2);
+    expect(connection.entity('post', 60).taxonomies('tag').length).toBe(4);
+  });
+
+  test('Subscribe to taxonomies before entity is ready', done => {
+    autorun(() => {
+      if (connection.entity('post', 60).taxonomies('category').length === 3) done();
     });
     connection.addEntity({ entity: entities.single[60] });
   });
@@ -81,7 +127,6 @@ describe('Store › Entity', () => {
     expect(connection.entity('post', 60).ready).toBe(true);
     expect(getSnapshot(connection.entity('post', 60).entity)).toMatchSnapshot();
   });
-
 
   test('Access post properties before ready', () => {
     expect(connection.entity('post', 60).title).toBe(null);
@@ -99,10 +144,10 @@ describe('Store › Entity', () => {
     expect(connection.entity('post', 60).ready).toBe(true);
     expect(connection.entity('post', 60).title).toBe(post60converted.title);
     expect(connection.entity('post', 60).creationDate).toEqual(
-      new Date(post60converted.creationDate),
+      new Date(post60converted.creationDate)
     );
     expect(connection.entity('post', 60).modificationDate).toEqual(
-      new Date(post60converted.modificationDate),
+      new Date(post60converted.modificationDate)
     );
     expect(connection.entity('post', 60).slug).toBe(post60converted.slug);
     expect(connection.entity('post', 60).link).toBe(post60converted.link);

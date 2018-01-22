@@ -25,7 +25,7 @@ export const props = {
 export const views = self => ({
   entity(type, id) {
     const mstId = join(type, id);
-    return resolveIdentifier(Entity, self, mstId) || entityShape;
+    return resolveIdentifier(Entity, self, mstId) || entityShape(type, id);
   },
   list(type, id) {
     self.initListMap({ type, id });

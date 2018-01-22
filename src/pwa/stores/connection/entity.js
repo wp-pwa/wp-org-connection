@@ -1,6 +1,7 @@
 /* eslint-disable no-use-before-define */
-import { types, getParent } from 'mobx-state-tree';
-import { extract } from './utils';
+import { types, getParent, resolveIdentifier } from 'mobx-state-tree';
+import { join, extract } from './utils';
+import { link, pagedLink } from './entity-shape';
 
 const common = self => ({
   get ready() {
@@ -9,17 +10,12 @@ const common = self => ({
   get link() {
     if (self.entity && self.entity.link) return self.entity.link;
     const { type, id } = extract(self.mstId);
-    if (type === 'category') return `/?cat=${id}`;
-    if (type === 'author') return `/?author=${id}`;
-    if (type === 'media') return `/?attachement_id=${id}`;
-    if (type === 'post' || type === 'page') return `/?p=${id}`;
-    return '/';
+    return link(type, id);
   },
-  pagedLink(page = 1) {
-    if (self.entity && (self.entity.mst === 'single' || self.entity.mst === 'media'))
-      throw new Error(`Can't add a page to a ${self.entity.mst} entity (${self.mstId})`);
-    return self.ready ? `${self.link}/page/${page}` : `${self.link}&paged=${page}`;
-  },
+  pagedLink: (page = 1) => {
+    const { type, id } = extract(self.mstId);
+    return pagedLink({ type, id, page, entityLink: self.entity && self.entity.link });
+  }
 });
 
 const single = self => ({
@@ -41,14 +37,20 @@ const single = self => ({
   get excerpt() {
     return self.ready ? self.entity.excerpt : null;
   },
-  taxonomies(taxonomy) {
-    return self.ready ? self.entity.taxonomies && self.entity.taxonomies.get(taxonomy) : [];
+  get target() {
+    return self.ready ? self.entity.target : null;
   },
-  taxonomies: [],
-  featured: media,
-  author,
-  target: null,
-  meta,
+  taxonomies(taxonomy) {
+    return self.ready && self.entity.taxonomies && self.entity.taxonomies[taxonomy]
+      ? self.entity.taxonomies[taxonomy].map(id =>
+          resolveIdentifier(Entity, self, join(taxonomy, id))
+        )
+      : [];
+  }
+  // taxonomies: [],
+  // featured: media,
+  // author,
+  // meta
 });
 
 export const Entity = types
@@ -56,28 +58,16 @@ export const Entity = types
   .props({
     mstId: types.identifier(types.string), // post_60, category_7, movie_34, author_3, media_35
     fetching: false,
-    entity: types.frozen,
+    entity: types.frozen
   })
   .views(common)
-  // .views(single)
-  .views(self => ({
-    get featured() {
-      return (self.entity && self.entity.featured) || { ready: false, original: {}, sizes: [] };
-    },
-    taxonomies(taxonomy) {
-      return (self.entity && self.entity.taxonomies && self.entity.taxonomies.get(taxonomy)) || [];
-    },
-    // Taxonomies
-    get name() {
-      return (self.entity && self.entity.name) || null;
-    },
-  }));
+  .views(single);
 
 export const Image = types.model('Image').props({
   height: types.number,
   width: types.number,
   filename: types.string,
-  url: types.string,
+  url: types.string
 });
 
 export const Media = types.model('Media').props({
@@ -91,13 +81,13 @@ export const Media = types.model('Media').props({
   mimeType: types.string,
   mediaType: types.string,
   original: Image,
-  sizes: types.array(Image),
+  sizes: types.array(Image)
 });
 
 export const Meta = types.model('Meta').props({
   title: types.maybe(types.string),
   description: types.maybe(types.string),
-  canonical: types.maybe(types.string),
+  canonical: types.maybe(types.string)
 });
 
 export const Author = types.model('Author').props({
@@ -107,7 +97,7 @@ export const Author = types.model('Author').props({
   slug: types.string,
   description: types.string,
   link: types.string,
-  avatar: types.maybe(types.string),
+  avatar: types.maybe(types.string)
 });
 
 export const Taxonomy = types.model('Taxonomy').props({
@@ -118,7 +108,7 @@ export const Taxonomy = types.model('Taxonomy').props({
   link: types.string,
   type: types.string,
   target: types.maybe(types.string),
-  meta: types.optional(Meta, {}),
+  meta: types.optional(Meta, {})
 });
 
 const Featured = types
@@ -130,9 +120,9 @@ const Featured = types
           getParent(parent, 4)
             .entities.get('media')
             .get(identifier) || null,
-        set: value => value,
-      }),
-    ),
+        set: value => value
+      })
+    )
   })
   .views(self => ({
     get ready() {
@@ -164,7 +154,7 @@ const Featured = types
     },
     get sizes() {
       return (self.entity && self.entity.sizes) || [];
-    },
+    }
   }));
 
 export const Single = types.model('Single').props({
@@ -191,14 +181,14 @@ export const Single = types.model('Single').props({
           },
           set(value) {
             return value;
-          },
-        }),
-      ),
+          }
+        })
+      )
     ),
-    {},
+    {}
   ),
   target: types.maybe(types.string),
-  meta: types.optional(Meta, {}),
+  meta: types.optional(Meta, {})
 });
 
 export const Entities = types.union(
@@ -211,5 +201,5 @@ export const Entities = types.union(
   Single,
   Taxonomy,
   Author,
-  Media,
+  Media
 );

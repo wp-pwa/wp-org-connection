@@ -157,7 +157,7 @@ Object {
     "type": "media",
   },
   "fetching": false,
-  "id": null,
+  "id": "someId",
   "link": "/",
   "mediaType": "",
   "meta": Object {
@@ -174,13 +174,14 @@ Object {
     "url": "",
     "width": null,
   },
+  "pagedLink": [Function],
   "ready": false,
   "sizes": Array [],
   "slug": "",
   "target": "",
-  "taxonomies": Array [],
+  "taxonomies": [Function],
   "title": "",
-  "type": null,
+  "type": "someType",
 }
 `;
 
