@@ -156,10 +156,9 @@ export const actions = self => ({
     custom.fetching = false;
     custom.pageMap.get(page - 1).fetching = false;
   },
-  [actionTypes.SITE_INFO_SUCCEED]({ home: { title, description, canonical }, perPage }) {
+  [actionTypes.SITE_INFO_SUCCEED]({ home: { title, description }, perPage }) {
     self.siteInfo.home.title = title;
     self.siteInfo.home.description = description;
-    self.siteInfo.home.canonical = canonical;
     self.siteInfo.perPage = perPage;
   }
 });

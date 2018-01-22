@@ -155,12 +155,11 @@ export const siteInfoRequested = () => ({
   type: actionTypes.SITE_INFO_REQUESTED,
 });
 
-export const siteInfoSucceed = ({ home: { title, description, canonical }, perPage }) => ({
+export const siteInfoSucceed = ({ home: { title, description }, perPage }) => ({
   type: actionTypes.SITE_INFO_SUCCEED,
   home: {
     title,
     description,
-    canonical
   },
   perPage: parseInt(perPage, 10),
 });

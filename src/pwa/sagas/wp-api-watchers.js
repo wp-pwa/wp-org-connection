@@ -76,8 +76,8 @@ export const listRequested = connection =>
           listId,
           page,
           total,
-          endpoint: getList({ connection, listType, listId, singleType, page }).toString(),
-        }),
+          endpoint: getList({ connection, listType, listId, singleType, page }).toString()
+        })
       );
     } catch (error) {
       yield put(
@@ -171,8 +171,7 @@ export const siteInfoRequested = connection =>
         actions.siteInfoSucceed({
           home: {
             title: data.home.title,
-            description: data.home.description,
-            canonical: data.home.canonical
+            description: data.home.description
           },
           perPage: data.perPage
         })
