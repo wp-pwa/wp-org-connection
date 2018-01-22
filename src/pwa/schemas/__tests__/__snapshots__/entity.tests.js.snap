@@ -70,7 +70,7 @@ Object {
   "name": "Nature",
   "parent": 0,
   "slug": "nature",
-  "taxonomy": "category",
+  "type": "category",
   "yoast_meta": Object {
     "yoast_wpseo_metadesc": "",
     "yoast_wpseo_title": "Nature Archives - Demo Worona",
@@ -259,7 +259,7 @@ Object {
   "mst": "taxonomy",
   "name": "Gullfoss",
   "slug": "gullfoss",
-  "taxonomy": "tag",
+  "type": "tag",
   "yoast_meta": Object {
     "yoast_wpseo_metadesc": "",
     "yoast_wpseo_title": "Gullfoss Archives - Demo Worona",
@@ -643,7 +643,7 @@ Object {
   "mst": "taxonomy",
   "name": "Photography",
   "slug": "photography",
-  "taxonomy": "category",
+  "type": "category",
   "yoast_meta": Object {
     "yoast_wpseo_metadesc": "",
     "yoast_wpseo_title": "Photography Archives - Demo Worona",
@@ -687,7 +687,7 @@ Object {
   "mst": "taxonomy",
   "name": "Gullfoss",
   "slug": "gullfoss",
-  "taxonomy": "tag",
+  "type": "tag",
   "yoast_meta": Object {
     "yoast_wpseo_metadesc": "",
     "yoast_wpseo_title": "Gullfoss Archives - Demo Worona",

@@ -186,7 +186,7 @@ Object {
       "name": "Weekend trip",
       "parent": 0,
       "slug": "weekend-trip",
-      "taxonomy": "category",
+      "type": "category",
       "yoast_meta": Object {
         "yoast_wpseo_metadesc": "",
         "yoast_wpseo_title": "Weekend trip Archives - Demo Worona",
@@ -231,7 +231,7 @@ Object {
       "name": "Photography",
       "parent": 0,
       "slug": "photography",
-      "taxonomy": "category",
+      "type": "category",
       "yoast_meta": Object {
         "yoast_wpseo_metadesc": "",
         "yoast_wpseo_title": "Photography Archives - Demo Worona",
@@ -276,7 +276,7 @@ Object {
       "name": "Cities",
       "parent": 0,
       "slug": "cities",
-      "taxonomy": "category",
+      "type": "category",
       "yoast_meta": Object {
         "yoast_wpseo_metadesc": "",
         "yoast_wpseo_title": "Cities Archives - Demo Worona",
@@ -327,7 +327,7 @@ Object {
       "name": "Architecture",
       "parent": 4,
       "slug": "architecture",
-      "taxonomy": "category",
+      "type": "category",
       "yoast_meta": Object {
         "yoast_wpseo_metadesc": "",
         "yoast_wpseo_title": "Architecture Archives - Demo Worona",
@@ -372,7 +372,7 @@ Object {
       "name": "Culture",
       "parent": 0,
       "slug": "culture",
-      "taxonomy": "category",
+      "type": "category",
       "yoast_meta": Object {
         "yoast_wpseo_metadesc": "",
         "yoast_wpseo_title": "Culture Archives - Demo Worona",
@@ -417,7 +417,7 @@ Object {
       "name": "Nature",
       "parent": 0,
       "slug": "nature",
-      "taxonomy": "category",
+      "type": "category",
       "yoast_meta": Object {
         "yoast_wpseo_metadesc": "",
         "yoast_wpseo_title": "Nature Archives - Demo Worona",
@@ -462,7 +462,7 @@ Object {
       "name": "Travel",
       "parent": 0,
       "slug": "travel",
-      "taxonomy": "category",
+      "type": "category",
       "yoast_meta": Object {
         "yoast_wpseo_metadesc": "",
         "yoast_wpseo_title": "Travel Archives - Demo Worona",
@@ -1903,7 +1903,7 @@ Object {
       "mst": "taxonomy",
       "name": "Antelope Canyon",
       "slug": "antelope-canyon",
-      "taxonomy": "tag",
+      "type": "tag",
       "yoast_meta": Object {
         "yoast_wpseo_metadesc": "",
         "yoast_wpseo_title": "Antelope Canyon Archives - Demo Worona",
@@ -1947,7 +1947,7 @@ Object {
       "mst": "taxonomy",
       "name": "Arizona",
       "slug": "arizona",
-      "taxonomy": "tag",
+      "type": "tag",
       "yoast_meta": Object {
         "yoast_wpseo_metadesc": "",
         "yoast_wpseo_title": "Arizona Archives - Demo Worona",
@@ -1991,7 +1991,7 @@ Object {
       "mst": "taxonomy",
       "name": "America",
       "slug": "america",
-      "taxonomy": "tag",
+      "type": "tag",
       "yoast_meta": Object {
         "yoast_wpseo_metadesc": "",
         "yoast_wpseo_title": "America Archives - Demo Worona",
@@ -2035,7 +2035,7 @@ Object {
       "mst": "taxonomy",
       "name": "Culture",
       "slug": "culture",
-      "taxonomy": "tag",
+      "type": "tag",
       "yoast_meta": Object {
         "yoast_wpseo_metadesc": "",
         "yoast_wpseo_title": "Culture Archives - Demo Worona",
@@ -2079,7 +2079,7 @@ Object {
       "mst": "taxonomy",
       "name": "Canada",
       "slug": "canada",
-      "taxonomy": "tag",
+      "type": "tag",
       "yoast_meta": Object {
         "yoast_wpseo_metadesc": "",
         "yoast_wpseo_title": "Canada Archives - Demo Worona",
@@ -2123,7 +2123,7 @@ Object {
       "mst": "taxonomy",
       "name": "Al Hajar Mountains",
       "slug": "al-hajar-mountains",
-      "taxonomy": "tag",
+      "type": "tag",
       "yoast_meta": Object {
         "yoast_wpseo_metadesc": "",
         "yoast_wpseo_title": "Al Hajar Mountains Archives - Demo Worona",
@@ -2167,7 +2167,7 @@ Object {
       "mst": "taxonomy",
       "name": "Animals",
       "slug": "animals",
-      "taxonomy": "tag",
+      "type": "tag",
       "yoast_meta": Object {
         "yoast_wpseo_metadesc": "",
         "yoast_wpseo_title": "Animals Archives - Demo Worona",
@@ -2211,7 +2211,7 @@ Object {
       "mst": "taxonomy",
       "name": "Alps",
       "slug": "alps",
-      "taxonomy": "tag",
+      "type": "tag",
       "yoast_meta": Object {
         "yoast_wpseo_metadesc": "",
         "yoast_wpseo_title": "Alps Archives - Demo Worona",
@@ -2255,7 +2255,7 @@ Object {
       "mst": "taxonomy",
       "name": "Agra",
       "slug": "agra",
-      "taxonomy": "tag",
+      "type": "tag",
       "yoast_meta": Object {
         "yoast_wpseo_metadesc": "",
         "yoast_wpseo_title": "Agra Archives - Demo Worona",
@@ -2299,7 +2299,7 @@ Object {
       "mst": "taxonomy",
       "name": "Cities",
       "slug": "cities",
-      "taxonomy": "tag",
+      "type": "tag",
       "yoast_meta": Object {
         "yoast_wpseo_metadesc": "",
         "yoast_wpseo_title": "Cities Archives - Demo Worona",
@@ -5086,7 +5086,7 @@ Tags: <a href=\\"https://demo.worona.org/tag/japan\\">Japan</a>, <a href=\\"http
       "mst": "taxonomy",
       "name": "Nature",
       "slug": "nature",
-      "taxonomy": "tag",
+      "type": "tag",
       "yoast_meta": Object {
         "yoast_wpseo_metadesc": "",
         "yoast_wpseo_title": "Nature Archives - Demo Worona",
@@ -5127,7 +5127,7 @@ Tags: <a href=\\"https://demo.worona.org/tag/japan\\">Japan</a>, <a href=\\"http
       "mst": "taxonomy",
       "name": "Tokyo",
       "slug": "tokyo",
-      "taxonomy": "tag",
+      "type": "tag",
       "yoast_meta": Object {
         "yoast_wpseo_metadesc": "",
         "yoast_wpseo_title": "Tokyo Archives - Demo Worona",
@@ -5168,7 +5168,7 @@ Tags: <a href=\\"https://demo.worona.org/tag/japan\\">Japan</a>, <a href=\\"http
       "mst": "taxonomy",
       "name": "Japan",
       "slug": "japan",
-      "taxonomy": "tag",
+      "type": "tag",
       "yoast_meta": Object {
         "yoast_wpseo_metadesc": "",
         "yoast_wpseo_title": "Japan Archives - Demo Worona",
@@ -5209,7 +5209,7 @@ Tags: <a href=\\"https://demo.worona.org/tag/japan\\">Japan</a>, <a href=\\"http
       "mst": "taxonomy",
       "name": "National Garden",
       "slug": "national-garden",
-      "taxonomy": "tag",
+      "type": "tag",
       "yoast_meta": Object {
         "yoast_wpseo_metadesc": "",
         "yoast_wpseo_title": "National Garden Archives - Demo Worona",
@@ -5250,7 +5250,7 @@ Tags: <a href=\\"https://demo.worona.org/tag/japan\\">Japan</a>, <a href=\\"http
       "mst": "taxonomy",
       "name": "Antelope Canyon",
       "slug": "antelope-canyon",
-      "taxonomy": "tag",
+      "type": "tag",
       "yoast_meta": Object {
         "yoast_wpseo_metadesc": "",
         "yoast_wpseo_title": "Antelope Canyon Archives - Demo Worona",
@@ -5291,7 +5291,7 @@ Tags: <a href=\\"https://demo.worona.org/tag/japan\\">Japan</a>, <a href=\\"http
       "mst": "taxonomy",
       "name": "Arizona",
       "slug": "arizona",
-      "taxonomy": "tag",
+      "type": "tag",
       "yoast_meta": Object {
         "yoast_wpseo_metadesc": "",
         "yoast_wpseo_title": "Arizona Archives - Demo Worona",
@@ -5332,7 +5332,7 @@ Tags: <a href=\\"https://demo.worona.org/tag/japan\\">Japan</a>, <a href=\\"http
       "mst": "taxonomy",
       "name": "Island",
       "slug": "island",
-      "taxonomy": "tag",
+      "type": "tag",
       "yoast_meta": Object {
         "yoast_wpseo_metadesc": "",
         "yoast_wpseo_title": "Island Archives - Demo Worona",
@@ -5373,7 +5373,7 @@ Tags: <a href=\\"https://demo.worona.org/tag/japan\\">Japan</a>, <a href=\\"http
       "mst": "taxonomy",
       "name": "Java",
       "slug": "java",
-      "taxonomy": "tag",
+      "type": "tag",
       "yoast_meta": Object {
         "yoast_wpseo_metadesc": "",
         "yoast_wpseo_title": "Java Archives - Demo Worona",
@@ -5414,7 +5414,7 @@ Tags: <a href=\\"https://demo.worona.org/tag/japan\\">Japan</a>, <a href=\\"http
       "mst": "taxonomy",
       "name": "Indonesia",
       "slug": "indonesia",
-      "taxonomy": "tag",
+      "type": "tag",
       "yoast_meta": Object {
         "yoast_wpseo_metadesc": "",
         "yoast_wpseo_title": "Indonesia Archives - Demo Worona",
@@ -5455,7 +5455,7 @@ Tags: <a href=\\"https://demo.worona.org/tag/japan\\">Japan</a>, <a href=\\"http
       "mst": "taxonomy",
       "name": "Photography",
       "slug": "photography",
-      "taxonomy": "category",
+      "type": "category",
       "yoast_meta": Object {
         "yoast_wpseo_metadesc": "",
         "yoast_wpseo_title": "Photography Archives - Demo Worona",
@@ -5496,7 +5496,7 @@ Tags: <a href=\\"https://demo.worona.org/tag/japan\\">Japan</a>, <a href=\\"http
       "mst": "taxonomy",
       "name": "Culture",
       "slug": "culture",
-      "taxonomy": "tag",
+      "type": "tag",
       "yoast_meta": Object {
         "yoast_wpseo_metadesc": "",
         "yoast_wpseo_title": "Culture Archives - Demo Worona",
@@ -5537,7 +5537,7 @@ Tags: <a href=\\"https://demo.worona.org/tag/japan\\">Japan</a>, <a href=\\"http
       "mst": "taxonomy",
       "name": "National Park",
       "slug": "national-park",
-      "taxonomy": "tag",
+      "type": "tag",
       "yoast_meta": Object {
         "yoast_wpseo_metadesc": "",
         "yoast_wpseo_title": "National Park Archives - Demo Worona",
@@ -5578,7 +5578,7 @@ Tags: <a href=\\"https://demo.worona.org/tag/japan\\">Japan</a>, <a href=\\"http
       "mst": "taxonomy",
       "name": "Canada",
       "slug": "canada",
-      "taxonomy": "tag",
+      "type": "tag",
       "yoast_meta": Object {
         "yoast_wpseo_metadesc": "",
         "yoast_wpseo_title": "Canada Archives - Demo Worona",
@@ -5619,7 +5619,7 @@ Tags: <a href=\\"https://demo.worona.org/tag/japan\\">Japan</a>, <a href=\\"http
       "mst": "taxonomy",
       "name": "Rocky Mountains",
       "slug": "rocky-mountains",
-      "taxonomy": "tag",
+      "type": "tag",
       "yoast_meta": Object {
         "yoast_wpseo_metadesc": "",
         "yoast_wpseo_title": "Rocky Mountains Archives - Demo Worona",
@@ -5660,7 +5660,7 @@ Tags: <a href=\\"https://demo.worona.org/tag/japan\\">Japan</a>, <a href=\\"http
       "mst": "taxonomy",
       "name": "Al Hajar Mountains",
       "slug": "al-hajar-mountains",
-      "taxonomy": "tag",
+      "type": "tag",
       "yoast_meta": Object {
         "yoast_wpseo_metadesc": "",
         "yoast_wpseo_title": "Al Hajar Mountains Archives - Demo Worona",
@@ -5701,7 +5701,7 @@ Tags: <a href=\\"https://demo.worona.org/tag/japan\\">Japan</a>, <a href=\\"http
       "mst": "taxonomy",
       "name": "Oman",
       "slug": "oman",
-      "taxonomy": "tag",
+      "type": "tag",
       "yoast_meta": Object {
         "yoast_wpseo_metadesc": "",
         "yoast_wpseo_title": "Oman Archives - Demo Worona",
@@ -5742,7 +5742,7 @@ Tags: <a href=\\"https://demo.worona.org/tag/japan\\">Japan</a>, <a href=\\"http
       "mst": "taxonomy",
       "name": "United Arab Emirates",
       "slug": "united-arab-emirates",
-      "taxonomy": "tag",
+      "type": "tag",
       "yoast_meta": Object {
         "yoast_wpseo_metadesc": "",
         "yoast_wpseo_title": "United Arab Emirates Archives - Demo Worona",
@@ -5783,7 +5783,7 @@ Tags: <a href=\\"https://demo.worona.org/tag/japan\\">Japan</a>, <a href=\\"http
       "mst": "taxonomy",
       "name": "Machu Picchu",
       "slug": "machu-picchu",
-      "taxonomy": "tag",
+      "type": "tag",
       "yoast_meta": Object {
         "yoast_wpseo_metadesc": "",
         "yoast_wpseo_title": "Machu Picchu Archives - Demo Worona",
@@ -5824,7 +5824,7 @@ Tags: <a href=\\"https://demo.worona.org/tag/japan\\">Japan</a>, <a href=\\"http
       "mst": "taxonomy",
       "name": "Inca",
       "slug": "inca",
-      "taxonomy": "tag",
+      "type": "tag",
       "yoast_meta": Object {
         "yoast_wpseo_metadesc": "",
         "yoast_wpseo_title": "Inca Archives - Demo Worona",
@@ -5865,7 +5865,7 @@ Tags: <a href=\\"https://demo.worona.org/tag/japan\\">Japan</a>, <a href=\\"http
       "mst": "taxonomy",
       "name": "Peru",
       "slug": "peru",
-      "taxonomy": "tag",
+      "type": "tag",
       "yoast_meta": Object {
         "yoast_wpseo_metadesc": "",
         "yoast_wpseo_title": "Peru Archives - Demo Worona",
@@ -5906,7 +5906,7 @@ Tags: <a href=\\"https://demo.worona.org/tag/japan\\">Japan</a>, <a href=\\"http
       "mst": "taxonomy",
       "name": "Cities",
       "slug": "cities",
-      "taxonomy": "category",
+      "type": "category",
       "yoast_meta": Object {
         "yoast_wpseo_metadesc": "",
         "yoast_wpseo_title": "Cities Archives - Demo Worona",
@@ -5947,7 +5947,7 @@ Tags: <a href=\\"https://demo.worona.org/tag/japan\\">Japan</a>, <a href=\\"http
       "mst": "taxonomy",
       "name": "Animals",
       "slug": "animals",
-      "taxonomy": "tag",
+      "type": "tag",
       "yoast_meta": Object {
         "yoast_wpseo_metadesc": "",
         "yoast_wpseo_title": "Animals Archives - Demo Worona",
@@ -5988,7 +5988,7 @@ Tags: <a href=\\"https://demo.worona.org/tag/japan\\">Japan</a>, <a href=\\"http
       "mst": "taxonomy",
       "name": "Alps",
       "slug": "alps",
-      "taxonomy": "tag",
+      "type": "tag",
       "yoast_meta": Object {
         "yoast_wpseo_metadesc": "",
         "yoast_wpseo_title": "Alps Archives - Demo Worona",
@@ -6029,7 +6029,7 @@ Tags: <a href=\\"https://demo.worona.org/tag/japan\\">Japan</a>, <a href=\\"http
       "mst": "taxonomy",
       "name": "Mountains",
       "slug": "mountains",
-      "taxonomy": "tag",
+      "type": "tag",
       "yoast_meta": Object {
         "yoast_wpseo_metadesc": "",
         "yoast_wpseo_title": "Mountains Archives - Demo Worona",
@@ -6070,7 +6070,7 @@ Tags: <a href=\\"https://demo.worona.org/tag/japan\\">Japan</a>, <a href=\\"http
       "mst": "taxonomy",
       "name": "Switzerland",
       "slug": "switzerland",
-      "taxonomy": "tag",
+      "type": "tag",
       "yoast_meta": Object {
         "yoast_wpseo_metadesc": "",
         "yoast_wpseo_title": "Switzerland Archives - Demo Worona",
@@ -6111,7 +6111,7 @@ Tags: <a href=\\"https://demo.worona.org/tag/japan\\">Japan</a>, <a href=\\"http
       "mst": "taxonomy",
       "name": "Landscape",
       "slug": "landscape",
-      "taxonomy": "tag",
+      "type": "tag",
       "yoast_meta": Object {
         "yoast_wpseo_metadesc": "",
         "yoast_wpseo_title": "Landscape Archives - Demo Worona",
@@ -6152,7 +6152,7 @@ Tags: <a href=\\"https://demo.worona.org/tag/japan\\">Japan</a>, <a href=\\"http
       "mst": "taxonomy",
       "name": "The Carpathian Mountains",
       "slug": "the-carpathian-mountains",
-      "taxonomy": "tag",
+      "type": "tag",
       "yoast_meta": Object {
         "yoast_wpseo_metadesc": "",
         "yoast_wpseo_title": "The Carpathian Mountains Archives - Demo Worona",
@@ -6193,7 +6193,7 @@ Tags: <a href=\\"https://demo.worona.org/tag/japan\\">Japan</a>, <a href=\\"http
       "mst": "taxonomy",
       "name": "Romania",
       "slug": "romania",
-      "taxonomy": "tag",
+      "type": "tag",
       "yoast_meta": Object {
         "yoast_wpseo_metadesc": "",
         "yoast_wpseo_title": "Romania Archives - Demo Worona",
@@ -6240,7 +6240,7 @@ Tags: <a href=\\"https://demo.worona.org/tag/japan\\">Japan</a>, <a href=\\"http
       "mst": "taxonomy",
       "name": "Architecture",
       "slug": "architecture",
-      "taxonomy": "category",
+      "type": "category",
       "yoast_meta": Object {
         "yoast_wpseo_metadesc": "",
         "yoast_wpseo_title": "Architecture Archives - Demo Worona",
@@ -6281,7 +6281,7 @@ Tags: <a href=\\"https://demo.worona.org/tag/japan\\">Japan</a>, <a href=\\"http
       "mst": "taxonomy",
       "name": "Forests",
       "slug": "forests",
-      "taxonomy": "tag",
+      "type": "tag",
       "yoast_meta": Object {
         "yoast_wpseo_metadesc": "",
         "yoast_wpseo_title": "Forests Archives - Demo Worona",
@@ -6322,7 +6322,7 @@ Tags: <a href=\\"https://demo.worona.org/tag/japan\\">Japan</a>, <a href=\\"http
       "mst": "taxonomy",
       "name": "Culture",
       "slug": "culture",
-      "taxonomy": "category",
+      "type": "category",
       "yoast_meta": Object {
         "yoast_wpseo_metadesc": "",
         "yoast_wpseo_title": "Culture Archives - Demo Worona",
@@ -6363,7 +6363,7 @@ Tags: <a href=\\"https://demo.worona.org/tag/japan\\">Japan</a>, <a href=\\"http
       "mst": "taxonomy",
       "name": "Nature",
       "slug": "nature",
-      "taxonomy": "category",
+      "type": "category",
       "yoast_meta": Object {
         "yoast_wpseo_metadesc": "",
         "yoast_wpseo_title": "Nature Archives - Demo Worona",
@@ -6404,7 +6404,7 @@ Tags: <a href=\\"https://demo.worona.org/tag/japan\\">Japan</a>, <a href=\\"http
       "mst": "taxonomy",
       "name": "Travel",
       "slug": "travel",
-      "taxonomy": "category",
+      "type": "category",
       "yoast_meta": Object {
         "yoast_wpseo_metadesc": "",
         "yoast_wpseo_title": "Travel Archives - Demo Worona",
@@ -6445,7 +6445,7 @@ Tags: <a href=\\"https://demo.worona.org/tag/japan\\">Japan</a>, <a href=\\"http
       "mst": "taxonomy",
       "name": "Iceland",
       "slug": "iceland",
-      "taxonomy": "tag",
+      "type": "tag",
       "yoast_meta": Object {
         "yoast_wpseo_metadesc": "",
         "yoast_wpseo_title": "Iceland Archives - Demo Worona",

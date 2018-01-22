@@ -5,7 +5,8 @@ export const taxonomy = new schema.Entity(
   {},
   {
     processStrategy(entity) {
-      if (entity.taxonomy === 'post_tag') entity.taxonomy = 'tag';
+      entity.type = entity.taxonomy === 'post_tag' ? 'tag' : entity.taxonomy;
+      delete entity.taxonomy;
       entity.mst = 'taxonomy';
       return entity;
     },

@@ -31,7 +31,7 @@ export const taxonomy = entity => ({
   name: entity.name,
   slug: entity.slug,
   link: entity.link,
-  type: entity.taxonomy,
+  type: entity.type,
   target: entity['term-target'],
   meta: {
     title: (entity.yoast_meta && entity.yoast_meta.yoast_wpseo_title) || entity.name,
