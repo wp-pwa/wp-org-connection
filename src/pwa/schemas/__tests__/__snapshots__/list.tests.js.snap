@@ -3614,15 +3614,15 @@ You can find her on Twitter as @r_martinezduque.",
       ],
       "taxonomiesMap": Object {
         "category": Array [
-          "category_6",
-          "category_7",
-          "category_3",
-          "category_8",
+          6,
+          7,
+          3,
+          8,
         ],
         "tag": Array [
-          "tag_9",
-          "tag_47",
-          "tag_13",
+          9,
+          47,
+          13,
         ],
       },
       "title": Object {
@@ -3769,13 +3769,13 @@ You can find her on Twitter as @r_martinezduque.",
       ],
       "taxonomiesMap": Object {
         "category": Array [
-          "category_4",
-          "category_7",
+          4,
+          7,
         ],
         "tag": Array [
-          "tag_50",
-          "tag_49",
-          "tag_48",
+          50,
+          49,
+          48,
         ],
       },
       "title": Object {
@@ -3923,14 +3923,14 @@ You can find her on Twitter as @r_martinezduque.",
       ],
       "taxonomiesMap": Object {
         "category": Array [
-          "category_7",
-          "category_3",
-          "category_8",
+          7,
+          3,
+          8,
         ],
         "tag": Array [
-          "tag_41",
-          "tag_42",
-          "tag_43",
+          41,
+          42,
+          43,
         ],
       },
       "title": Object {
@@ -4074,13 +4074,13 @@ You can find her on Twitter as @r_martinezduque.",
       ],
       "taxonomiesMap": Object {
         "category": Array [
-          "category_4",
-          "category_7",
+          4,
+          7,
         ],
         "tag": Array [
-          "tag_40",
-          "tag_9",
-          "tag_13",
+          40,
+          9,
+          13,
         ],
       },
       "title": Object {
@@ -4269,14 +4269,14 @@ You can find her on Twitter as @r_martinezduque.",
       ],
       "taxonomiesMap": Object {
         "category": Array [
-          "category_5",
-          "category_6",
-          "category_7",
+          5,
+          6,
+          7,
         ],
         "tag": Array [
-          "tag_38",
-          "tag_37",
-          "tag_39",
+          38,
+          37,
+          39,
         ],
       },
       "title": Object {
@@ -4421,14 +4421,14 @@ You can find her on Twitter as @r_martinezduque.",
       ],
       "taxonomiesMap": Object {
         "category": Array [
-          "category_6",
-          "category_7",
-          "category_8",
+          6,
+          7,
+          8,
         ],
         "tag": Array [
-          "tag_34",
-          "tag_35",
-          "tag_36",
+          34,
+          35,
+          36,
         ],
       },
       "title": Object {
@@ -4570,13 +4570,13 @@ You can find her on Twitter as @r_martinezduque.",
       ],
       "taxonomiesMap": Object {
         "category": Array [
-          "category_7",
-          "category_3",
+          7,
+          3,
         ],
         "tag": Array [
-          "tag_32",
-          "tag_31",
-          "tag_33",
+          32,
+          31,
+          33,
         ],
       },
       "title": Object {
@@ -4723,14 +4723,14 @@ You can find her on Twitter as @r_martinezduque.",
       ],
       "taxonomiesMap": Object {
         "category": Array [
-          "category_4",
-          "category_7",
+          4,
+          7,
         ],
         "tag": Array [
-          "tag_30",
-          "tag_29",
-          "tag_23",
-          "tag_28",
+          30,
+          29,
+          23,
+          28,
         ],
       },
       "title": Object {
@@ -4877,14 +4877,14 @@ You can find her on Twitter as @r_martinezduque.",
       ],
       "taxonomiesMap": Object {
         "category": Array [
-          "category_7",
-          "category_3",
-          "category_8",
+          7,
+          3,
+          8,
         ],
         "tag": Array [
-          "tag_18",
-          "tag_19",
-          "tag_13",
+          18,
+          19,
+          13,
         ],
       },
       "title": Object {
@@ -5030,13 +5030,13 @@ Tags: <a href=\\"https://demo.worona.org/tag/japan\\">Japan</a>, <a href=\\"http
       ],
       "taxonomiesMap": Object {
         "category": Array [
-          "category_7",
-          "category_3",
+          7,
+          3,
         ],
         "tag": Array [
-          "tag_15",
-          "tag_16",
-          "tag_14",
+          15,
+          16,
+          14,
         ],
       },
       "title": Object {

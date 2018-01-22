@@ -114,11 +114,25 @@ describe('Store › Entity', () => {
     expect(connection.entity('post', 60).taxonomies('tag').length).toBe(4);
   });
 
-  test('Subscribe to taxonomies before entity is ready', done => {
+  test.only('Subscribe to taxonomies before entity is ready', done => {
     autorun(() => {
-      if (connection.entity('post', 60).taxonomies('category').length === 3) done();
+      if (connection.entity('post', 60).taxonomies('category').length === 2) done();
     });
     connection.addEntity({ entity: entities.single[60] });
+  });
+
+  test.only('Subscribe to taxonomies fields before entity is ready', done => {
+    connection.addEntity({ entity: entities.single[60] });
+    expect(connection.entity('post', 60).taxonomies('category').length).toBe(2);
+    expect(connection.entity('post', 60).taxonomies('category')[0].id).toBe(3);
+    autorun(() => {
+      if (
+        connection.entity('post', 60).taxonomies('category')[0].name ===
+        convert(entities.taxonomy[3]).name
+      )
+        done();
+    });
+    connection.addEntity({ entity: entities.taxonomy[3] });
   });
 
   test('Access entity after adding real entity', () => {

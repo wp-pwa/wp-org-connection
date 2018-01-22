@@ -1,7 +1,7 @@
 /* eslint-disable no-use-before-define */
 import { types, getParent, resolveIdentifier } from 'mobx-state-tree';
 import { join, extract } from './utils';
-import { link, pagedLink } from './entity-shape';
+import entityShape, { link, pagedLink } from './entity-shape';
 
 const common = self => ({
   get ready() {
@@ -20,7 +20,7 @@ const common = self => ({
 
 const single = self => ({
   get title() {
-    return self.ready ? self.entity.title : null;
+    return self.ready ? self.entity.title : '';
   },
   get creationDate() {
     return self.ready ? self.entity.creationDate : null;
@@ -29,28 +29,33 @@ const single = self => ({
     return self.ready ? self.entity.modificationDate : null;
   },
   get slug() {
-    return self.ready ? self.entity.slug : null;
+    return self.ready ? self.entity.slug : '';
   },
   get content() {
-    return self.ready ? self.entity.content : null;
+    return self.ready ? self.entity.content : '';
   },
   get excerpt() {
-    return self.ready ? self.entity.excerpt : null;
+    return self.ready ? self.entity.excerpt : '';
   },
   get target() {
-    return self.ready ? self.entity.target : null;
+    return self.ready ? self.entity.target : '';
   },
-  taxonomies(taxonomy) {
-    return self.ready && self.entity.taxonomies && self.entity.taxonomies[taxonomy]
-      ? self.entity.taxonomies[taxonomy].map(id =>
-          resolveIdentifier(Entity, self, join(taxonomy, id))
+  taxonomies(type) {
+    return self.ready && self.entity.taxonomies && self.entity.taxonomies[type]
+      ? self.entity.taxonomies[type].map(id =>
+          resolveIdentifier(Entity, self, join(type, id))  || entityShape(type, id)
         )
       : [];
   }
-  // taxonomies: [],
   // featured: media,
   // author,
   // meta
+});
+
+const taxonomy = self => ({
+  get name() {
+    return self.ready ? self.entity.name : '';
+  },
 });
 
 export const Entity = types
@@ -61,7 +66,8 @@ export const Entity = types
     entity: types.frozen
   })
   .views(common)
-  .views(single);
+  .views(single)
+  .views(taxonomy);
 
 export const Image = types.model('Image').props({
   height: types.number,

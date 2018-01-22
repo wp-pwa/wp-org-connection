@@ -22,7 +22,7 @@ export const single = new schema.Entity(
             term.forEach(item => {
               const type = item.taxonomy === 'post_tag' ? 'tag' : item.taxonomy;
               result.taxonomiesMap[type] = result.taxonomiesMap[type] || [];
-              result.taxonomiesMap[type].push(`${type}_${item.id}`);
+              result.taxonomiesMap[type].push(item.id);
             }),
           );
         }
