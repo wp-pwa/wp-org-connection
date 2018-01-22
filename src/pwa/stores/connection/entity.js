@@ -1,7 +1,14 @@
 /* eslint-disable no-use-before-define */
 import { types, getParent, resolveIdentifier } from 'mobx-state-tree';
 import { join, extract } from './utils';
-import entityShape, { link, pagedLink, mediaShape, authorShape, metaShape } from './entity-shape';
+import entityShape, {
+  link,
+  pagedLink,
+  mediaShape,
+  authorShape,
+  metaShape,
+  originalShape
+} from './entity-shape';
 
 const common = self => ({
   get ready() {
@@ -74,6 +81,30 @@ const taxonomy = self => ({
   }
 });
 
+const media = self => ({
+  get caption() {
+    return self.ready ? self.entity.caption : '';
+  },
+  get description() {
+    return self.ready ? self.entity.description : '';
+  },
+  get alt() {
+    return self.ready ? self.entity.alt : '';
+  },
+  get mimeType() {
+    return self.ready ? self.entity.mimeType : '';
+  },
+  get mediaType() {
+    return self.ready ? self.entity.mediaType : '';
+  },
+  get original() {
+    return self.ready ? self.entity.original : originalShape;
+  },
+  get sizes() {
+    return self.ready ? self.entity.sizes : [];
+  }
+});
+
 export const Entity = types
   .model('Entity')
   .props({
@@ -83,7 +114,8 @@ export const Entity = types
   })
   .views(common)
   .views(single)
-  .views(taxonomy);
+  .views(taxonomy)
+  .views(media);
 
 export const Image = types.model('Image').props({
   height: types.number,

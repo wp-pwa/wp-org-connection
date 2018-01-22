@@ -16,6 +16,13 @@ export const authorShape = (type, id) => ({
   avatar: ''
 });
 
+export const originalShape = {
+  height: null,
+  width: null,
+  filename: '',
+  url: ''
+};
+
 export const mediaShape = (type, id) => ({
   id: id || null,
   type: 'media',
@@ -31,12 +38,7 @@ export const mediaShape = (type, id) => ({
   alt: '',
   mimeType: '',
   mediaType: '',
-  original: {
-    height: null,
-    width: null,
-    filename: '',
-    url: ''
-  },
+  original: originalShape,
   meta: metaShape,
   sizes: []
 });

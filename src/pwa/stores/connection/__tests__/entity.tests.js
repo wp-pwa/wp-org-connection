@@ -155,15 +155,19 @@ describe('Store › Entity', () => {
   test.only('Get author inside post before entity is ready', () => {
     expect(connection.entity('post', 60).author.id).toBe(null);
     expect(connection.entity('post', 60).author.name).toBe('');
+    expect(connection.entity('media', 62).author.id).toBe(null);
+    expect(connection.entity('media', 62).author.name).toBe('');
     connection.addEntity({ entity: entities.single[60] });
     expect(connection.entity('post', 60).author.id).toBe(4);
     expect(connection.entity('post', 60).author.name).toBe('');
+    connection.addEntity({ entity: entities.media[62] });
+    expect(connection.entity('media', 62).author.id).toBe(2);
+    expect(connection.entity('media', 62).author.name).toBe('');
   });
 
-  test.only('Subscribe to featured fields before entity is ready', done => {
+  test.only('Subscribe to author fields before entity is ready', done => {
     autorun(() => {
-      if (connection.entity('post', 60).author.name === convert(entities.author[4]).name)
-        done();
+      if (connection.entity('post', 60).author.name === convert(entities.author[4]).name) done();
     });
     connection.addEntity({ entity: entities.single[60] });
     connection.addEntity({ entity: entities.author[4] });
@@ -171,8 +175,14 @@ describe('Store › Entity', () => {
 
   test.only('Get meta inside post before entity is ready', () => {
     expect(connection.entity('post', 60).meta.title).toBe('');
+    expect(connection.entity('category', 3).meta.title).toBe('');
+    expect(connection.entity('media', 62).meta.title).toBe('');
     connection.addEntity({ entity: entities.single[60] });
     expect(connection.entity('post', 60).meta.title).toBe('The Beauties of Gullfoss - Demo Worona');
+    connection.addEntity({ entity: entities.taxonomy[3] });
+    expect(connection.entity('category', 3).meta.title).toBe('Photography Archives - Demo Worona');
+    connection.addEntity({ entity: entities.media[62] });
+    expect(connection.entity('media', 62).meta.title).toBe('iceland');
   });
 
   test.only('Subscribe to meta fields before entity is ready', done => {
@@ -181,6 +191,24 @@ describe('Store › Entity', () => {
         done();
     });
     connection.addEntity({ entity: entities.single[60] });
+  });
+
+  test.only('Subscribe to media original before entity is ready', done => {
+    autorun(() => {
+      if (
+        connection.entity('media', 62).original.height ===
+        convert(entities.media[62]).original.height
+      )
+        done();
+    });
+    connection.addEntity({ entity: entities.media[62] });
+  });
+
+  test.only('Subscribe to media sizes before entity is ready', done => {
+    autorun(() => {
+      if (connection.entity('media', 62).sizes.length === 6) done();
+    });
+    connection.addEntity({ entity: entities.media[62] });
   });
 
   test('Access entity after adding real entity', () => {
