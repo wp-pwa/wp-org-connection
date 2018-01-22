@@ -31,10 +31,8 @@ export function* initConnection() {
 
 export const getList = ({ connection, listType, listId, singleType, page }) => {
   const endpoint = typesToEndpoints(singleType);
-  const paramType = ['category', 'tag', 'author'].includes(listType)
-    ? typesToParams(listType)
-    : listType;
-  const params = { _embed: true, [paramType]: listId };
+  const params = { _embed: true };
+  if (['category', 'tag', 'author'].includes(listType)) params[typesToParams(listType)] = listId;
   let query = connection[endpoint]().page(page);
   forOwn(params, (value, key) => {
     query = query.param(key, value);
