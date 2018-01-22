@@ -3,6 +3,7 @@ import { types } from 'mobx-state-tree';
 const Home = types.model('Home').props({
   title: types.optional(types.string, 'WP-PWA'),
   description: types.optional(types.string, ''),
+  canonical: types.optional(types.string, ''),
 });
 
 export default types.model('SiteInfo').props({
