@@ -76,6 +76,7 @@ export const listRequested = connection =>
           listId,
           page,
           total,
+          endpoint: getList({ connection, listType, listId, singleType, page }).toString(),
         }),
       );
     } catch (error) {

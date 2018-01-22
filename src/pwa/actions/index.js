@@ -37,6 +37,7 @@ export const listSucceed = ({
   total = { entities: 0, pages: 0 },
   result,
   entities,
+  endpoint,
 }) => {
   if (listType === 'latest' && !listId) listId = 'post';
   return {
@@ -47,6 +48,7 @@ export const listSucceed = ({
     total,
     result,
     entities,
+    endpoint,
   };
 };
 export const listFailed = ({ listType, listId, page = 1, error, endpoint }) => ({
