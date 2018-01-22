@@ -11,6 +11,7 @@ export const media = new schema.Entity(
   {
     processStrategy(entity) {
       entity.mst = 'media';
+      entity.type = 'media';
       return entity;
     },
   },

@@ -28,6 +28,7 @@ Object {
       "mst": "author",
       "name": "worona",
       "slug": "worona",
+      "type": "author",
       "url": "",
     },
     "2": Object {
@@ -57,6 +58,7 @@ You can find her on Twitter as @r_martinezduque.",
       "mst": "author",
       "name": "Reyes Martinez",
       "slug": "reyes",
+      "type": "author",
       "url": "http://www.worona.org",
     },
     "3": Object {
@@ -84,6 +86,7 @@ You can find her on Twitter as @r_martinezduque.",
       "mst": "author",
       "name": "Luis Herranz",
       "slug": "luis",
+      "type": "author",
       "url": "http://www.worona.org",
     },
     "4": Object {
@@ -111,6 +114,7 @@ You can find her on Twitter as @r_martinezduque.",
       "mst": "author",
       "name": "Alan Martin",
       "slug": "alan",
+      "type": "author",
       "url": "",
     },
     "6": Object {
@@ -138,6 +142,7 @@ You can find her on Twitter as @r_martinezduque.",
       "mst": "author",
       "name": "David Arenas",
       "slug": "david",
+      "type": "author",
       "url": "http://worona.org",
     },
   },
@@ -499,6 +504,7 @@ Object {
       "mst": "author",
       "name": "Reyes Martínez",
       "slug": "reyes",
+      "type": "author",
       "url": "",
     },
   },
@@ -640,7 +646,7 @@ Object {
       "title": Object {
         "rendered": "amp",
       },
-      "type": "attachment",
+      "type": "media",
     },
     "2651": Object {
       "_embedded": Object {
@@ -779,7 +785,7 @@ Object {
       "title": Object {
         "rendered": "AMP_for_WP_Accelerated_Mobile_Pages_WordPress_Plugin",
       },
-      "type": "attachment",
+      "type": "media",
     },
     "2656": Object {
       "_embedded": Object {
@@ -918,7 +924,7 @@ Object {
       "title": Object {
         "rendered": "AMP_WordPress_Plugin_Automattic",
       },
-      "type": "attachment",
+      "type": "media",
     },
     "2659": Object {
       "_embedded": Object {
@@ -1050,7 +1056,7 @@ Object {
       "title": Object {
         "rendered": "Glue_for_Yoast_SEO_AMP_WordPress_Plugin",
       },
-      "type": "attachment",
+      "type": "media",
     },
     "2660": Object {
       "_embedded": Object {
@@ -1182,7 +1188,7 @@ Object {
       "title": Object {
         "rendered": "WordPress_Instant_Articles_by_allfacebook_de_WordPress_Plugin",
       },
-      "type": "attachment",
+      "type": "media",
     },
     "2661": Object {
       "_embedded": Object {
@@ -1314,7 +1320,7 @@ Object {
       "title": Object {
         "rendered": "Facebook_Instant_Articles_Google_AMP_Pages_by_PageFrog_WordPress_Plugins",
       },
-      "type": "attachment",
+      "type": "media",
     },
     "2662": Object {
       "_embedded": Object {
@@ -1446,7 +1452,7 @@ Object {
       "title": Object {
         "rendered": "WordPress_Instant_Articles_by_allfacebook_de_WordPress_Plugin",
       },
-      "type": "attachment",
+      "type": "media",
     },
     "2669": Object {
       "_embedded": Object {
@@ -1578,7 +1584,7 @@ Object {
       "title": Object {
         "rendered": "Lazy_Load_by_WP_Rocket_WordPress_Plugin",
       },
-      "type": "attachment",
+      "type": "media",
     },
     "2681": Object {
       "_embedded": Object {
@@ -1717,7 +1723,7 @@ Object {
       "title": Object {
         "rendered": "the-google-amp-phenomenon",
       },
-      "type": "attachment",
+      "type": "media",
     },
     "2687": Object {
       "_embedded": Object {
@@ -1856,7 +1862,7 @@ Object {
       "title": Object {
         "rendered": "faq-questions-answers",
       },
-      "type": "attachment",
+      "type": "media",
     },
   },
 }
@@ -2338,6 +2344,7 @@ You can find her on Twitter as @r_martinezduque.",
       "mst": "author",
       "name": "Reyes Martinez",
       "slug": "reyes",
+      "type": "author",
       "url": "http://www.worona.org",
     },
     "3": Object {
@@ -2364,6 +2371,7 @@ You can find her on Twitter as @r_martinezduque.",
       "mst": "author",
       "name": "Luis Herranz",
       "slug": "luis",
+      "type": "author",
       "url": "http://www.worona.org",
     },
     "4": Object {
@@ -2390,6 +2398,7 @@ You can find her on Twitter as @r_martinezduque.",
       "mst": "author",
       "name": "Alan Martin",
       "slug": "alan",
+      "type": "author",
       "url": "",
     },
   },
@@ -2500,7 +2509,7 @@ You can find her on Twitter as @r_martinezduque.",
       "title": Object {
         "rendered": "machupicchu",
       },
-      "type": "attachment",
+      "type": "media",
     },
     "13": Object {
       "_links": Object {
@@ -2608,7 +2617,7 @@ You can find her on Twitter as @r_martinezduque.",
       "title": Object {
         "rendered": "romania",
       },
-      "type": "attachment",
+      "type": "media",
     },
     "24": Object {
       "_links": Object {
@@ -2716,7 +2725,7 @@ You can find her on Twitter as @r_martinezduque.",
       "title": Object {
         "rendered": "switzerland",
       },
-      "type": "attachment",
+      "type": "media",
     },
     "27": Object {
       "_links": Object {
@@ -2824,7 +2833,7 @@ You can find her on Twitter as @r_martinezduque.",
       "title": Object {
         "rendered": "iceland5",
       },
-      "type": "attachment",
+      "type": "media",
     },
     "34": Object {
       "_links": Object {
@@ -2932,7 +2941,7 @@ You can find her on Twitter as @r_martinezduque.",
       "title": Object {
         "rendered": "unitedarabemirates",
       },
-      "type": "attachment",
+      "type": "media",
     },
     "37": Object {
       "_links": Object {
@@ -3040,7 +3049,7 @@ You can find her on Twitter as @r_martinezduque.",
       "title": Object {
         "rendered": "canada",
       },
-      "type": "attachment",
+      "type": "media",
     },
     "45": Object {
       "_links": Object {
@@ -3148,7 +3157,7 @@ You can find her on Twitter as @r_martinezduque.",
       "title": Object {
         "rendered": "kebumenindonesia",
       },
-      "type": "attachment",
+      "type": "media",
     },
     "55": Object {
       "_links": Object {
@@ -3256,7 +3265,7 @@ You can find her on Twitter as @r_martinezduque.",
       "title": Object {
         "rendered": "canyon",
       },
-      "type": "attachment",
+      "type": "media",
     },
     "58": Object {
       "_links": Object {
@@ -3364,7 +3373,7 @@ You can find her on Twitter as @r_martinezduque.",
       "title": Object {
         "rendered": "japan",
       },
-      "type": "attachment",
+      "type": "media",
     },
     "6": Object {
       "_links": Object {
@@ -3472,7 +3481,7 @@ You can find her on Twitter as @r_martinezduque.",
       "title": Object {
         "rendered": "northern-lights-iceland",
       },
-      "type": "attachment",
+      "type": "media",
     },
   },
   "single": Object {

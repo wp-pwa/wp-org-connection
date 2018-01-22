@@ -13,7 +13,7 @@ export const single = entity => ({
   content: entity.content.rendered,
   excerpt: entity.excerpt.rendered,
   author: entity.author,
-  featured: { entity: entity.featured_media },
+  featured: entity.featured_media,
   taxonomies: entity.taxonomiesMap,
   target: entity['post-target'],
   meta: {
@@ -42,6 +42,7 @@ export const taxonomy = entity => ({
 
 export const author = entity => ({
   mst: 'author',
+  type: 'author',
   id: entity.id,
   name: entity.name,
   slug: entity.slug,
@@ -53,6 +54,7 @@ export const author = entity => ({
 export const media = entity => ({
   mst: 'media',
   id: entity.id,
+  type: 'media',
   creationDate: new Date(entity.date).getTime(),
   slug: entity.slug,
   alt: entity.alt_text,

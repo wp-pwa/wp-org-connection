@@ -106,7 +106,7 @@ describe('Store › Entity', () => {
     connection.addEntity({ entity: entities.single[60] });
   });
 
-  test.only('Subscribe to taxonomies before entity is ready', () => {
+  test.only('Get taxonomies inside post before entity is ready', () => {
     expect(connection.entity('post', 60).taxonomies('category').length).toBe(0);
     expect(connection.entity('post', 60).taxonomies('tag').length).toBe(0);
     connection.addEntity({ entity: entities.single[60] });
@@ -133,6 +133,54 @@ describe('Store › Entity', () => {
         done();
     });
     connection.addEntity({ entity: entities.taxonomy[3] });
+  });
+
+  test.only('Get featured inside post before entity is ready', () => {
+    expect(connection.entity('post', 60).featured.id).toBe(null);
+    expect(connection.entity('post', 60).featured.sizes).toEqual([]);
+    connection.addEntity({ entity: entities.single[60] });
+    expect(connection.entity('post', 60).featured.id).toBe(62);
+    expect(connection.entity('post', 60).featured.title).toBe('');
+  });
+
+  test.only('Subscribe to featured fields before entity is ready', done => {
+    autorun(() => {
+      if (connection.entity('post', 60).featured.title === convert(entities.media[62]).title)
+        done();
+    });
+    connection.addEntity({ entity: entities.single[60] });
+    connection.addEntity({ entity: entities.media[62] });
+  });
+
+  test.only('Get author inside post before entity is ready', () => {
+    expect(connection.entity('post', 60).author.id).toBe(null);
+    expect(connection.entity('post', 60).author.name).toBe('');
+    connection.addEntity({ entity: entities.single[60] });
+    expect(connection.entity('post', 60).author.id).toBe(4);
+    expect(connection.entity('post', 60).author.name).toBe('');
+  });
+
+  test.only('Subscribe to featured fields before entity is ready', done => {
+    autorun(() => {
+      if (connection.entity('post', 60).author.name === convert(entities.author[4]).name)
+        done();
+    });
+    connection.addEntity({ entity: entities.single[60] });
+    connection.addEntity({ entity: entities.author[4] });
+  });
+
+  test.only('Get meta inside post before entity is ready', () => {
+    expect(connection.entity('post', 60).meta.title).toBe('');
+    connection.addEntity({ entity: entities.single[60] });
+    expect(connection.entity('post', 60).meta.title).toBe('The Beauties of Gullfoss - Demo Worona');
+  });
+
+  test.only('Subscribe to meta fields before entity is ready', done => {
+    autorun(() => {
+      if (connection.entity('post', 60).meta.title === convert(entities.single[60]).meta.title)
+        done();
+    });
+    connection.addEntity({ entity: entities.single[60] });
   });
 
   test('Access entity after adding real entity', () => {

@@ -1,23 +1,23 @@
-const meta = {
+export const metaShape = {
   title: '',
   description: '',
   canonical: ''
 };
 
-const author = {
-  id: null,
+export const authorShape = (type, id) => ({
+  id: id || null,
   type: 'author',
   ready: false,
   fetching: false,
   name: '',
   slug: '',
   description: '',
-  link: '/',
+  link: id ? `/?author=${id}` : '/',
   avatar: ''
-};
+});
 
-const media = {
-  id: null,
+export const mediaShape = (type, id) => ({
+  id: id || null,
   type: 'media',
   ready: false,
   fetching: false,
@@ -26,8 +26,8 @@ const media = {
   title: '',
   caption: '',
   description: '',
-  link: '/',
-  author,
+  link: id ? `/?attachement_id=${id}` : '/',
+  author: authorShape(),
   alt: '',
   mimeType: '',
   mediaType: '',
@@ -37,11 +37,11 @@ const media = {
     filename: '',
     url: ''
   },
-  meta,
+  meta: metaShape,
   sizes: []
-};
+});
 
-const single = {
+export const singleShape = {
   title: '',
   creationDate: null,
   modificationDate: null,
@@ -49,17 +49,17 @@ const single = {
   content: '',
   excerpt: '',
   taxonomies: () => [],
-  featured: media,
-  author,
+  featured: mediaShape(),
+  author: authorShape(),
   target: '',
-  meta
+  meta: metaShape
 };
 
-const taxonomy = {
+export const taxonomyShape = {
   name: '',
   slug: '',
   target: '',
-  meta
+  meta: metaShape
 };
 
 export const link = (type, id) => {
@@ -91,9 +91,9 @@ const common = (type, id) => ({
 });
 
 export default (type, id) => ({
-  ...media,
-  ...author,
-  ...taxonomy,
-  ...single,
+  ...mediaShape(type, id),
+  ...authorShape(type, id),
+  ...taxonomyShape,
+  ...singleShape,
   ...common(type, id)
 });

@@ -9,6 +9,7 @@ Object {
   "mst": "author",
   "name": "Alan Martin",
   "slug": "alan",
+  "type": "author",
 }
 `;
 
@@ -99,6 +100,7 @@ Object {
   ],
   "slug": "faq-questions-answers",
   "title": "faq-questions-answers",
+  "type": "media",
 }
 `;
 
@@ -165,6 +167,7 @@ Object {
   ],
   "slug": "iceland-test",
   "title": "iceland",
+  "type": "media",
 }
 `;
 
@@ -209,9 +212,7 @@ Category: <a href=\\"https://demo.worona.org/wp-cat/travel/\\">Travel</a></p>
   "creationDate": 1480095071000,
   "excerpt": "<p>Gullfoss is a waterfall located in the canyon of the Hvítá river in southwest Iceland.</p>
 ",
-  "featured": Object {
-    "entity": 62,
-  },
+  "featured": 62,
   "id": 60,
   "link": "https://demo.worona.org/the-beauties-of-gullfoss/",
   "meta": Object {

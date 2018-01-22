@@ -1,7 +1,7 @@
 /* eslint-disable no-use-before-define */
 import { types, getParent, resolveIdentifier } from 'mobx-state-tree';
 import { join, extract } from './utils';
-import entityShape, { link, pagedLink } from './entity-shape';
+import entityShape, { link, pagedLink, mediaShape, authorShape, metaShape } from './entity-shape';
 
 const common = self => ({
   get ready() {
@@ -42,20 +42,36 @@ const single = self => ({
   },
   taxonomies(type) {
     return self.ready && self.entity.taxonomies && self.entity.taxonomies[type]
-      ? self.entity.taxonomies[type].map(id =>
-          resolveIdentifier(Entity, self, join(type, id))  || entityShape(type, id)
+      ? self.entity.taxonomies[type].map(
+          id => resolveIdentifier(Entity, self, join(type, id)) || entityShape(type, id)
         )
       : [];
+  },
+  get featured() {
+    return (
+      (self.ready &&
+        self.entity.featured &&
+        resolveIdentifier(Entity, self, join('media', self.entity.featured))) ||
+      mediaShape('media', self.entity.featured)
+    );
+  },
+  get author() {
+    return (
+      (self.ready &&
+        self.entity.author &&
+        resolveIdentifier(Entity, self, join('author', self.entity.author))) ||
+      authorShape('author', self.entity.author)
+    );
+  },
+  get meta() {
+    return (self.ready && self.entity.meta) || metaShape;
   }
-  // featured: media,
-  // author,
-  // meta
 });
 
 const taxonomy = self => ({
   get name() {
     return self.ready ? self.entity.name : '';
-  },
+  }
 });
 
 export const Entity = types
