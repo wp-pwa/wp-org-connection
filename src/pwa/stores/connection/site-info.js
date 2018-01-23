@@ -7,5 +7,6 @@ const Home = types.model('Home').props({
 
 export default types.model('SiteInfo').props({
   home: types.optional(Home, {}),
+  headContent: types.optional(types.array(types.frozen), []),
   perPage: types.optional(types.number, 10)
 });

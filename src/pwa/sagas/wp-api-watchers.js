@@ -79,12 +79,13 @@ export const getHeadContent = headString => {
         return result;
       }
 
-      // Reduces attributes to something easier to check.
+      // Reduces current to something easier to check.
       current.attributes = current.attributes.reduce((r, c) => {
         r[c.key] = c.value;
 
         return r;
       }, {});
+      delete current.type;
 
       // Applies a whitelist with the content accepted.
       const passesWhitelist = whitelist.some(valid => {
