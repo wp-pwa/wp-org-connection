@@ -160,5 +160,8 @@ export const actions = self => ({
     self.siteInfo.home.title = title;
     self.siteInfo.home.description = description;
     self.siteInfo.perPage = perPage;
+  },
+  [actionTypes.HEAD_CONTENT_SUCCEED]({ content }) {
+    self.siteInfo.headContent = content;
   }
 });

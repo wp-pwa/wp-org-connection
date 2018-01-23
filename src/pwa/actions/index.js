@@ -5,7 +5,7 @@ const parse = id => (Number.isFinite(parseInt(id, 10)) ? parseInt(id, 10) : id);
 export const singleRequested = ({ singleType, singleId }) => ({
   type: actionTypes.SINGLE_REQUESTED,
   singleType,
-  singleId: parse(singleId),
+  singleId: parse(singleId)
 });
 export const singleSucceed = ({ singleType, singleId, entities, endpoint }) => ({
   type: actionTypes.SINGLE_SUCCEED,
@@ -19,7 +19,7 @@ export const singleFailed = ({ singleType, singleId, error, endpoint }) => ({
   singleType,
   singleId: parse(singleId),
   error,
-  endpoint,
+  endpoint
 });
 
 export const listRequested = ({ listType, listId, page = 1 }) => {
@@ -28,7 +28,7 @@ export const listRequested = ({ listType, listId, page = 1 }) => {
     type: actionTypes.LIST_REQUESTED,
     listType,
     listId: parse(listId),
-    page: parse(page),
+    page: parse(page)
   };
 };
 export const listSucceed = ({
@@ -38,7 +38,7 @@ export const listSucceed = ({
   total = { entities: 0, pages: 0 },
   result,
   entities,
-  endpoint,
+  endpoint
 }) => {
   if (listType === 'latest' && !listId) listId = 'post';
   return {
@@ -49,7 +49,7 @@ export const listSucceed = ({
     total,
     result,
     entities,
-    endpoint,
+    endpoint
   };
 };
 export const listFailed = ({ listType, listId, page = 1, error, endpoint }) => ({
@@ -58,7 +58,7 @@ export const listFailed = ({ listType, listId, page = 1, error, endpoint }) => (
   listId: parse(listId),
   page: parse(page),
   error,
-  endpoint,
+  endpoint
 });
 
 export const customRequested = ({ url = '/', name, singleType, page = 1, params = {} }) => ({
@@ -67,7 +67,7 @@ export const customRequested = ({ url = '/', name, singleType, page = 1, params 
   name,
   singleType,
   page: parse(page),
-  params,
+  params
 });
 export const customSucceed = ({
   url = '/',
@@ -77,7 +77,7 @@ export const customSucceed = ({
   page = 1,
   total = { entities: 0, pages: 0 },
   result,
-  entities,
+  entities
 }) => ({
   type: actionTypes.CUSTOM_SUCCEED,
   url,
@@ -87,7 +87,7 @@ export const customSucceed = ({
   page: parse(page),
   total,
   result,
-  entities,
+  entities
 });
 export const customFailed = ({
   url = '/',
@@ -96,7 +96,7 @@ export const customFailed = ({
   params = {},
   page = 1,
   error,
-  endpoint,
+  endpoint
 }) => ({
   type: actionTypes.CUSTOM_FAILED,
   url,
@@ -105,13 +105,13 @@ export const customFailed = ({
   params,
   page: parse(page),
   error,
-  endpoint,
+  endpoint
 });
 
 export const routeChangeRequested = ({
   selected: { listType, listId, page, singleType, singleId },
   method = 'push',
-  context = null,
+  context = null
 }) => {
   if (listType && !page) page = 1;
   if (listType === 'latest' && !listId) listId = 'post';
@@ -125,13 +125,13 @@ export const routeChangeRequested = ({
     type: actionTypes.ROUTE_CHANGE_REQUESTED,
     selected,
     method,
-    context,
+    context
   };
 };
 export const routeChangeSucceed = ({
   selected: { listType, listId, page, singleType, singleId },
   method = 'push',
-  context = null,
+  context = null
 }) => {
   if (listType && !page) page = 1;
   if (listType === 'latest' && !listId) listId = 'post';
@@ -145,27 +145,41 @@ export const routeChangeSucceed = ({
     type: actionTypes.ROUTE_CHANGE_SUCCEED,
     selected,
     method,
-    context,
+    context
   };
 };
 export const routeChangeFailed = () => ({
-  type: actionTypes.ROUTE_CHANGE_FAILED,
+  type: actionTypes.ROUTE_CHANGE_FAILED
 });
 
 export const siteInfoRequested = () => ({
-  type: actionTypes.SITE_INFO_REQUESTED,
+  type: actionTypes.SITE_INFO_REQUESTED
 });
 
 export const siteInfoSucceed = ({ home: { title, description }, perPage }) => ({
   type: actionTypes.SITE_INFO_SUCCEED,
   home: {
     title,
-    description,
+    description
   },
-  perPage: parseInt(perPage, 10),
+  perPage: parseInt(perPage, 10)
 });
 
 export const siteInfoFailed = ({ error }) => ({
   type: actionTypes.SITE_INFO_FAILED,
-  error,
+  error
+});
+
+export const headContentRequested = () => ({
+  type: actionTypes.HEAD_CONTENT_REQUESTED
+});
+
+export const headContentSucceed = ({ content }) => ({
+  type: actionTypes.HEAD_CONTENT_SUCCEED,
+  content
+});
+
+export const headContentFailed = ({ error }) => ({
+  type: actionTypes.HEAD_CONTENT_FAILED,
+  error
 });

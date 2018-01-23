@@ -10,13 +10,13 @@ const lateContext = types.late(() => Context);
 
 export const props = {
   contexts: types.optional(types.array(lateContext), []),
-  context: types.maybe(types.reference(lateContext)),
+  context: types.maybe(types.reference(lateContext))
 };
 
 export const views = self => ({
   get selected() {
     return self.context && self.context.selected;
-  },
+  }
 });
 
 const columnSnapshot = element => {
@@ -45,7 +45,7 @@ export const extractList = ({ listType, listId, page, result }, context) => {
   let elementsToPlace = result;
   firstColumns.forEach(col => {
     elementsToPlace = elementsToPlace.filter(
-      id => !col.getItem({ singleId: id, singleType: 'post' }),
+      id => !col.getItem({ singleId: id, singleType: 'post' })
     );
   });
 
@@ -81,8 +81,8 @@ export const extractList = ({ listType, listId, page, result }, context) => {
         router: 'single',
         singleType: 'post',
         singleId: id,
-        fromList: { listType, listId, page },
-      }),
+        fromList: { listType, listId, page }
+      })
     );
   });
 
@@ -121,7 +121,7 @@ export const actions = self => {
     if (entities && !fetching) {
       return entities
         .filter(
-          ({ type, id }) => !generated.some(col => col.getItem({ singleType: type, singleId: id })),
+          ({ type, id }) => !generated.some(col => col.getItem({ singleType: type, singleId: id }))
         )
         .map(({ type, id }) =>
           Column.create(
@@ -129,9 +129,9 @@ export const actions = self => {
               router: 'single',
               singleType: type,
               singleId: id,
-              fromList: list,
-            }),
-          ),
+              fromList: list
+            })
+          )
         );
     }
 
@@ -141,9 +141,9 @@ export const actions = self => {
         columnSnapshot({
           router: 'single',
           singleType: 'post',
-          fromList: list,
-        }),
-      ),
+          fromList: list
+        })
+      )
     ];
   };
 
@@ -164,11 +164,11 @@ export const actions = self => {
           const nextList = {
             listType: fromList.type,
             listId: fromList.id,
-            page: fromList.page + 1,
+            page: fromList.page + 1
           };
 
           getExtractedColumns(self.context.columns, nextList).forEach(col =>
-            self.context.columns.push(col),
+            self.context.columns.push(col)
           );
         }
       }
@@ -215,7 +215,7 @@ export const actions = self => {
       columns,
       options,
       infinite,
-      generator,
+      generator
     };
   };
 
@@ -254,7 +254,7 @@ export const actions = self => {
     self.contexts.push({
       index: contextIndex,
       column: columnId,
-      columns: [{ _id: columnId, items, selected: itemId }],
+      columns: [{ _id: columnId, items, selected: itemId }]
     });
 
     self.context = contextIndex;
@@ -305,6 +305,8 @@ export const actions = self => {
       } else {
         createContextFromSelected(selected);
       }
-    },
+
+      if (typeof window !== 'undefined') self.siteInfo.headContent = [];
+    }
   };
 };
