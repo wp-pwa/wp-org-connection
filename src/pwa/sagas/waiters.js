@@ -7,9 +7,9 @@ export function* waitForSiteInfo() {
   );
 }
 
-export function* waitForHeadElements() {
+export function* waitForHeadContent() {
   yield take(
     ({ type }) =>
-      type === actionTypes.HEAD_ELEMENTS_SUCCEED || type === actionTypes.HEAD_ELEMENTS_FAILED
+      type === actionTypes.HEAD_CONTENT_SUCCEED || type === actionTypes.HEAD_CONTENT_FAILED
   );
 }

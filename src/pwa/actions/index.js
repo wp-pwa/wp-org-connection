@@ -169,16 +169,16 @@ export const siteInfoFailed = ({ error }) => ({
   error
 });
 
-export const headElementsRequested = () => ({
-  type: actionTypes.HEAD_ELEMENTS_REQUESTED
+export const headContentRequested = () => ({
+  type: actionTypes.HEAD_CONTENT_REQUESTED
 });
 
-export const headElementsSucceed = ({ content }) => ({
-  type: actionTypes.HEAD_ELEMENTS_SUCCEED,
+export const headContentSucceed = ({ content }) => ({
+  type: actionTypes.HEAD_CONTENT_SUCCEED,
   content
 });
 
-export const headElementsFailed = ({ error }) => ({
-  type: actionTypes.HEAD_ELEMENTS_FAILED,
+export const headContentFailed = ({ error }) => ({
+  type: actionTypes.HEAD_CONTENT_FAILED,
   error
 });

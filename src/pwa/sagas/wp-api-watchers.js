@@ -4,8 +4,6 @@ import { normalize } from 'normalizr';
 import { forOwn } from 'lodash';
 import { call, select, put, takeEvery, all } from 'redux-saga/effects';
 import { dep } from 'worona-deps';
-import request from 'superagent';
-import { parse } from 'himalaya';
 import * as actions from '../actions';
 import * as actionTypes from '../actionTypes';
 import * as schemas from '../schemas';
@@ -55,99 +53,6 @@ export const getCustom = ({ connection, singleType, page, params }) => {
     query = query.param(key, value);
   });
   return query;
-};
-
-export const getHeadContent = headString => {
-  const whitelist = [
-    { tagName: 'title' },
-    { tagName: 'meta', attributes: { name: 'description' } },
-    { tagName: 'link', attributes: { rel: 'canonical' } }
-  ];
-
-  // Parses <head> content string to an array with 'himalaya'.
-  const parsedHead = parse(headString);
-
-  // Reduces parsed content to an object with a 'title', an array of 'meta'
-  // and an array of 'link'.
-  const content = parsedHead.reduce(
-    (result, current) => {
-      // Removes text, styles, scripts and comments.
-      if (
-        current.type !== 'element' ||
-        (current.tagName !== 'title' && current.tagName !== 'meta' && current.tagName !== 'link')
-      ) {
-        return result;
-      }
-
-      // Reduces current to something easier to check.
-      current.attributes = current.attributes.reduce((r, c) => {
-        r[c.key] = c.value;
-
-        return r;
-      }, {});
-      delete current.type;
-
-      // Applies a whitelist with the content accepted.
-      const passesWhitelist = whitelist.some(valid => {
-        if (valid.tagName !== current.tagName) return false;
-
-        if (valid.attributes) {
-          if (current.attributes.length < 1) return false;
-
-          const keys = Object.keys(valid.attributes);
-
-          const sameAttributes = keys.every(
-            key => current.attributes[key] === valid.attributes[key]
-          );
-
-          if (!sameAttributes) return false;
-
-          return true;
-        }
-
-        return true;
-      });
-
-      // Checks if the item passed the whitelist and if that kind of item already exists
-      // in the result, the previous one is substituted by the current item.
-      if (passesWhitelist) {
-        if (current.tagName === 'title') result.title = current;
-
-        if (current.tagName === 'meta') {
-          const indexOfCurrent = result.meta.findIndex(
-            item => item.attributes.name === current.attributes.name
-          );
-
-          if (indexOfCurrent >= 0) {
-            result.meta[indexOfCurrent] = current;
-          } else {
-            result.meta.push(current);
-          }
-        }
-
-        if (current.tagName === 'link') {
-          const indexOfCurrent = result.link.findIndex(
-            item => item.attributes.rel === current.attributes.rel
-          );
-
-          if (indexOfCurrent >= 0) {
-            result.link[indexOfCurrent] = current;
-          } else {
-            result.link.push(current);
-          }
-        }
-      }
-
-      return result;
-    },
-    {
-      title: null,
-      meta: [],
-      link: []
-    }
-  );
-
-  return [content.title].concat(content.meta).concat(content.link);
 };
 
 export const listRequested = connection =>
@@ -276,24 +181,6 @@ export const siteInfoRequested = connection =>
     }
   };
 
-export const headElementsRequested = () =>
-  function* headElementsRequestedSaga() {
-    try {
-      const url = yield select(dep('build', 'selectors', 'getUrl'));
-      const site = yield request(url);
-      const headString = site.text.match(/<head>([\w\W]+)<\/head>/)[1];
-      const headContent = getHeadContent(headString);
-
-      yield put(
-        actions.headElementsSucceed({
-          content: headContent
-        })
-      );
-    } catch (error) {
-      yield put(actions.headElementsFailed({ error }));
-    }
-  };
-
 export default function* wpApiWatchersSaga(stores) {
   const connection = yield call(initConnection);
   yield all([
@@ -301,7 +188,6 @@ export default function* wpApiWatchersSaga(stores) {
     takeEvery(actionTypes.SINGLE_REQUESTED, singleRequested(connection)),
     takeEvery(actionTypes.LIST_REQUESTED, listRequested(connection)),
     takeEvery(actionTypes.CUSTOM_REQUESTED, customRequested(connection)),
-    takeEvery(actionTypes.SITE_INFO_REQUESTED, siteInfoRequested(connection)),
-    takeEvery(actionTypes.HEAD_ELEMENTS_REQUESTED, headElementsRequested())
+    takeEvery(actionTypes.SITE_INFO_REQUESTED, siteInfoRequested(connection))
   ]);
 }
