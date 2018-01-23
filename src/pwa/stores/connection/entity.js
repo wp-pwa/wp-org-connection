@@ -50,7 +50,7 @@ const single = self => ({
   taxonomies(type) {
     return self.ready && self.entity.taxonomies && self.entity.taxonomies[type]
       ? self.entity.taxonomies[type].map(
-          id => resolveIdentifier(types.late(() => Entity), self, join(type, id)) || entityShape(type, id)
+          id => resolveIdentifier(Entity, self, join(type, id)) || entityShape(type, id)
         )
       : [];
   },
@@ -58,7 +58,7 @@ const single = self => ({
     return (
       (self.ready &&
         self.entity.featured &&
-        resolveIdentifier(types.late(() => Entity), self, join('media', self.entity.featured))) ||
+        resolveIdentifier(Entity, self, join('media', self.entity.featured))) ||
       mediaShape('media', self.entity.featured)
     );
   },
@@ -66,7 +66,7 @@ const single = self => ({
     return (
       (self.ready &&
         self.entity.author &&
-        resolveIdentifier(types.late(() => Entity), self, join('author', self.entity.author))) ||
+        resolveIdentifier(Entity, self, join('author', self.entity.author))) ||
       authorShape('author', self.entity.author)
     );
   },
