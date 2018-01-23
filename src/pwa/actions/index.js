@@ -7,11 +7,12 @@ export const singleRequested = ({ singleType, singleId }) => ({
   singleType,
   singleId: parse(singleId),
 });
-export const singleSucceed = ({ singleType, singleId, entities }) => ({
+export const singleSucceed = ({ singleType, singleId, entities, endpoint }) => ({
   type: actionTypes.SINGLE_SUCCEED,
   singleType,
   singleId: parse(singleId),
   entities,
+  endpoint,
 });
 export const singleFailed = ({ singleType, singleId, error, endpoint }) => ({
   type: actionTypes.SINGLE_FAILED,

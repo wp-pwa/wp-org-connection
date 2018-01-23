@@ -97,7 +97,14 @@ export const singleRequested = connection =>
     try {
       const response = yield call(getSingle, { connection, singleType, singleId });
       const { entities } = normalize(response, schemas.single);
-      yield put(actions.singleSucceed({ singleType, singleId, entities }));
+      yield put(
+        actions.singleSucceed({
+          singleType,
+          singleId,
+          entities,
+          endpoint: getSingle({ connection, singleType, singleId }).toString()
+        })
+      );
     } catch (error) {
       yield put(
         actions.singleFailed({
