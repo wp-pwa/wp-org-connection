@@ -181,6 +181,15 @@ export const siteInfoRequested = connection =>
     }
   };
 
+export const headElementsRequested = () =>
+  function* headElementsRequestedSaga() {
+    try {
+      yield put(actions.headElementsSucceed());
+    } catch (error) {
+      yield put(actions.headElementsFailed());
+    }
+  };
+
 export default function* wpApiWatchersSaga(stores) {
   const connection = yield call(initConnection);
   yield all([
@@ -188,6 +197,7 @@ export default function* wpApiWatchersSaga(stores) {
     takeEvery(actionTypes.SINGLE_REQUESTED, singleRequested(connection)),
     takeEvery(actionTypes.LIST_REQUESTED, listRequested(connection)),
     takeEvery(actionTypes.CUSTOM_REQUESTED, customRequested(connection)),
-    takeEvery(actionTypes.SITE_INFO_REQUESTED, siteInfoRequested(connection))
+    takeEvery(actionTypes.SITE_INFO_REQUESTED, siteInfoRequested(connection)),
+    takeEvery(actionTypes.HEAD_ELEMENTS_REQUESTED, headElementsRequested())
   ]);
 }
