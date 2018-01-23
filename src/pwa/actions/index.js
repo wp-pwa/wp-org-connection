@@ -173,10 +173,12 @@ export const headElementsRequested = () => ({
   type: actionTypes.HEAD_ELEMENTS_REQUESTED
 });
 
-export const headElementsSucceed = () => ({
-  type: actionTypes.HEAD_ELEMENTS_SUCCEED
+export const headElementsSucceed = ({ content }) => ({
+  type: actionTypes.HEAD_ELEMENTS_SUCCEED,
+  content
 });
 
-export const headElementsFailed = () => ({
-  type: actionTypes.HEAD_ELEMENTS_FAILED
+export const headElementsFailed = ({ error }) => ({
+  type: actionTypes.HEAD_ELEMENTS_FAILED,
+  error
 });
