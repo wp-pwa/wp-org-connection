@@ -1,13 +1,12 @@
-import { types, getParent, getType } from 'mobx-state-tree';
+import { types, getParent, getRoot, getType } from 'mobx-state-tree';
 
 import Id from './id';
-import Connection from '../'
+import Connection from '../';
 
-const getConnection = element => {
-  let connection = element;
-  while (getType(connection) !== Connection) connection = getParent(connection);
-  return connection;
-}
+const getConnection = node => {
+  const root = getRoot(node);
+  return getType(root) === Connection ? root : null;
+};
 
 export const List = types
   .model('List')
@@ -24,13 +23,15 @@ export const List = types
     },
     get list() {
       const { type, id, page } = self;
-      const list = getConnection(self).list[type][id];
-      return list && list.page[page - 1] || null;
+      const connection = getConnection(self);
+      const list = connection && connection.list[type][id];
+      return (list && list.page[page - 1]) || null;
     },
     get single() {
       const { type, id } = self;
       if (type === 'latest') return null;
-      return getConnection(self).single[type][id]
+      const connection = getConnection(self);
+      return connection && connection.single[type][id];
     },
     get type() {
       return self.listType;
@@ -75,7 +76,8 @@ export const Single = types
     },
     get single() {
       const { type, id } = self;
-      return getConnection(self).single[type][id] || null;
+      const connection = getConnection(self);
+      return (connection && connection.single[type][id]) || null;
     },
     get type() {
       return self.singleType;
