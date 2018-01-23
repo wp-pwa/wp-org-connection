@@ -1,9 +1,9 @@
 import { types, resolveIdentifier } from 'mobx-state-tree';
 import { join } from './utils';
-import { Entity } from './entity';
+import Entity from './entity';
 import entityShape from './entity-shape';
-import { List } from './list';
-import { Custom } from './custom';
+// import { List } from './list';
+// import { Custom } from './custom';
 import SiteInfo from './site-info';
 import { extractList } from '../router';
 import * as actionTypes from '../../actionTypes';
@@ -11,8 +11,8 @@ import convert from '../../converters';
 
 export const props = {
   entities: types.optional(types.map(Entity), {}),
-  lists: types.optional(types.map(List), {}),
-  customs: types.optional(types.map(Custom), {}),
+  // lists: types.optional(types.map(List), {}),
+  // customs: types.optional(types.map(Custom), {}),
   siteInfo: types.optional(SiteInfo, {}),
   typeRelations: types.optional(types.map(types.string), {
     post: 'single',
