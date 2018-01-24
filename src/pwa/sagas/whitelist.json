@@ -1,0 +1,72 @@
+[
+  {
+    "tagName": "meta",
+    "attributes": { "name": "description" },
+    "unique": true
+  },
+  {
+    "tagName": "link",
+    "attributes": { "rel": "canonical" },
+    "unique": true
+  },
+  {
+    "tagName": "meta",
+    "attributes": { "name": "robots" },
+    "unique": true
+  },
+  {
+    "tagName": "link",
+    "attributes": { "rel": "next" },
+    "unique": true
+  },
+  {
+    "tagName": "link",
+    "attributes": { "rel": "shortlink" },
+    "unique": true
+  },
+  {
+    "tagName": "link",
+    "attributes": { "rel": "publisher" },
+    "unique": true,
+    "permanent": true
+  },
+  {
+    "tagName": "link",
+    "attributes": { "rel": "pingback" },
+    "unique": true,
+    "permanent": true
+  },
+  {
+    "tagName": "link",
+    "attributes": { "rel": "icon" },
+    "unique": true,
+    "permanent": true
+  },
+  {
+    "tagName": "link",
+    "attributes": { "rel": "shortcut icon" },
+    "unique": true,
+    "permanent": true
+  },
+  {
+    "tagName": "link",
+    "attributes": { "rel": "apple-touch-icon" },
+    "unique": true,
+    "permanent": true
+  },
+  {
+    "tagName": "link",
+    "attributes": { "rel": "apple-touch-icon-precomposed" },
+    "permanent": true
+  },
+  {
+    "tagName": "meta",
+    "attributes": { "name": "keywords" },
+    "unique": true
+  },
+  {
+    "tagName": "meta",
+    "attributes": { "name": "news_keywords" },
+    "unique": true
+  }
+]

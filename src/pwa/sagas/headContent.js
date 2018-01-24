@@ -4,87 +4,81 @@ import { parse } from 'himalaya';
 import { dep } from 'worona-deps';
 import * as actions from '../actions';
 import * as actionTypes from '../actionTypes';
+import whitelist from './whitelist.json';
+
+const allowedTags = new Set(whitelist.map(item => item.tagName));
 
 export const getHeadContent = headString => {
-  // A whitelist of the elements allowed.
-  const whitelist = [
-    { tagName: 'meta', attributes: { name: 'description' } },
-    { tagName: 'link', attributes: { rel: 'canonical' } },
-    { tagName: 'meta', attributes: { name: 'robots' } }
-  ];
-
   // Parses <head> content string to an array with 'himalaya'.
   const parsedHead = parse(headString);
 
+  // Filters out anything different than the tags allowed on the whitelist (currently <meta> and <link>).
+  const filteredHead = parsedHead.filter(
+    node => node.type === 'element' && allowedTags.has(node.tagName)
+  );
+
+  // Maps nodes into something easier to read.
+  const mappedHead = filteredHead.map(node => ({
+    tagName: node.tagName,
+    attributes: node.attributes.reduce((r, c) => {
+      r[c.key] = c.value;
+      return r;
+    }, {})
+  }));
+
   // Reduces parsed content to an object with an array of <meta> elements
   // and an array of <link> elements.
-  const content = parsedHead.reduce(
-    (result, current) => {
-      const tags = whitelist.map(item => item.tagName);
+  const content = mappedHead.reduce((result, node) => {
+    // Applies a whitelist with the content accepted.
+    const passesWhitelist = whitelist.some(valid => {
+      if (valid.tagName !== node.tagName) return false;
 
-      // Removes any element that has a different tag of those in the whitelist.
-      if (current.type !== 'element' || !tags.includes(current.tagName)) return result;
+      if (valid.attributes) {
+        if (node.attributes.length < 1) return false;
 
-      // Reduces current to something easier to check.
-      const node = {
-        tagName: current.tagName,
-        attributes: current.attributes.reduce((r, c) => {
-          r[c.key] = c.value;
-          return r;
-        }, {})
-      };
+        const keys = Object.keys(valid.attributes);
+        const sameAttributes = keys.every(key => node.attributes[key] === valid.attributes[key]);
 
-      // Applies a whitelist with the content accepted.
-      const passesWhitelist = whitelist.some(valid => {
-        if (valid.tagName !== node.tagName) return false;
+        if (!sameAttributes) return false;
 
-        if (valid.attributes) {
-          if (node.attributes.length < 1) return false;
+        // Assigns unique and permanent values (if needed) for future interactions.
+        if (valid.unique) node.unique = true;
+        if (valid.permanent) node.permanent = true;
+      }
 
-          const keys = Object.keys(valid.attributes);
-          const sameAttributes = keys.every(key => node.attributes[key] === valid.attributes[key]);
+      return true;
+    });
 
-          if (!sameAttributes) return false;
-        }
-
-        return true;
-      });
-
-      // Checks if the node passed the whitelist. If that kind of node already exists,
-      // the former one is substituted by the current node.
-      if (passesWhitelist) {
-        if (node.tagName === 'meta') {
-          const indexOfnode = result.meta.findIndex(
-            item => item.attributes.name === node.attributes.name
-          );
-
-          if (indexOfnode >= 0) {
-            result.meta[indexOfnode] = node;
-          } else {
-            result.meta.push(node);
-          }
-        }
-
-        if (node.tagName === 'link') {
-          const indexOfnode = result.link.findIndex(
-            item => item.attributes.rel === node.attributes.rel
-          );
-
-          if (indexOfnode >= 0) {
-            result.link[indexOfnode] = node;
-          } else {
-            result.link.push(node);
-          }
+    const getIndexOfNode = n => {
+      if (result[n.tagName].length > 0) {
+        if (n.tagName === 'meta') {
+          return result.meta.findIndex(item => item.attributes.name === n.attributes.name);
+        } else if (n.tagName === 'link') {
+          return result.link.findIndex(item => item.attributes.rel === n.attributes.rel);
         }
       }
 
-      return result;
-    },
-    {
-      meta: [],
-      link: []
+      return -1;
+    };
+
+    // Checks if the node passed the whitelist. If that kind of node already exists,
+    // the former one is substituted by the current node.
+    if (passesWhitelist) {
+      // Initializes tag array.
+      if (!result[node.tagName]) result[node.tagName] = [];
+
+      const index = getIndexOfNode(node);
+
+      if (node.unique && index >= 0) {
+        result[node.tagName][index] = node;
+      } else {
+        // Pushes node into tag array.
+        result[node.tagName].push(node);
+      }
     }
-  );
+
+    return result;
+  }, {});
 
   return Object.keys(content).reduce((result, key) => result.concat(content[key]), []);
 };
