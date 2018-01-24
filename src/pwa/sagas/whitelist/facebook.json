@@ -1,0 +1,14 @@
+[
+  {
+    "tagName": "meta",
+    "attributes": { "property": "fb:app_id" },
+    "unique": true,
+    "permanent": true
+  },
+  {
+    "tagName": "meta",
+    "attributes": { "property": "fb:pages" },
+    "unique": true,
+    "permanent": true
+  }
+]

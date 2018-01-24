@@ -4,7 +4,7 @@ import { parse } from 'himalaya';
 import { dep } from 'worona-deps';
 import * as actions from '../actions';
 import * as actionTypes from '../actionTypes';
-import whitelist from './whitelist.json';
+import whitelist from './whitelist';
 
 const allowedTags = new Set(whitelist.map(item => item.tagName));
 
@@ -65,20 +65,16 @@ export const getHeadContent = headString => {
       return -1;
     };
 
-    // Checks if the node passed the whitelist. If that kind of node already exists,
-    // the former one is substituted by the current node.
+    // Checks that the node passed the whitelist and if none of its kind
+    // is already in result, pushes the node.
     if (passesWhitelist) {
       // Initializes tag array.
       if (!result[node.tagName]) result[node.tagName] = [];
 
-      const index = getIndexOfNode(node);
+      if (node.unique && getIndexOfNode(node) >= 0) return result;
 
-      if (node.unique && index >= 0) {
-        result[node.tagName][index] = node;
-      } else {
-        // Pushes node into tag array.
-        result[node.tagName].push(node);
-      }
+      // Pushes node into tag array.
+      result[node.tagName].push(node);
     }
 
     return result;
