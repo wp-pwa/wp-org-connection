@@ -49,16 +49,16 @@ export const getHeadContent = headString => {
       return true;
     });
 
-    const getIndexOfNode = n => {
-      if (result[n.tagName].length > 0) {
+    const getIndex = (n, r) => {
+      if (r[n.tagName].length > 0) {
         if (n.tagName === 'meta') {
-          return result.meta.findIndex(
+          return r.meta.findIndex(
             item =>
-              item.attributes.name === n.attributes.name ||
-              item.attributes.property === n.attributes.property
+              (item.attributes.name && item.attributes.name === n.attributes.name) ||
+              (item.attributes.property && item.attributes.property === n.attributes.property)
           );
         } else if (n.tagName === 'link') {
-          return result.link.findIndex(item => item.attributes.rel === n.attributes.rel);
+          return r.link.findIndex(item => item.attributes.rel === n.attributes.rel);
         }
       }
 
@@ -70,8 +70,7 @@ export const getHeadContent = headString => {
     if (passesWhitelist) {
       // Initializes tag array.
       if (!result[node.tagName]) result[node.tagName] = [];
-
-      if (node.unique && getIndexOfNode(node) >= 0) return result;
+      if (node.unique && getIndex(node, result) >= 0) return result;
 
       // Pushes node into tag array.
       result[node.tagName].push(node);
@@ -79,7 +78,6 @@ export const getHeadContent = headString => {
 
     return result;
   }, {});
-
   return Object.keys(content).reduce((result, key) => result.concat(content[key]), []);
 };
 

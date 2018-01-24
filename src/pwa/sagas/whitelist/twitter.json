@@ -1,1 +1,112 @@
-[]
+[
+  {
+    "tagName": "meta",
+    "attributes": { "name": "twitter:card" },
+    "unique": true
+  },
+  {
+    "tagName": "meta",
+    "attributes": { "name": "twitter:site" },
+    "unique": true
+  },
+  {
+    "tagName": "meta",
+    "attributes": { "name": "twitter:site:id" },
+    "unique": true
+  },
+  {
+    "tagName": "meta",
+    "attributes": { "name": "twitter:creator" },
+    "unique": true
+  },
+  {
+    "tagName": "meta",
+    "attributes": { "name": "twitter:creator:id" },
+    "unique": true
+  },
+  {
+    "tagName": "meta",
+    "attributes": { "name": "twitter:description" },
+    "unique": true
+  },
+  {
+    "tagName": "meta",
+    "attributes": { "name": "twitter:title" },
+    "unique": true
+  },
+  {
+    "tagName": "meta",
+    "attributes": { "name": "twitter:image" },
+    "unique": true
+  },
+  {
+    "tagName": "meta",
+    "attributes": { "name": "twitter:image:alt" },
+    "unique": true
+  },
+  {
+    "tagName": "meta",
+    "attributes": { "name": "twitter:player" },
+    "unique": true
+  },
+  {
+    "tagName": "meta",
+    "attributes": { "name": "twitter:player:width" },
+    "unique": true
+  },
+  {
+    "tagName": "meta",
+    "attributes": { "name": "twitter:player:height" },
+    "unique": true
+  },
+  {
+    "tagName": "meta",
+    "attributes": { "name": "twitter:player:stream" },
+    "unique": true
+  },
+  {
+    "tagName": "meta",
+    "attributes": { "name": "twitter:app:name:iphone" },
+    "unique": true
+  },
+  {
+    "tagName": "meta",
+    "attributes": { "name": "twitter:app:id:iphone" },
+    "unique": true
+  },
+  {
+    "tagName": "meta",
+    "attributes": { "name": "twitter:app:url:iphone" },
+    "unique": true
+  },
+  {
+    "tagName": "meta",
+    "attributes": { "name": "twitter:app:name:ipad" },
+    "unique": true
+  },
+  {
+    "tagName": "meta",
+    "attributes": { "name": "twitter:app:id:ipad" },
+    "unique": true
+  },
+  {
+    "tagName": "meta",
+    "attributes": { "name": "twitter:app:url:ipad" },
+    "unique": true
+  },
+  {
+    "tagName": "meta",
+    "attributes": { "name": "twitter:app:name:googleplay" },
+    "unique": true
+  },
+  {
+    "tagName": "meta",
+    "attributes": { "name": "twitter:app:id:googleplay" },
+    "unique": true
+  },
+  {
+    "tagName": "meta",
+    "attributes": { "name": "twitter:app:url:googleplay" },
+    "unique": true
+  }
+]
