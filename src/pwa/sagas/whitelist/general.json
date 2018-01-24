@@ -68,15 +68,5 @@
     "tagName": "meta",
     "attributes": { "name": "news_keywords" },
     "unique": true
-  },
-  {
-    "tagName": "meta",
-    "attributes": { "property": "fb:app_id" },
-    "unique": true
-  },
-  {
-    "tagName": "meta",
-    "attributes": { "property": "fb:pages" },
-    "unique": true
   }
 ]
