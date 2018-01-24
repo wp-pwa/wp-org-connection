@@ -52,7 +52,11 @@ export const getHeadContent = headString => {
     const getIndexOfNode = n => {
       if (result[n.tagName].length > 0) {
         if (n.tagName === 'meta') {
-          return result.meta.findIndex(item => item.attributes.name === n.attributes.name);
+          return result.meta.findIndex(
+            item =>
+              item.attributes.name === n.attributes.name ||
+              item.attributes.property === n.attributes.property
+          );
         } else if (n.tagName === 'link') {
           return result.link.findIndex(item => item.attributes.rel === n.attributes.rel);
         }
