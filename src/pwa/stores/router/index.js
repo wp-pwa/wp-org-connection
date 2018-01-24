@@ -306,7 +306,8 @@ export const actions = self => {
         createContextFromSelected(selected);
       }
 
-      if (typeof window !== 'undefined') self.siteInfo.headContent = [];
+      if (typeof window !== 'undefined')
+        self.siteInfo.headContent = self.siteInfo.headContent.filter(node => node.permanent);
     }
   };
 };

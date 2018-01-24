@@ -65,8 +65,8 @@ export const getHeadContent = headString => {
       return -1;
     };
 
-    // Checks that the node passed the whitelist and if none of its kind
-    // is already in result, pushes the node.
+    // Checks that the node passed the whitelist. If none of its kind
+    // is already in the result, pushes the node.
     if (passesWhitelist) {
       // Initializes tag array.
       if (!result[node.tagName]) result[node.tagName] = [];
