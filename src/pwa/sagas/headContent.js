@@ -6,9 +6,11 @@ import * as actions from '../actions';
 import * as actionTypes from '../actionTypes';
 
 export const getHeadContent = headString => {
+  // A whitelist of the elements allowed.
   const whitelist = [
     { tagName: 'meta', attributes: { name: 'description' } },
-    { tagName: 'link', attributes: { rel: 'canonical' } }
+    { tagName: 'link', attributes: { rel: 'canonical' } },
+    { tagName: 'meta', attributes: { name: 'robots' } }
   ];
 
   // Parses <head> content string to an array with 'himalaya'.
@@ -40,7 +42,6 @@ export const getHeadContent = headString => {
           if (node.attributes.length < 1) return false;
 
           const keys = Object.keys(valid.attributes);
-
           const sameAttributes = keys.every(key => node.attributes[key] === valid.attributes[key]);
 
           if (!sameAttributes) return false;
@@ -49,7 +50,7 @@ export const getHeadContent = headString => {
         return true;
       });
 
-      // Checks if the node passed the whitelist and if that kind of node already exists,
+      // Checks if the node passed the whitelist. If that kind of node already exists,
       // the former one is substituted by the current node.
       if (passesWhitelist) {
         if (node.tagName === 'meta') {
