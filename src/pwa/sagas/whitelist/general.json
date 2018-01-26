@@ -68,5 +68,10 @@
     "tagName": "meta",
     "attributes": { "name": "news_keywords" },
     "unique": true
+  },
+  {
+    "tagName": "link",
+    "attributes": { "rel": "amphtml" },
+    "unique": true
   }
 ]
