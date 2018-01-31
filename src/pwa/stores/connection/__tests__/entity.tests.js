@@ -225,4 +225,13 @@ describe('Store › Entity', () => {
     });
     connection.addEntity({ entity: entities.author[4] });
   });
+
+  test('Get missing media (featured) inside ready post', () => {
+    connection.addEntity({ entity: entities.single[60] });
+    expect(connection.entity('post', 60).featured.id).toBe(62);
+    expect(connection.entity('media', 62).ready).toBe(false);
+    expect(connection.entity('media', 62).sizes).toEqual([]);
+    expect(connection.entity('post', 60).featured.ready).toBe(false);
+    expect(connection.entity('post', 60).featured.sizes).toEqual([]);
+  });
 });
