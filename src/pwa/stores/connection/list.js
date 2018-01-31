@@ -1,5 +1,5 @@
 import { types, getParent } from 'mobx-state-tree';
-import { Single } from './entity';
+import Entity from './entity';
 
 export const Total = types
   .model('Total')
@@ -19,7 +19,7 @@ export const Total = types
 export const Page = types
   .model('Page')
   .props({
-    entities: types.optional(types.array(types.reference(Single)), []),
+    entities: types.optional(types.array(types.reference(Entity)), []),
     fetching: types.optional(types.boolean, false),
     ready: types.optional(types.boolean, false),
   })
@@ -29,7 +29,7 @@ export const Page = types
     },
   }));
 
-export const List = types
+const List = types
   .model('List')
   .props({
     pageMap: types.optional(types.map(Page), {}),
@@ -54,3 +54,5 @@ export const List = types
       },
     };
   });
+
+export default List;

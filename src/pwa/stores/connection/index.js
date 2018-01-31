@@ -2,7 +2,8 @@ import { types, resolveIdentifier } from 'mobx-state-tree';
 import { join } from './utils';
 import Entity from './entity';
 import entityShape from './entity-shape';
-// import { List } from './list';
+import listShape from './list-shape';
+import List from './list';
 // import { Custom } from './custom';
 import SiteInfo from './site-info';
 import { extractList } from '../router';
@@ -11,7 +12,7 @@ import convert from '../../converters';
 
 export const props = {
   entities: types.optional(types.map(Entity), {}),
-  // lists: types.optional(types.map(List), {}),
+  lists: types.optional(types.map(List), {}),
   // customs: types.optional(types.map(Custom), {}),
   siteInfo: types.optional(SiteInfo, {}),
   typeRelations: types.optional(types.map(types.string), {
@@ -28,8 +29,8 @@ export const views = self => ({
     return resolveIdentifier(Entity, self, mstId) || entityShape(type, id);
   },
   list(type, id) {
-    self.initListMap({ type, id });
-    return self.listMap.get(`${type}_${id}`);
+    const mstId = join(type, id);
+    return resolveIdentifier(List, self, mstId) || listShape(type, id);
   },
   custom(name) {
     self.initCustomMap({ name });
