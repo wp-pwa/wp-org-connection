@@ -9,6 +9,7 @@ Object {
     "fetching": false,
     "id": null,
     "link": "/",
+    "mstId": "",
     "name": "",
     "pagedLink": [Function],
     "ready": false,
@@ -29,6 +30,7 @@ Object {
       "fetching": false,
       "id": null,
       "link": "/",
+      "mstId": "",
       "name": "",
       "pagedLink": [Function],
       "ready": false,
@@ -48,6 +50,7 @@ Object {
       "title": "",
     },
     "mimeType": "",
+    "mstId": "",
     "original": Object {
       "filename": "",
       "height": null,
@@ -72,6 +75,7 @@ Object {
   },
   "mimeType": "",
   "modificationDate": null,
+  "mstId": "someType_someId",
   "name": "",
   "original": Object {
     "filename": "",
@@ -84,7 +88,7 @@ Object {
   "sizes": Array [],
   "slug": "",
   "target": "",
-  "taxonomies": [Function],
+  "taxonomy": [Function],
   "title": "",
   "type": "someType",
 }

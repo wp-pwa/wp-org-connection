@@ -1,3 +1,5 @@
+import { join } from './utils';
+
 export const link = (type, id) => {
   if (!id) return '/';
   if (type === 'category') return `/?cat=${id}`;
@@ -18,6 +20,7 @@ export const pagedLink = ({ type, id, page = 1, entityLink }) => {
 };
 
 const common = (type, id) => ({
+  mstId: join(type, id),
   id: id || null,
   type: type || null,
   ready: false,
@@ -72,7 +75,7 @@ export const singleShape = (type, id) => ({
   slug: '',
   content: '',
   excerpt: '',
-  taxonomies: () => [],
+  taxonomy: () => [],
   featured: mediaShape('media'),
   author: authorShape('author'),
   target: '',

@@ -47,7 +47,7 @@ const single = self => ({
   get target() {
     return self.ready ? self.entity.target : '';
   },
-  taxonomies(type) {
+  taxonomy(type) {
     return self.ready && self.entity.taxonomies && self.entity.taxonomies[type]
       ? self.entity.taxonomies[type].map(
           id => resolveIdentifier(Entity, self, join(type, id)) || entityShape(type, id)
@@ -59,7 +59,7 @@ const single = self => ({
       (self.ready &&
         self.entity.featured &&
         resolveIdentifier(Entity, self, join('media', self.entity.featured))) ||
-      mediaShape('media', self.entity.featured)
+      mediaShape('media', self.ready && self.entity.featured)
     );
   },
   get author() {
@@ -67,7 +67,7 @@ const single = self => ({
       (self.ready &&
         self.entity.author &&
         resolveIdentifier(Entity, self, join('author', self.entity.author))) ||
-      authorShape('author', self.entity.author)
+      authorShape('author', self.ready && self.entity.author)
     );
   },
   get meta() {
@@ -117,7 +117,7 @@ const author = self => ({
   },
   get avatar() {
     return self.ready ? self.entity.avatar : '';
-  },
+  }
 });
 
 const Entity = types

@@ -39,9 +39,13 @@ export const views = self => ({
 });
 
 export const actions = self => ({
+  fetchingEntity({ type, id }) {
+    const mstId = join(type, id);
+    self.entities.put({ mstId, fetching: true });
+  },
   addEntity({ entity }) {
     const mstId = join(entity.type, entity.id);
-    self.entities.put({ mstId, entity: convert(entity) });
+    self.entities.put({ mstId, fetching: false, entity: convert(entity) });
   },
   addEntities({ entities }) {
     Object.entries(entities).map(([, single]) => {

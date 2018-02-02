@@ -28,10 +28,11 @@ describe('Store › Entity', () => {
 
   test('Get single shape when entity is not ready', () => {
     expect(connection.entity('post', 60).ready).toBe(false);
+    expect(connection.entity('post', 60).fetching).toBe(false);
     expect(connection.entity('post', 60).title).toBe('');
     expect(connection.entity('post', 60).link).toBe('/?p=60');
     expect(() => connection.entity('post', 60).pagedLink(3)).toThrow();
-    expect(connection.entity('post', 60).taxonomies('category')).toEqual([]);
+    expect(connection.entity('post', 60).taxonomy('category')).toEqual([]);
     expect(connection.entity('post', 60).featured.ready).toBe(false);
     expect(connection.entity('post', 60).featured.sizes).toEqual([]);
     expect(connection.entity('post', 60).author.name).toBe('');
@@ -100,30 +101,57 @@ describe('Store › Entity', () => {
     connection.addEntity({ entity: entities.single[60] });
   });
 
-  test('Get taxonomies inside post before taxonomies are ready', () => {
-    expect(connection.entity('post', 60).taxonomies('category').length).toBe(0);
-    expect(connection.entity('post', 60).taxonomies('tag').length).toBe(0);
+  test('Fetching should be false after item is added', () => {
+    expect(connection.entity('post', 60).fetching).toBe(false);
+    connection.fetchingEntity({ type: 'post', id: 60 });
+    expect(connection.entity('post', 60).fetching).toBe(true);
     connection.addEntity({ entity: entities.single[60] });
-    expect(connection.entity('post', 60).taxonomies('category').length).toBe(2);
-    expect(connection.entity('post', 60).taxonomies('category')[0].id).toBe(3);
-    expect(connection.entity('post', 60).taxonomies('tag').length).toBe(4);
-    expect(connection.entity('post', 60).taxonomies('tag')[1].id).toBe(9);
+    expect(connection.entity('post', 60).fetching).toBe(false);
+  });
+
+  test('Shape should be the same after fetching is started', () => {
+    const authorId1 = connection.entity('post', 60).author.id;
+    connection.fetchingEntity({ type: 'post', id: 60 });
+    const authorId2 = connection.entity('post', 60).author.id;
+    expect(authorId1).toEqual(authorId2);
+    const featuredOriginal1 = connection.entity('post', 60).featured.original.url;
+    connection.fetchingEntity({ type: 'post', id: 60 });
+    const featuredOriginal2 = connection.entity('post', 60).featured.original.url;
+    expect(featuredOriginal1).toEqual(featuredOriginal2);
+    const link1 = connection.entity('post', 60).link;
+    connection.fetchingEntity({ type: 'post', id: 60 });
+    const link2 = connection.entity('post', 60).link;
+    expect(link1).toEqual(link2);
+    const taxonomies1 = connection.entity('post', 60).taxonomy('category');
+    connection.fetchingEntity({ type: 'post', id: 60 });
+    const taxonomies2 = connection.entity('post', 60).taxonomy('category');
+    expect(taxonomies1).toEqual(taxonomies2);
+  });
+
+  test('Get taxonomies inside post before taxonomies are ready', () => {
+    expect(connection.entity('post', 60).taxonomy('category').length).toBe(0);
+    expect(connection.entity('post', 60).taxonomy('tag').length).toBe(0);
+    connection.addEntity({ entity: entities.single[60] });
+    expect(connection.entity('post', 60).taxonomy('category').length).toBe(2);
+    expect(connection.entity('post', 60).taxonomy('category')[0].id).toBe(3);
+    expect(connection.entity('post', 60).taxonomy('tag').length).toBe(4);
+    expect(connection.entity('post', 60).taxonomy('tag')[1].id).toBe(9);
   });
 
   test('Subscribe to taxonomies array before entity is ready', done => {
     autorun(() => {
-      if (connection.entity('post', 60).taxonomies('category').length === 2) done();
+      if (connection.entity('post', 60).taxonomy('category').length === 2) done();
     });
     connection.addEntity({ entity: entities.single[60] });
   });
 
   test('Subscribe to taxonomies array fields before entity is ready', done => {
     connection.addEntity({ entity: entities.single[60] });
-    expect(connection.entity('post', 60).taxonomies('category').length).toBe(2);
-    expect(connection.entity('post', 60).taxonomies('category')[0].id).toBe(3);
+    expect(connection.entity('post', 60).taxonomy('category').length).toBe(2);
+    expect(connection.entity('post', 60).taxonomy('category')[0].id).toBe(3);
     autorun(() => {
       if (
-        connection.entity('post', 60).taxonomies('category')[0].name ===
+        connection.entity('post', 60).taxonomy('category')[0].name ===
         convert(entities.taxonomy[3]).name
       )
         done();
