@@ -124,6 +124,8 @@ const Entity = types
   .model('Entity')
   .props({
     mstId: types.identifier(types.string), // post_60, category_7, movie_34, author_3, media_35
+    type: types.string,
+    id: types.number,
     fetching: false,
     entity: types.frozen
   })

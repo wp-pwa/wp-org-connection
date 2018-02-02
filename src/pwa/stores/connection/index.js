@@ -39,13 +39,19 @@ export const views = self => ({
 });
 
 export const actions = self => ({
-  fetchingEntity({ type, id }) {
+  getEntity({ type, id }) {
     const mstId = join(type, id);
-    self.entities.put({ mstId, fetching: true });
+    if (!self.entities.get(mstId)) self.entities.put({ mstId, type, id });
+    return self.entities.get(mstId);
+  },
+  fetchingEntity({ type, id }) {
+    const item = self.getEntity({ type, id });
+    item.fetching = true;
   },
   addEntity({ entity }) {
-    const mstId = join(entity.type, entity.id);
-    self.entities.put({ mstId, fetching: false, entity: convert(entity) });
+    const item = self.getEntity({ type: entity.type, id: entity.id });
+    item.entity = convert(entity);
+    item.fetching = false;
   },
   addEntities({ entities }) {
     Object.entries(entities).map(([, single]) => {
@@ -53,6 +59,27 @@ export const actions = self => ({
         self.addEntity({ entity });
       });
     });
+  },
+  getList({ type, id }) {
+    const mstId = join(type, id);
+    if (!self.lists.get(mstId)) self.lists.put({ mstId, type, id });
+    return self.lists.get(mstId);
+  },
+  getPage({ type, id, page }) {
+    const list = self.getList({ type, id });
+    if (!list.pageMap.get(page)) list.pageMap.put({ page });
+    return list.pageMap.get(page);
+  },
+  fetchingList({ type, id }) {
+    const list = self.getList({ type, id });
+    list.fetching = true;
+  },
+  addListPage({ type, id, page = 1, result, entities }) {
+    self.addEntities({ entities });
+    const mstResults = result.map(res => `${entities[res.schema][res.id].type}_${res.id}`);
+    const pageItem = self.getPage({ type, id, page });
+    pageItem.entities = mstResults;
+    pageItem.fetching = false;
   },
   [actionTypes.SINGLE_REQUESTED]({ entityType, entityId }) {
     // self.single(entityType, entityId).fetching = true;

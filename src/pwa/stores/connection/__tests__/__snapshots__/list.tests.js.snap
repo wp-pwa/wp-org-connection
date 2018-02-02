@@ -1,0 +1,40 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Store › List Get list snapshot when entity is not ready 1`] = `
+Object {
+  "entities": Array [],
+  "entity": Object {
+    "avatar": "",
+    "description": "",
+    "fetching": false,
+    "id": 7,
+    "link": "/?cat=7",
+    "meta": Object {
+      "canonical": "",
+      "description": "",
+      "title": "",
+    },
+    "mstId": "category_7",
+    "name": "",
+    "pagedLink": [Function],
+    "ready": false,
+    "slug": "",
+    "target": "",
+    "type": "category",
+  },
+  "fetching": false,
+  "id": 7,
+  "page": [Function],
+  "pages": Array [],
+  "ready": false,
+  "total": Object {
+    "entities": null,
+    "fetched": Object {
+      "entities": null,
+      "pages": null,
+    },
+    "pages": null,
+  },
+  "type": "category",
+}
+`;
