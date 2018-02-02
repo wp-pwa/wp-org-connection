@@ -80,7 +80,10 @@ describe('Store › Entity', () => {
   test('Subscribe to link before entity is ready', done => {
     expect(connection.entity('post', 60).link).toBe('/?p=60');
     autorun(() => {
-      if (connection.entity('post', 60).link === convert(entities.single[60]).link) done();
+      if (
+        connection.entity('post', 60).link === 'https://demo.worona.org/the-beauties-of-gullfoss/'
+      )
+        done();
     });
     connection.addEntity({ entity: entities.single[60] });
   });
@@ -90,7 +93,7 @@ describe('Store › Entity', () => {
     autorun(() => {
       if (
         connection.entity('category', 3).pagedLink(2) ===
-        `${convert(entities.taxonomy[3]).link}page/2`
+        'https://demo.worona.org/wp-cat/photography/page/2'
       )
         done();
     });
@@ -100,7 +103,7 @@ describe('Store › Entity', () => {
   test('Subscribe to single fields before entity is ready', done => {
     expect(connection.entity('post', 60).title).toBe('');
     autorun(() => {
-      if (connection.entity('post', 60).title === convert(entities.single[60]).title) done();
+      if (connection.entity('post', 60).title === 'The Beauties of Gullfoss') done();
     });
     connection.addEntity({ entity: entities.single[60] });
   });
@@ -160,6 +163,7 @@ describe('Store › Entity', () => {
   });
 
   test('Subscribe to taxonomies array before entity is ready', done => {
+    expect(connection.entity('post', 60).taxonomy('category').length).toBe(0);
     autorun(() => {
       if (connection.entity('post', 60).taxonomy('category').length === 2) done();
     });
@@ -170,12 +174,9 @@ describe('Store › Entity', () => {
     connection.addEntity({ entity: entities.single[60] });
     expect(connection.entity('post', 60).taxonomy('category').length).toBe(2);
     expect(connection.entity('post', 60).taxonomy('category')[0].id).toBe(3);
+    expect(connection.entity('post', 60).taxonomy('category')[0].name).toBe('');
     autorun(() => {
-      if (
-        connection.entity('post', 60).taxonomy('category')[0].name ===
-        convert(entities.taxonomy[3]).name
-      )
-        done();
+      if (connection.entity('post', 60).taxonomy('category')[0].name === 'Photography') done();
     });
     connection.addEntity({ entity: entities.taxonomy[3] });
   });
@@ -189,12 +190,9 @@ describe('Store › Entity', () => {
   });
 
   test('Subscribe to featured fields before entity is ready', done => {
+    expect(connection.entity('post', 60).featured.original.width).toBe(null);
     autorun(() => {
-      if (
-        connection.entity('post', 60).featured.original.width ===
-        convert(entities.media[62]).original.width
-      )
-        done();
+      if (connection.entity('post', 60).featured.original.width === 5000) done();
     });
     connection.addEntity({ entity: entities.single[60] });
     connection.addEntity({ entity: entities.media[62] });
@@ -214,8 +212,9 @@ describe('Store › Entity', () => {
   });
 
   test('Subscribe to author fields before entity is ready', done => {
+    expect(connection.entity('post', 60).author.name).toBe('');
     autorun(() => {
-      if (connection.entity('post', 60).author.name === convert(entities.author[4]).name) done();
+      if (connection.entity('post', 60).author.name === 'Alan Martin') done();
     });
     connection.addEntity({ entity: entities.single[60] });
     connection.addEntity({ entity: entities.author[4] });
@@ -236,25 +235,24 @@ describe('Store › Entity', () => {
   });
 
   test('Subscribe to meta fields before entity is ready', done => {
+    expect(connection.entity('post', 60).meta.title).toBe('');
     autorun(() => {
-      if (connection.entity('post', 60).meta.title === convert(entities.single[60]).meta.title)
+      if (connection.entity('post', 60).meta.title === 'The Beauties of Gullfoss - Demo Worona')
         done();
     });
     connection.addEntity({ entity: entities.single[60] });
   });
 
   test('Subscribe to media original before entity is ready', done => {
+    expect(connection.entity('media', 62).original.height).toBe(null);
     autorun(() => {
-      if (
-        connection.entity('media', 62).original.height ===
-        convert(entities.media[62]).original.height
-      )
-        done();
+      if (connection.entity('media', 62).original.height === 3025) done();
     });
     connection.addEntity({ entity: entities.media[62] });
   });
 
   test('Subscribe to media sizes before entity is ready', done => {
+    expect(connection.entity('media', 62).sizes.length).toBe(0);
     autorun(() => {
       if (connection.entity('media', 62).sizes.length === 6) done();
     });
@@ -262,15 +260,21 @@ describe('Store › Entity', () => {
   });
 
   test('Subscribe to taxonomy fields before entity is ready', done => {
+    expect(connection.entity('category', 3).name).toBe('');
     autorun(() => {
-      if (connection.entity('category', 3).name === convert(entities.taxonomy[3]).name) done();
+      if (connection.entity('category', 3).name === 'Photography') done();
     });
     connection.addEntity({ entity: entities.taxonomy[3] });
   });
 
   test('Subscribe to author fields before entity is ready', done => {
+    expect(connection.entity('author', 4).avatar).toBe('');
     autorun(() => {
-      if (connection.entity('author', 4).avatar === convert(entities.author[4]).avatar) done();
+      if (
+        connection.entity('author', 4).avatar ===
+        'https://secure.gravatar.com/avatar/eebc7d67bdc645559fd6634e0335a42b'
+      )
+        done();
     });
     connection.addEntity({ entity: entities.author[4] });
   });
