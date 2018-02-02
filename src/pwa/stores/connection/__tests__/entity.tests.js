@@ -70,6 +70,7 @@ describe('Store › Entity', () => {
   });
 
   test('Subscribe to ready before entity is ready', done => {
+    expect(connection.entity('post', 60).ready).toBe(false);
     autorun(() => {
       if (connection.entity('post', 60).ready) done();
     });
@@ -77,6 +78,7 @@ describe('Store › Entity', () => {
   });
 
   test('Subscribe to link before entity is ready', done => {
+    expect(connection.entity('post', 60).link).toBe('/?p=60');
     autorun(() => {
       if (connection.entity('post', 60).link === convert(entities.single[60]).link) done();
     });
@@ -84,6 +86,7 @@ describe('Store › Entity', () => {
   });
 
   test('Subscribe to paged link before entity is ready', done => {
+    expect(connection.entity('category', 3).pagedLink(2)).toBe('/?cat=3&paged=2');
     autorun(() => {
       if (
         connection.entity('category', 3).pagedLink(2) ===
@@ -95,6 +98,7 @@ describe('Store › Entity', () => {
   });
 
   test('Subscribe to single fields before entity is ready', done => {
+    expect(connection.entity('post', 60).title).toBe('');
     autorun(() => {
       if (connection.entity('post', 60).title === convert(entities.single[60]).title) done();
     });
@@ -107,6 +111,23 @@ describe('Store › Entity', () => {
     expect(connection.entity('post', 60).fetching).toBe(true);
     connection.addEntity({ entity: entities.single[60] });
     expect(connection.entity('post', 60).fetching).toBe(false);
+  });
+
+  test('Subscribe to fetching from false to true', done => {
+    expect(connection.entity('post', 60).fetching).toBe(false);
+    autorun(() => {
+      if (connection.entity('post', 60).fetching) done();
+    });
+    connection.fetchingEntity({ type: 'post', id: 60 });
+  });
+
+  test('Subscribe to fetching from true to false', done => {
+    connection.fetchingEntity({ type: 'post', id: 60 });
+    expect(connection.entity('post', 60).fetching).toBe(true);
+    autorun(() => {
+      if (!connection.entity('post', 60).fetching) done();
+    });
+    connection.addEntity({ entity: entities.single[60] });
   });
 
   test('Shape should be the same after fetching is started', () => {
