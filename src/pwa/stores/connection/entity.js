@@ -7,7 +7,7 @@ import entityShape, {
   mediaShape,
   authorShape,
   metaShape,
-  originalShape
+  originalShape,
 } from './entity-shape';
 
 const common = self => ({
@@ -22,7 +22,7 @@ const common = self => ({
   pagedLink: (page = 1) => {
     const { type, id } = extract(self.mstId);
     return pagedLink({ type, id, page, entityLink: self.entity && self.entity.link });
-  }
+  },
 });
 
 const single = self => ({
@@ -50,7 +50,7 @@ const single = self => ({
   taxonomy(type) {
     return self.ready && self.entity.taxonomies && self.entity.taxonomies[type]
       ? self.entity.taxonomies[type].map(
-          id => resolveIdentifier(Entity, self, join(type, id)) || entityShape(type, id)
+          id => resolveIdentifier(Entity, self, join(type, id)) || entityShape(type, id),
         )
       : [];
   },
@@ -72,13 +72,13 @@ const single = self => ({
   },
   get meta() {
     return (self.ready && self.entity.meta) || metaShape;
-  }
+  },
 });
 
 const taxonomy = self => ({
   get name() {
     return self.ready ? self.entity.name : '';
-  }
+  },
 });
 
 const media = self => ({
@@ -102,7 +102,7 @@ const media = self => ({
   },
   get sizes() {
     return self.ready ? self.entity.sizes : [];
-  }
+  },
 });
 
 const author = self => ({
@@ -117,7 +117,7 @@ const author = self => ({
   },
   get avatar() {
     return self.ready ? self.entity.avatar : '';
-  }
+  },
 });
 
 const Entity = types
@@ -127,7 +127,7 @@ const Entity = types
     type: types.string,
     id: types.number,
     fetching: false,
-    entity: types.frozen
+    entity: types.frozen,
   })
   .views(common)
   .views(single)

@@ -70,16 +70,21 @@ export const actions = self => ({
     if (!list.pageMap.get(page)) list.pageMap.put({ page });
     return list.pageMap.get(page);
   },
-  fetchingList({ type, id }) {
-    const list = self.getList({ type, id });
-    list.fetching = true;
+  fetchingPage({ type, id, page }) {
+    const item = self.getPage({ type, id, page });
+    item.fetching = true;
   },
-  addListPage({ type, id, page = 1, result, entities }) {
+  addPage({ type, id, page = 1, result, entities, total }) {
     self.addEntities({ entities });
     const mstResults = result.map(res => `${entities[res.schema][res.id].type}_${res.id}`);
-    const pageItem = self.getPage({ type, id, page });
-    pageItem.entities = mstResults;
-    pageItem.fetching = false;
+    const item = self.getPage({ type, id, page });
+    item.entities = mstResults;
+    item.fetching = false;
+    if (total) {
+      const list = self.getList({ type, id });
+      if (total.entities) list.total.entities = total.entities;
+      if (total.pages) list.total.pages = total.pages;
+    }
   },
   [actionTypes.SINGLE_REQUESTED]({ entityType, entityId }) {
     // self.single(entityType, entityId).fetching = true;
