@@ -122,6 +122,7 @@ describe('Store › Entity', () => {
       if (connection.entity('post', 60).fetching) done();
     });
     connection.fetchingEntity({ type: 'post', id: 60 });
+    expect(connection.entity('post', 60).ready).toBe(false);
   });
 
   test('Subscribe to fetching from true to false', done => {
@@ -228,7 +229,7 @@ describe('Store › Entity', () => {
     expect(connection.entity('post', 60).meta.title).toBe(convert(entities.single[60]).meta.title);
     connection.addEntity({ entity: entities.taxonomy[3] });
     expect(connection.entity('category', 3).meta.title).toBe(
-      convert(entities.taxonomy[3]).meta.title
+      convert(entities.taxonomy[3]).meta.title,
     );
     connection.addEntity({ entity: entities.media[62] });
     expect(connection.entity('media', 62).meta.title).toBe('iceland');
