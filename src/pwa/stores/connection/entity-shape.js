@@ -14,7 +14,7 @@ export const pagedLink = ({ type, id, page = 1, entityLink }) => {
   if (type === 'post' || type === 'page' || type === 'media')
     throw new Error(`Can't add a page to a ${type} entity (${type} ${id})`);
   const initialLink = entityLink || link(type, id);
-  initialLink.replace(/\/$/, '/')
+  initialLink.replace(/\/$/, '/');
   if (initialLink === '/') return `/page/${page}`;
   return entityLink ? `${initialLink}page/${page}` : `${initialLink}&paged=${page}`;
 };
@@ -28,20 +28,20 @@ const common = (type, id) => ({
   get link() {
     return link(type, id);
   },
-  pagedLink: page => pagedLink({ type, id, page })
+  pagedLink: page => pagedLink({ type, id, page }),
 });
 
 export const metaShape = {
   title: '',
   description: '',
-  canonical: ''
+  canonical: '',
 };
 
 export const originalShape = {
   height: null,
   width: null,
   filename: '',
-  url: ''
+  url: '',
 };
 
 export const authorShape = (type, id) => ({
