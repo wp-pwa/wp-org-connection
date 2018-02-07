@@ -65,19 +65,19 @@ export const actions = self => ({
     if (!self.lists.get(mstId)) self.lists.put({ mstId, type, id });
     return self.lists.get(mstId);
   },
-  getPage({ type, id, page }) {
+  getListPage({ type, id, page }) {
     const list = self.getList({ type, id });
     if (!list.pageMap.get(page)) list.pageMap.put({ page });
     return list.pageMap.get(page);
   },
-  fetchingPage({ type, id, page }) {
-    const item = self.getPage({ type, id, page });
+  fetchingListPage({ type, id, page }) {
+    const item = self.getListPage({ type, id, page });
     item.fetching = true;
   },
-  addPage({ type, id, page = 1, result, entities, total }) {
+  addListPage({ type, id, page = 1, result, entities, total }) {
     self.addEntities({ entities });
     const mstResults = result.map(res => `${entities[res.schema][res.id].type}_${res.id}`);
-    const item = self.getPage({ type, id, page });
+    const item = self.getListPage({ type, id, page });
     item.entities = mstResults;
     item.fetching = false;
     if (total) {
@@ -97,14 +97,14 @@ export const actions = self => ({
     item.fetching = false;
   },
   [actionTypes.LIST_REQUESTED]({ listType: type, listId: id, page = 1 }) {
-    self.fetchingPage({ type, id, page });
+    self.fetchingListPage({ type, id, page });
   },
   [actionTypes.LIST_SUCCEED]({ listType, listId, page, total, result, entities }) {
-    self.addPage({ type: listType, id: listId, page, total, result, entities });
+    self.addListPage({ type: listType, id: listId, page, total, result, entities });
     if (self.context) extractList({ listType, listId, page, result }, self.context);
   },
   [actionTypes.LIST_FAILED]({ listType: type, listId: id, page = 1 }) {
-    const item = self.getPage({ type, id, page });
+    const item = self.getListPage({ type, id, page });
     item.fetching = false;
   },
 });

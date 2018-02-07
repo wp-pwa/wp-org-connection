@@ -52,7 +52,7 @@ describe('Store › List', () => {
   test('Get list entity shapes after adding a page', () => {
     expect(connection.list('category', 7).entities).toEqual([]);
     expect(connection.list('category', 7).page(1).entities).toEqual([]);
-    connection.addPage({
+    connection.addListPage({
       type: 'category',
       id: 7,
       page: 1,
@@ -83,14 +83,14 @@ describe('Store › List', () => {
   });
 
   test('Get list entity shapes after adding two pages', () => {
-    connection.addPage({
+    connection.addListPage({
       type: 'category',
       id: 7,
       page: 1,
       result: resultFromCategory7,
       entities: entitiesFromCategory,
     });
-    connection.addPage({
+    connection.addListPage({
       type: 'category',
       id: 7,
       page: 2,
@@ -122,7 +122,7 @@ describe('Store › List', () => {
     autorun(() => {
       if (connection.list('category', 7).page(2).ready) done();
     });
-    connection.addPage({
+    connection.addListPage({
       type: 'category',
       id: 7,
       page: 2,
@@ -136,7 +136,7 @@ describe('Store › List', () => {
     autorun(() => {
       if (connection.list('category', 7).ready) done();
     });
-    connection.addPage({
+    connection.addListPage({
       type: 'category',
       id: 7,
       page: 1,
@@ -150,7 +150,7 @@ describe('Store › List', () => {
     autorun(() => {
       if (connection.list('category', 7).page(1).fetching) done();
     });
-    connection.fetchingPage({ type: 'category', id: 7, page: 1 });
+    connection.fetchingListPage({ type: 'category', id: 7, page: 1 });
     expect(connection.list('category', 7).page(1).ready).toBe(false);
   });
 
@@ -159,7 +159,7 @@ describe('Store › List', () => {
     autorun(() => {
       if (connection.list('category', 7).fetching) done();
     });
-    connection.fetchingPage({ type: 'category', id: 7, page: 1 });
+    connection.fetchingListPage({ type: 'category', id: 7, page: 1 });
     expect(connection.list('category', 7).ready).toBe(false);
   });
 
@@ -167,7 +167,7 @@ describe('Store › List', () => {
     expect(connection.list('category', 7).ready).toBe(false);
     expect(connection.list('category', 7).page(1).ready).toBe(false);
     expect(connection.list('category', 7).page(2).ready).toBe(false);
-    connection.addPage({
+    connection.addListPage({
       type: 'category',
       id: 7,
       page: 1,
@@ -177,7 +177,7 @@ describe('Store › List', () => {
     expect(connection.list('category', 7).ready).toBe(true);
     expect(connection.list('category', 7).page(1).ready).toBe(true);
     expect(connection.list('category', 7).page(2).ready).toBe(false);
-    connection.fetchingPage({ type: 'category', id: 7, page: 2 });
+    connection.fetchingListPage({ type: 'category', id: 7, page: 2 });
     expect(connection.list('category', 7).ready).toBe(true);
     expect(connection.list('category', 7).page(1).ready).toBe(true);
     expect(connection.list('category', 7).page(2).ready).toBe(false);
@@ -187,10 +187,10 @@ describe('Store › List', () => {
     expect(connection.list('category', 7).fetching).toBe(false);
     expect(connection.list('category', 7).page(1).fetching).toBe(false);
     expect(connection.list('category', 7).page(2).fetching).toBe(false);
-    connection.fetchingPage({ type: 'category', id: 7, page: 1 });
+    connection.fetchingListPage({ type: 'category', id: 7, page: 1 });
     expect(connection.list('category', 7).fetching).toBe(true);
     expect(connection.list('category', 7).page(1).fetching).toBe(true);
-    connection.addPage({
+    connection.addListPage({
       type: 'category',
       id: 7,
       page: 1,
@@ -199,7 +199,7 @@ describe('Store › List', () => {
     });
     expect(connection.list('category', 7).fetching).toBe(false);
     expect(connection.list('category', 7).page(1).fetching).toBe(false);
-    connection.fetchingPage({ type: 'category', id: 7, page: 2 });
+    connection.fetchingListPage({ type: 'category', id: 7, page: 2 });
     expect(connection.list('category', 7).fetching).toBe(true);
     expect(connection.list('category', 7).page(1).fetching).toBe(false);
     expect(connection.list('category', 7).page(2).fetching).toBe(true);
@@ -211,7 +211,7 @@ describe('Store › List', () => {
     expect(connection.list('category', 7).total.fetched.entities).toBe(null);
     expect(connection.list('category', 7).total.fetched.pages).toBe(null);
     expect(connection.list('category', 7).page(1).total).toBe(null);
-    connection.addPage({
+    connection.addListPage({
       type: 'category',
       id: 7,
       page: 1,
@@ -242,7 +242,7 @@ describe('Store › List', () => {
       )
         done();
     });
-    connection.addPage({
+    connection.addListPage({
       type: 'category',
       id: 7,
       page: 1,
