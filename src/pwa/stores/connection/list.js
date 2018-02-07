@@ -1,5 +1,6 @@
 import { types, getParent, resolveIdentifier, getSnapshot } from 'mobx-state-tree';
 import { flatten } from 'lodash';
+import { entityShape } from './entity-shape';
 import { pageShape } from './list-shape';
 import Entity from './entity';
 
@@ -66,6 +67,9 @@ const List = types
     get pages() {
       return self.pageMap.values();
     },
+    get entity() {
+      return resolveIdentifier(Entity, self, self.mstId) || entityShape(self.type, self.id)
+    }
   }));
 
 export default List;

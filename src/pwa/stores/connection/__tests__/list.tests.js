@@ -77,6 +77,9 @@ describe('Store › List', () => {
     expect(connection.list('category', 7).pages[0].entities[0].title).toBe(
       'Shinjuku Gyoen National Garden',
     );
+    expect(connection.list('category', 7).entity.link).toBe(
+      'https://demo.worona.org/wp-cat/nature/',
+    );
   });
 
   test('Get list entity shapes after adding two pages', () => {
