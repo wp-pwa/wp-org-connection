@@ -86,6 +86,27 @@ export const actions = self => ({
       if (total.pages) list.total.pages = total.pages;
     }
   },
+  getCustom({ name }) {
+    if (!self.customs.get(name)) self.customs.put({ name });
+    return self.customs.get(name);
+  },
+  getCustomPage({ name, page = 1 }) {
+    const custom = self.getCustom({ name });
+    if (!custom.pageMap.get(page)) custom.pageMap.put({ page });
+    return custom.pageMap.get(page);
+  },
+  addCustomPage({ name, page = 1, result, entities, total }) {
+    self.addEntities({ entities });
+    const mstResults = result.map(res => `${entities[res.schema][res.id].type}_${res.id}`);
+    const item = self.getCustomPage({ name, page });
+    item.entities = mstResults;
+    item.fetching = false;
+    if (total) {
+      const list = self.getCustom({ name });
+      if (total.entities) list.total.entities = total.entities;
+      if (total.pages) list.total.pages = total.pages;
+    }
+  },
   [actionTypes.SINGLE_REQUESTED]({ singleType: type, singleId: id }) {
     self.fetchingEntity({ type, id });
   },
