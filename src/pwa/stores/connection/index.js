@@ -95,6 +95,10 @@ export const actions = self => ({
     if (!custom.pageMap.get(page)) custom.pageMap.put({ page });
     return custom.pageMap.get(page);
   },
+  fetchingCustomPage({ name, page = 1 }) {
+    const item = self.getCustomPage({ name, page });
+    item.fetching = true;
+  },
   addCustomPage({ name, page = 1, result, entities, total }) {
     self.addEntities({ entities });
     const mstResults = result.map(res => `${entities[res.schema][res.id].type}_${res.id}`);

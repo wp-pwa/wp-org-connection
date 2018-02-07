@@ -1,3 +1,4 @@
+import { autorun } from 'mobx';
 import { types, unprotect } from 'mobx-state-tree';
 import { normalize } from 'normalizr';
 import * as connect from '../';
@@ -99,6 +100,30 @@ describe('Store › Custom', () => {
     expect(connection.custom('test').page(2).entities[0].name).toBe('Nature');
     expect(connection.custom('test').pages[1].entities[0].id).toBe(7);
     expect(connection.custom('test').pages[1].entities[0].name).toBe('Nature');
+  });
+
+  test('Subscribe to ready before entity is ready', done => {
+    expect(connection.custom('test').page(2).ready).toBe(false);
+    expect(connection.custom('test').ready).toBe(false);
+    autorun(() => {
+      if (connection.custom('test').page(2).ready && connection.custom('test').ready) done();
+    });
+    connection.addCustomPage({
+      name: 'test',
+      page: 2,
+      result: resultFromCategoryListPage2,
+      entities: entitiesFromCategoryListPage2,
+    });
+  });
+
+  test('Subscribe to fetching before entity is ready', done => {
+    expect(connection.custom('test').page(1).fetching).toBe(false);
+    expect(connection.custom('test').page(1).fetching).toBe(false);
+    autorun(() => {
+      if (connection.custom('test').page(1).fetching && connection.custom('test').fetching) done();
+    });
+    connection.fetchingCustomPage({ name: 'test', page: 1 });
+    expect(connection.custom('test').page(1).ready).toBe(false);
   });
 
   // test('Check custom and page totals', () => {
