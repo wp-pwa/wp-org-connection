@@ -2,14 +2,14 @@ import { authorShape, taxonomyShape } from './entity-shape';
 
 const entityListShape = (type, id) => ({
   ...authorShape(type, id),
-  ...taxonomyShape(type, id)
+  ...taxonomyShape(type, id),
 });
 
 export const pageShape = {
   ready: false,
   fetching: false,
   entities: [],
-  total: null
+  total: null,
 };
 
 const listShape = (type, id) => ({
@@ -22,13 +22,13 @@ const listShape = (type, id) => ({
     pages: null,
     fetched: {
       entities: null,
-      pages: null
-    }
+      pages: null,
+    },
   },
   pages: [],
   page: () => pageShape,
   entities: [],
-  entity: entityListShape(type, id)
+  entity: entityListShape(type, id),
 });
 
 export default listShape;
