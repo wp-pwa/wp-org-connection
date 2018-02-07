@@ -16,7 +16,7 @@ export const entity = new schema.Union(
     else if (val.media_type) return 'media';
     else if (val.name) return 'author';
     return 'single';
-  }
+  },
 );
 
 export const list = new schema.Array(entity);
