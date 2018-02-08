@@ -12,6 +12,8 @@ class RouteWaypoint extends Component {
     children: PropTypes.node.isRequired,
     ssr: PropTypes.bool.isRequired,
     active: PropTypes.bool.isRequired,
+    selected: PropTypes.shape({}).isRequired,
+    next: PropTypes.shape({}).isRequired,
     changeRoute: PropTypes.func.isRequired,
   };
 
@@ -22,30 +24,30 @@ class RouteWaypoint extends Component {
   }
 
   changeRouteFromBelow({ previousPosition }) {
-    const { changeRoute } = this.props;
-    if (previousPosition === Waypoint.below) changeRoute();
+    const { changeRoute, next } = this.props;
+    if (next && previousPosition === Waypoint.below) changeRoute(next);
   }
 
   changeRouteFromAbove({ previousPosition }) {
-    const { changeRoute } = this.props;
-    if (previousPosition === Waypoint.above) changeRoute();
+    const { changeRoute, selected } = this.props;
+    if (previousPosition === Waypoint.above) changeRoute(selected);
   }
 
   render() {
     const { children, ssr, active } = this.props;
     return !ssr ? (
       <Fragment>
-        <Waypoint
-          onEnter={active ? this.changeRouteFromBelow : noop}
-          topOffset={0}
-          bottomOffset={600}
-          scrollableAncestor={window}
-        />
         {children}
         <Waypoint
           onEnter={active ? this.changeRouteFromAbove : noop}
           topOffset={600}
           bottomOffset={0}
+          scrollableAncestor={window}
+        />
+        <Waypoint
+          onEnter={active ? this.changeRouteFromBelow : noop}
+          topOffset={0}
+          bottomOffset={-1}
           scrollableAncestor={window}
         />
       </Fragment>
@@ -59,11 +61,11 @@ const mapStateToProps = state => ({
   ssr: dep('build', 'selectors', 'getSsr')(state),
 });
 
-const mapDispatchToProps = (dispatch, { selected, currentSelected, method }) => ({
-  changeRoute() {
+const mapDispatchToProps = (dispatch, { currentSelected, method }) => ({
+  changeRoute({ singleType, singleId }) {
     setTimeout(() => {
-      if (!isMatch(currentSelected, selected)) {
-        dispatch(routeChangeRequested({ selected, method }));
+      if (!isMatch(currentSelected, { singleType, singleId })) {
+        dispatch(routeChangeRequested({ selected: { singleType, singleId }, method }));
       }
     })
   },
@@ -71,8 +73,8 @@ const mapDispatchToProps = (dispatch, { selected, currentSelected, method }) => 
 
 export default inject(({ connection }, { selected }) => {
   const { context, selected: currentSelected } = connection;
-  const selectedColumn = context.getItem(selected).column;
+  const { column: selectedColumn, next } = context.getItem(selected);
   const method = selectedColumn === currentSelected.column ? 'replace' : 'push';
   const active = selectedColumn === context.column;
-  return { currentSelected, method, active };
+  return { currentSelected, next, method, active };
 })(connect(mapStateToProps, mapDispatchToProps)(RouteWaypoint));
