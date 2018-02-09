@@ -126,126 +126,88 @@ describe('Store › Custom', () => {
     expect(connection.custom('test').page(1).ready).toBe(false);
   });
 
-  // test('Check custom and page totals', () => {
-  // expect(connection.custom('test1')).toMatchSnapshot();
+  test('Ready should remain true even if new pages are fetched', () => {
+    expect(connection.custom('test').ready).toBe(false);
+    expect(connection.custom('test').page(1).ready).toBe(false);
+    expect(connection.custom('test').page(2).ready).toBe(false);
+    connection.addCustomPage({
+      name: 'test',
+      page: 1,
+      result: resultFromCategoryList,
+      entities: entitiesFromCategoryList,
+    });
+    expect(connection.custom('test').ready).toBe(true);
+    expect(connection.custom('test').page(1).ready).toBe(true);
+    expect(connection.custom('test').page(2).ready).toBe(false);
+    connection.fetchingCustomPage({ name: 'test', page: 2 });
+    expect(connection.custom('test').ready).toBe(true);
+    expect(connection.custom('test').page(1).ready).toBe(true);
+    expect(connection.custom('test').page(2).ready).toBe(false);
+  });
 
-  // // Views
-  // expect(connection.custom('test1').page[0].total).toBe(2);
-  // expect(connection.custom('test1').page[1].total).toBe(2);
-  // expect(connection.custom('test1').page[7].total).toBe(2);
-  // expect(connection.custom('test2').page[0].total).toBe(4);
-  // expect(connection.custom('test2').page[1].total).toBe(3);
-  //
-  // expect(connection.custom('test1').total.fetched.entities).toBe(6);
-  // expect(connection.custom('test1').total.fetched.pages).toBe(8);
-  // expect(connection.custom('test2').total.fetched.entities).toBe(7);
-  // expect(connection.custom('test2').total.fetched.pages).toBe(2);
-  // });
+  test('Fetching should go back to false when new pages are fetched', () => {
+    expect(connection.custom('test').fetching).toBe(false);
+    expect(connection.custom('test').page(1).fetching).toBe(false);
+    expect(connection.custom('test').page(2).fetching).toBe(false);
+    connection.fetchingCustomPage({ name: 'test', page: 1 });
+    expect(connection.custom('test').fetching).toBe(true);
+    expect(connection.custom('test').page(1).fetching).toBe(true);
+    connection.addCustomPage({
+      name: 'test',
+      page: 1,
+      result: resultFromCategoryList,
+      entities: entitiesFromCategoryList,
+    });
+    expect(connection.custom('test').fetching).toBe(false);
+    expect(connection.custom('test').page(1).fetching).toBe(false);
+    connection.fetchingCustomPage({ name: 'test', page: 2 });
+    expect(connection.custom('test').fetching).toBe(true);
+    expect(connection.custom('test').page(1).fetching).toBe(false);
+    expect(connection.custom('test').page(2).fetching).toBe(true);
+  });
 
-  // test('Check entities and page entities names', () => {
-  //   const testEntities = ({ entities }) => entities.forEach(e => expect(e).toMatchSnapshot());
-  //
-  //   testEntities(connection.custom('test1'));
-  //   testEntities(connection.custom('test2'));
-  //
-  //   testEntities(connection.custom('test1').page[0]);
-  //   testEntities(connection.custom('test1').page[7]);
-  //   testEntities(connection.custom('test2').page[0]);
-  //   testEntities(connection.custom('test2').page[1]);
-  // });
-  //
-  // test('Check CUSTOM_REQUESTED action', () => {
-  //   connection[actionTypes.CUSTOM_REQUESTED](
-  //     actions.customRequested({
-  //       url: '/pepe',
-  //       name: 'test',
-  //       singleType: 'category',
-  //       page: 1,
-  //       params: {},
-  //     }),
-  //   );
-  //   expect(connection.custom('test').url).toBe('/pepe');
-  //   expect(connection.custom('test').params).toEqual({});
-  //   expect(connection.custom('test').fetching).toBe(true);
-  //   expect(connection.custom('test').ready).toBe(false);
-  //   expect(connection.custom('test').page[0].fetching).toBe(true);
-  //   expect(connection.custom('test').page[0].ready).toBe(false);
-  //   expect(connection.custom('test').total.entities).toBe(null);
-  //   expect(connection.custom('test').total.fetched.entities).toBeNull();
-  //   expect(connection.custom('test').total.fetched.pages).toBe(1);
-  //   expect(connection.custom('test').total.pages).toBe(null);
-  //   expect(connection.custom('test').page[0].total).toBe(0);
-  // });
-  //
-  // test('Check CUSTOM_SUCCEED action', () => {
-  //   connection[actionTypes.CUSTOM_REQUESTED](
-  //     actions.customRequested({
-  //       url: '/pepe',
-  //       name: 'test',
-  //       singleType: 'category',
-  //       page: 1,
-  //       params: {},
-  //     }),
-  //   );
-  //   connection[actionTypes.CUSTOM_SUCCEED](
-  //     actions.customSucceed({
-  //       url: '/pepe',
-  //       name: 'test',
-  //       singleType: 'category',
-  //       page: 1,
-  //       total: {
-  //         entities: 7,
-  //         pages: 1,
-  //       },
-  //       result: [1, 3, 4, 5, 6, 7, 8],
-  //       entities: {
-  //         category: snapshot.singleMap.category,
-  //       },
-  //     }),
-  //   );
-  //   expect(connection.custom('test').fetching).toBe(false);
-  //   expect(connection.custom('test').ready).toBe(true);
-  //   expect(connection.custom('test').page[0].fetching).toBe(false);
-  //   expect(connection.custom('test').page[0].ready).toBe(true);
-  //   expect(connection.custom('test').total.entities).toBe(7);
-  //   expect(connection.custom('test').total.fetched.entities).toBe(7);
-  //   expect(connection.custom('test').total.fetched.pages).toBe(1);
-  //   expect(connection.custom('test').total.pages).toBe(1);
-  //   expect(connection.custom('test').page[0].total).toBe(7);
-  //   expect(connection.custom('test').entities[0].name).toBe('Weekend Trip');
-  //   expect(connection.custom('test').entities[6].name).toBe('Travel');
-  //   expect(connection.custom('test').page[0].entities[0].name).toBe('Weekend Trip');
-  //   expect(connection.custom('test').page[0].entities[6].name).toBe('Travel');
-  // });
-  //
-  // test('Check CUSTOM_FAILED action', () => {
-  //   connection[actionTypes.CUSTOM_REQUESTED](
-  //     actions.customRequested({
-  //       url: '/pepe',
-  //       name: 'test',
-  //       singleType: 'category',
-  //       page: 1,
-  //       params: {},
-  //     }),
-  //   );
-  //   connection[actionTypes.CUSTOM_FAILED](
-  //     actions.customFailed({
-  //       url: '/pepe',
-  //       name: 'test',
-  //       singleType: 'category',
-  //       page: 1,
-  //       error: new Error('Something went wrong!'),
-  //       endpoint: '/pepe',
-  //     }),
-  //   );
-  //   expect(connection.custom('test').fetching).toBe(false);
-  //   expect(connection.custom('test').ready).toBe(false);
-  //   expect(connection.custom('test').page[0].fetching).toBe(false);
-  //   expect(connection.custom('test').page[0].ready).toBe(false);
-  //   expect(connection.custom('test').total.entities).toBe(null);
-  //   expect(connection.custom('test').total.fetched.entities).toBeNull();
-  //   expect(connection.custom('test').total.fetched.pages).toBe(1);
-  //   expect(connection.custom('test').total.pages).toBe(null);
-  //   expect(connection.custom('test').page[0].total).toBe(0);
-  // });
+  test('Total shapes before and after initialization', () => {
+    expect(connection.custom('test').total.entities).toBe(null);
+    expect(connection.custom('test').total.pages).toBe(null);
+    expect(connection.custom('test').total.fetched.entities).toBe(null);
+    expect(connection.custom('test').total.fetched.pages).toBe(null);
+    expect(connection.custom('test').page(1).total).toBe(null);
+    connection.addCustomPage({
+      name: 'test',
+      page: 1,
+      result: resultFromCategoryList,
+      entities: entitiesFromCategoryList,
+      total: { entities: 6, pages: 2 },
+    });
+    expect(connection.custom('test').total.entities).toBe(6);
+    expect(connection.custom('test').total.pages).toBe(2);
+    expect(connection.custom('test').page(1).total).toBe(3);
+    expect(connection.custom('test').total.fetched.entities).toBe(3);
+    expect(connection.custom('test').total.fetched.pages).toBe(1);
+  });
+
+  test('Subscribe to totals', done => {
+    expect(connection.custom('test').total.entities).toBe(null);
+    expect(connection.custom('test').total.pages).toBe(null);
+    expect(connection.custom('test').total.fetched.entities).toBe(null);
+    expect(connection.custom('test').total.fetched.pages).toBe(null);
+    expect(connection.custom('test').page(1).total).toBe(null);
+    autorun(() => {
+      if (
+        connection.custom('test').total.entities === 6 &&
+        connection.custom('test').total.pages === 2 &&
+        connection.custom('test').page(1).total === 3 &&
+        connection.custom('test').total.fetched.entities === 3 &&
+        connection.custom('test').total.fetched.pages === 1
+      )
+        done();
+    });
+    connection.addCustomPage({
+      name: 'test',
+      page: 1,
+      result: resultFromCategoryList,
+      entities: entitiesFromCategoryList,
+      total: { entities: 6, pages: 2 },
+    });
+  });
 });
