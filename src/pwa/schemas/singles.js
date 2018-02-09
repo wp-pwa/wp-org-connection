@@ -37,7 +37,7 @@ single.define({
     author: [author],
     'wp:featuredmedia': [media],
     'wp:term': taxonomies,
-    up: single,
+    up: [single],
   },
 });
 

@@ -222,6 +222,78 @@ Object {
 }
 `;
 
+exports[`Convert a page with a embeded subpage using entity 1`] = `
+Object {
+  "_links": Object {
+    "about": Array [
+      Object {
+        "href": "https://androidayuda.com/wp-json/wp/v2/types/page",
+      },
+    ],
+    "author": Array [
+      Object {
+        "embeddable": true,
+        "href": "https://androidayuda.com/wp-json/wp/v2/users/2",
+      },
+    ],
+    "collection": Array [
+      Object {
+        "href": "https://androidayuda.com/wp-json/wp/v2/pages",
+      },
+    ],
+    "curies": Array [
+      Object {
+        "href": "https://api.w.org/{rel}",
+        "name": "wp",
+        "templated": true,
+      },
+    ],
+    "replies": Array [
+      Object {
+        "embeddable": true,
+        "href": "https://androidayuda.com/wp-json/wp/v2/comments?post=231",
+      },
+    ],
+    "self": Array [
+      Object {
+        "href": "https://androidayuda.com/wp-json/wp/v2/pages/231",
+      },
+    ],
+    "version-history": Array [
+      Object {
+        "href": "https://androidayuda.com/wp-json/wp/v2/pages/231/revisions",
+      },
+    ],
+    "wp:attachment": Array [
+      Object {
+        "href": "https://androidayuda.com/wp-json/wp/v2/media?parent=231",
+      },
+    ],
+  },
+  "author": 2,
+  "date": "2012-03-08T10:16:32",
+  "excerpt": Object {
+    "protected": false,
+    "rendered": "<p>A continuación puedes encontrar una selección de las mejores aplicaciones de Android gratuitas y de pago. Puedes elegir la categoría para seleccionar las &#8220;apps&#8221; que más te interesan. Recuerda que además puedes comentar tus impresiones y compartir las aplicaciones en las redes sociales.</p>
+",
+  },
+  "featured_media": 0,
+  "id": 231,
+  "link": "https://androidayuda.com/aplicaciones-android/",
+  "mst": "single",
+  "slug": "aplicaciones-android",
+  "title": Object {
+    "rendered": "Aplicaciones",
+  },
+  "type": "page",
+  "yoast_meta": Object {
+    "yoast_wpseo_canonical": "https://androidayuda.com/aplicaciones-android/",
+    "yoast_wpseo_metadesc": "Aplicaciones Android : descarga las mejores Apps para tu móvil o tablet Android. Seguridad, mensajería, utilidades, entretenimiento, fotografía",
+    "yoast_wpseo_title": "Aplicaciones de Android gratuitas - Las mejores aplicaciones Andriod gratis",
+  },
+}
+`;
+
 exports[`Convert a tag using entity 1`] = `
 Object {
   "_links": Object {
