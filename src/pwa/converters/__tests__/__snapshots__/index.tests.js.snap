@@ -189,9 +189,7 @@ Object {
   },
   "modificationDate": 1497610288000,
   "mst": "single",
-  "parent": Array [
-    231,
-  ],
+  "parent": 231,
   "slug": "seguridad",
   "target": undefined,
   "taxonomies": undefined,
@@ -251,7 +249,7 @@ Category: <a href=\\"https://demo.worona.org/wp-cat/travel/\\">Travel</a></p>
   },
   "modificationDate": 1510321906000,
   "mst": "single",
-  "parent": Array [],
+  "parent": undefined,
   "slug": "the-beauties-of-gullfoss",
   "target": undefined,
   "taxonomies": Object {
