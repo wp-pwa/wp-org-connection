@@ -36,7 +36,8 @@ test('Convert a media using entity', () => {
   expect(entities.media[2687]).toMatchSnapshot();
 });
 
-test('Convert a page with a embeded subpage using entity', () => {
+test('Convert a page using entity and ignore subpages', () => {
   const { entities } = normalize(page260, entity);
-  expect(entities.single[231]).toMatchSnapshot();
+  expect(entities.single[260]).toMatchSnapshot();
+  expect(entities.single[231]).toBe(undefined);
 });

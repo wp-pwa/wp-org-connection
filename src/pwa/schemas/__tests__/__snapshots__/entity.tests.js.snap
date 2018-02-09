@@ -222,8 +222,16 @@ Object {
 }
 `;
 
-exports[`Convert a page with a embeded subpage using entity 1`] = `
+exports[`Convert a page using entity and ignore subpages 1`] = `
 Object {
+  "_embedded": Object {
+    "author": Array [
+      2,
+    ],
+    "up": Array [
+      231,
+    ],
+  },
   "_links": Object {
     "about": Array [
       Object {
@@ -251,45 +259,71 @@ Object {
     "replies": Array [
       Object {
         "embeddable": true,
-        "href": "https://androidayuda.com/wp-json/wp/v2/comments?post=231",
+        "href": "https://androidayuda.com/wp-json/wp/v2/comments?post=260",
       },
     ],
     "self": Array [
       Object {
+        "href": "https://androidayuda.com/wp-json/wp/v2/pages/260",
+      },
+    ],
+    "up": Array [
+      Object {
+        "embeddable": true,
         "href": "https://androidayuda.com/wp-json/wp/v2/pages/231",
       },
     ],
     "version-history": Array [
       Object {
-        "href": "https://androidayuda.com/wp-json/wp/v2/pages/231/revisions",
+        "href": "https://androidayuda.com/wp-json/wp/v2/pages/260/revisions",
       },
     ],
     "wp:attachment": Array [
       Object {
-        "href": "https://androidayuda.com/wp-json/wp/v2/media?parent=231",
+        "href": "https://androidayuda.com/wp-json/wp/v2/media?parent=260",
       },
     ],
   },
   "author": 2,
-  "date": "2012-03-08T10:16:32",
+  "comment_status": "open",
+  "content": Object {
+    "protected": false,
+    "rendered": "<p>En esta sección hemos seleccionado las mejores aplicaciones para proteger a tu smartphone Android del malware y aplicaciones de dudosa procedencia. Con el aumento de dispositivos Android, el malware se ha multiplicado exponencialmente en los últimos meses. Es esencial proteger forma precisa el terminal para evitar sustos o problemas de seguridad.</p>
+",
+  },
+  "date": "2012-03-08T10:41:58",
+  "date_gmt": "2012-03-08T09:41:58",
   "excerpt": Object {
     "protected": false,
-    "rendered": "<p>A continuación puedes encontrar una selección de las mejores aplicaciones de Android gratuitas y de pago. Puedes elegir la categoría para seleccionar las &#8220;apps&#8221; que más te interesan. Recuerda que además puedes comentar tus impresiones y compartir las aplicaciones en las redes sociales.</p>
+    "rendered": "<p>En esta sección hemos seleccionado las mejores aplicaciones para proteger a tu smartphone Android del malware y aplicaciones de dudosa procedencia. Con el aumento de dispositivos Android, el malware se ha multiplicado exponencialmente en los últimos meses. Es esencial proteger forma precisa el terminal para evitar sustos o problemas de seguridad.</p>
 ",
   },
   "featured_media": 0,
-  "id": 231,
-  "link": "https://androidayuda.com/aplicaciones-android/",
+  "guid": Object {
+    "rendered": "http://androidayuda.com/?page_id=260",
+  },
+  "id": 260,
+  "link": "https://androidayuda.com/aplicaciones-android/seguridad/",
+  "menu_order": 0,
+  "meta": Object {
+    "amp_status": "",
+  },
+  "modified": "2017-06-16T12:51:28",
+  "modified_gmt": "2017-06-16T10:51:28",
   "mst": "single",
-  "slug": "aplicaciones-android",
+  "parent": 231,
+  "ping_status": "open",
+  "slug": "seguridad",
+  "status": "publish",
+  "template": "template-apps-category-index.php",
   "title": Object {
-    "rendered": "Aplicaciones",
+    "rendered": "Seguridad",
   },
   "type": "page",
   "yoast_meta": Object {
-    "yoast_wpseo_canonical": "https://androidayuda.com/aplicaciones-android/",
-    "yoast_wpseo_metadesc": "Aplicaciones Android : descarga las mejores Apps para tu móvil o tablet Android. Seguridad, mensajería, utilidades, entretenimiento, fotografía",
-    "yoast_wpseo_title": "Aplicaciones de Android gratuitas - Las mejores aplicaciones Andriod gratis",
+    "yoast_wpseo_canonical": "https://androidayuda.com/aplicaciones-android/seguridad/",
+    "yoast_wpseo_metadesc": "Aplicaciones de seguridad para Android. Descarga los mejores antivirus y apps para proteger tu smartphone o tablet Android",
+    "yoast_wpseo_title": "Aplicaciones para proteger móvil Android | Aplicaciones de seguridad",
   },
 }
 `;

@@ -26,6 +26,9 @@ export const single = new schema.Entity(
             }),
           );
         }
+        if (entity._embedded.up) {
+          entity._embedded.up = entity._embedded.up.map(page => page.id);
+        }
       }
       return result;
     },
@@ -37,7 +40,6 @@ single.define({
     author: [author],
     'wp:featuredmedia': [media],
     'wp:term': taxonomies,
-    up: [single],
   },
 });
 
