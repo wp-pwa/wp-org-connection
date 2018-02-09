@@ -19,7 +19,7 @@ class RouteWaypoint extends Component {
 
   static defaultProps = {
     next: null,
-  }
+  };
 
   constructor(props) {
     super(props);
@@ -48,14 +48,15 @@ class RouteWaypoint extends Component {
     const { show } = this.state;
 
     if (ssr) return [children];
-    if (!show) return [
-      <Waypoint
-        key="showChildren"
-        scrollableAncestor={window}
-        offsetBottom={-300}
-        onEnter={this.showChildren}
-      />,
-    ];
+    if (!show)
+      return [
+        <Waypoint
+          key="showChildren"
+          scrollableAncestor={window}
+          offsetBottom={-300}
+          onEnter={this.showChildren}
+        />,
+      ];
 
     return [
       children,
