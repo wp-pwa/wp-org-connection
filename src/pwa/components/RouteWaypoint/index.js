@@ -1,4 +1,4 @@
-import React, { Component, Fragment } from 'react';
+import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import Waypoint from 'react-waypoint';
 import { connect } from 'react-redux';
@@ -19,8 +19,14 @@ class RouteWaypoint extends Component {
 
   constructor(props) {
     super(props);
+    this.state = { show: this.props.ssr };
+    this.showChildren = this.showChildren.bind(this);
     this.changeRouteFromBelow = this.changeRouteFromBelow.bind(this);
     this.changeRouteFromAbove = this.changeRouteFromAbove.bind(this);
+  }
+
+  showChildren() {
+    this.setState({ show: true });
   }
 
   changeRouteFromBelow({ previousPosition }) {
@@ -35,25 +41,35 @@ class RouteWaypoint extends Component {
 
   render() {
     const { children, ssr, active } = this.props;
-    return !ssr ? (
-      <Fragment>
-        {children}
-        <Waypoint
-          onEnter={active ? this.changeRouteFromAbove : noop}
-          topOffset={600}
-          bottomOffset={0}
-          scrollableAncestor={window}
-        />
-        <Waypoint
-          onEnter={active ? this.changeRouteFromBelow : noop}
-          topOffset={0}
-          bottomOffset={-1}
-          scrollableAncestor={window}
-        />
-      </Fragment>
-    ) : (
-      children
-    );
+    const { show } = this.state;
+
+    if (ssr) return [children];
+    if (!show) return [
+      <Waypoint
+        key="showChildren"
+        scrollableAncestor={window}
+        offsetBottom={-300}
+        onEnter={this.showChildren}
+      />,
+    ];
+
+    return [
+      children,
+      <Waypoint
+        key="changeRouteFromAbove"
+        onEnter={active ? this.changeRouteFromAbove : noop}
+        topOffset={600}
+        bottomOffset={0}
+        scrollableAncestor={window}
+      />,
+      <Waypoint
+        key="changeRouteFromBelow"
+        onEnter={active ? this.changeRouteFromBelow : noop}
+        topOffset={0}
+        bottomOffset={600}
+        scrollableAncestor={window}
+      />,
+    ];
   }
 }
 
@@ -67,7 +83,7 @@ const mapDispatchToProps = (dispatch, { currentSelected, method }) => ({
       if (!isMatch(currentSelected, { singleType, singleId })) {
         dispatch(routeChangeRequested({ selected: { singleType, singleId }, method }));
       }
-    })
+    });
   },
 });
 
