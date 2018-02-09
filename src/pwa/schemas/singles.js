@@ -26,6 +26,9 @@ export const single = new schema.Entity(
             }),
           );
         }
+        if (entity.parent) {
+          result.parent = `${entity.type}_${entity.parent}`;
+        }
       }
       return result;
     },
