@@ -80,6 +80,7 @@ export const singleShape = (type, id) => ({
   author: authorShape('author'),
   target: '',
   meta: metaShape,
+  parent: null,
   ...common(type, id),
 });
 

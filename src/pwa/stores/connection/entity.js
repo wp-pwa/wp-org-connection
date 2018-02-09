@@ -47,6 +47,12 @@ const single = self => ({
   get target() {
     return self.ready ? self.entity.target : '';
   },
+  get parent() {
+    return self.ready && self.entity.parent
+      ? resolveIdentifier(Entity, self, join(self.type, self.entity.parent)) ||
+          entityShape(self.type, self.entity.parent)
+      : null;
+  },
   taxonomy(type) {
     return self.ready && self.entity.taxonomies && self.entity.taxonomies[type]
       ? self.entity.taxonomies[type].map(

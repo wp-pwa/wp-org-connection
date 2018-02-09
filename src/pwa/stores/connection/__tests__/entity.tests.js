@@ -4,6 +4,8 @@ import { types, unprotect } from 'mobx-state-tree';
 import { normalize } from 'normalizr';
 import * as connect from '../';
 import post60 from '../../../__tests__/post-60.json';
+import page260 from '../../../__tests__/page-with-subpage.json';
+import page231 from '../../../__tests__/page-231.json';
 import { entity } from '../../../schemas';
 import convert from '../../../converters';
 
@@ -287,5 +289,20 @@ describe('Store › Entity', () => {
     expect(connection.entity('media', 62).sizes).toEqual([]);
     expect(connection.entity('post', 60).featured.ready).toBe(false);
     expect(connection.entity('post', 60).featured.sizes).toEqual([]);
+  });
+
+  test('Get parent page', done => {
+    expect(connection.entity('page', 260).parent).toBe(null);
+    const { entities: entitiesFromPage260 } = normalize(page260, entity);
+    connection.addEntity({ entity: entitiesFromPage260.single[260] });
+    expect(connection.entity('page', 260).parent.id).toBe(231);
+    expect(connection.entity('page', 260).parent.title).toBe('');
+    autorun(() => {
+      if (connection.entity('page', 260).parent.title === 'Aplicaciones') done();
+    });
+    const { entities: entitiesFromPage231 } = normalize(page231, entity);
+    connection.addEntity({ entity: entitiesFromPage231.single[231] });
+    expect(connection.entity('page', 260).parent.id).toBe(231);
+    expect(connection.entity('page', 260).parent.title).toBe('Aplicaciones');
   });
 });

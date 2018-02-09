@@ -84,6 +84,7 @@ Object {
     "width": null,
   },
   "pagedLink": [Function],
+  "parent": null,
   "ready": false,
   "sizes": Array [],
   "slug": "",
