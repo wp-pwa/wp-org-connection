@@ -13,6 +13,7 @@ class RouteWaypoint extends Component {
     ssr: PropTypes.bool.isRequired,
     active: PropTypes.bool.isRequired,
     selected: PropTypes.shape({}).isRequired,
+    currentSelected: PropTypes.shape({}).isRequired,
     next: PropTypes.shape({}),
     changeRoute: PropTypes.func.isRequired,
   };
@@ -23,7 +24,8 @@ class RouteWaypoint extends Component {
 
   constructor(props) {
     super(props);
-    this.state = { show: this.props.ssr };
+    const { ssr, currentSelected, selected } = this.props;
+    this.state = { show: ssr || isMatch(currentSelected, selected) };
     this.showChildren = this.showChildren.bind(this);
     this.changeRouteFromBelow = this.changeRouteFromBelow.bind(this);
     this.changeRouteFromAbove = this.changeRouteFromAbove.bind(this);
