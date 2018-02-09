@@ -13,9 +13,13 @@ class RouteWaypoint extends Component {
     ssr: PropTypes.bool.isRequired,
     active: PropTypes.bool.isRequired,
     selected: PropTypes.shape({}).isRequired,
-    next: PropTypes.shape({}).isRequired,
+    next: PropTypes.shape({}),
     changeRoute: PropTypes.func.isRequired,
   };
+
+  static defaultProps = {
+    next: null,
+  }
 
   constructor(props) {
     super(props);
@@ -31,7 +35,7 @@ class RouteWaypoint extends Component {
 
   changeRouteFromBelow({ previousPosition }) {
     const { changeRoute, next } = this.props;
-    if (next && previousPosition === Waypoint.below) changeRoute(next);
+    if (previousPosition === Waypoint.below) changeRoute(next);
   }
 
   changeRouteFromAbove({ previousPosition }) {
@@ -40,7 +44,7 @@ class RouteWaypoint extends Component {
   }
 
   render() {
-    const { children, ssr, active } = this.props;
+    const { children, ssr, active, next } = this.props;
     const { show } = this.state;
 
     if (ssr) return [children];
@@ -64,7 +68,7 @@ class RouteWaypoint extends Component {
       />,
       <Waypoint
         key="changeRouteFromBelow"
-        onEnter={active ? this.changeRouteFromBelow : noop}
+        onEnter={active && next ? this.changeRouteFromBelow : noop}
         topOffset={0}
         bottomOffset={600}
         scrollableAncestor={window}
