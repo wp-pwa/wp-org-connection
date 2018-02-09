@@ -1,53 +1,41 @@
-import { types } from 'mobx-state-tree';
-import { Total } from './list';
-import { Any } from './single';
-
-const Page = types
-  .model('Page')
-  .props({
-    entities: types.optional(types.array(types.reference(Any)), []),
-    fetching: types.optional(types.boolean, false),
-    ready: types.optional(types.boolean, false),
-  })
-  .views(self => ({
-    get total() {
-      return self.entities.length || 0;
-    },
-  }));
+import { types, resolveIdentifier, getSnapshot } from 'mobx-state-tree';
+import { flatten } from 'lodash';
+import Entity from './entity';
+import { Total, Page } from './list';
+import { pageShape } from './list-shape';
 
 const Custom = types
   .model('Custom')
   .props({
+    name: types.identifier(types.string),
     pageMap: types.optional(types.map(Page), {}),
     total: types.optional(Total, {}),
-    fetching: types.optional(types.boolean, false),
-    ready: types.optional(types.boolean, false),
     url: types.optional(types.string, '/'),
     params: types.optional(types.frozen, {}),
   })
-  .views(self => {
-    const pages = [];
-    const entities = [];
-    return {
-      // Maps pageMap and returns an array of pages.
-      get page() {
-        self.pageMap.keys().forEach(key => {
-          pages[key] = self.pageMap.get(key);
-        });
-        return pages;
-      },
-      // Maps page array and retuns an array of all entities
-      get entities() {
-        let index = 0;
-        self.page.forEach(page => {
-          page.entities.forEach(result => {
-            entities[index] = result;
-            index += 1;
-          });
-        });
-        return entities;
-      },
-    };
-  });
+  .views(self => ({
+    get ready() {
+      return self.pageMap
+        .values()
+        .map(page => page.ready)
+        .reduce((acc, cur) => acc || cur, false);
+    },
+    get fetching() {
+      return self.pageMap
+        .values()
+        .map(page => page.fetching)
+        .reduce((acc, cur) => acc || cur, false);
+    },
+    get entities() {
+      const mstIds = flatten(self.pages.map(page => getSnapshot(page.entities)));
+      return mstIds.map(mstId => resolveIdentifier(Entity, self, mstId));
+    },
+    page(page) {
+      return self.pageMap.get(page) || pageShape;
+    },
+    get pages() {
+      return self.pageMap.values();
+    },
+  }));
 
-export { Custom, Page };
+export default Custom;

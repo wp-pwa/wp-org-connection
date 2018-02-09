@@ -1,98 +1,97 @@
 /* eslint-disable no-underscore-dangle */
 import { decode } from 'he';
 
-export const post = entity => ({
+export const single = entity => ({
+  mst: 'single',
   id: entity.id,
   type: entity.type,
   creationDate: new Date(entity.date).getTime(),
   modificationDate: new Date(entity.modified).getTime(),
   title: entity.title.rendered,
   slug: entity.slug,
-  _link: entity.link,
-  guid: entity.guid.rendered,
+  link: entity.link,
   content: entity.content.rendered,
   excerpt: entity.excerpt.rendered,
   author: entity.author,
-  featured: entity.featured_media,
-  taxonomiesMap: entity.taxonomiesMap,
+  featured: entity.featured_media || null,
+  taxonomies: entity.taxonomiesMap,
+  parent: entity.parent,
   target: entity['post-target'],
   meta: {
     title: decode(
-      (entity.yoast_meta && entity.yoast_meta.yoast_wpseo_title) || entity.title.rendered
+      (entity.yoast_meta && entity.yoast_meta.yoast_wpseo_title) || entity.title.rendered,
     ),
-    description: entity.yoast_meta && entity.yoast_meta.yoast_wpseo_desc,
-    pretty: true
-  }
+    description: (entity.yoast_meta && entity.yoast_meta.yoast_wpseo_desc) || '',
+    canonical: (entity.yoast_meta && entity.yoast_meta.yoast_wpseo_canonical) || '',
+  },
 });
 
 export const taxonomy = entity => ({
+  mst: 'taxonomy',
   id: entity.id,
   name: entity.name,
   slug: entity.slug,
-  _link: entity.link,
-  taxonomy: entity.taxonomy,
+  link: entity.link,
+  type: entity.type,
   target: entity['term-target'],
   meta: {
-    title: decode((entity.yoast_meta && entity.yoast_meta.yoast_wpseo_title) || entity.name),
-    description: entity.yoast_meta && entity.yoast_meta.yoast_wpseo_desc,
-    pretty: true
-  }
+    title: (entity.yoast_meta && entity.yoast_meta.yoast_wpseo_title) || entity.name,
+    description: (entity.yoast_meta && entity.yoast_meta.yoast_wpseo_desc) || '',
+    canonical: (entity.yoast_meta && entity.yoast_meta.yoast_wpseo_canonical) || '',
+  },
 });
 
 export const author = entity => ({
+  mst: 'author',
+  type: 'author',
   id: entity.id,
   name: entity.name,
   slug: entity.slug,
   description: entity.description,
-  _link: entity.link,
-  avatar: entity.avatar_urls && Object.values(entity.avatar_urls)[0].replace(/\?.*$/, '')
+  link: entity.link,
+  avatar: entity.avatar_urls && Object.values(entity.avatar_urls)[0].replace(/\?.*$/, ''),
 });
 
-export const media = entity => {
-  if (entity.error)
-    return {
-      id: parseInt(entity.id, 10),
-      error: entity.error
-    };
-
-  return {
-    id: entity.id,
-    creationDate: new Date(entity.date).getTime(),
-    slug: entity.slug,
-    alt: entity.alt_text,
-    mimeType: entity.mime_type,
-    mediaType: entity.media_type,
-    title: entity.title.rendered,
-    author: entity.author,
-    _link: entity.link,
-    meta: {
-      title: decode(
-        (entity.yoast_meta && entity.yoast_meta.yoast_wpseo_title) || entity.title.rendered
-      ),
-      description: entity.yoast_meta && entity.yoast_meta.yoast_wpseo_desc,
-      pretty: true
-    },
-    original: {
-      height: parseInt(entity.media_details.height, 10),
-      width: parseInt(entity.media_details.width, 10),
-      filename: entity.media_details.file,
-      url: entity.source_url
-    },
-    sizes:
-      entity.media_details.sizes &&
-      Object.values(entity.media_details.sizes).map(image => ({
-        height: parseInt(image.height, 10),
-        width: parseInt(image.width, 10),
-        filename: image.file,
-        url: image.source_url
-      }))
-  };
-};
+export const media = entity => ({
+  mst: 'media',
+  id: entity.id,
+  type: 'media',
+  creationDate: new Date(entity.date).getTime(),
+  slug: entity.slug,
+  alt: entity.alt_text,
+  link: entity.link,
+  mimeType: entity.mime_type,
+  mediaType: entity.media_type,
+  title: entity.title.rendered,
+  description: entity.description && entity.description.rendered,
+  caption: entity.caption && entity.caption.rendered,
+  author: entity.author,
+  meta: {
+    title: decode(
+      (entity.yoast_meta && entity.yoast_meta.yoast_wpseo_title) || entity.title.rendered,
+    ),
+    description: (entity.yoast_meta && entity.yoast_meta.yoast_wpseo_desc) || '',
+    canonical: (entity.yoast_meta && entity.yoast_meta.yoast_wpseo_canonical) || '',
+  },
+  original: {
+    height: entity.media_details.height,
+    width: entity.media_details.width,
+    filename: entity.media_details.file,
+    url: entity.source_url,
+  },
+  sizes:
+    entity.media_details.sizes &&
+    Object.values(entity.media_details.sizes).map(image => ({
+      height: image.height,
+      width: image.width,
+      filename: image.file,
+      url: image.source_url,
+    })),
+});
 
 export default entity => {
-  if (entity.error && entity.type === 'media') return media(entity);
-  else if (entity.media_details) return media(entity);
-  else if (entity.taxonomy) return taxonomy(entity);
-  else if (entity.name) return author(entity);
-  return post(entity);
+  if (entity.mst === 'media') return media(entity);
+  else if (entity.mst === 'taxonomy') return taxonomy(entity);
+  else if (entity.mst === 'author') return author(entity);
+  return single(entity);
 };

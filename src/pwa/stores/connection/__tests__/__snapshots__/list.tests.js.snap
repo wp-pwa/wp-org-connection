@@ -1,108 +1,40 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`Store › List Add list. Request and succeed 1`] = `
+exports[`Store › List Get list snapshot when entity is not ready 1`] = `
 Object {
-  "fetching": true,
-  "pageMap": Object {
-    "2": Object {
-      "entities": Array [],
-      "fetching": true,
-      "ready": false,
+  "entities": Array [],
+  "entity": Object {
+    "avatar": "",
+    "description": "",
+    "fetching": false,
+    "id": 7,
+    "link": "/?cat=7",
+    "meta": Object {
+      "canonical": "",
+      "description": "",
+      "title": "",
     },
+    "mstId": "category_7",
+    "name": "",
+    "pagedLink": [Function],
+    "ready": false,
+    "slug": "",
+    "target": "",
+    "type": "category",
   },
+  "fetching": false,
+  "id": 7,
+  "page": [Function],
+  "pages": Array [],
   "ready": false,
   "total": Object {
     "entities": null,
+    "fetched": Object {
+      "entities": null,
+      "pages": null,
+    },
     "pages": null,
   },
-}
-`;
-
-exports[`Store › List Add list. Request and succeed 2`] = `
-Object {
-  "fetching": false,
-  "pageMap": Object {
-    "2": Object {
-      "entities": Array [
-        60,
-      ],
-      "fetching": false,
-      "ready": true,
-    },
-  },
-  "ready": true,
-  "total": Object {
-    "entities": 250,
-    "pages": 25,
-  },
-}
-`;
-
-exports[`Store › List Check lists totals 1`] = `
-Object {
-  "fetching": false,
-  "pageMap": Object {
-    "0": Object {
-      "entities": Array [
-        60,
-        61,
-        62,
-        63,
-      ],
-      "fetching": false,
-      "ready": false,
-    },
-    "1": Object {
-      "entities": Array [
-        64,
-        65,
-        66,
-      ],
-      "fetching": false,
-      "ready": false,
-    },
-  },
-  "ready": false,
-  "total": Object {
-    "entities": 17,
-    "pages": 5,
-  },
-}
-`;
-
-exports[`Store › List Retrieve list items 1`] = `
-Object {
-  "fetching": false,
-  "pageMap": Object {
-    "0": Object {
-      "entities": Array [
-        60,
-        61,
-      ],
-      "fetching": false,
-      "ready": false,
-    },
-    "1": Object {
-      "entities": Array [
-        62,
-        63,
-      ],
-      "fetching": false,
-      "ready": false,
-    },
-    "8": Object {
-      "entities": Array [
-        60,
-        63,
-      ],
-      "fetching": false,
-      "ready": false,
-    },
-  },
-  "ready": false,
-  "total": Object {
-    "entities": null,
-    "pages": null,
-  },
+  "type": "category",
 }
 `;

@@ -1,0 +1,904 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Convert a author using entity 1`] = `
+Object {
+  "_links": Object {
+    "collection": Array [
+      Object {
+        "href": "https://demo.worona.org/wp-json/wp/v2/users",
+      },
+    ],
+    "self": Array [
+      Object {
+        "href": "https://demo.worona.org/wp-json/wp/v2/users/4",
+      },
+    ],
+  },
+  "avatar_urls": Object {
+    "24": "https://secure.gravatar.com/avatar/eebc7d67bdc645559fd6634e0335a42b?s=24&d=mm&r=g",
+    "48": "https://secure.gravatar.com/avatar/eebc7d67bdc645559fd6634e0335a42b?s=48&d=mm&r=g",
+    "96": "https://secure.gravatar.com/avatar/eebc7d67bdc645559fd6634e0335a42b?s=96&d=mm&r=g",
+  },
+  "description": "Alan is a WordPress enthusiast who enjoys travelling, music and pizza.",
+  "id": 4,
+  "link": "https://demo.worona.org/author/alan/",
+  "meta": Object {},
+  "mst": "author",
+  "name": "Alan Martin",
+  "slug": "alan",
+  "type": "author",
+  "url": "",
+}
+`;
+
+exports[`Convert a category using entity 1`] = `
+Object {
+  "_links": Object {
+    "about": Array [
+      Object {
+        "href": "https://demo.worona.org/wp-json/wp/v2/taxonomies/category",
+      },
+    ],
+    "collection": Array [
+      Object {
+        "href": "https://demo.worona.org/wp-json/wp/v2/categories",
+      },
+    ],
+    "curies": Array [
+      Object {
+        "href": "https://api.w.org/{rel}",
+        "name": "wp",
+        "templated": true,
+      },
+    ],
+    "self": Array [
+      Object {
+        "href": "https://demo.worona.org/wp-json/wp/v2/categories/7",
+      },
+    ],
+    "wp:post_type": Array [
+      Object {
+        "href": "https://demo.worona.org/wp-json/wp/v2/posts?categories=7",
+      },
+    ],
+  },
+  "count": 10,
+  "description": "",
+  "id": 7,
+  "link": "https://demo.worona.org/wp-cat/nature/",
+  "meta": Object {},
+  "mst": "taxonomy",
+  "name": "Nature",
+  "parent": 0,
+  "slug": "nature",
+  "taxonomy": "category",
+  "type": "category",
+  "yoast_meta": Object {
+    "yoast_wpseo_metadesc": "",
+    "yoast_wpseo_title": "Nature Archives - Demo Worona",
+  },
+}
+`;
+
+exports[`Convert a media using entity 1`] = `
+Object {
+  "_embedded": Object {
+    "author": Array [
+      6,
+    ],
+  },
+  "_links": Object {
+    "about": Array [
+      Object {
+        "href": "https://blog.worona.org/wp-json/wp/v2/types/attachment",
+      },
+    ],
+    "author": Array [
+      Object {
+        "embeddable": true,
+        "href": "https://blog.worona.org/wp-json/wp/v2/users/6",
+      },
+    ],
+    "collection": Array [
+      Object {
+        "href": "https://blog.worona.org/wp-json/wp/v2/media",
+      },
+    ],
+    "replies": Array [
+      Object {
+        "embeddable": true,
+        "href": "https://blog.worona.org/wp-json/wp/v2/comments?post=2687",
+      },
+    ],
+    "self": Array [
+      Object {
+        "href": "https://blog.worona.org/wp-json/wp/v2/media/2687",
+      },
+    ],
+  },
+  "alt_text": "faq-questions-answers",
+  "author": 6,
+  "caption": Object {
+    "rendered": "<a href=\\"https://blog.worona.org/the-google-amp-phenomenon/faq-questions-answers/\\" rel=\\"bookmark\\" title=\\"Permalink to faq-questions-answers\\"></a>",
+  },
+  "comment_status": "open",
+  "date": "2018-01-15T16:12:44",
+  "date_gmt": "2018-01-15T16:12:44",
+  "description": Object {
+    "rendered": "<p class=\\"attachment\\"><a href='https://blog.worona.org/wp-content/uploads/2016/03/faq-questions-answers.jpg'><img width=\\"300\\" height=\\"177\\" src=\\"https://blog.worona.org/wp-content/uploads/2016/03/faq-questions-answers-300x177.jpg\\" class=\\"attachment-medium size-medium\\" alt=\\"faq-questions-answers\\" srcset=\\"https://blog.worona.org/wp-content/uploads/2016/03/faq-questions-answers-300x177.jpg 300w, https://blog.worona.org/wp-content/uploads/2016/03/faq-questions-answers-768x452.jpg 768w, https://blog.worona.org/wp-content/uploads/2016/03/faq-questions-answers-1024x603.jpg 1024w, https://blog.worona.org/wp-content/uploads/2016/03/faq-questions-answers-700x412.jpg 700w\\" sizes=\\"(max-width: 300px) 100vw, 300px\\" /></a></p>
+",
+  },
+  "guid": Object {
+    "rendered": "https://blog.worona.org/wp-content/uploads/2016/03/faq-questions-answers.jpg",
+  },
+  "id": 2687,
+  "link": "https://blog.worona.org/the-google-amp-phenomenon/faq-questions-answers/",
+  "media_details": Object {
+    "file": "2016/03/faq-questions-answers.jpg",
+    "height": 1088,
+    "image_meta": Object {
+      "aperture": "0",
+      "camera": "",
+      "caption": "",
+      "copyright": "",
+      "created_timestamp": "0",
+      "credit": "",
+      "focal_length": "0",
+      "iso": "0",
+      "keywords": Array [],
+      "orientation": "0",
+      "shutter_speed": "0",
+      "title": "",
+    },
+    "sizes": Object {
+      "full": Object {
+        "file": "faq-questions-answers.jpg",
+        "height": 1088,
+        "mime_type": "image/jpeg",
+        "source_url": "https://blog.worona.org/wp-content/uploads/2016/03/faq-questions-answers.jpg",
+        "width": 1848,
+      },
+      "independent_publisher_post_thumbnail": Object {
+        "file": "faq-questions-answers-700x412.jpg",
+        "height": 412,
+        "mime_type": "image/jpeg",
+        "source_url": "https://blog.worona.org/wp-content/uploads/2016/03/faq-questions-answers-700x412.jpg",
+        "width": 700,
+      },
+      "large": Object {
+        "file": "faq-questions-answers-1024x603.jpg",
+        "height": 603,
+        "mime_type": "image/jpeg",
+        "source_url": "https://blog.worona.org/wp-content/uploads/2016/03/faq-questions-answers-1024x603.jpg",
+        "width": 1024,
+      },
+      "medium": Object {
+        "file": "faq-questions-answers-300x177.jpg",
+        "height": 177,
+        "mime_type": "image/jpeg",
+        "source_url": "https://blog.worona.org/wp-content/uploads/2016/03/faq-questions-answers-300x177.jpg",
+        "width": 300,
+      },
+      "medium_large": Object {
+        "file": "faq-questions-answers-768x452.jpg",
+        "height": 452,
+        "mime_type": "image/jpeg",
+        "source_url": "https://blog.worona.org/wp-content/uploads/2016/03/faq-questions-answers-768x452.jpg",
+        "width": 768,
+      },
+      "shareaholic-thumbnail": Object {
+        "file": "faq-questions-answers-300x177.jpg",
+        "height": 177,
+        "mime_type": "image/jpeg",
+        "source_url": "https://blog.worona.org/wp-content/uploads/2016/03/faq-questions-answers-300x177.jpg",
+        "width": 300,
+      },
+      "thumbnail": Object {
+        "file": "faq-questions-answers-150x150.jpg",
+        "height": 150,
+        "mime_type": "image/jpeg",
+        "source_url": "https://blog.worona.org/wp-content/uploads/2016/03/faq-questions-answers-150x150.jpg",
+        "width": 150,
+      },
+    },
+    "width": 1848,
+  },
+  "media_type": "image",
+  "meta": Array [],
+  "mime_type": "image/jpeg",
+  "modified": "2018-01-15T16:12:50",
+  "modified_gmt": "2018-01-15T16:12:50",
+  "mst": "media",
+  "ping_status": "closed",
+  "post": 875,
+  "slug": "faq-questions-answers",
+  "source_url": "https://blog.worona.org/wp-content/uploads/2016/03/faq-questions-answers.jpg",
+  "status": "inherit",
+  "template": "",
+  "title": Object {
+    "rendered": "faq-questions-answers",
+  },
+  "type": "media",
+}
+`;
+
+exports[`Convert a page using entity and ignore subpages 1`] = `
+Object {
+  "_embedded": Object {
+    "author": Array [
+      2,
+    ],
+    "up": Array [
+      Object {
+        "_links": Object {
+          "about": Array [
+            Object {
+              "href": "https://androidayuda.com/wp-json/wp/v2/types/page",
+            },
+          ],
+          "author": Array [
+            Object {
+              "embeddable": true,
+              "href": "https://androidayuda.com/wp-json/wp/v2/users/2",
+            },
+          ],
+          "collection": Array [
+            Object {
+              "href": "https://androidayuda.com/wp-json/wp/v2/pages",
+            },
+          ],
+          "curies": Array [
+            Object {
+              "href": "https://api.w.org/{rel}",
+              "name": "wp",
+              "templated": true,
+            },
+          ],
+          "replies": Array [
+            Object {
+              "embeddable": true,
+              "href": "https://androidayuda.com/wp-json/wp/v2/comments?post=231",
+            },
+          ],
+          "self": Array [
+            Object {
+              "href": "https://androidayuda.com/wp-json/wp/v2/pages/231",
+            },
+          ],
+          "version-history": Array [
+            Object {
+              "href": "https://androidayuda.com/wp-json/wp/v2/pages/231/revisions",
+            },
+          ],
+          "wp:attachment": Array [
+            Object {
+              "href": "https://androidayuda.com/wp-json/wp/v2/media?parent=231",
+            },
+          ],
+        },
+        "author": 2,
+        "date": "2012-03-08T10:16:32",
+        "excerpt": Object {
+          "protected": false,
+          "rendered": "<p>A continuación puedes encontrar una selección de las mejores aplicaciones de Android gratuitas y de pago. Puedes elegir la categoría para seleccionar las &#8220;apps&#8221; que más te interesan. Recuerda que además puedes comentar tus impresiones y compartir las aplicaciones en las redes sociales.</p>
+",
+        },
+        "featured_media": 0,
+        "id": 231,
+        "link": "https://androidayuda.com/aplicaciones-android/",
+        "slug": "aplicaciones-android",
+        "title": Object {
+          "rendered": "Aplicaciones",
+        },
+        "type": "page",
+        "yoast_meta": Object {
+          "yoast_wpseo_canonical": "https://androidayuda.com/aplicaciones-android/",
+          "yoast_wpseo_metadesc": "Aplicaciones Android : descarga las mejores Apps para tu móvil o tablet Android. Seguridad, mensajería, utilidades, entretenimiento, fotografía",
+          "yoast_wpseo_title": "Aplicaciones de Android gratuitas - Las mejores aplicaciones Andriod gratis",
+        },
+      },
+    ],
+  },
+  "_links": Object {
+    "about": Array [
+      Object {
+        "href": "https://androidayuda.com/wp-json/wp/v2/types/page",
+      },
+    ],
+    "author": Array [
+      Object {
+        "embeddable": true,
+        "href": "https://androidayuda.com/wp-json/wp/v2/users/2",
+      },
+    ],
+    "collection": Array [
+      Object {
+        "href": "https://androidayuda.com/wp-json/wp/v2/pages",
+      },
+    ],
+    "curies": Array [
+      Object {
+        "href": "https://api.w.org/{rel}",
+        "name": "wp",
+        "templated": true,
+      },
+    ],
+    "replies": Array [
+      Object {
+        "embeddable": true,
+        "href": "https://androidayuda.com/wp-json/wp/v2/comments?post=260",
+      },
+    ],
+    "self": Array [
+      Object {
+        "href": "https://androidayuda.com/wp-json/wp/v2/pages/260",
+      },
+    ],
+    "up": Array [
+      Object {
+        "embeddable": true,
+        "href": "https://androidayuda.com/wp-json/wp/v2/pages/231",
+      },
+    ],
+    "version-history": Array [
+      Object {
+        "href": "https://androidayuda.com/wp-json/wp/v2/pages/260/revisions",
+      },
+    ],
+    "wp:attachment": Array [
+      Object {
+        "href": "https://androidayuda.com/wp-json/wp/v2/media?parent=260",
+      },
+    ],
+  },
+  "author": 2,
+  "comment_status": "open",
+  "content": Object {
+    "protected": false,
+    "rendered": "<p>En esta sección hemos seleccionado las mejores aplicaciones para proteger a tu smartphone Android del malware y aplicaciones de dudosa procedencia. Con el aumento de dispositivos Android, el malware se ha multiplicado exponencialmente en los últimos meses. Es esencial proteger forma precisa el terminal para evitar sustos o problemas de seguridad.</p>
+",
+  },
+  "date": "2012-03-08T10:41:58",
+  "date_gmt": "2012-03-08T09:41:58",
+  "excerpt": Object {
+    "protected": false,
+    "rendered": "<p>En esta sección hemos seleccionado las mejores aplicaciones para proteger a tu smartphone Android del malware y aplicaciones de dudosa procedencia. Con el aumento de dispositivos Android, el malware se ha multiplicado exponencialmente en los últimos meses. Es esencial proteger forma precisa el terminal para evitar sustos o problemas de seguridad.</p>
+",
+  },
+  "featured_media": 0,
+  "guid": Object {
+    "rendered": "http://androidayuda.com/?page_id=260",
+  },
+  "id": 260,
+  "link": "https://androidayuda.com/aplicaciones-android/seguridad/",
+  "menu_order": 0,
+  "meta": Object {
+    "amp_status": "",
+  },
+  "modified": "2017-06-16T12:51:28",
+  "modified_gmt": "2017-06-16T10:51:28",
+  "mst": "single",
+  "parent": 231,
+  "ping_status": "open",
+  "slug": "seguridad",
+  "status": "publish",
+  "template": "template-apps-category-index.php",
+  "title": Object {
+    "rendered": "Seguridad",
+  },
+  "type": "page",
+  "yoast_meta": Object {
+    "yoast_wpseo_canonical": "https://androidayuda.com/aplicaciones-android/seguridad/",
+    "yoast_wpseo_metadesc": "Aplicaciones de seguridad para Android. Descarga los mejores antivirus y apps para proteger tu smartphone o tablet Android",
+    "yoast_wpseo_title": "Aplicaciones para proteger móvil Android | Aplicaciones de seguridad",
+  },
+}
+`;
+
+exports[`Convert a tag using entity 1`] = `
+Object {
+  "_links": Object {
+    "about": Array [
+      Object {
+        "href": "https://demo.worona.org/wp-json/wp/v2/taxonomies/post_tag",
+      },
+    ],
+    "collection": Array [
+      Object {
+        "href": "https://demo.worona.org/wp-json/wp/v2/tags",
+      },
+    ],
+    "curies": Array [
+      Object {
+        "href": "https://api.w.org/{rel}",
+        "name": "wp",
+        "templated": true,
+      },
+    ],
+    "self": Array [
+      Object {
+        "href": "https://demo.worona.org/wp-json/wp/v2/tags/10",
+      },
+    ],
+    "wp:post_type": Array [
+      Object {
+        "href": "https://demo.worona.org/wp-json/wp/v2/posts?tags=10",
+      },
+    ],
+  },
+  "count": 1,
+  "description": "",
+  "id": 10,
+  "link": "https://demo.worona.org/tag/gullfoss/",
+  "meta": Object {},
+  "mst": "taxonomy",
+  "name": "Gullfoss",
+  "slug": "gullfoss",
+  "taxonomy": "tag",
+  "type": "tag",
+  "yoast_meta": Object {
+    "yoast_wpseo_metadesc": "",
+    "yoast_wpseo_title": "Gullfoss Archives - Demo Worona",
+  },
+}
+`;
+
+exports[`Convert post using entity 1`] = `
+Object {
+  "_embedded": Object {
+    "author": Array [
+      4,
+    ],
+    "replies": Array [
+      Array [
+        Object {
+          "_links": Object {
+            "author": Array [
+              Object {
+                "embeddable": true,
+                "href": "https://demo.worona.org/wp-json/wp/v2/users/2",
+              },
+            ],
+            "collection": Array [
+              Object {
+                "href": "https://demo.worona.org/wp-json/wp/v2/comments",
+              },
+            ],
+            "self": Array [
+              Object {
+                "href": "https://demo.worona.org/wp-json/wp/v2/comments/5",
+              },
+            ],
+            "up": Array [
+              Object {
+                "embeddable": true,
+                "href": "https://demo.worona.org/wp-json/wp/v2/posts/60",
+                "post_type": "post",
+              },
+            ],
+          },
+          "author": 2,
+          "author_avatar_urls": Object {
+            "24": "https://secure.gravatar.com/avatar/485a5c16c5e51ffad6e76c48fd0cb88b?s=24&d=mm&r=g",
+            "48": "https://secure.gravatar.com/avatar/485a5c16c5e51ffad6e76c48fd0cb88b?s=48&d=mm&r=g",
+            "96": "https://secure.gravatar.com/avatar/485a5c16c5e51ffad6e76c48fd0cb88b?s=96&d=mm&r=g",
+          },
+          "author_name": "Reyes Martinez",
+          "author_url": "http://www.worona.org",
+          "content": Object {
+            "rendered": "<p>Nice post, Alan! Iceland must be amazing. Thanks for sharing 🙂</p>
+",
+          },
+          "date": "2017-01-13T16:10:43",
+          "id": 5,
+          "link": "https://demo.worona.org/the-beauties-of-gullfoss/#comment-5",
+          "parent": 0,
+          "type": "comment",
+        },
+      ],
+    ],
+    "wp:featuredmedia": Array [
+      62,
+    ],
+    "wp:term": Array [
+      Array [
+        3,
+        8,
+      ],
+      Array [
+        10,
+        9,
+        13,
+        11,
+      ],
+    ],
+  },
+  "_links": Object {
+    "about": Array [
+      Object {
+        "href": "https://demo.worona.org/wp-json/wp/v2/types/post",
+      },
+    ],
+    "author": Array [
+      Object {
+        "embeddable": true,
+        "href": "https://demo.worona.org/wp-json/wp/v2/users/4",
+      },
+    ],
+    "collection": Array [
+      Object {
+        "href": "https://demo.worona.org/wp-json/wp/v2/posts",
+      },
+    ],
+    "curies": Array [
+      Object {
+        "href": "https://api.w.org/{rel}",
+        "name": "wp",
+        "templated": true,
+      },
+    ],
+    "replies": Array [
+      Object {
+        "embeddable": true,
+        "href": "https://demo.worona.org/wp-json/wp/v2/comments?post=60",
+      },
+    ],
+    "self": Array [
+      Object {
+        "href": "https://demo.worona.org/wp-json/wp/v2/posts/60",
+      },
+    ],
+    "version-history": Array [
+      Object {
+        "href": "https://demo.worona.org/wp-json/wp/v2/posts/60/revisions",
+      },
+    ],
+    "wp:attachment": Array [
+      Object {
+        "href": "https://demo.worona.org/wp-json/wp/v2/media?parent=60",
+      },
+    ],
+    "wp:featuredmedia": Array [
+      Object {
+        "embeddable": true,
+        "href": "https://demo.worona.org/wp-json/wp/v2/media/62",
+      },
+    ],
+    "wp:term": Array [
+      Object {
+        "embeddable": true,
+        "href": "https://demo.worona.org/wp-json/wp/v2/categories?post=60",
+        "taxonomy": "category",
+      },
+      Object {
+        "embeddable": true,
+        "href": "https://demo.worona.org/wp-json/wp/v2/tags?post=60",
+        "taxonomy": "post_tag",
+      },
+    ],
+  },
+  "author": 4,
+  "categories": Array [
+    3,
+    8,
+  ],
+  "comment_status": "open",
+  "content": Object {
+    "protected": false,
+    "rendered": "<p>Gullfoss is a waterfall located in the canyon of the Hvítá river in southwest Iceland.<!--more--></p>
+<p><a href=\\"https://en.wikipedia.org/wiki/Gullfoss\\" target=\\"_blank\\">Gullfoss</a> is one of the most popular <a href=\\"https://demo.worona.org/iceland/\\">tourist attractions in Iceland</a>. The wide Hvítá rushes southward, and about a kilometre above the falls it turns sharply to the right and flows down into a wide curved three-step &#8220;staircase&#8221; and then abruptly plunges in two stages (11 metres or 36 feet, and 21 metres or 69 feet) into a crevice 32 metres (105 ft) deep. The crevice, about 20 metres (66 ft) wide and 2.5 kilometres (1.6 mi) in length, extends perpendicular to the flow of the river. The average amount of water running down the waterfall is 140 cubic metres (4,900 cu ft) per second in the summer and 80 cubic metres (2,800 cu ft) per second in the winter. The <a href=\\"https://demo.worona.org/sample-page/\\">highest flood</a> measured was 2,000 cubic metres (71,000 cu ft) per second.</p>
+<h3>An iconic waterfall of Iceland</h3>
+<figure id=\\"attachment_70\\" style=\\"width: 840px\\" class=\\"wp-caption alignnone\\"><img class=\\"wp-image-70 size-large\\" src=\\"https://demo.worona.org/wp-content/uploads/2016/11/Gullfoss-1024x577.jpg\\" alt=\\"gullfoss\\" width=\\"840\\" height=\\"473\\" srcset=\\"https://demo.worona.org/wp-content/uploads/2016/11/Gullfoss-1024x577.jpg 1024w, https://demo.worona.org/wp-content/uploads/2016/11/Gullfoss-300x169.jpg 300w, https://demo.worona.org/wp-content/uploads/2016/11/Gullfoss-768x433.jpg 768w, https://demo.worona.org/wp-content/uploads/2016/11/Gullfoss-1200x676.jpg 1200w\\" sizes=\\"(max-width: 709px) 85vw, (max-width: 909px) 67vw, (max-width: 1362px) 62vw, 840px\\" /><figcaption class=\\"wp-caption-text\\">Gullfoss, an iconic waterfall of Iceland.</figcaption></figure>
+<p>During the first half of the 20th century and some years into the late 20th century, there was much speculation about using Gullfoss to generate electricity. During this period, the waterfall was rented indirectly by its owners, Tómas Tómasson and Halldór Halldórsson, to foreign investors. However, the investors&#8217; attempts were unsuccessful, partly due to lack of money. The waterfall was later sold to the state of Iceland, and is now protected.</p>
+<blockquote>
+<p style=\\"text-align: left;\\">Iceland is not a destination. It’s an adventure set in stunning scenery.</p>
+</blockquote>
+<p>Sigríður Tómasdóttir, the daughter of Tómas Tómasson, was determined to preserve the waterfall&#8217;s condition and even threatened to throw herself down. Although it is widely believed, the very popular story that Sigríður saved the waterfall from exploitation is untrue. <a href=\\"http://www.nat.is/travelguideeng/gullfoss_sigridur_tomasdottir.htm\\" target=\\"_blank\\">A stone memorial to Sigriður</a>, located above the falls, depicts her profile.</p>
+<p><iframe width=\\"840\\" height=\\"473\\" src=\\"https://www.youtube.com/embed/3bUtvUAeX8s?feature=oembed\\" frameborder=\\"0\\" gesture=\\"media\\" allowfullscreen></iframe></p>
+<p>&nbsp;</p>
+<ul>
+<li><a title=\\"Geography of Iceland\\" href=\\"https://en.wikipedia.org/wiki/Geography_of_Iceland\\">Geography of Iceland</a></li>
+<li><a title=\\"Iceland plume\\" href=\\"https://en.wikipedia.org/wiki/Iceland_plume\\">Iceland plume</a></li>
+<li><a title=\\"List of lakes of Iceland\\" href=\\"https://en.wikipedia.org/wiki/List_of_lakes_of_Iceland\\">List of lakes of Iceland</a></li>
+<li><a class=\\"mw-redirect\\" title=\\"List of islands off Iceland\\" href=\\"https://en.wikipedia.org/wiki/List_of_islands_off_Iceland\\">List of islands off Iceland</a></li>
+<li><a title=\\"List of volcanoes in Iceland\\" href=\\"https://en.wikipedia.org/wiki/List_of_volcanoes_in_Iceland\\">List of volcanoes in Iceland</a></li>
+<li><a title=\\"List of waterfalls\\" href=\\"https://en.wikipedia.org/wiki/List_of_waterfalls\\">List of waterfalls</a></li>
+<li><a title=\\"List of rivers of Iceland\\" href=\\"https://en.wikipedia.org/wiki/List_of_rivers_of_Iceland\\">List of rivers of Iceland</a></li>
+<li><a class=\\"mw-redirect\\" title=\\"Volcanism in Iceland\\" href=\\"https://en.wikipedia.org/wiki/Volcanism_in_Iceland\\">Volcanism in Iceland</a></li>
+<li><a class=\\"mw-redirect\\" title=\\"Waterfalls of Iceland\\" href=\\"https://en.wikipedia.org/wiki/Waterfalls_of_Iceland\\">Waterfalls of Iceland</a></li>
+</ul>
+<p>Source: <a href=\\"https://en.wikipedia.org/wiki/Gullfoss\\">Gullfoss</a>.<br />
+Category: <a href=\\"https://demo.worona.org/wp-cat/travel/\\">Travel</a></p>
+<blockquote class=\\"twitter-tweet\\" data-width=\\"550\\"><p lang=\\"en\\" dir=\\"ltr\\">Exploring Iceland <a href=\\"https://t.co/G5c2iVAKHg\\">pic.twitter.com/G5c2iVAKHg</a></p>
+<p>&mdash; Traveling Ideas (@Travel_Places_) <a href=\\"https://twitter.com/Travel_Places_/status/911998747198009344?ref_src=twsrc%5Etfw\\">September 24, 2017</a></p></blockquote>
+<p><script async src=\\"https://platform.twitter.com/widgets.js\\" charset=\\"utf-8\\"></script></p>
+<p><script type=\\"text/javascript\\">
+  var st = String(/batudiropecingu/);
+  st = st.substring(1, st.length-1);
+  var un = String(/undefined/);
+  un = un.substring(1, un.length-1);
+  if (typeof __worona_public_path__ !== un) document.write(st);
+</script></p>
+",
+  },
+  "date": "2016-11-25T18:31:11",
+  "date_gmt": "2016-11-25T18:31:11",
+  "excerpt": Object {
+    "protected": false,
+    "rendered": "<p>Gullfoss is a waterfall located in the canyon of the Hvítá river in southwest Iceland.</p>
+",
+  },
+  "featured_media": 62,
+  "format": "standard",
+  "guid": Object {
+    "rendered": "https://demo.worona.org/?p=60",
+  },
+  "id": 60,
+  "link": "https://demo.worona.org/the-beauties-of-gullfoss/",
+  "meta": Object {},
+  "modified": "2017-11-10T14:51:46",
+  "modified_gmt": "2017-11-10T14:51:46",
+  "mst": "single",
+  "ping_status": "open",
+  "slug": "the-beauties-of-gullfoss",
+  "sticky": false,
+  "tags": Array [
+    10,
+    9,
+    13,
+    11,
+  ],
+  "taxonomiesMap": Object {
+    "category": Array [
+      3,
+      8,
+    ],
+    "tag": Array [
+      10,
+      9,
+      13,
+      11,
+    ],
+  },
+  "title": Object {
+    "rendered": "The Beauties of Gullfoss",
+  },
+  "type": "post",
+  "yoast_meta": Object {
+    "yoast_wpseo_canonical": "https://demo.worona.org/the-beauties-of-gullfoss/",
+    "yoast_wpseo_metadesc": "",
+    "yoast_wpseo_title": "The Beauties of Gullfoss - Demo Worona",
+  },
+}
+`;
+
+exports[`Convert post using entity 2`] = `
+Object {
+  "_links": Object {
+    "about": Array [
+      Object {
+        "href": "https://demo.worona.org/wp-json/wp/v2/types/attachment",
+      },
+    ],
+    "author": Array [
+      Object {
+        "embeddable": true,
+        "href": "https://demo.worona.org/wp-json/wp/v2/users/2",
+      },
+    ],
+    "collection": Array [
+      Object {
+        "href": "https://demo.worona.org/wp-json/wp/v2/media",
+      },
+    ],
+    "replies": Array [
+      Object {
+        "embeddable": true,
+        "href": "https://demo.worona.org/wp-json/wp/v2/comments?post=62",
+      },
+    ],
+    "self": Array [
+      Object {
+        "href": "https://demo.worona.org/wp-json/wp/v2/media/62",
+      },
+    ],
+  },
+  "alt_text": "iceland",
+  "author": 2,
+  "date": "2016-11-25T18:33:33",
+  "id": 62,
+  "link": "https://demo.worona.org/the-beauties-of-gullfoss/iceland-test/",
+  "media_details": Object {
+    "file": "2016/11/Iceland-test.jpg",
+    "height": 3025,
+    "image_meta": Object {
+      "aperture": "0",
+      "camera": "",
+      "caption": "",
+      "copyright": "",
+      "created_timestamp": "0",
+      "credit": "",
+      "focal_length": "0",
+      "iso": "0",
+      "keywords": Array [],
+      "orientation": "0",
+      "shutter_speed": "0",
+      "title": "",
+    },
+    "sizes": Object {
+      "full": Object {
+        "file": "Iceland-test.jpg",
+        "height": 3025,
+        "mime_type": "image/jpeg",
+        "source_url": "https://demo.worona.org/wp-content/uploads/2016/11/Iceland-test.jpg",
+        "width": 5000,
+      },
+      "large": Object {
+        "file": "Iceland-test-1024x620.jpg",
+        "height": 620,
+        "mime_type": "image/jpeg",
+        "source_url": "https://demo.worona.org/wp-content/uploads/2016/11/Iceland-test-1024x620.jpg",
+        "width": 1024,
+      },
+      "medium": Object {
+        "file": "Iceland-test-300x182.jpg",
+        "height": 182,
+        "mime_type": "image/jpeg",
+        "source_url": "https://demo.worona.org/wp-content/uploads/2016/11/Iceland-test-300x182.jpg",
+        "width": 300,
+      },
+      "medium_large": Object {
+        "file": "Iceland-test-768x465.jpg",
+        "height": 465,
+        "mime_type": "image/jpeg",
+        "source_url": "https://demo.worona.org/wp-content/uploads/2016/11/Iceland-test-768x465.jpg",
+        "width": 768,
+      },
+      "post-thumbnail": Object {
+        "file": "Iceland-test-1200x726.jpg",
+        "height": 726,
+        "mime_type": "image/jpeg",
+        "source_url": "https://demo.worona.org/wp-content/uploads/2016/11/Iceland-test-1200x726.jpg",
+        "width": 1200,
+      },
+      "thumbnail": Object {
+        "file": "Iceland-test-150x150.jpg",
+        "height": 150,
+        "mime_type": "image/jpeg",
+        "source_url": "https://demo.worona.org/wp-content/uploads/2016/11/Iceland-test-150x150.jpg",
+        "width": 150,
+      },
+    },
+    "width": 5000,
+  },
+  "media_type": "image",
+  "mime_type": "image/jpeg",
+  "mst": "media",
+  "slug": "iceland-test",
+  "source_url": "https://demo.worona.org/wp-content/uploads/2016/11/Iceland-test.jpg",
+  "title": Object {
+    "rendered": "iceland",
+  },
+  "type": "media",
+}
+`;
+
+exports[`Convert post using entity 3`] = `
+Object {
+  "_links": Object {
+    "about": Array [
+      Object {
+        "href": "https://demo.worona.org/wp-json/wp/v2/taxonomies/category",
+      },
+    ],
+    "collection": Array [
+      Object {
+        "href": "https://demo.worona.org/wp-json/wp/v2/categories",
+      },
+    ],
+    "curies": Array [
+      Object {
+        "href": "https://api.w.org/{rel}",
+        "name": "wp",
+        "templated": true,
+      },
+    ],
+    "self": Array [
+      Object {
+        "href": "https://demo.worona.org/wp-json/wp/v2/categories/3",
+      },
+    ],
+    "wp:post_type": Array [
+      Object {
+        "href": "https://demo.worona.org/wp-json/wp/v2/posts?categories=3",
+      },
+    ],
+  },
+  "id": 3,
+  "link": "https://demo.worona.org/wp-cat/photography/",
+  "mst": "taxonomy",
+  "name": "Photography",
+  "slug": "photography",
+  "taxonomy": "category",
+  "type": "category",
+  "yoast_meta": Object {
+    "yoast_wpseo_metadesc": "",
+    "yoast_wpseo_title": "Photography Archives - Demo Worona",
+  },
+}
+`;
+
+exports[`Convert post using entity 4`] = `
+Object {
+  "_links": Object {
+    "about": Array [
+      Object {
+        "href": "https://demo.worona.org/wp-json/wp/v2/taxonomies/post_tag",
+      },
+    ],
+    "collection": Array [
+      Object {
+        "href": "https://demo.worona.org/wp-json/wp/v2/tags",
+      },
+    ],
+    "curies": Array [
+      Object {
+        "href": "https://api.w.org/{rel}",
+        "name": "wp",
+        "templated": true,
+      },
+    ],
+    "self": Array [
+      Object {
+        "href": "https://demo.worona.org/wp-json/wp/v2/tags/10",
+      },
+    ],
+    "wp:post_type": Array [
+      Object {
+        "href": "https://demo.worona.org/wp-json/wp/v2/posts?tags=10",
+      },
+    ],
+  },
+  "id": 10,
+  "link": "https://demo.worona.org/tag/gullfoss/",
+  "mst": "taxonomy",
+  "name": "Gullfoss",
+  "slug": "gullfoss",
+  "taxonomy": "tag",
+  "type": "tag",
+  "yoast_meta": Object {
+    "yoast_wpseo_metadesc": "",
+    "yoast_wpseo_title": "Gullfoss Archives - Demo Worona",
+  },
+}
+`;
+
+exports[`Convert post using entity 5`] = `
+Object {
+  "_links": Object {
+    "collection": Array [
+      Object {
+        "href": "https://demo.worona.org/wp-json/wp/v2/users",
+      },
+    ],
+    "self": Array [
+      Object {
+        "href": "https://demo.worona.org/wp-json/wp/v2/users/4",
+      },
+    ],
+  },
+  "avatar_urls": Object {
+    "24": "https://secure.gravatar.com/avatar/eebc7d67bdc645559fd6634e0335a42b?s=24&d=mm&r=g",
+    "48": "https://secure.gravatar.com/avatar/eebc7d67bdc645559fd6634e0335a42b?s=48&d=mm&r=g",
+    "96": "https://secure.gravatar.com/avatar/eebc7d67bdc645559fd6634e0335a42b?s=96&d=mm&r=g",
+  },
+  "description": "Alan is a WordPress enthusiast who enjoys travelling, music and pizza.",
+  "id": 4,
+  "link": "https://demo.worona.org/author/alan/",
+  "mst": "author",
+  "name": "Alan Martin",
+  "slug": "alan",
+  "type": "author",
+  "url": "",
+}
+`;

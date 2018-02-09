@@ -184,13 +184,17 @@ export const actions = self => {
     const selectedItem = self.context.getItem(selected);
     const current = self.context.selected;
 
-    if (selectedItem && current.column._id !== selectedItem.column._id) {
+    if (!selectedItem) return;
+
+    if (current.column._id !== selectedItem.column._id) {
       const { column } = selectedItem;
       detach(selectedItem);
 
       if (column.items.length === 0) detach(column);
 
       current.column.items.push(selectedItem);
+      selectedItem.column.selected = selectedItem;
+    } else {
       selectedItem.column.selected = selectedItem;
     }
   };

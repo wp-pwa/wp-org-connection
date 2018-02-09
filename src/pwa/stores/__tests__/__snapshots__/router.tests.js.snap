@@ -1,3 +1,93 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
 exports[`Router initializes empty 1`] = `Array []`;
+
+exports[`Router initializes items from context and selected 1`] = `
+Object {
+  "_link": null,
+  "author": null,
+  "content": null,
+  "creationDate": null,
+  "excerpt": null,
+  "featured": null,
+  "fetching": false,
+  "guid": null,
+  "id": 160,
+  "link": Object {},
+  "meta": Object {
+    "canonical": null,
+    "description": null,
+    "pretty": false,
+    "title": null,
+  },
+  "modificationDate": null,
+  "ready": false,
+  "slug": null,
+  "target": null,
+  "taxonomiesMap": Object {},
+  "title": null,
+  "type": "post",
+}
+`;
+
+exports[`Router initializes items from context and selected 2`] = `
+Object {
+  "_link": null,
+  "author": null,
+  "content": null,
+  "creationDate": null,
+  "excerpt": null,
+  "featured": null,
+  "fetching": false,
+  "guid": null,
+  "id": 60,
+  "link": Object {},
+  "meta": Object {
+    "canonical": null,
+    "description": null,
+    "pretty": false,
+    "title": null,
+  },
+  "modificationDate": null,
+  "ready": false,
+  "slug": null,
+  "target": null,
+  "taxonomiesMap": Object {},
+  "title": null,
+  "type": "post",
+}
+`;
+
+exports[`Router initializes items from context and selected 3`] = `
+Object {
+  "_link": null,
+  "id": 12,
+  "link": Object {},
+  "meta": Object {
+    "canonical": null,
+    "description": null,
+    "pretty": false,
+    "title": null,
+  },
+  "name": null,
+  "slug": null,
+  "target": null,
+  "taxonomy": "category",
+}
+`;
+
+exports[`Router initializes items from context and selected 4`] = `
+Object {
+  "entities": Array [],
+  "fetching": false,
+  "ready": false,
+}
+`;
+
+exports[`Router initializes items from context and selected 5`] = `
+Object {
+  "entities": Array [],
+  "fetching": false,
+  "ready": false,
+}
+`;
