@@ -9,7 +9,7 @@ const mapValuesWithKey = mapValues.convert({ cap: false });
 
 const getParams = flow(
   mapValuesWithKey((value, key) => state => state.connection.params[key]),
-  mapKeys(key => `get${capitalize(key)}Params`),
+  mapKeys(key => `get${capitalize(key)}Params`)
 )(wpTypesPlural);
 
 const getCurrentWpType = state =>
@@ -32,7 +32,7 @@ const isCurrentSingleReady = state => {
 
 const getEntities = flow(
   mapValuesWithKey((value, key) => state => state.connection.entities[key]),
-  mapKeys(key => `get${capitalize(key)}Entities`),
+  mapKeys(key => `get${capitalize(key)}Entities`)
 )(wpTypesPlural);
 
 const getEntity = createSelector(
@@ -48,7 +48,7 @@ const getEntity = createSelector(
       .concat(type.slice(1))}ById`;
 
     return dep('connection', 'selectorCreators', selectorName)(id)(state);
-  },
+  }
 );
 
 const getTitle = createSelector(
@@ -59,7 +59,7 @@ const getTitle = createSelector(
     (entity && entity.title && entity.title.rendered) ||
     (entity && entity.name) ||
     (state.connection.siteInfo && state.connection.siteInfo.title) ||
-    '',
+    ''
 );
 
 const getDescription = createSelector(
@@ -68,15 +68,7 @@ const getDescription = createSelector(
   (state, entity) =>
     (entity && entity.yoast_meta && entity.yoast_meta.yoast_wpseo_metadesc) ||
     (entity && entity.description) ||
-    '',
-);
-
-const getCanonical = createSelector(
-  getEntity,
-  entity =>
-    (entity && entity.yoast_meta && entity.yoast_meta.yoast_wpseo_canonical) ||
-    (entity && entity.link) ||
-    '',
+    ''
 );
 
 module.exports = {
@@ -88,6 +80,5 @@ module.exports = {
   getCurrentId,
   getEntity,
   getTitle,
-  getDescription,
-  getCanonical,
+  getDescription
 };

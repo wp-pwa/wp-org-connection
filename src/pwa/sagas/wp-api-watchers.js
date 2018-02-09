@@ -31,10 +31,8 @@ export function* initConnection() {
 
 export const getList = ({ connection, listType, listId, singleType, page }) => {
   const endpoint = typesToEndpoints(singleType);
-  const paramType = ['category', 'tag', 'author'].includes(listType)
-    ? typesToParams(listType)
-    : listType;
-  const params = { _embed: true, [paramType]: listId };
+  const params = { _embed: true };
+  if (['category', 'tag', 'author'].includes(listType)) params[typesToParams(listType)] = listId;
   let query = connection[endpoint]().page(page);
   forOwn(params, (value, key) => {
     query = query.param(key, value);
@@ -62,7 +60,7 @@ export const listRequested = connection =>
     const singleType = 'post';
     if (!['latest', 'category', 'tag', 'author'].includes(listType))
       throw new Error(
-        'Custom taxonomies should retrieve their custom post types first. NOT IMPLEMENTED.',
+        'Custom taxonomies should retrieve their custom post types first. NOT IMPLEMENTED.'
       );
     try {
       const response = yield call(getList, { connection, listType, listId, singleType, page });
@@ -78,7 +76,8 @@ export const listRequested = connection =>
           listId,
           page,
           total,
-        }),
+          endpoint: getList({ connection, listType, listId, singleType, page }).toString()
+        })
       );
     } catch (error) {
       yield put(
@@ -87,8 +86,8 @@ export const listRequested = connection =>
           listId,
           page,
           error,
-          endpoint: getList({ connection, listType, listId, singleType, page }).toString(),
-        }),
+          endpoint: getList({ connection, listType, listId, singleType, page }).toString()
+        })
       );
     }
   };
@@ -98,15 +97,22 @@ export const singleRequested = connection =>
     try {
       const response = yield call(getSingle, { connection, singleType, singleId });
       const { entities } = normalize(response, schemas.single);
-      yield put(actions.singleSucceed({ singleType, singleId, entities }));
+      yield put(
+        actions.singleSucceed({
+          singleType,
+          singleId,
+          entities,
+          endpoint: getSingle({ connection, singleType, singleId }).toString()
+        })
+      );
     } catch (error) {
       yield put(
         actions.singleFailed({
           singleType,
           singleId,
           error,
-          endpoint: getSingle({ connection, singleType, singleId }).toString(),
-        }),
+          endpoint: getSingle({ connection, singleType, singleId }).toString()
+        })
       );
     }
   };
@@ -128,8 +134,8 @@ export const customRequested = connection =>
           page,
           params,
           result: result.map(item => item.id),
-          entities,
-        }),
+          entities
+        })
       );
     } catch (error) {
       yield put(
@@ -140,8 +146,8 @@ export const customRequested = connection =>
           params,
           page,
           error,
-          endpoint: getCustom({ connection, singleType, page, params }).toString(),
-        }),
+          endpoint: getCustom({ connection, singleType, page, params }).toString()
+        })
       );
     }
   };
@@ -172,10 +178,10 @@ export const siteInfoRequested = connection =>
         actions.siteInfoSucceed({
           home: {
             title: data.home.title,
-            description: data.home.description,
+            description: data.home.description
           },
-          perPage: data.perPage,
-        }),
+          perPage: data.perPage
+        })
       );
     } catch (error) {
       yield put(actions.siteInfoFailed({ error }));
@@ -189,6 +195,6 @@ export default function* wpApiWatchersSaga(stores) {
     takeEvery(actionTypes.SINGLE_REQUESTED, singleRequested(connection)),
     takeEvery(actionTypes.LIST_REQUESTED, listRequested(connection)),
     takeEvery(actionTypes.CUSTOM_REQUESTED, customRequested(connection)),
-    takeEvery(actionTypes.SITE_INFO_REQUESTED, siteInfoRequested(connection)),
+    takeEvery(actionTypes.SITE_INFO_REQUESTED, siteInfoRequested(connection))
   ]);
 }

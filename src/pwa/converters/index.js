@@ -18,7 +18,7 @@ export const single = entity => ({
   target: entity['post-target'],
   meta: {
     title: decode(
-      (entity.yoast_meta && entity.yoast_meta.yoast_wpseo_title) || entity.title.rendered,
+      (entity.yoast_meta && entity.yoast_meta.yoast_wpseo_title) || entity.title.rendered
     ),
     description: (entity.yoast_meta && entity.yoast_meta.yoast_wpseo_desc) || '',
     canonical: (entity.yoast_meta && entity.yoast_meta.yoast_wpseo_canonical) || '',

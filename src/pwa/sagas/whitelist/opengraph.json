@@ -1,0 +1,234 @@
+[
+  {
+    "tagName": "meta",
+    "attributes": { "property": "og:title" },
+    "unique": true
+  },
+  {
+    "tagName": "meta",
+    "attributes": { "property": "og:type" },
+    "unique": true
+  },
+  {
+    "tagName": "meta",
+    "attributes": { "property": "og:url" },
+    "unique": true
+  },
+  {
+    "tagName": "meta",
+    "attributes": { "property": "og:description" },
+    "unique": true
+  },
+  {
+    "tagName": "meta",
+    "attributes": { "property": "og:determiner" },
+    "unique": true
+  },
+  {
+    "tagName": "meta",
+    "attributes": { "property": "og:locale" },
+    "unique": true
+  },
+  {
+    "tagName": "meta",
+    "attributes": { "property": "og:locale:alternate" },
+    "unique": true
+  },
+  {
+    "tagName": "meta",
+    "attributes": { "property": "og:site_name" },
+    "unique": true
+  },
+  {
+    "tagName": "meta",
+    "attributes": { "property": "og:image" }
+  },
+  {
+    "tagName": "meta",
+    "attributes": { "property": "og:image:url" }
+  },
+  {
+    "tagName": "meta",
+    "attributes": { "property": "og:image:secure_url" }
+  },
+  {
+    "tagName": "meta",
+    "attributes": { "property": "og:image:type" }
+  },
+  {
+    "tagName": "meta",
+    "attributes": { "property": "og:image:width" }
+  },
+  {
+    "tagName": "meta",
+    "attributes": { "property": "og:image:height" }
+  },
+  {
+    "tagName": "meta",
+    "attributes": { "property": "og:image:alt" }
+  },
+  {
+    "tagName": "meta",
+    "attributes": { "property": "og:video" }
+  },
+  {
+    "tagName": "meta",
+    "attributes": { "property": "og:video:url" }
+  },
+  {
+    "tagName": "meta",
+    "attributes": { "property": "og:video:secure_url" }
+  },
+  {
+    "tagName": "meta",
+    "attributes": { "property": "og:video:type" }
+  },
+  {
+    "tagName": "meta",
+    "attributes": { "property": "og:video:width" }
+  },
+  {
+    "tagName": "meta",
+    "attributes": { "property": "og:video:height" }
+  },
+  {
+    "tagName": "meta",
+    "attributes": { "property": "og:video:alt" }
+  },
+  {
+    "tagName": "meta",
+    "attributes": { "property": "og:audio" }
+  },
+  {
+    "tagName": "meta",
+    "attributes": { "property": "og:audio:secure_url" }
+  },
+  {
+    "tagName": "meta",
+    "attributes": { "property": "og:audio:type" }
+  },
+  {
+    "tagName": "meta",
+    "attributes": { "property": "music:duration" }
+  },
+  {
+    "tagName": "meta",
+    "attributes": { "property": "music:album" }
+  },
+  {
+    "tagName": "meta",
+    "attributes": { "property": "music:album:disc" }
+  },
+  {
+    "tagName": "meta",
+    "attributes": { "property": "music:album:track" }
+  },
+  {
+    "tagName": "meta",
+    "attributes": { "property": "music:musician" }
+  },
+  {
+    "tagName": "meta",
+    "attributes": { "property": "music:song" }
+  },
+  {
+    "tagName": "meta",
+    "attributes": { "property": "music:song:disc" }
+  },
+  {
+    "tagName": "meta",
+    "attributes": { "property": "music:song:track" }
+  },
+  {
+    "tagName": "meta",
+    "attributes": { "property": "music:creator" }
+  },
+  {
+    "tagName": "meta",
+    "attributes": { "property": "video:actor" }
+  },
+  {
+    "tagName": "meta",
+    "attributes": { "property": "video:actor:role" }
+  },
+  {
+    "tagName": "meta",
+    "attributes": { "property": "video:director" }
+  },
+  {
+    "tagName": "meta",
+    "attributes": { "property": "video:writer" }
+  },
+  {
+    "tagName": "meta",
+    "attributes": { "property": "video:duration" }
+  },
+  {
+    "tagName": "meta",
+    "attributes": { "property": "video:release_date" }
+  },
+  {
+    "tagName": "meta",
+    "attributes": { "property": "video:tag" }
+  },
+  {
+    "tagName": "meta",
+    "attributes": { "property": "video:series" }
+  },
+  {
+    "tagName": "meta",
+    "attributes": { "property": "article:published_time" }
+  },
+  {
+    "tagName": "meta",
+    "attributes": { "property": "article:modified_time" }
+  },
+  {
+    "tagName": "meta",
+    "attributes": { "property": "article:expiration_time" }
+  },
+  {
+    "tagName": "meta",
+    "attributes": { "property": "article:author" }
+  },
+  {
+    "tagName": "meta",
+    "attributes": { "property": "article:section" }
+  },
+  {
+    "tagName": "meta",
+    "attributes": { "property": "article:tag" }
+  },
+  {
+    "tagName": "meta",
+    "attributes": { "property": "book:author" }
+  },
+  {
+    "tagName": "meta",
+    "attributes": { "property": "book:isbn" }
+  },
+  {
+    "tagName": "meta",
+    "attributes": { "property": "book:release_date" }
+  },
+  {
+    "tagName": "meta",
+    "attributes": { "property": "book:tag" }
+  },
+  {
+    "tagName": "meta",
+    "attributes": { "property": "profile:first_name" }
+  },
+  {
+    "tagName": "meta",
+    "attributes": { "property": "profile:last_name" }
+  },
+  {
+    "tagName": "meta",
+    "attributes": { "property": "profile:username" }
+  },
+  {
+    "tagName": "meta",
+    "attributes": { "property": "profile:gender" }
+  }
+]

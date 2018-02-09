@@ -132,4 +132,7 @@ export const actions = self => ({
     const item = self.getListPage({ type, id, page });
     item.fetching = false;
   },
+  [actionTypes.HEAD_CONTENT_SUCCEED]({ content }) {
+    self.siteInfo.headContent = content;
+  }
 });

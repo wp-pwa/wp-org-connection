@@ -2,6 +2,7 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import NProgress from 'nprogress';
+import { compose } from 'recompose';
 import { inject } from 'mobx-react';
 import { connect } from 'react-redux';
 import { dep } from 'worona-deps';
@@ -91,13 +92,14 @@ class Link extends Component {
       page: PropTypes.number,
     }).isRequired,
     context: PropTypes.shape({}),
+    method: PropTypes.string,
     children: PropTypes.node.isRequired,
     href: PropTypes.string.isRequired,
     routeChangeRequested: PropTypes.func.isRequired,
-    // siteId: PropTypes.string.isRequired,
   };
 
   static defaultProps = {
+    method: 'push',
     context: null,
   };
 
@@ -116,8 +118,8 @@ class Link extends Component {
     e.preventDefault();
     NProgress.start();
 
-    const { routeChangeRequested, selected, context } = this.props;
-    setTimeout(() => routeChangeRequested({ selected, context }), 100);
+    const { routeChangeRequested, selected, context, method } = this.props;
+    setTimeout(() => routeChangeRequested({ selected, context, method }), 100);
   }
 
   render() {
@@ -126,16 +128,12 @@ class Link extends Component {
   }
 }
 
-const mapStateToProps = state => ({
-  siteId: dep('settings', 'selectors', 'getSiteId')(state),
-});
-
 const mapDispatchToProps = dispatch => ({
   routeChangeRequested: payload =>
     dispatch(dep('connection', 'actions', 'routeChangeRequested')(payload)),
 });
 
-export default connect(mapStateToProps, mapDispatchToProps)(
+export default compose(
   inject(({ connection }, { selected }) => {
     const { singleType, singleId, listType, listId, page } = selected;
     const type = listType || singleType;
@@ -147,5 +145,6 @@ export default connect(mapStateToProps, mapDispatchToProps)(
       href = page > 1 ? link.paged(1) : link.url;
     }
     return { href };
-  })(Link),
-);
+  }),
+  connect(null, mapDispatchToProps),
+)(Link);
