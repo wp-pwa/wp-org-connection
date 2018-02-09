@@ -37,17 +37,21 @@ describe('Store › Actions', () => {
   test('Single: Action Succeed', () => {
     expect(connection.entity('post', 60).ready).toBe(false);
     expect(connection.entity('post', 60).fetching).toBe(false);
-    connection[actionTypes.SINGLE_REQUESTED](actions.singleRequested({
-      singleType: 'post',
-      singleId: 60,
-    }));
+    connection[actionTypes.SINGLE_REQUESTED](
+      actions.singleRequested({
+        singleType: 'post',
+        singleId: 60,
+      }),
+    );
     expect(connection.entity('post', 60).ready).toBe(false);
     expect(connection.entity('post', 60).fetching).toBe(true);
-    connection[actionTypes.SINGLE_SUCCEED](actions.singleSucceed({
-      singleType: 'post',
-      singleId: 60,
-      entities: entitiesFromPost60,
-    }));
+    connection[actionTypes.SINGLE_SUCCEED](
+      actions.singleSucceed({
+        singleType: 'post',
+        singleId: 60,
+        entities: entitiesFromPost60,
+      }),
+    );
     expect(connection.entity('post', 60).ready).toBe(true);
     expect(connection.entity('post', 60).title).toBe('The Beauties of Gullfoss');
     expect(connection.entity('media', 62).title).toBe('iceland');
@@ -55,14 +59,18 @@ describe('Store › Actions', () => {
   });
 
   test('Single: Action Failed', () => {
-    connection[actionTypes.SINGLE_REQUESTED](actions.singleRequested({
-      singleType: 'post',
-      singleId: 60,
-    }));
-    connection[actionTypes.SINGLE_FAILED](actions.singleSucceed({
-      singleType: 'post',
-      singleId: 60,
-    }));
+    connection[actionTypes.SINGLE_REQUESTED](
+      actions.singleRequested({
+        singleType: 'post',
+        singleId: 60,
+      }),
+    );
+    connection[actionTypes.SINGLE_FAILED](
+      actions.singleSucceed({
+        singleType: 'post',
+        singleId: 60,
+      }),
+    );
     expect(connection.entity('post', 60).ready).toBe(false);
     expect(connection.entity('post', 60).fetching).toBe(false);
   });
@@ -72,20 +80,24 @@ describe('Store › Actions', () => {
     expect(connection.list('category', 7).fetching).toBe(false);
     expect(connection.list('category', 7).page(1).ready).toBe(false);
     expect(connection.list('category', 7).page(1).fetching).toBe(false);
-    connection[actionTypes.LIST_REQUESTED](actions.listRequested({
-      listType: 'category',
-      listId: 7,
-    }));
+    connection[actionTypes.LIST_REQUESTED](
+      actions.listRequested({
+        listType: 'category',
+        listId: 7,
+      }),
+    );
     expect(connection.list('category', 7).ready).toBe(false);
     expect(connection.list('category', 7).fetching).toBe(true);
     expect(connection.list('category', 7).page(1).ready).toBe(false);
     expect(connection.list('category', 7).page(1).fetching).toBe(true);
-    connection[actionTypes.LIST_SUCCEED](actions.listSucceed({
-      listType: 'category',
-      listId: 7,
-      result: resultFromCategory7,
-      entities: entitiesFromCategory,
-    }));
+    connection[actionTypes.LIST_SUCCEED](
+      actions.listSucceed({
+        listType: 'category',
+        listId: 7,
+        result: resultFromCategory7,
+        entities: entitiesFromCategory,
+      }),
+    );
     expect(connection.list('category', 7).ready).toBe(true);
     expect(connection.list('category', 7).fetching).toBe(false);
     expect(connection.list('category', 7).page(1).ready).toBe(true);
@@ -99,48 +111,56 @@ describe('Store › Actions', () => {
     expect(connection.list('category', 7).page(1).fetching).toBe(false);
     expect(connection.list('category', 7).page(2).ready).toBe(false);
     expect(connection.list('category', 7).page(2).fetching).toBe(false);
-    connection[actionTypes.LIST_REQUESTED](actions.listRequested({
-      listType: 'category',
-      listId: 7,
-      page: 2,
-    }));
+    connection[actionTypes.LIST_REQUESTED](
+      actions.listRequested({
+        listType: 'category',
+        listId: 7,
+        page: 2,
+      }),
+    );
     expect(connection.list('category', 7).ready).toBe(false);
     expect(connection.list('category', 7).fetching).toBe(true);
     expect(connection.list('category', 7).page(1).ready).toBe(false);
     expect(connection.list('category', 7).page(1).fetching).toBe(false);
     expect(connection.list('category', 7).page(2).ready).toBe(false);
     expect(connection.list('category', 7).page(2).fetching).toBe(true);
-    connection[actionTypes.LIST_SUCCEED](actions.listSucceed({
-      listType: 'category',
-      listId: 7,
-      page: 2,
-      result: resultFromCategory7Page2,
-      entities: entitiesFromCategoryPage2,
-    }));
+    connection[actionTypes.LIST_SUCCEED](
+      actions.listSucceed({
+        listType: 'category',
+        listId: 7,
+        page: 2,
+        result: resultFromCategory7Page2,
+        entities: entitiesFromCategoryPage2,
+      }),
+    );
     expect(connection.list('category', 7).ready).toBe(true);
     expect(connection.list('category', 7).fetching).toBe(false);
     expect(connection.list('category', 7).page(1).ready).toBe(false);
     expect(connection.list('category', 7).page(1).fetching).toBe(false);
     expect(connection.list('category', 7).page(2).ready).toBe(true);
     expect(connection.list('category', 7).page(2).fetching).toBe(false);
-    connection[actionTypes.LIST_REQUESTED](actions.listRequested({
-      listType: 'category',
-      listId: 7,
-      page: 1,
-    }));
+    connection[actionTypes.LIST_REQUESTED](
+      actions.listRequested({
+        listType: 'category',
+        listId: 7,
+        page: 1,
+      }),
+    );
     expect(connection.list('category', 7).ready).toBe(true);
     expect(connection.list('category', 7).fetching).toBe(true);
     expect(connection.list('category', 7).page(1).ready).toBe(false);
     expect(connection.list('category', 7).page(1).fetching).toBe(true);
     expect(connection.list('category', 7).page(2).ready).toBe(true);
     expect(connection.list('category', 7).page(2).fetching).toBe(false);
-    connection[actionTypes.LIST_SUCCEED](actions.listSucceed({
-      listType: 'category',
-      listId: 7,
-      page: 1,
-      result: resultFromCategory7,
-      entities: entitiesFromCategory,
-    }));
+    connection[actionTypes.LIST_SUCCEED](
+      actions.listSucceed({
+        listType: 'category',
+        listId: 7,
+        page: 1,
+        result: resultFromCategory7,
+        entities: entitiesFromCategory,
+      }),
+    );
     expect(connection.list('category', 7).ready).toBe(true);
     expect(connection.list('category', 7).fetching).toBe(false);
     expect(connection.list('category', 7).page(1).ready).toBe(true);
@@ -150,17 +170,49 @@ describe('Store › Actions', () => {
   });
 
   test('List: Action Failed', () => {
-    connection[actionTypes.LIST_REQUESTED](actions.listRequested({
-      listType: 'category',
-      listId: 7,
-    }));
-    connection[actionTypes.LIST_FAILED](actions.listSucceed({
-      listType: 'category',
-      listId: 7,
-    }));
+    connection[actionTypes.LIST_REQUESTED](
+      actions.listRequested({
+        listType: 'category',
+        listId: 7,
+      }),
+    );
+    connection[actionTypes.LIST_FAILED](
+      actions.listSucceed({
+        listType: 'category',
+        listId: 7,
+      }),
+    );
     expect(connection.list('category', 7).ready).toBe(false);
     expect(connection.list('category', 7).fetching).toBe(false);
     expect(connection.list('category', 7).page(1).ready).toBe(false);
     expect(connection.list('category', 7).page(1).fetching).toBe(false);
+  });
+
+  test('Custom: Action Succeed', () => {
+    expect(connection.custom('test').ready).toBe(false);
+    expect(connection.custom('test').fetching).toBe(false);
+    expect(connection.custom('test').page(1).ready).toBe(false);
+    expect(connection.custom('test').page(1).fetching).toBe(false);
+    connection[actionTypes.CUSTOM_REQUESTED](
+      actions.customRequested({
+        name: 'test',
+        params: {},
+      }),
+    );
+    expect(connection.custom('test').ready).toBe(false);
+    expect(connection.custom('test').fetching).toBe(true);
+    expect(connection.custom('test').page(1).ready).toBe(false);
+    expect(connection.custom('test').page(1).fetching).toBe(true);
+    connection[actionTypes.CUSTOM_SUCCEED](
+      actions.customSucceed({
+        name: 'test',
+        result: resultFromCategory7,
+        entities: entitiesFromCategory,
+      }),
+    );
+    expect(connection.custom('test').ready).toBe(true);
+    expect(connection.custom('test').fetching).toBe(false);
+    expect(connection.custom('test').page(1).ready).toBe(true);
+    expect(connection.custom('test').page(1).fetching).toBe(false);
   });
 });
