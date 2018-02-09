@@ -171,6 +171,35 @@ Object {
 }
 `;
 
+exports[`Convert page 1`] = `
+Object {
+  "author": 2,
+  "content": "<p>En esta sección hemos seleccionado las mejores aplicaciones para proteger a tu smartphone Android del malware y aplicaciones de dudosa procedencia. Con el aumento de dispositivos Android, el malware se ha multiplicado exponencialmente en los últimos meses. Es esencial proteger forma precisa el terminal para evitar sustos o problemas de seguridad.</p>
+",
+  "creationDate": 1331199718000,
+  "excerpt": "<p>En esta sección hemos seleccionado las mejores aplicaciones para proteger a tu smartphone Android del malware y aplicaciones de dudosa procedencia. Con el aumento de dispositivos Android, el malware se ha multiplicado exponencialmente en los últimos meses. Es esencial proteger forma precisa el terminal para evitar sustos o problemas de seguridad.</p>
+",
+  "featured": null,
+  "id": 260,
+  "link": "https://androidayuda.com/aplicaciones-android/seguridad/",
+  "meta": Object {
+    "canonical": "https://androidayuda.com/aplicaciones-android/seguridad/",
+    "description": "",
+    "title": "Aplicaciones para proteger móvil Android | Aplicaciones de seguridad",
+  },
+  "modificationDate": 1497610288000,
+  "mst": "single",
+  "parent": Array [
+    231,
+  ],
+  "slug": "seguridad",
+  "target": undefined,
+  "taxonomies": undefined,
+  "title": "Seguridad",
+  "type": "page",
+}
+`;
+
 exports[`Convert post 1`] = `
 Object {
   "author": 4,
@@ -222,6 +251,7 @@ Category: <a href=\\"https://demo.worona.org/wp-cat/travel/\\">Travel</a></p>
   },
   "modificationDate": 1510321906000,
   "mst": "single",
+  "parent": Array [],
   "slug": "the-beauties-of-gullfoss",
   "target": undefined,
   "taxonomies": Object {

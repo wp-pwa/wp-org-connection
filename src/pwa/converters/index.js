@@ -13,12 +13,13 @@ export const single = entity => ({
   content: entity.content.rendered,
   excerpt: entity.excerpt.rendered,
   author: entity.author,
-  featured: entity.featured_media,
+  featured: entity.featured_media || null,
   taxonomies: entity.taxonomiesMap,
+  parent: entity._embedded && entity._embedded.up || [],
   target: entity['post-target'],
   meta: {
     title: decode(
-      (entity.yoast_meta && entity.yoast_meta.yoast_wpseo_title) || entity.title.rendered
+      (entity.yoast_meta && entity.yoast_meta.yoast_wpseo_title) || entity.title.rendered,
     ),
     description: (entity.yoast_meta && entity.yoast_meta.yoast_wpseo_desc) || '',
     canonical: (entity.yoast_meta && entity.yoast_meta.yoast_wpseo_canonical) || '',
