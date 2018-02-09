@@ -55,7 +55,7 @@ class RouteWaypoint extends Component {
         <Waypoint
           key="showChildren"
           scrollableAncestor={window}
-          offsetBottom={-300}
+          bottomOffset={-300}
           onEnter={this.showChildren}
         />,
       ];
@@ -96,7 +96,7 @@ const mapDispatchToProps = (dispatch, { currentSelected, method }) => ({
 
 export default inject(({ connection }, { selected }) => {
   const { context, selected: currentSelected } = connection;
-  const { column: selectedColumn, next } = context.getItem(selected);
+  const { column: selectedColumn, next } = context.getItem(selected) || {};
   const method = selectedColumn === currentSelected.column ? 'replace' : 'push';
   const active = selectedColumn === context.column;
   return { currentSelected, next, method, active };
