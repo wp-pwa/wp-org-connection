@@ -12,20 +12,19 @@ class RouteWaypoint extends Component {
     children: PropTypes.node.isRequired,
     ssr: PropTypes.bool.isRequired,
     active: PropTypes.bool.isRequired,
-    selected: PropTypes.shape({}).isRequired,
-    currentSelected: PropTypes.shape({}).isRequired,
-    next: PropTypes.shape({}),
     changeRoute: PropTypes.func.isRequired,
+    entity: PropTypes.shape({}).isRequired,
+    isNext: PropTypes.bool,
   };
 
   static defaultProps = {
-    next: null,
+    isNext: false,
   };
 
   constructor(props) {
     super(props);
-    const { ssr, currentSelected, selected } = this.props;
-    this.state = { show: ssr || isMatch(currentSelected, selected) };
+    const { ssr, isNext } = this.props;
+    this.state = { show: ssr || !isNext };
     this.showChildren = this.showChildren.bind(this);
     this.changeRouteFromBelow = this.changeRouteFromBelow.bind(this);
     this.changeRouteFromAbove = this.changeRouteFromAbove.bind(this);
@@ -36,17 +35,19 @@ class RouteWaypoint extends Component {
   }
 
   changeRouteFromBelow({ previousPosition }) {
-    const { changeRoute, next } = this.props;
-    if (previousPosition === Waypoint.below) changeRoute(next);
+    const { changeRoute, entity, active, isNext } = this.props;
+    const method = active || isNext ? 'replace' : 'push';
+    if (previousPosition === Waypoint.below) changeRoute(entity, method);
   }
 
   changeRouteFromAbove({ previousPosition }) {
-    const { changeRoute, selected } = this.props;
-    if (previousPosition === Waypoint.above) changeRoute(selected);
+    const { changeRoute, entity, active, isNext } = this.props;
+    const method = active || isNext ? 'replace' : 'push';
+    if (previousPosition === Waypoint.above) changeRoute(entity, method);
   }
 
   render() {
-    const { children, ssr, active, next } = this.props;
+    const { children, ssr, active, isNext } = this.props;
     const { show } = this.state;
 
     if (ssr) return [children];
@@ -56,24 +57,22 @@ class RouteWaypoint extends Component {
           key="showChildren"
           scrollableAncestor={window}
           bottomOffset={-300}
-          onEnter={this.showChildren}
+          onEnter={isNext ? this.showChildren : noop}
         />,
       ];
 
     return [
+      <Waypoint
+        key="changeRouteFromBelow"
+        onEnter={active ? this.changeRouteFromBelow : noop}
+        bottomOffset={600}
+        scrollableAncestor={window}
+      />,
       children,
       <Waypoint
         key="changeRouteFromAbove"
         onEnter={active ? this.changeRouteFromAbove : noop}
         topOffset={600}
-        bottomOffset={0}
-        scrollableAncestor={window}
-      />,
-      <Waypoint
-        key="changeRouteFromBelow"
-        onEnter={active && next ? this.changeRouteFromBelow : noop}
-        topOffset={0}
-        bottomOffset={600}
         scrollableAncestor={window}
       />,
     ];
@@ -84,20 +83,17 @@ const mapStateToProps = state => ({
   ssr: dep('build', 'selectors', 'getSsr')(state),
 });
 
-const mapDispatchToProps = (dispatch, { currentSelected, method }) => ({
-  changeRoute({ singleType, singleId }) {
+const mapDispatchToProps = (dispatch, { selected }) => ({
+  changeRoute(entity, method) {
     setTimeout(() => {
-      if (!isMatch(currentSelected, { singleType, singleId })) {
-        dispatch(routeChangeRequested({ selected: { singleType, singleId }, method }));
-      }
+      if (!isMatch(selected, entity)) dispatch(routeChangeRequested({ selected: entity, method }));
     });
   },
 });
 
-export default inject(({ connection }, { selected }) => {
-  const { context, selected: currentSelected } = connection;
-  const { column: selectedColumn, next } = context.getItem(selected) || {};
-  const method = selectedColumn === currentSelected.column ? 'replace' : 'push';
-  const active = selectedColumn === context.column;
-  return { currentSelected, next, method, active };
-})(connect(mapStateToProps, mapDispatchToProps)(RouteWaypoint));
+export default connect(mapStateToProps, mapDispatchToProps)(
+  inject(({ connection }) => {
+    const { selected } = connection;
+    return { selected };
+  })(RouteWaypoint),
+);
