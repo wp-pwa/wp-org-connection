@@ -20,7 +20,7 @@ export const List = types
   })
   .views(self => ({
     get ready() {
-      return !!self.entity && self.entity.ready;
+      return !!self.list && self.list.ready;
     },
     get list() {
       const { type, id, page } = self;
@@ -74,7 +74,7 @@ export const Single = types
   })
   .views(self => ({
     get ready() {
-      return !!self.entity && self.entity.ready;
+      return !!self.single && self.single.ready;
     },
     get single() {
       const { type, id } = self;
