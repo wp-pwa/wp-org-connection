@@ -182,6 +182,8 @@ export const actions = self => {
       self.context.columns.unshift(newColumn);
       self.context.column = newColumn;
     }
+    // Mark as visited
+    self.selected.visited = true;
   };
 
   const moveSelected = selected => {
@@ -202,6 +204,8 @@ export const actions = self => {
     } else {
       selectedItem.column.selected = selectedItem;
     }
+    // Mark as visited
+    self.selected.visited = true;
   };
 
   const createContext = (selected, generator, contextIndex) => {
