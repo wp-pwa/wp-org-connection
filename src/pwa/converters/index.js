@@ -13,7 +13,7 @@ export const post = entity => ({
   content: entity.content.rendered,
   excerpt: entity.excerpt.rendered,
   author: entity.author,
-  featured: entity.featured_media,
+  featured: entity.featured_media || null,
   taxonomiesMap: entity.taxonomiesMap,
   target: entity['post-target'],
   meta: {
