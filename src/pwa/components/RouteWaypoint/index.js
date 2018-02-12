@@ -34,16 +34,26 @@ class RouteWaypoint extends Component {
     this.setState({ show: true });
   }
 
-  changeRouteFromBelow({ previousPosition }) {
-    const { changeRoute, entity, active, isNext } = this.props;
+  changeRouteFromBelow(args) {
+    const { event, previousPosition } = args;
+    console.log('fromBelow', args);
+    const { selected, changeRoute, entity, active, isNext } = this.props;
     const method = active || isNext ? 'replace' : 'push';
-    if (previousPosition === Waypoint.below) changeRoute(entity, method);
+    if (event && previousPosition === Waypoint.below) {
+      console.log('CHANGING FROM BELOW', entity);
+      changeRoute(selected, entity, method);
+    }
   }
 
-  changeRouteFromAbove({ previousPosition }) {
-    const { changeRoute, entity, active, isNext } = this.props;
+  changeRouteFromAbove(args) {
+    const { event, previousPosition } = args;
+    console.log('fromAbove', args);
+    const { selected, changeRoute, entity, active, isNext } = this.props;
     const method = active || isNext ? 'replace' : 'push';
-    if (previousPosition === Waypoint.above) changeRoute(entity, method);
+    if (event && previousPosition === Waypoint.above) {
+      console.log('CHANGING FROM ABOVE', entity);
+      changeRoute(selected, entity, method);
+    }
   }
 
   render() {
@@ -83,10 +93,12 @@ const mapStateToProps = state => ({
   ssr: dep('build', 'selectors', 'getSsr')(state),
 });
 
-const mapDispatchToProps = (dispatch, { selected }) => ({
-  changeRoute(entity, method) {
+const mapDispatchToProps = dispatch => ({
+  changeRoute(selected, entity, method) {
     setTimeout(() => {
+      debugger
       if (!isMatch(selected, entity)) dispatch(routeChangeRequested({ selected: entity, method }));
+      else console.log('NO ROUTE CHANGE');
     });
   },
 });
