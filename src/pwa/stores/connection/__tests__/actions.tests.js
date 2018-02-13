@@ -1,12 +1,10 @@
 /* eslint-disable no-restricted-syntax */
-import { autorun } from 'mobx';
 import { types, unprotect } from 'mobx-state-tree';
 import { normalize } from 'normalizr';
 import * as connect from '../';
 import { list, entity } from '../../../schemas';
 import * as actions from '../../../actions';
 import * as actionTypes from '../../../actionTypes';
-import convert from '../../../converters';
 import post60 from '../../../__tests__/post-60.json';
 import postsFromCategory7 from '../../../__tests__/posts-from-category-7.json';
 import postsFromCategory7Page2 from '../../../__tests__/posts-from-category-7-page-2.json';
@@ -177,7 +175,7 @@ describe('Store › Actions', () => {
       }),
     );
     connection[actionTypes.LIST_FAILED](
-      actions.listSucceed({
+      actions.listFailed({
         listType: 'category',
         listId: 7,
       }),
@@ -193,14 +191,18 @@ describe('Store › Actions', () => {
     expect(connection.custom('test').fetching).toBe(false);
     expect(connection.custom('test').page(1).ready).toBe(false);
     expect(connection.custom('test').page(1).fetching).toBe(false);
+    const params = { a: 'b' };
     connection[actionTypes.CUSTOM_REQUESTED](
       actions.customRequested({
         name: 'test',
-        params: {},
+        params,
+        url: '/#test',
       }),
     );
     expect(connection.custom('test').ready).toBe(false);
     expect(connection.custom('test').fetching).toBe(true);
+    expect(connection.custom('test').params).toEqual(params);
+    expect(connection.custom('test').url).toBe('/#test');
     expect(connection.custom('test').page(1).ready).toBe(false);
     expect(connection.custom('test').page(1).fetching).toBe(true);
     connection[actionTypes.CUSTOM_SUCCEED](
@@ -213,6 +215,22 @@ describe('Store › Actions', () => {
     expect(connection.custom('test').ready).toBe(true);
     expect(connection.custom('test').fetching).toBe(false);
     expect(connection.custom('test').page(1).ready).toBe(true);
+    expect(connection.custom('test').page(1).fetching).toBe(false);
+  });
+
+  test('Custom: Action Failed', () => {
+    connection[actionTypes.CUSTOM_REQUESTED](
+      actions.customRequested({
+        name: 'test',
+        params: {},
+      }),
+    );
+    connection[actionTypes.CUSTOM_FAILED](
+      actions.customFailed({ name: 'test' }),
+    );
+    expect(connection.custom('test').ready).toBe(false);
+    expect(connection.custom('test').fetching).toBe(false);
+    expect(connection.custom('test').page(1).ready).toBe(false);
     expect(connection.custom('test').page(1).fetching).toBe(false);
   });
 });

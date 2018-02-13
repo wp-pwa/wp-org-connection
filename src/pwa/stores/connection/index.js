@@ -132,31 +132,21 @@ export const actions = self => ({
     const item = self.getListPage({ type, id, page });
     item.fetching = false;
   },
-  [actionTypes.HEAD_CONTENT_SUCCEED]({ content }) {
-    self.siteInfo.headContent = content;
-  },
-  [actionTypes.CUSTOM_REQUESTED]({ url = '/', params, name, page = 1 }) {
-    // if (!self.customMap.get(name)) self.customMap.set(name, {});
-    // const custom = self.customMap.get(name);
-    // custom.fetching = true;
-    // custom.url = url;
-    // custom.params = params;
-    // if (!custom.pageMap.get(page - 1)) custom.pageMap.set(page - 1, {});
-    // custom.pageMap.get(page - 1).fetching = true;
+  [actionTypes.CUSTOM_REQUESTED]({ name, page = 1, params, url }) {
+    const custom = self.getCustom({ name });
+    custom.params = params;
+    custom.url = url;
+    const item = self.getCustomPage({ name, page });
+    item.fetching = true;
   },
   [actionTypes.CUSTOM_SUCCEED]({ name, page = 1, total, result, entities }) {
-    // const custom = self.customMap.get(name);
-    // custom.fetching = false;
-    // custom.ready = true;
-    // custom.pageMap.get(page - 1).fetching = false;
-    // custom.pageMap.get(page - 1).ready = true;
-    // custom.pageMap.get(page - 1).entities = result;
-    // custom.total = total;
-    // addEntities({ self, entities, ready: true, fetching: false });
+    self.addCustomPage({ name, page, total, result, entities });
   },
   [actionTypes.CUSTOM_FAILED]({ name, page }) {
-    // const custom = self.customMap.get(name);
-    // custom.fetching = false;
-    // custom.pageMap.get(page - 1).fetching = false;
+    const item = self.getCustomPage({ name, page });
+    item.fetching = false;
   },
+  // [actionTypes.HEAD_CONTENT_SUCCEED]({ content }) {
+  //   self.siteInfo.headContent = content;
+  // },
 });
