@@ -189,6 +189,7 @@ export const actions = self => {
   const moveSelected = selected => {
     const selectedItem = self.context.getItem(selected);
     const current = self.context.selected;
+    const { columns } = self.context;
 
     if (!selectedItem) return;
 
@@ -196,7 +197,7 @@ export const actions = self => {
       const { column } = selectedItem;
       detach(selectedItem);
 
-      if (column.items.length === 0) detach(column);
+      if (column.items.length === 0) columns.remove(column);
 
       current.column.items.push(selectedItem);
       selectedItem.column.selected = selectedItem;
