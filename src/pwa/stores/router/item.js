@@ -16,10 +16,11 @@ export const List = types
     listType: types.optional(types.string, 'latest'),
     listId: types.optional(types.union(types.string, types.number), 'post'),
     page: types.optional(types.number, 1),
+    visited: false,
   })
   .views(self => ({
     get ready() {
-      return !!self.entity && self.entity.ready;
+      return !!self.list && self.list.ready;
     },
     get list() {
       const { type, id, page } = self;
@@ -69,10 +70,11 @@ export const Single = types
     singleType: types.string,
     singleId: types.maybe(types.number),
     fromList: types.optional(List, { listType: 'latest', listId: 'post' }),
+    visited: false,
   })
   .views(self => ({
     get ready() {
-      return !!self.entity && self.entity.ready;
+      return !!self.single && self.single.ready;
     },
     get single() {
       const { type, id } = self;
