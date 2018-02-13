@@ -4,8 +4,8 @@ import { decode } from 'he';
 export const post = entity => ({
   id: entity.id,
   type: entity.type,
-  creationDate: new Date(entity.date).getTime(),
-  modificationDate: new Date(entity.modified).getTime(),
+  creationDate: new Date(`${entity.date_gmt}`).getTime(),
+  modificationDate: new Date(`${entity.modified_gmt}`).getTime(),
   title: entity.title.rendered,
   slug: entity.slug,
   _link: entity.link,
@@ -18,11 +18,11 @@ export const post = entity => ({
   target: entity['post-target'],
   meta: {
     title: decode(
-      (entity.yoast_meta && entity.yoast_meta.yoast_wpseo_title) || entity.title.rendered
+      (entity.yoast_meta && entity.yoast_meta.yoast_wpseo_title) || entity.title.rendered,
     ),
     description: entity.yoast_meta && entity.yoast_meta.yoast_wpseo_desc,
-    pretty: true
-  }
+    pretty: true,
+  },
 });
 
 export const taxonomy = entity => ({
@@ -35,8 +35,8 @@ export const taxonomy = entity => ({
   meta: {
     title: decode((entity.yoast_meta && entity.yoast_meta.yoast_wpseo_title) || entity.name),
     description: entity.yoast_meta && entity.yoast_meta.yoast_wpseo_desc,
-    pretty: true
-  }
+    pretty: true,
+  },
 });
 
 export const author = entity => ({
@@ -45,14 +45,14 @@ export const author = entity => ({
   slug: entity.slug,
   description: entity.description,
   _link: entity.link,
-  avatar: entity.avatar_urls && Object.values(entity.avatar_urls)[0].replace(/\?.*$/, '')
+  avatar: entity.avatar_urls && Object.values(entity.avatar_urls)[0].replace(/\?.*$/, ''),
 });
 
 export const media = entity => {
   if (entity.error)
     return {
       id: parseInt(entity.id, 10),
-      error: entity.error
+      error: entity.error,
     };
 
   return {
@@ -67,16 +67,16 @@ export const media = entity => {
     _link: entity.link,
     meta: {
       title: decode(
-        (entity.yoast_meta && entity.yoast_meta.yoast_wpseo_title) || entity.title.rendered
+        (entity.yoast_meta && entity.yoast_meta.yoast_wpseo_title) || entity.title.rendered,
       ),
       description: entity.yoast_meta && entity.yoast_meta.yoast_wpseo_desc,
-      pretty: true
+      pretty: true,
     },
     original: {
       height: parseInt(entity.media_details.height, 10),
       width: parseInt(entity.media_details.width, 10),
       filename: entity.media_details.file,
-      url: entity.source_url
+      url: entity.source_url,
     },
     sizes:
       entity.media_details.sizes &&
@@ -84,8 +84,8 @@ export const media = entity => {
         height: parseInt(image.height, 10),
         width: parseInt(image.width, 10),
         filename: image.file,
-        url: image.source_url
-      }))
+        url: image.source_url,
+      })),
   };
 };
 
