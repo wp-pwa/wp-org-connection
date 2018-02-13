@@ -10,13 +10,13 @@ const lateContext = types.late(() => Context);
 
 export const props = {
   contexts: types.optional(types.array(lateContext), []),
-  context: types.maybe(types.reference(lateContext))
+  context: types.maybe(types.reference(lateContext)),
 };
 
 export const views = self => ({
   get selected() {
     return self.context && self.context.selected;
-  }
+  },
 });
 
 const columnSnapshot = element => {
@@ -45,7 +45,7 @@ export const extractList = ({ listType, listId, page, result }, context) => {
   let elementsToPlace = result;
   firstColumns.forEach(col => {
     elementsToPlace = elementsToPlace.filter(
-      id => !col.getItem({ singleId: id, singleType: 'post' })
+      id => !col.getItem({ singleId: id, singleType: 'post' }),
     );
   });
 
@@ -81,8 +81,8 @@ export const extractList = ({ listType, listId, page, result }, context) => {
         router: 'single',
         singleType: 'post',
         singleId: id,
-        fromList: { listType, listId, page }
-      })
+        fromList: { listType, listId, page },
+      }),
     );
   });
 
@@ -121,7 +121,7 @@ export const actions = self => {
     if (entities && !fetching) {
       return entities
         .filter(
-          ({ type, id }) => !generated.some(col => col.getItem({ singleType: type, singleId: id }))
+          ({ type, id }) => !generated.some(col => col.getItem({ singleType: type, singleId: id })),
         )
         .map(({ type, id }) =>
           Column.create(
@@ -129,9 +129,9 @@ export const actions = self => {
               router: 'single',
               singleType: type,
               singleId: id,
-              fromList: list
-            })
-          )
+              fromList: list,
+            }),
+          ),
         );
     }
 
@@ -141,50 +141,58 @@ export const actions = self => {
         columnSnapshot({
           router: 'single',
           singleType: 'post',
-          fromList: list
-        })
-      )
+          fromList: list,
+        }),
+      ),
     ];
   };
 
   const extractListFromStore = (generated, list) =>
     generated.concat(getExtractedColumns(generated, list));
 
+  const loadNextPageIfInfinite = () => {
+    if (self.context.infinite) {
+      const { column, fromList } = self.context.selected;
+      const { columns } = self.context;
+
+      if (column.index >= columns.length - 2 && fromList) {
+        const nextList = {
+          listType: fromList.type,
+          listId: fromList.id,
+          page: fromList.page + 1,
+        };
+
+        getExtractedColumns(self.context.columns, nextList).forEach(col =>
+          self.context.columns.push(col),
+        );
+      }
+    }
+  };
+
   const changeSelected = selected => {
     const selectedItem = self.context.getItem(selected);
     if (selectedItem) {
-      const { column, fromList } = selectedItem;
+      const { column } = selectedItem;
       column.selected = selectedItem;
       self.context.column = column;
-
-      if (self.context.infinite) {
-        const { columns } = self.context;
-
-        if (columns.indexOf(column) >= columns.length - 1 && fromList) {
-          const nextList = {
-            listType: fromList.type,
-            listId: fromList.id,
-            page: fromList.page + 1
-          };
-
-          getExtractedColumns(self.context.columns, nextList).forEach(col =>
-            self.context.columns.push(col)
-          );
-        }
-      }
+      loadNextPageIfInfinite();
     } else {
       // Creates a new element at first position
       const newColumn = Column.create(columnSnapshot(selected));
       self.context.columns.unshift(newColumn);
       self.context.column = newColumn;
     }
+    // Mark as visited
+    self.selected.visited = true;
   };
 
   const moveSelected = selected => {
     const selectedItem = self.context.getItem(selected);
     const current = self.context.selected;
 
-    if (selectedItem && current.column._id !== selectedItem.column._id) {
+    if (!selectedItem) return;
+
+    if (current.column._id !== selectedItem.column._id) {
       const { column } = selectedItem;
       detach(selectedItem);
 
@@ -192,7 +200,12 @@ export const actions = self => {
 
       current.column.items.push(selectedItem);
       selectedItem.column.selected = selectedItem;
+      loadNextPageIfInfinite();
+    } else {
+      selectedItem.column.selected = selectedItem;
     }
+    // Mark as visited
+    self.selected.visited = true;
   };
 
   const createContext = (selected, generator, contextIndex) => {
@@ -215,7 +228,7 @@ export const actions = self => {
       columns,
       options,
       infinite,
-      generator
+      generator,
     };
   };
 
@@ -254,7 +267,7 @@ export const actions = self => {
     self.contexts.push({
       index: contextIndex,
       column: columnId,
-      columns: [{ _id: columnId, items, selected: itemId }]
+      columns: [{ _id: columnId, items, selected: itemId }],
     });
 
     self.context = contextIndex;
@@ -308,6 +321,6 @@ export const actions = self => {
 
       if (typeof window !== 'undefined')
         self.siteInfo.headContent = self.siteInfo.headContent.filter(node => node.permanent);
-    }
+    },
   };
 };
