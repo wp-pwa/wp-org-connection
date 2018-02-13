@@ -13,6 +13,7 @@ class RouteWaypoint extends Component {
     ssr: PropTypes.bool.isRequired,
     active: PropTypes.bool.isRequired,
     changeRoute: PropTypes.func.isRequired,
+    selected: PropTypes.shape({}).isRequired,
     entity: PropTypes.shape({}).isRequired,
     isNext: PropTypes.bool,
   };
@@ -34,24 +35,18 @@ class RouteWaypoint extends Component {
     this.setState({ show: true });
   }
 
-  changeRouteFromBelow(args) {
-    const { event, previousPosition } = args;
-    console.log('fromBelow', args);
+  changeRouteFromBelow({ event, previousPosition }) {
     const { selected, changeRoute, entity, active, isNext } = this.props;
     const method = active || isNext ? 'replace' : 'push';
     if (event && previousPosition === Waypoint.below) {
-      console.log('CHANGING FROM BELOW', entity);
       changeRoute(selected, entity, method);
     }
   }
 
-  changeRouteFromAbove(args) {
-    const { event, previousPosition } = args;
-    console.log('fromAbove', args);
+  changeRouteFromAbove({ event, previousPosition }) {
     const { selected, changeRoute, entity, active, isNext } = this.props;
     const method = active || isNext ? 'replace' : 'push';
     if (event && previousPosition === Waypoint.above) {
-      console.log('CHANGING FROM ABOVE', entity);
       changeRoute(selected, entity, method);
     }
   }
@@ -65,9 +60,10 @@ class RouteWaypoint extends Component {
       return [
         <Waypoint
           key="showChildren"
-          scrollableAncestor={window}
-          bottomOffset={-300}
           onEnter={isNext ? this.showChildren : noop}
+          bottomOffset={-300}
+          scrollableAncestor="window"
+          fireOnRapidScroll={false}
         />,
       ];
 
@@ -76,14 +72,16 @@ class RouteWaypoint extends Component {
         key="changeRouteFromBelow"
         onEnter={active ? this.changeRouteFromBelow : noop}
         bottomOffset={600}
-        scrollableAncestor={window}
+        scrollableAncestor="window"
+        fireOnRapidScroll={false}
       />,
       children,
       <Waypoint
         key="changeRouteFromAbove"
         onEnter={active ? this.changeRouteFromAbove : noop}
         topOffset={600}
-        scrollableAncestor={window}
+        scrollableAncestor="window"
+        fireOnRapidScroll={false}
       />,
     ];
   }
@@ -96,9 +94,7 @@ const mapStateToProps = state => ({
 const mapDispatchToProps = dispatch => ({
   changeRoute(selected, entity, method) {
     setTimeout(() => {
-      debugger
       if (!isMatch(selected, entity)) dispatch(routeChangeRequested({ selected: entity, method }));
-      else console.log('NO ROUTE CHANGE');
     });
   },
 });
