@@ -1,5 +1,5 @@
 import { types, getParent } from 'mobx-state-tree';
-import { isMatch, omitBy, isUndefined } from 'lodash';
+import { isMatchWith, omitBy, isUndefined } from 'lodash';
 import { Item } from './item';
 
 import Id from './id';
@@ -12,10 +12,10 @@ const Column = types
     selected: types.reference(types.late(() => Item)),
   })
   .views(self => ({
-    getItem(props) {
+    getItem(props, customizer) {
       return (
         self.items.find(
-          i => isMatch(i, omitBy(props, isUndefined)),
+          i => isMatchWith(i, omitBy(props, isUndefined), customizer),
         ) || null
       );
     },
