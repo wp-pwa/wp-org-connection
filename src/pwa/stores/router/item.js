@@ -25,14 +25,16 @@ export const List = types
     get list() {
       const { type, id, page } = self;
       const connection = getConnection(self);
-      const list = connection && connection.list[type][id];
+      const listType = connection && connection.list[type]
+      const list = listType && listType[id];
       return (list && list.page[page - 1]) || null;
     },
     get single() {
       const { type, id } = self;
       if (type === 'latest') return null;
       const connection = getConnection(self);
-      return connection && connection.single[type][id];
+      const singleType = connection && connection.single[type]
+      return singleType && singleType[id] || null;
     },
     get type() {
       return self.listType;
@@ -79,7 +81,8 @@ export const Single = types
     get single() {
       const { type, id } = self;
       const connection = getConnection(self);
-      return (connection && connection.single[type][id]) || null;
+      const singleType = connection && connection.single[type]
+      return singleType && singleType[id] || null;
     },
     get type() {
       return self.singleType;
