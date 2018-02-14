@@ -15,10 +15,10 @@ const Context = types
     get selected() {
       return self.column.selected;
     },
-    getItem(props) {
+    getItem(props, customizer) {
       let item;
       self.columns.find(col => {
-        const i = col.getItem(props);
+        const i = col.getItem(props, customizer);
         if (i) item = i;
         return i;
       });
