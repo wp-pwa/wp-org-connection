@@ -14,7 +14,7 @@ export const getHeadContent = headString => {
 
   // Filters out anything different than the tags allowed on the whitelist (currently <meta> and <link>).
   const filteredHead = parsedHead.filter(
-    node => node.type === 'element' && allowedTags.has(node.tagName)
+    node => node.type === 'element' && allowedTags.has(node.tagName),
   );
 
   // Maps nodes into something easier to read.
@@ -23,7 +23,7 @@ export const getHeadContent = headString => {
     attributes: node.attributes.reduce((r, c) => {
       r[c.key] = c.value;
       return r;
-    }, {})
+    }, {}),
   }));
 
   // Reduces parsed content to an object with an array of <meta> elements
@@ -55,7 +55,7 @@ export const getHeadContent = headString => {
           return r.meta.findIndex(
             item =>
               (item.attributes.name && item.attributes.name === n.attributes.name) ||
-              (item.attributes.property && item.attributes.property === n.attributes.property)
+              (item.attributes.property && item.attributes.property === n.attributes.property),
           );
         } else if (n.tagName === 'link') {
           return r.link.findIndex(item => item.attributes.rel === n.attributes.rel);
@@ -86,13 +86,13 @@ export const headContentRequested = () =>
     try {
       const url = yield select(dep('build', 'selectors', 'getInitialUrl'));
       const site = yield request(url);
-      const headString = site.text.match(/<head>([\w\W]+)<\/head>/)[1];
+      const headString = site.text.match(/<\s*?head[^>]*>([\w\W]+)<\s*?\/\s*?head\s*?>/)[1];
       const headContent = getHeadContent(headString);
 
       yield put(
         actions.headContentSucceed({
-          content: headContent
-        })
+          content: headContent,
+        }),
       );
     } catch (error) {
       yield put(actions.headContentFailed({ error }));
