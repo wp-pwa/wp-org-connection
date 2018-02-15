@@ -69,7 +69,7 @@ const List = types
     },
     get entity() {
       return resolveIdentifier(Entity, self, self.mstId) || entityShape(self.type, self.id)
-    }
+    },
   }));
 
 export default List;

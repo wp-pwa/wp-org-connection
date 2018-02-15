@@ -13,11 +13,7 @@ const Column = types
   })
   .views(self => ({
     getItem(props, customizer) {
-      return (
-        self.items.find(
-          i => isMatchWith(i, omitBy(props, isUndefined), customizer),
-        ) || null
-      );
+      return self.items.find(i => isMatchWith(i, omitBy(props, isUndefined), customizer)) || null;
     },
     get next() {
       const columns = getParent(self);
@@ -27,7 +23,7 @@ const Column = types
     get index() {
       const columns = getParent(self);
       return columns ? columns.indexOf(self) : -1;
-    }
+    },
   }));
 
 export default Column;
