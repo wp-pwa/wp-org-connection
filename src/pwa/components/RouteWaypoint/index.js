@@ -52,10 +52,9 @@ class RouteWaypoint extends Component {
   }
 
   render() {
-    const { children, ssr, active, isNext } = this.props;
+    const { children, active, isNext } = this.props;
     const { show } = this.state;
 
-    if (ssr) return [children];
     if (!show)
       return [
         <Waypoint
