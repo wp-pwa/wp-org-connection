@@ -1,3 +1,4 @@
+import { getSnapshot } from 'mobx-state-tree';
 import Connection from '../../';
 import * as actionTypes from '../../../actionTypes';
 import * as actions from '../../../actions';
@@ -29,8 +30,8 @@ describe('Connection › Router', () => {
         },
       }),
     );
-    expect(connection.contexts[0]).toMatchSnapshot();
-    expect(connection.selectedContext).toMatchSnapshot();
+    expect(connection.contexts).toMatchSnapshot();
+    expect(getSnapshot(connection).selectedContext).toBe(connection.contexts[0].index);
   });
   test('Create context from selected list', () => {
     connection[actionTypes.ROUTE_CHANGE_SUCCEED](
@@ -42,7 +43,7 @@ describe('Connection › Router', () => {
         },
       }),
     );
-    expect(connection.contexts[0]).toMatchSnapshot();
-    expect(connection.selectedContext).toMatchSnapshot();
+    expect(connection.contexts).toMatchSnapshot();
+    expect(getSnapshot(connection).selectedContext).toBe(connection.contexts[0].index);
   });
 });

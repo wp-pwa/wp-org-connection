@@ -1,115 +1,63 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
 exports[`Connection › Router Create context from selected list 1`] = `
-Object {
-  "columns": Array [
-    Object {
-      "items": Array [
-        Object {
-          "id": 70,
-          "mstId": "mockedId_7",
-          "page": 1,
-          "type": "category",
-          "visited": false,
-        },
-      ],
-      "mstId": "mockedId_6",
-      "selectedItem": "",
-    },
-  ],
-  "generator": undefined,
-  "index": 0,
-  "infinite": true,
-  "options": undefined,
-  "selectedColumn": "",
-}
-`;
-
-exports[`Connection › Router Create context from selected list 2`] = `
-Object {
-  "columns": Array [
-    Object {
-      "items": Array [
-        Object {
-          "id": 70,
-          "mstId": "mockedId_7",
-          "page": 1,
-          "type": "category",
-          "visited": false,
-        },
-      ],
-      "mstId": "mockedId_6",
-      "selectedItem": "",
-    },
-  ],
-  "generator": undefined,
-  "index": 0,
-  "infinite": true,
-  "options": undefined,
-  "selectedColumn": "",
-}
+Array [
+  Object {
+    "columns": Array [
+      Object {
+        "items": Array [
+          Object {
+            "id": 70,
+            "mstId": "mockedId_7",
+            "page": 1,
+            "type": "category",
+            "visited": false,
+          },
+        ],
+        "mstId": "mockedId_6",
+        "selectedItem": "",
+      },
+    ],
+    "generator": undefined,
+    "index": 0,
+    "infinite": true,
+    "options": undefined,
+    "selectedColumn": "",
+  },
+]
 `;
 
 exports[`Connection › Router Create context from selected single 1`] = `
-Object {
-  "columns": Array [
-    Object {
-      "items": Array [
-        Object {
-          "fromList": Object {
-            "id": "post",
-            "mstId": "mockedId_5",
-            "page": 1,
-            "type": "latest",
+Array [
+  Object {
+    "columns": Array [
+      Object {
+        "items": Array [
+          Object {
+            "fromList": Object {
+              "id": "post",
+              "mstId": "mockedId_5",
+              "page": 1,
+              "type": "latest",
+              "visited": false,
+            },
+            "id": 60,
+            "mstId": "mockedId_4",
+            "type": "post",
             "visited": false,
           },
-          "id": 60,
-          "mstId": "mockedId_4",
-          "type": "post",
-          "visited": false,
-        },
-      ],
-      "mstId": "mockedId_3",
-      "selectedItem": "",
-    },
-  ],
-  "generator": undefined,
-  "index": 0,
-  "infinite": true,
-  "options": undefined,
-  "selectedColumn": "",
-}
-`;
-
-exports[`Connection › Router Create context from selected single 2`] = `
-Object {
-  "columns": Array [
-    Object {
-      "items": Array [
-        Object {
-          "fromList": Object {
-            "id": "post",
-            "mstId": "mockedId_5",
-            "page": 1,
-            "type": "latest",
-            "visited": false,
-          },
-          "id": 60,
-          "mstId": "mockedId_4",
-          "type": "post",
-          "visited": false,
-        },
-      ],
-      "mstId": "mockedId_3",
-      "selectedItem": "",
-    },
-  ],
-  "generator": undefined,
-  "index": 0,
-  "infinite": true,
-  "options": undefined,
-  "selectedColumn": "",
-}
+        ],
+        "mstId": "mockedId_3",
+        "selectedItem": "",
+      },
+    ],
+    "generator": undefined,
+    "index": 0,
+    "infinite": true,
+    "options": undefined,
+    "selectedColumn": "",
+  },
+]
 `;
 
 exports[`Connection › Router Initializes contexts as empty array 1`] = `Array []`;
