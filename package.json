@@ -1,6 +1,7 @@
 {
   "name": "wp-org-connection-app-extension-worona",
-  "version": "1.4.1",
+  "version": "1.1.0",
+  "private": true,
   "description": "Connect to any self hosted WP using the WP-API",
   "scripts": {
     "start": "node node_modules/worona-packages/dist/start.js"
@@ -21,7 +22,7 @@
   "license": "MIT",
   "dependencies": {
     "he": "^1.1.1",
-    "himalaya": "^1.0.0",
+    "himalaya": "^1.0.1",
     "nprogress": "^0.2.0",
     "query-parse": "^2.0.0",
     "react-waypoint": "^8.0.0",

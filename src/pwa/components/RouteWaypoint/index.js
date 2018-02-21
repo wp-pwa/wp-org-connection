@@ -52,10 +52,9 @@ class RouteWaypoint extends Component {
   }
 
   render() {
-    const { children, ssr, active, isNext } = this.props;
+    const { children, active, isNext } = this.props;
     const { show } = this.state;
 
-    if (ssr) return [children];
     if (!show)
       return [
         <Waypoint
@@ -71,7 +70,7 @@ class RouteWaypoint extends Component {
       <Waypoint
         key="changeRouteFromBelow"
         onEnter={active ? this.changeRouteFromBelow : noop}
-        bottomOffset={600}
+        bottomOffset={500}
         scrollableAncestor="window"
         fireOnRapidScroll={false}
       />,
@@ -79,7 +78,7 @@ class RouteWaypoint extends Component {
       <Waypoint
         key="changeRouteFromAbove"
         onEnter={active ? this.changeRouteFromAbove : noop}
-        topOffset={600}
+        topOffset={500}
         scrollableAncestor="window"
         fireOnRapidScroll={false}
       />,
