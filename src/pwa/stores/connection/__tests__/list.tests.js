@@ -29,7 +29,7 @@ beforeEach(() => {
   unprotect(connection);
 });
 
-describe('Store › List', () => {
+describe('Connection › List', () => {
   test('Get list snapshot when entity is not ready', () => {
     expect(connection.list('category', 7)).toMatchSnapshot();
   });

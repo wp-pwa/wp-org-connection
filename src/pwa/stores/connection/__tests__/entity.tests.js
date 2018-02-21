@@ -23,7 +23,7 @@ beforeEach(() => {
   unprotect(connection);
 });
 
-describe('Store › Entity', () => {
+describe('Connection › Entity', () => {
   test('Get entity shape when entity is not ready', () => {
     expect(connection.entity('someType', 'someId')).toMatchSnapshot();
   });

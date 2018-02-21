@@ -28,7 +28,7 @@ const { result: resultFromCategoryListPage2, entities: entitiesFromCategoryListP
   list,
 );
 
-describe('Store › Custom', () => {
+describe('Connection › Custom', () => {
   test('Get custom snapshot when it is not ready', () => {
     expect(connection.custom('test')).toMatchSnapshot();
   });

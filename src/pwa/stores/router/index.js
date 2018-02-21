@@ -4,18 +4,24 @@ import uuid from 'uuid/v4';
 import Column from './column';
 import Context from './context';
 import * as actionTypes from '../../actionTypes';
-import { init } from '../connection';
 
 const lateContext = types.late(() => Context);
 
 export const props = {
   contexts: types.optional(types.array(lateContext), []),
-  context: types.maybe(types.reference(lateContext)),
+  selectedContext: types.maybe(types.reference(lateContext)),
 };
 
 export const views = self => ({
-  get selected() {
-    return self.context && self.context.selected;
+  get selectedColumn() {
+    return self.selectedContext && self.selectedContext.selectedColumn;
+  },
+  get selectedItem() {
+    return (
+      self.selectedContext &&
+      self.selectedContext.selectedColumn &&
+      self.selectedContext.selectedColumn.selectedItem
+    );
   },
 });
 
@@ -95,23 +101,6 @@ export const extractList = ({ listType, listId, page, result }, context) => {
 };
 
 export const actions = self => {
-  const shouldInit = ({ listType, listId, singleType, singleId }) => {
-    if (listType) {
-      const list = self.listMap.get(listType) && self.listMap.get(listType).get(listId);
-      const single = self.singleMap.get(listType) && self.singleMap.get(listType).get(listId);
-      if (list && single) return false;
-    }
-
-    if (singleType && singleId) {
-      const single = self.singleMap.get(singleType) && self.singleMap.get(singleType).get(singleId);
-      if (single) return false;
-    }
-
-    if (singleType && !singleId) return false;
-
-    return true;
-  };
-
   const getExtractedColumns = (generated, list) => {
     const { listType, listId, page = 1 } = list;
     const listItem = self.list[listType][listId];
@@ -169,7 +158,7 @@ export const actions = self => {
     }
   };
 
-  const changeSelected = selected => {
+  const changeSelectedItem = selected => {
     const selectedItem = self.context.getItem(selected);
     if (selectedItem) {
       const { column } = selectedItem;
@@ -186,7 +175,7 @@ export const actions = self => {
     self.selected.visited = true;
   };
 
-  const moveSelected = selected => {
+  const moveSelectedItem = selected => {
     const selectedItem = self.context.getItem(selected);
     const current = self.context.selected;
     const { columns } = self.context;
@@ -233,89 +222,67 @@ export const actions = self => {
     };
   };
 
-  const pushContext = (selected, context) => {
+  const createNewContext = (selected, context) => {
     const contextIndex = self.context ? self.context.index + 1 : 0;
     self.contexts[contextIndex] = createContext(selected, context, contextIndex);
     self.context = self.contexts[contextIndex];
-    changeSelected(selected);
+    changeSelectedItem(selected);
   };
 
-  const replaceContext = (selected, context) => {
+  const replaceSelectedContext = (selected, context) => {
     const contextIndex = self.context ? self.context.index : 0;
     const ctx = self.context;
     detach(ctx);
     self.contexts[contextIndex] = createContext(selected, context, contextIndex);
     self.context = self.contexts[contextIndex];
-    changeSelected(selected);
+    changeSelectedItem(selected);
   };
 
   const changeToContext = (selected, relativeIndex) => {
     const newIndex = self.context.index + relativeIndex;
     self.context = self.contexts[newIndex];
-    changeSelected(selected);
+    changeSelectedItem(selected);
   };
 
   const selectInPreviousContext = selected => changeToContext(selected, -1);
   const selectInNextContext = selected => changeToContext(selected, 1);
 
-  const createContextFromSelected = ({ listType, listId, singleType, singleId, page }) => {
-    const contextIndex = self.context ? self.context.index + 1 : 0;
-    const columnId = uuid();
-    const itemId = uuid();
-    const items = [{ _id: itemId, column: columnId }];
-    if (listType) items[0] = { ...items[0], route: 'list', listType, listId, page };
-    else items[0] = { ...items[0], route: 'single', singleType, singleId };
-    self.contexts.push({
-      index: contextIndex,
-      column: columnId,
-      columns: [{ _id: columnId, items, selected: itemId }],
-    });
-
-    self.context = contextIndex;
+  const createContextFromSelected = ({ type, id, page }) => {
+    const index = self.selectedContext ? self.selectedContext.index + 1 : 0;
+    const items = [{ type, id, page }];
+    const columns = [{ items }];
+    self.contexts[index] = { index, columns };
+    self.selectedContext = self.contexts[index];
   };
 
   return {
-    [actionTypes.ROUTE_CHANGE_REQUESTED]: ({ selected, context }) => {
-      if (selected && shouldInit(selected)) init({ self, ...selected, fetching: false });
-
-      if (context) {
-        context.items.forEach(column => {
-          if (column instanceof Array) {
-            column.forEach(item => {
-              const { fromList } = item;
-              if (shouldInit(item)) init({ self, ...item, fetching: false });
-              if (fromList && shouldInit(fromList)) init({ self, ...fromList, fetching: false });
-            });
-          } else {
-            const { fromList } = column;
-            if (shouldInit(column)) init({ self, ...column, fetching: false });
-            if (fromList && shouldInit(fromList)) init({ self, ...fromList, fetching: false });
-          }
-        });
-      }
-    },
     [actionTypes.ROUTE_CHANGE_SUCCEED]: ({ selected, method, context }) => {
-      const selectedInContext = self.context && !!self.context.getItem(selected);
-      const contextsAreEqual = self.context && isEqual(self.context.generator, context);
+      const selectedItemIsInContext =
+        self.selectedContext && !!self.selectedContext.getItem(selected);
+      const contextsAreEqual =
+        self.selectedContext && isEqual(self.selectedContext.generator, context);
 
-      if (self.context) {
-        if (selectedInContext && ((context && contextsAreEqual) || !context)) {
-          if (['push', 'back', 'forward'].includes(method)) changeSelected(selected);
-          if (method === 'replace') moveSelected(selected);
-        }
-        if (context && !contextsAreEqual) {
-          if (method === 'push') pushContext(selected, context);
-          if (method === 'replace') replaceContext(selected, context);
+      // If there's a previous context...
+      if (self.selectedContext) {
+        // and selected item is in the previous context and the new context is equal.
+        if (selectedItemIsInContext && ((context && contextsAreEqual) || !context)) {
+          if (['change', 'back', 'forward'].includes(method)) changeSelectedItem(selected);
+          else if (method === 'move') moveSelectedItem(selected);
+          // and contexts are not equal.
+        } else if (context && !contextsAreEqual) {
+          if (method === 'change') createNewContext(selected, context);
+          else if (method === 'move') replaceSelectedContext(selected, context);
+          else if (method === 'back') selectInPreviousContext(selected);
+          else if (method === 'forward') selectInNextContext(selected);
+          // and there's no context and item in not in previous context.
+        } else if (!context && !selectedItemIsInContext) {
           if (method === 'back') selectInPreviousContext(selected);
-          if (method === 'forward') selectInNextContext(selected);
+          else if (method === 'forward') selectInNextContext(selected);
+          else if (['change', 'move'].includes(method)) createContextFromSelected(selected);
         }
-        if (!context && !selectedInContext) {
-          if (method === 'back') selectInPreviousContext(selected);
-          if (method === 'forward') selectInNextContext(selected);
-          if (['push', 'replace'].includes(method)) createContextFromSelected(selected);
-        }
+        // If there's no previous context.
       } else if (context) {
-        pushContext(selected, context);
+        createNewContext(selected, context);
       } else {
         createContextFromSelected(selected);
       }

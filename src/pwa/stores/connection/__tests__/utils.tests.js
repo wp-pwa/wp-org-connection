@@ -1,6 +1,6 @@
 import { join, extract } from '../utils';
 
-describe('Store › Connection › Utils', () => {
+describe('Connection › Utils', () => {
   test('Join types', () => {
     expect(join('post', 60)).toBe('post_60');
     expect(join('category', 7)).toBe('category_7');

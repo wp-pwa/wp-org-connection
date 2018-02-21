@@ -5,46 +5,42 @@ import post60converted from '../../../__tests__/post-60-converted.json';
 
 describe('Store > Context > Column > Item', () => {
   const post = Item.create({
-    _id: 'c0dab071-a251-4dac-9801-a2792a3bb362',
-    route: 'single',
-    singleType: 'post',
-    singleId: 60,
+    mstId: 'c0dab071-a251-4dac-9801-a2792a3bb362',
+    type: 'post',
+    id: 60,
     fromList: {
-      _id: 'e5571d38-b4c9-4c9e-bb7a-404954cad292',
-      listType: 'latest',
+      mstId: 'e5571d38-b4c9-4c9e-bb7a-404954cad292',
+      type: 'latest',
+      id: 'post',
+      page: 1,
     },
   });
 
   const page = Item.create({
-    _id: 'b783bfa6-9ff7-43dd-b7d3-8cf6d215ef7f',
-    route: 'single',
-    singleType: 'page',
-    singleId: 30,
-    fromList: {
-      _id: '7ee66289-df96-4b2b-a08b-5527cacfc266',
-      listType: 'latest',
-    },
+    mstId: 'b783bfa6-9ff7-43dd-b7d3-8cf6d215ef7f',
+    type: 'page',
+    id: 30,
   });
 
   const latest = Item.create({
-    _id: 'c8bf4c53-370d-4e75-b023-917ec3a4a3b5',
-    listType: 'latest',
+    mstId: 'c8bf4c53-370d-4e75-b023-917ec3a4a3b5',
+    type: 'latest',
   });
 
   const category = Item.create({
-    _id: '2fbd1661-41fe-40d2-8df5-009f293ada41',
-    listType: 'category',
+    mstId: '2fbd1661-41fe-40d2-8df5-009f293ada41',
+    type: 'category',
     listId: '12',
   });
 
   const column1 = Column.create({
-    _id: 'column-snapshot-000',
+    mstId: 'column-snapshot-000',
     selected: post,
     items: [post, category],
   });
 
   const column2 = Column.create({
-    _id: 'column-snapshot-001',
+    mstId: 'column-snapshot-001',
     selected: page,
     items: [page],
   });

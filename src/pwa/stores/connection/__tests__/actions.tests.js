@@ -31,7 +31,7 @@ beforeEach(() => {
   unprotect(connection);
 });
 
-describe('Store › Actions', () => {
+describe('Connection › Actions', () => {
   test('Single: Action Succeed', () => {
     expect(connection.entity('post', 60).ready).toBe(false);
     expect(connection.entity('post', 60).fetching).toBe(false);
