@@ -90,10 +90,18 @@ const mapStateToProps = state => ({
   ssr: dep('build', 'selectors', 'getSsr')(state),
 });
 
-const mapDispatchToProps = dispatch => ({
+const mapDispatchToProps = (dispatch, { event }) => ({
   changeRoute(selected, entity, method) {
     setTimeout(() => {
-      if (!isMatch(selected, entity)) dispatch(routeChangeRequested({ selected: entity, method }));
+      if (!isMatch(selected, entity)) {
+        dispatch(
+          routeChangeRequested({
+            selected: entity,
+            method,
+            event,
+          }),
+        );
+      }
     });
   },
 });
