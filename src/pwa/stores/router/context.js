@@ -1,4 +1,4 @@
-import { types, getRoot } from 'mobx-state-tree';
+import { types, getRoot, resolveIdentifier } from 'mobx-state-tree';
 import Column from './column';
 
 const Context = types
@@ -9,8 +9,7 @@ const Context = types
     rawColumns: types.array(types.late(() => Column)),
     selectedColumn: types.optional(
       types.reference(types.late(() => Column), {
-        get: (mstId, parent) =>
-          parent.columns.find(column => column.mstId === mstId) || parent.columns[0],
+        get: (mstId, parent) => resolveIdentifier(Column, parent, mstId) || parent.columns[0],
         set: mstId => mstId,
       }),
       '',

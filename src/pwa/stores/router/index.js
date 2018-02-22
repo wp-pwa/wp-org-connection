@@ -241,9 +241,14 @@ export const actions = self => {
     self.selectedContext = newContext.index; // Select the correct context
   };
 
+  const getItemMstId = ({ index, type, id, page }) => {
+    const mstId = `${index}_${type}_${id}`;
+    return page ? `${mstId}_page_${page}` : mstId;
+  }
+
   const createNewContextFromSelected = ({ selected: { type, id, page } }) => {
     const index = self.selectedContext ? self.selectedContext.index + 1 : 0;
-    const items = [{ type, id, page }];
+    const items = [{ mstId: getItemMstId({ index, type, id, page }), type, id, page }];
     const rawColumns = [{ items }];
     const generator = [{ items }];
     self.contexts[index] = { index, rawColumns, generator };

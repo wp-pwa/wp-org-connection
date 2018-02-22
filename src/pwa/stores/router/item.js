@@ -1,10 +1,9 @@
 import { types, getParent, getRoot } from 'mobx-state-tree';
-import uuid from 'uuid/v4';
 
 const BaseItem = types
   .model('BaseItem')
   .props({
-    mstId: types.optional(types.identifier(types.string), uuid),
+    mstId: types.identifier(types.string),
     type: types.string,
     id: types.union(types.string, types.number),
     visited: false,
@@ -42,7 +41,7 @@ export const List = BaseItem.named('List')
   }));
 
 export const Single = BaseItem.named('List').props({
-  fromList: types.optional(List, { type: 'latest', id: 'post', page: 1 }),
+  fromList: types.frozen,
 });
 
 export const Item = types.union(({ page }) => (page ? List : Single), List, Single);
