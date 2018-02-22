@@ -4,16 +4,13 @@ exports[`Connection › Router Create context from selected list 1`] = `
 Array [
   Object {
     "generator": Array [
-      Object {
-        "items": Array [
-          Object {
-            "id": 7,
-            "mstId": "0_category_7_page_1",
-            "page": 1,
-            "type": "category",
-          },
-        ],
-      },
+      Array [
+        Object {
+          "id": 7,
+          "page": 1,
+          "type": "category",
+        },
+      ],
     ],
     "index": 0,
     "infinite": undefined,
@@ -42,16 +39,13 @@ exports[`Connection › Router Create context from selected list with previous c
 Array [
   Object {
     "generator": Array [
-      Object {
-        "items": Array [
-          Object {
-            "id": 5,
-            "mstId": "0_category_5_page_1",
-            "page": 1,
-            "type": "category",
-          },
-        ],
-      },
+      Array [
+        Object {
+          "id": 5,
+          "page": 1,
+          "type": "category",
+        },
+      ],
     ],
     "index": 0,
     "infinite": undefined,
@@ -75,16 +69,13 @@ Array [
   },
   Object {
     "generator": Array [
-      Object {
-        "items": Array [
-          Object {
-            "id": 7,
-            "mstId": "1_category_7_page_1",
-            "page": 1,
-            "type": "category",
-          },
-        ],
-      },
+      Array [
+        Object {
+          "id": 7,
+          "page": 1,
+          "type": "category",
+        },
+      ],
     ],
     "index": 1,
     "infinite": undefined,
@@ -113,16 +104,13 @@ exports[`Connection › Router Create context from selected single 1`] = `
 Array [
   Object {
     "generator": Array [
-      Object {
-        "items": Array [
-          Object {
-            "id": 60,
-            "mstId": "0_post_60",
-            "page": undefined,
-            "type": "post",
-          },
-        ],
-      },
+      Array [
+        Object {
+          "id": 60,
+          "page": undefined,
+          "type": "post",
+        },
+      ],
     ],
     "index": 0,
     "infinite": undefined,
@@ -321,16 +309,13 @@ exports[`Connection › Router Create context from selected single with previous
 Array [
   Object {
     "generator": Array [
-      Object {
-        "items": Array [
-          Object {
-            "id": 63,
-            "mstId": "0_post_63",
-            "page": undefined,
-            "type": "post",
-          },
-        ],
-      },
+      Array [
+        Object {
+          "id": 63,
+          "page": undefined,
+          "type": "post",
+        },
+      ],
     ],
     "index": 0,
     "infinite": undefined,
@@ -358,16 +343,13 @@ Array [
   },
   Object {
     "generator": Array [
-      Object {
-        "items": Array [
-          Object {
-            "id": 60,
-            "mstId": "1_post_60",
-            "page": undefined,
-            "type": "post",
-          },
-        ],
-      },
+      Array [
+        Object {
+          "id": 60,
+          "page": undefined,
+          "type": "post",
+        },
+      ],
     ],
     "index": 1,
     "infinite": undefined,

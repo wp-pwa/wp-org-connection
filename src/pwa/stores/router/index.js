@@ -255,11 +255,10 @@ export const actions = self => {
     self.selectedContext = newContext.index; // Select the correct context
   };
 
-  const createNewContextFromSelected = ({ selected: { type, id, page } }) => {
+  const createNewContextFromSelected = ({ selected }) => {
     const index = self.selectedContext ? self.selectedContext.index + 1 : 0;
-    const items = [{ mstId: getItemMstId({ index, type, id, page }), type, id, page }];
-    const rawColumns = [{ items }];
-    const generator = [{ items }];
+    const rawColumns = convertToRawColumns({ index, columns: [[{ ...selected }]]});
+    const generator = [[{ ...selected }]];
     self.contexts[index] = { index, rawColumns, generator };
     self.selectedContext = self.contexts[index];
   };
