@@ -3,11 +3,25 @@
 exports[`Connection › Router Create context from selected list 1`] = `
 Array [
   Object {
-    "columns": Array [
+    "generator": Array [
       Object {
         "items": Array [
           Object {
-            "id": 70,
+            "id": 7,
+            "page": 1,
+            "type": "category",
+          },
+        ],
+      },
+    ],
+    "index": 0,
+    "infinite": undefined,
+    "options": undefined,
+    "rawColumns": Array [
+      Object {
+        "items": Array [
+          Object {
+            "id": 7,
             "mstId": "mockedId_7",
             "page": 1,
             "type": "category",
@@ -18,10 +32,75 @@ Array [
         "selectedItem": "",
       },
     ],
-    "generator": undefined,
+    "selectedColumn": "",
+  },
+]
+`;
+
+exports[`Connection › Router Create context from selected list with previous context 1`] = `
+Array [
+  Object {
+    "generator": Array [
+      Object {
+        "items": Array [
+          Object {
+            "id": 5,
+            "page": 1,
+            "type": "category",
+          },
+        ],
+      },
+    ],
     "index": 0,
-    "infinite": true,
+    "infinite": undefined,
     "options": undefined,
+    "rawColumns": Array [
+      Object {
+        "items": Array [
+          Object {
+            "id": 5,
+            "mstId": "mockedId_15",
+            "page": 1,
+            "type": "category",
+            "visited": false,
+          },
+        ],
+        "mstId": "mockedId_14",
+        "selectedItem": "",
+      },
+    ],
+    "selectedColumn": "",
+  },
+  Object {
+    "generator": Array [
+      Object {
+        "items": Array [
+          Object {
+            "id": 7,
+            "page": 1,
+            "type": "category",
+          },
+        ],
+      },
+    ],
+    "index": 1,
+    "infinite": undefined,
+    "options": undefined,
+    "rawColumns": Array [
+      Object {
+        "items": Array [
+          Object {
+            "id": 7,
+            "mstId": "mockedId_17",
+            "page": 1,
+            "type": "category",
+            "visited": false,
+          },
+        ],
+        "mstId": "mockedId_16",
+        "selectedItem": "",
+      },
+    ],
     "selectedColumn": "",
   },
 ]
@@ -30,7 +109,21 @@ Array [
 exports[`Connection › Router Create context from selected single 1`] = `
 Array [
   Object {
-    "columns": Array [
+    "generator": Array [
+      Object {
+        "items": Array [
+          Object {
+            "id": 60,
+            "page": undefined,
+            "type": "post",
+          },
+        ],
+      },
+    ],
+    "index": 0,
+    "infinite": undefined,
+    "options": undefined,
+    "rawColumns": Array [
       Object {
         "items": Array [
           Object {
@@ -51,10 +144,282 @@ Array [
         "selectedItem": "",
       },
     ],
-    "generator": undefined,
+    "selectedColumn": "",
+  },
+]
+`;
+
+exports[`Connection › Router Create context from selected single and context object 1`] = `
+Array [
+  Object {
+    "generator": Array [
+      Object {
+        "items": Array [
+          Object {
+            "id": 63,
+            "type": "post",
+          },
+        ],
+      },
+      Object {
+        "items": Array [
+          Object {
+            "id": 62,
+            "type": "post",
+          },
+          Object {
+            "id": 60,
+            "type": "post",
+          },
+        ],
+      },
+    ],
     "index": 0,
-    "infinite": true,
+    "infinite": undefined,
+    "options": Object {
+      "someThemeOption": 123,
+    },
+    "rawColumns": Array [
+      Object {
+        "items": Array [
+          Object {
+            "fromList": Object {
+              "id": "post",
+              "mstId": "mockedId_20",
+              "page": 1,
+              "type": "latest",
+              "visited": false,
+            },
+            "id": 63,
+            "mstId": "mockedId_19",
+            "type": "post",
+            "visited": false,
+          },
+        ],
+        "mstId": "mockedId_18",
+        "selectedItem": "",
+      },
+      Object {
+        "items": Array [
+          Object {
+            "fromList": Object {
+              "id": "post",
+              "mstId": "mockedId_23",
+              "page": 1,
+              "type": "latest",
+              "visited": false,
+            },
+            "id": 62,
+            "mstId": "mockedId_22",
+            "type": "post",
+            "visited": false,
+          },
+          Object {
+            "fromList": Object {
+              "id": "post",
+              "mstId": "mockedId_25",
+              "page": 1,
+              "type": "latest",
+              "visited": false,
+            },
+            "id": 60,
+            "mstId": "mockedId_24",
+            "type": "post",
+            "visited": false,
+          },
+        ],
+        "mstId": "mockedId_21",
+        "selectedItem": "mockedId_24",
+      },
+    ],
+    "selectedColumn": "mockedId_21",
+  },
+]
+`;
+
+exports[`Connection › Router Create context from selected single and context object without selected 1`] = `
+Array [
+  Object {
+    "generator": Array [
+      Object {
+        "items": Array [
+          Object {
+            "id": 63,
+            "type": "post",
+          },
+        ],
+      },
+      Object {
+        "items": Array [
+          Object {
+            "id": 62,
+            "type": "post",
+          },
+          Object {
+            "id": 64,
+            "type": "post",
+          },
+        ],
+      },
+    ],
+    "index": 0,
+    "infinite": undefined,
+    "options": Object {
+      "someThemeOption": 123,
+    },
+    "rawColumns": Array [
+      Object {
+        "items": Array [
+          Object {
+            "fromList": Object {
+              "id": "post",
+              "mstId": "mockedId_36",
+              "page": 1,
+              "type": "latest",
+              "visited": false,
+            },
+            "id": 60,
+            "mstId": "mockedId_35",
+            "type": "post",
+            "visited": false,
+          },
+        ],
+        "mstId": "mockedId_34",
+        "selectedItem": "mockedId_35",
+      },
+      Object {
+        "items": Array [
+          Object {
+            "fromList": Object {
+              "id": "post",
+              "mstId": "mockedId_28",
+              "page": 1,
+              "type": "latest",
+              "visited": false,
+            },
+            "id": 63,
+            "mstId": "mockedId_27",
+            "type": "post",
+            "visited": false,
+          },
+        ],
+        "mstId": "mockedId_26",
+        "selectedItem": "",
+      },
+      Object {
+        "items": Array [
+          Object {
+            "fromList": Object {
+              "id": "post",
+              "mstId": "mockedId_31",
+              "page": 1,
+              "type": "latest",
+              "visited": false,
+            },
+            "id": 62,
+            "mstId": "mockedId_30",
+            "type": "post",
+            "visited": false,
+          },
+          Object {
+            "fromList": Object {
+              "id": "post",
+              "mstId": "mockedId_33",
+              "page": 1,
+              "type": "latest",
+              "visited": false,
+            },
+            "id": 64,
+            "mstId": "mockedId_32",
+            "type": "post",
+            "visited": false,
+          },
+        ],
+        "mstId": "mockedId_29",
+        "selectedItem": "",
+      },
+    ],
+    "selectedColumn": "mockedId_34",
+  },
+]
+`;
+
+exports[`Connection › Router Create context from selected single with previous context 1`] = `
+Array [
+  Object {
+    "generator": Array [
+      Object {
+        "items": Array [
+          Object {
+            "id": 63,
+            "page": undefined,
+            "type": "post",
+          },
+        ],
+      },
+    ],
+    "index": 0,
+    "infinite": undefined,
     "options": undefined,
+    "rawColumns": Array [
+      Object {
+        "items": Array [
+          Object {
+            "fromList": Object {
+              "id": "post",
+              "mstId": "mockedId_10",
+              "page": 1,
+              "type": "latest",
+              "visited": false,
+            },
+            "id": 63,
+            "mstId": "mockedId_9",
+            "type": "post",
+            "visited": false,
+          },
+        ],
+        "mstId": "mockedId_8",
+        "selectedItem": "",
+      },
+    ],
+    "selectedColumn": "",
+  },
+  Object {
+    "generator": Array [
+      Object {
+        "items": Array [
+          Object {
+            "id": 60,
+            "page": undefined,
+            "type": "post",
+          },
+        ],
+      },
+    ],
+    "index": 1,
+    "infinite": undefined,
+    "options": undefined,
+    "rawColumns": Array [
+      Object {
+        "items": Array [
+          Object {
+            "fromList": Object {
+              "id": "post",
+              "mstId": "mockedId_13",
+              "page": 1,
+              "type": "latest",
+              "visited": false,
+            },
+            "id": 60,
+            "mstId": "mockedId_12",
+            "type": "post",
+            "visited": false,
+          },
+        ],
+        "mstId": "mockedId_11",
+        "selectedItem": "",
+      },
+    ],
     "selectedColumn": "",
   },
 ]

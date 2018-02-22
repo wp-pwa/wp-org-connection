@@ -18,7 +18,7 @@ const Column = types
     }), ''),
   })
   .views(self => ({
-    getItem(props, customizer) {
+    getItem({ props, customizer }) {
       return self.items.find(i => isMatchWith(i, omitBy(props, isUndefined), customizer)) || null;
     },
     get nextColumn() {
