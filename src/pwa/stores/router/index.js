@@ -251,10 +251,10 @@ export const actions = self => {
     const newContext = addNewContext();
     newContext.addGenerator(context);
     newContext.addColumns(context.columns);
-    let selectedItem = newContext.getItem(selected);
-    if (!selectedItem) {
-      selectedItem = newContext.addItem(selected, true);
+    if (!newContext.hasItem(selected)) {
+      newContext.addItem(selected, true); // If selected item is not on the context, add it.
     }
+    const selectedItem = newContext.getItem(selected);
     newContext.selectedColumn = selectedItem.parentColumn; // Select the correct column
     newContext.selectedColumn.selectedItem = selectedItem; // Select the correct item
     self.selectedContext = newContext; // Select the correct context
