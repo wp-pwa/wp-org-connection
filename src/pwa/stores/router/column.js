@@ -1,4 +1,4 @@
-import { types, getParent } from 'mobx-state-tree';
+import { types, getParent, resolveIdentifier } from 'mobx-state-tree';
 import { isMatchWith, omitBy, isUndefined } from 'lodash';
 import uuid from 'uuid/v4';
 import Item from './item';
@@ -9,12 +9,8 @@ const Column = types
     mstId: types.optional(types.identifier(types.string), uuid),
     items: types.optional(types.array(types.late(() => Item)), []),
     selectedItem: types.optional(types.reference(types.late(() => Item), {
-      get(mstId, parent) {
-        return parent.items.find(item => item.mstId === mstId) || parent.items[0];
-      },
-      set(mstId) {
-        return mstId;
-      },
+      get: (mstId, parent) => resolveIdentifier(Item, parent, mstId) || parent.items[0],
+      set: item => item.mstId || item,
     }), ''),
   })
   .views(self => ({

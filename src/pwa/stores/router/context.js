@@ -1,5 +1,6 @@
 import { types, getRoot, resolveIdentifier } from 'mobx-state-tree';
 import Column from './column';
+import Item from './item';
 
 const Context = types
   .model('Context')
@@ -10,7 +11,7 @@ const Context = types
     selectedColumn: types.optional(
       types.reference(types.late(() => Column), {
         get: (mstId, parent) => resolveIdentifier(Column, parent, mstId) || parent.columns[0],
-        set: mstId => mstId,
+        set: column => column.mstId || column,
       }),
       '',
     ),
@@ -41,17 +42,23 @@ const Context = types
     const getMstId = ({ type, id, page }) =>
       page ? `${self.index}_${type}_${id}_page_${page}` : `${self.index}_${type}_${id}`;
     const addMstIdToItem = ({ item }) => ({ mstId: getMstId({ ...item }), ...item });
-    const getRawItems = items =>
-      items.map(item => addMstIdToItem({ item }));
+    const getRawItems = items => items.map(item => addMstIdToItem({ item }));
     return {
       addGenerator: generator => {
         self.generator = generator;
       },
-      addColumn: items => {
-        self.rawColumns.push({ items: getRawItems(items) });
+      addColumn: (items, unshift) => {
+        if (unshift) self.rawColumns.unshift({ items: getRawItems(items) })
+        else self.rawColumns.push({ items: getRawItems(items) });
       },
       addColumns: columns => {
         columns.map(column => self.addColumn(column));
+      },
+      hasItem: item => !!resolveIdentifier(Item, self, getMstId(item)),
+      getItem: item => resolveIdentifier(Item, self, getMstId(item)),
+      addItem: (item, unshift) => {
+        self.addColumn([item], unshift)
+        return self.getItem(item);
       },
       changeSelectedColumnUsingItem: ({ selected }) => {
         const item = self.getItem({ props: selected });

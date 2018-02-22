@@ -142,29 +142,32 @@ Array [
 exports[`Connection › Router Create context from selected single and context object 1`] = `
 Array [
   Object {
-    "generator": Array [
-      Array [
-        Object {
-          "id": 63,
-          "type": "post",
-        },
+    "generator": Object {
+      "columns": Array [
+        Array [
+          Object {
+            "id": 63,
+            "type": "post",
+          },
+        ],
+        Array [
+          Object {
+            "id": 62,
+            "type": "post",
+          },
+          Object {
+            "id": 60,
+            "type": "post",
+          },
+        ],
       ],
-      Array [
-        Object {
-          "id": 62,
-          "type": "post",
-        },
-        Object {
-          "id": 60,
-          "type": "post",
-        },
-      ],
-    ],
+      "options": Object {
+        "someThemeOption": 123,
+      },
+    },
     "index": 0,
     "infinite": undefined,
-    "options": Object {
-      "someThemeOption": 123,
-    },
+    "options": undefined,
     "rawColumns": Array [
       Object {
         "items": Array [

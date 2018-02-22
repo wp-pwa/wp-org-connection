@@ -241,35 +241,30 @@ export const actions = self => {
     return self.contexts[index];
   };
 
-  const createNewContext = ({ selected, context }) => {
-    const newContext = addContext({ selected, context });
-    const selectedItem = resolveIdentifier(
-      Item,
-      self,
-      getMstId({ index: newContext.index, ...selected }),
-    );
-    selectedItem.parentColumn.selectedItem = selectedItem.mstId; // Select the correct column
-    newContext.selectedColumn = selectedItem.parentColumn.mstId; // Select the correct item
-    self.selectedContext = newContext.index; // Select the correct context
-  };
-
   const addNewContext = () => {
     const index = self.selectedContext ? self.selectedContext.index + 1 : 0;
     self.contexts[index] = { index };
     return self.contexts[index];
-  }
+  };
+
+  const createNewContext = ({ selected, context }) => {
+    const newContext = addNewContext();
+    newContext.addGenerator(context);
+    newContext.addColumns(context.columns);
+    let selectedItem = newContext.getItem(selected);
+    if (!selectedItem) {
+      selectedItem = newContext.addItem(selected, true);
+    }
+    newContext.selectedColumn = selectedItem.parentColumn; // Select the correct column
+    newContext.selectedColumn.selectedItem = selectedItem; // Select the correct item
+    self.selectedContext = newContext; // Select the correct context
+  };
 
   const createNewContextFromSelected = ({ selected }) => {
     const context = addNewContext();
     context.addGenerator([[{ ...selected }]]);
     context.addColumn([{ ...selected }]);
     self.selectedContext = context;
-    
-    // const index = self.selectedContext ? self.selectedContext.index + 1 : 0;
-    // const rawColumns = getRawColumns({ index, columns: [[{ ...selected }]] });
-    // const generator = [[{ ...selected }]];
-    // self.contexts[index] = { index, rawColumns, generator };
-    // self.selectedContext = self.contexts[index];
   };
 
   return {
