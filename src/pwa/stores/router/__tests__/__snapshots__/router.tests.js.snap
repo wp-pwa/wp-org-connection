@@ -131,7 +131,11 @@ Array [
       Object {
         "items": Array [
           Object {
-            "fromList": undefined,
+            "fromList": Object {
+              "id": "post",
+              "page": 1,
+              "type": "latest",
+            },
             "id": 60,
             "mstId": "0_post_60",
             "type": "post",
@@ -151,26 +155,22 @@ exports[`Connection › Router Create context from selected single and context o
 Array [
   Object {
     "generator": Array [
-      Object {
-        "items": Array [
-          Object {
-            "id": 63,
-            "type": "post",
-          },
-        ],
-      },
-      Object {
-        "items": Array [
-          Object {
-            "id": 62,
-            "type": "post",
-          },
-          Object {
-            "id": 60,
-            "type": "post",
-          },
-        ],
-      },
+      Array [
+        Object {
+          "id": 63,
+          "type": "post",
+        },
+      ],
+      Array [
+        Object {
+          "id": 62,
+          "type": "post",
+        },
+        Object {
+          "id": 60,
+          "type": "post",
+        },
+      ],
     ],
     "index": 0,
     "infinite": undefined,
@@ -183,18 +183,16 @@ Array [
           Object {
             "fromList": Object {
               "id": "post",
-              "mstId": "mockedId_20",
               "page": 1,
               "type": "latest",
-              "visited": false,
             },
             "id": 63,
-            "mstId": "mockedId_19",
+            "mstId": "0_post_63",
             "type": "post",
             "visited": false,
           },
         ],
-        "mstId": "mockedId_18",
+        "mstId": "mockedId_8",
         "selectedItem": "",
       },
       Object {
@@ -202,35 +200,31 @@ Array [
           Object {
             "fromList": Object {
               "id": "post",
-              "mstId": "mockedId_23",
               "page": 1,
               "type": "latest",
-              "visited": false,
             },
             "id": 62,
-            "mstId": "mockedId_22",
+            "mstId": "0_post_62",
             "type": "post",
             "visited": false,
           },
           Object {
             "fromList": Object {
               "id": "post",
-              "mstId": "mockedId_25",
               "page": 1,
               "type": "latest",
-              "visited": false,
             },
             "id": 60,
-            "mstId": "mockedId_24",
+            "mstId": "0_post_60",
             "type": "post",
             "visited": false,
           },
         ],
-        "mstId": "mockedId_21",
-        "selectedItem": "mockedId_24",
+        "mstId": "mockedId_9",
+        "selectedItem": "0_post_60",
       },
     ],
-    "selectedColumn": "mockedId_21",
+    "selectedColumn": "mockedId_9",
   },
 ]
 `;
@@ -345,7 +339,11 @@ Array [
       Object {
         "items": Array [
           Object {
-            "fromList": undefined,
+            "fromList": Object {
+              "id": "post",
+              "page": 1,
+              "type": "latest",
+            },
             "id": 63,
             "mstId": "0_post_63",
             "type": "post",
@@ -378,7 +376,11 @@ Array [
       Object {
         "items": Array [
           Object {
-            "fromList": undefined,
+            "fromList": Object {
+              "id": "post",
+              "page": 1,
+              "type": "latest",
+            },
             "id": 60,
             "mstId": "1_post_60",
             "type": "post",

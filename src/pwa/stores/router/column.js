@@ -1,7 +1,7 @@
 import { types, getParent } from 'mobx-state-tree';
 import { isMatchWith, omitBy, isUndefined } from 'lodash';
 import uuid from 'uuid/v4';
-import { Item } from './item';
+import Item from './item';
 
 const Column = types
   .model('Column')

@@ -41,7 +41,9 @@ export const List = BaseItem.named('List')
   }));
 
 export const Single = BaseItem.named('List').props({
-  fromList: types.frozen,
+  fromList: types.optional(types.frozen, { type: 'latest', id: 'post', page: 1 }),
 });
 
-export const Item = types.union(({ page }) => (page ? List : Single), List, Single);
+const Item = types.union(({ page }) => (page ? List : Single), List, Single);
+
+export default Item;

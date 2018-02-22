@@ -60,15 +60,15 @@ describe('Connection › Router', () => {
     expect(getSnapshot(connection).selectedContext).toBe(connection.contexts[1].index);
   });
 
-  test.skip('Create context from selected single and context object', () => {
+  test('Create context from selected single and context object', () => {
     connection[actionTypes.ROUTE_CHANGE_SUCCEED](
       actions.routeChangeSucceed({
         selected: { type: 'post', id: 60 },
         context: {
           options: { someThemeOption: 123 },
           columns: [
-            { items: [{ type: 'post', id: 63 }] },
-            { items: [{ type: 'post', id: 62 }, { type: 'post', id: 60 }] },
+            [{ type: 'post', id: 63 }],
+            [{ type: 'post', id: 62 }, { type: 'post', id: 60 }],
           ],
         },
       }),
@@ -78,15 +78,15 @@ describe('Connection › Router', () => {
     expect(connection.selectedItem).toBe(connection.contexts[0].columns[1].items[1]);
   });
 
-  test.skip('Create context from selected single and context object without selected', () => {
+  test('Create context from selected single and context object without selected', () => {
     connection[actionTypes.ROUTE_CHANGE_SUCCEED](
       actions.routeChangeSucceed({
         selected: { type: 'post', id: 60 },
         context: {
           options: { someThemeOption: 123 },
           columns: [
-            { items: [{ type: 'post', id: 63 }] },
-            { items: [{ type: 'post', id: 62 }, { type: 'post', id: 64 }] },
+            [{ type: 'post', id: 63 }],
+            [{ type: 'post', id: 62 }, { type: 'post', id: 64 }],
           ],
         },
       }),

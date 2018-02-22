@@ -1,8 +1,8 @@
-import { types, detach } from 'mobx-state-tree';
+import { types, detach, resolveIdentifier } from 'mobx-state-tree';
 import { isEqual } from 'lodash';
-import uuid from 'uuid/v4';
-import Column from './column';
 import Context from './context';
+import Column from './column';
+import Item from './item';
 import * as actionTypes from '../../actionTypes';
 
 const lateContext = types.late(() => Context);
@@ -216,18 +216,32 @@ export const actions = self => {
   const selectInPreviousContext = selected => changeToContext(selected, -1);
   const selectInNextContext = selected => changeToContext(selected, 1);
 
-  const addContext = ({ selected, context: { columns: rawColumns, options, infinite } }) => {
+  const getItemMstId = ({ index, type, id, page }) => {
+    const mstId = `${index}_${type}_${id}`;
+    return page ? `${mstId}_page_${page}` : mstId;
+  };
+
+  const addMstIdToItem = ({ index, item }) => ({
+    mstId: getItemMstId({ index, ...item }),
+    ...item,
+  });
+
+  const convertToRawColumns = ({ index, columns }) =>
+    columns.map(column => ({ items: column.map(item => addMstIdToItem({ index, item })) }));
+
+  const addContext = ({ selected, context: { columns, options, infinite } }) => {
     const index = self.selectedContext ? self.selectedContext.index + 1 : 0;
+    const rawColumns = convertToRawColumns({ columns, index }); // Add mstIds
     self.contexts[index] = {
       index,
       rawColumns,
       options,
       infinite,
-      generator: rawColumns,
+      generator: columns,
     };
-    const item = self.contexts[index].getItem({ props: selected });
-    if (!item) {
-      self.contexts[index].rawColumns.unshift({ items: [selected] });
+    const selectedWithMstId = addMstIdToItem({ index, item: selected });
+    if (!resolveIdentifier(Item, self, selectedWithMstId.mstId)) {
+      self.contexts[index].rawColumns.unshift({ items: [selectedWithMstId] });
     }
     return self.contexts[index];
   };
@@ -240,11 +254,6 @@ export const actions = self => {
     newContext.selectedColumn = columnFromSelected.mstId; // Select the correct item
     self.selectedContext = newContext.index; // Select the correct context
   };
-
-  const getItemMstId = ({ index, type, id, page }) => {
-    const mstId = `${index}_${type}_${id}`;
-    return page ? `${mstId}_page_${page}` : mstId;
-  }
 
   const createNewContextFromSelected = ({ selected: { type, id, page } }) => {
     const index = self.selectedContext ? self.selectedContext.index + 1 : 0;
