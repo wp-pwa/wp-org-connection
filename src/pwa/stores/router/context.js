@@ -6,7 +6,7 @@ const Context = types
   .props({
     index: types.identifier(types.number),
     options: types.frozen,
-    rawColumns: types.array(types.late(() => Column)),
+    rawColumns: types.optional(types.array(types.late(() => Column)), []),
     selectedColumn: types.optional(
       types.reference(types.late(() => Column), {
         get: (mstId, parent) => resolveIdentifier(Column, parent, mstId) || parent.columns[0],
@@ -37,14 +37,28 @@ const Context = types
       return item || null;
     },
   }))
-  .actions(self => ({
-    changeSelectedColumnUsingItem: ({ selected }) => {
-      const item = self.getItem({ props: selected });
-      self.selectedColumn = item.parentColumn.mstId;
-    },
-    afterCreate: () => {
-
-    },
-  }));
+  .actions(self => {
+    const getMstId = ({ type, id, page }) =>
+      page ? `${self.index}_${type}_${id}_page_${page}` : `${self.index}_${type}_${id}`;
+    const addMstIdToItem = ({ item }) => ({ mstId: getMstId({ ...item }), ...item });
+    const getRawItems = items =>
+      items.map(item => addMstIdToItem({ item }));
+    return {
+      addGenerator: generator => {
+        self.generator = generator;
+      },
+      addColumn: items => {
+        self.rawColumns.push({ items: getRawItems(items) });
+      },
+      addColumns: columns => {
+        columns.map(column => self.addColumn(column));
+      },
+      changeSelectedColumnUsingItem: ({ selected }) => {
+        const item = self.getItem({ props: selected });
+        self.selectedColumn = item.parentColumn.mstId;
+      },
+      afterCreate: () => {},
+    };
+  });
 
 export default Context;
