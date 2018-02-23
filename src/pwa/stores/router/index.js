@@ -214,6 +214,7 @@ export const actions = self => {
     const selectedItem = newContext.getItem(selected);
     newContext.selectedColumn = selectedItem.parentColumn; // Select the correct column
     newContext.selectedColumn.selectedItem = selectedItem; // Select the correct item
+    selectedItem.visited = true;
     self.selectedContext = newContext; // Select the correct context
   };
 
@@ -222,7 +223,7 @@ export const actions = self => {
     selectedItem.parentColumn.selectedItem = selectedItem;
     self.selectedContext.selectedColumn = selectedItem.parentColumn;
     // loadNextPageIfInfinite();
-    // self.selectedItem.visited = true; // Mark as visited
+    self.selectedItem.visited = true; // Mark as visited
   };
 
   return {

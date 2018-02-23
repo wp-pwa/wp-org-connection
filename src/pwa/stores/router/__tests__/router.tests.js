@@ -170,6 +170,34 @@ describe('Connection › Router', () => {
     expect(connection.selectedItem).toBe(connection.contexts[1].columns[1].items[1]);
   });
 
+  test('First selected item should be visited', () => {
+    connection[actionTypes.ROUTE_CHANGE_SUCCEED](
+      actions.routeChangeSucceed({ selected: { type: 'category', id: 7, page: 1 } }),
+    );
+    expect(connection.selectedItem.visited).toBe(true);
+  });
+
+  test('Current selected item and previous ones should be visited', () => {
+    connection[actionTypes.ROUTE_CHANGE_SUCCEED](
+      actions.routeChangeSucceed({
+        selected: { type: 'post', id: 60 },
+        context: {
+          options: { someThemeOption: 123 },
+          columns: [
+            [{ type: 'post', id: 63 }],
+            [{ type: 'post', id: 62 }, { type: 'post', id: 60 }],
+          ],
+        },
+      }),
+    );
+    connection[actionTypes.ROUTE_CHANGE_SUCCEED](
+      actions.routeChangeSucceed({ selected: { type: 'post', id: 63 } }),
+    );
+    expect(connection.selectedContext.getItem({ type: 'post', id: 60 }).visited).toBe(true);
+    expect(connection.selectedContext.getItem({ type: 'post', id: 63 }).visited).toBe(true);
+    expect(connection.selectedContext.getItem({ type: 'post', id: 62 }).visited).toBe(false);
+  });
+
   test.skip('Create context from selected single and context object with extracted', () => {
     connection[actionTypes.ROUTE_CHANGE_SUCCEED](
       actions.routeChangeSucceed({
