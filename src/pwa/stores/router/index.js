@@ -216,31 +216,6 @@ export const actions = self => {
   const selectInPreviousContext = selected => changeToContext(selected, -1);
   const selectInNextContext = selected => changeToContext(selected, 1);
 
-  const getMstId = ({ index, type, id, page }) =>
-    page ? `${index}_${type}_${id}_page_${page}` : `${index}_${type}_${id}`;
-
-  const addMstIdToItem = ({ index, item }) => ({ mstId: getMstId({ index, ...item }), ...item });
-
-  const getRawColumns = ({ index, columns }) =>
-    columns.map(column => ({ items: column.map(item => addMstIdToItem({ index, item })) }));
-
-  const addContext = ({ selected, context: { columns, options, infinite } }) => {
-    const index = self.selectedContext ? self.selectedContext.index + 1 : 0;
-    const rawColumns = getRawColumns({ columns, index }); // Add mstIds
-    self.contexts[index] = {
-      index,
-      rawColumns,
-      options,
-      infinite,
-      generator: columns,
-    };
-    const selectedWithMstId = addMstIdToItem({ index, item: selected });
-    if (!resolveIdentifier(Item, self, selectedWithMstId.mstId)) {
-      self.contexts[index].rawColumns.unshift({ items: [selectedWithMstId] });
-    }
-    return self.contexts[index];
-  };
-
   const addNewContext = () => {
     const index = self.selectedContext ? self.selectedContext.index + 1 : 0;
     self.contexts[index] = { index };
@@ -260,43 +235,60 @@ export const actions = self => {
     self.selectedContext = newContext; // Select the correct context
   };
 
-  const createNewContextFromSelected = ({ selected }) => {
-    const context = addNewContext();
-    context.addGenerator([[{ ...selected }]]);
-    context.addColumn([{ ...selected }]);
-    self.selectedContext = context;
-  };
-
   return {
-    [actionTypes.ROUTE_CHANGE_SUCCEED]: ({ selected, method, context }) => {
-      const selectedItemIsInContext =
-        self.selectedContext && !!self.selectedContext.getItem({ props: selected });
-      const contextsAreEqual =
-        self.selectedContext && isEqual(self.selectedContext.generator, context);
+    [actionTypes.ROUTE_CHANGE_SUCCEED]: ({ selected, method, context: actionContext }) => {
 
       // If there's a previous context...
       if (self.selectedContext) {
+        const selectedItemIsInContext = self.selectedContext.hasItem(selected);
+        const generatorsAreEqual = isEqual(self.selectedContext.generator, context);
+        if (generatorsAreEqual && selectedItemIsInContext) {
+          
+        }
+      } else {
+        createNewContext({ selected, context });
+      }
+
+
+      const context = actionContext || [[{ ...selected }]];
+
+      // If there's a previous context...
+      if (self.selectedContext) {
+        const selectedItemIsInContext = self.selectedContext.hasItem(selected);
+        const generatorsAreEqual = isEqual(self.selectedContext.generator, context);
+
+        if (!generatorsAreEqual) {
+          if (method === 'replaceContext') replaceSelectedContext({ selected, context });
+          else if (method === 'back') selectInPreviousContext({ selected });
+          else if (method === 'forward') selectInNextContext({ selected });
+          else createNewContext({ selected, context });
+        } else if (!selectedItemIsInContext) {
+          else createNewContext({ selected, context });
+        } else {
+          if (method === 'moveSelected') moveSelectedItem({ selected });
+          else changeSelectedItem({ selected });
+        }
+
+
         // and selected item is in the previous context and the new context is equal.
-        if (selectedItemIsInContext && ((context && contextsAreEqual) || !context)) {
-          if (['change', 'back', 'forward'].includes(method)) changeSelectedItem(selected);
-          else if (method === 'move') moveSelectedItem(selected);
-          // and contexts are not equal.
-        } else if (context && !contextsAreEqual) {
-          if (method === 'change') createNewContext(selected, context);
-          else if (method === 'move') replaceSelectedContext(selected, context);
+        if (selectedItemIsInContext && generatorsAreEqual) {
+          if (['changeSelected', 'back', 'forward'].includes(method)) changeSelectedItem(selected);
+          else if (method === 'moveSelected') moveSelectedItem(selected);
+          // and generators are not equal.
+        } else if (!generatorsAreEqual) {
+          if (method === 'changeSelected') createNewContext({ selected, context });
+          else if (method === 'replaceContext') replaceSelectedContext(selected, context);
           else if (method === 'back') selectInPreviousContext(selected);
           else if (method === 'forward') selectInNextContext(selected);
-          // and there's no context and item in not in previous context.
-        } else if (!context && !selectedItemIsInContext) {
+          // and item in not in previous context.
+        } else if (!selectedItemIsInContext) {
           if (method === 'back') selectInPreviousContext(selected);
           else if (method === 'forward') selectInNextContext(selected);
-          else if (['change', 'move'].includes(method)) createNewContextFromSelected({ selected }); // Tested
+          else if (['change', 'move'].includes(method)) createNewContext({ selected, context });
         }
         // If there's no previous context.
-      } else if (context) {
-        createNewContext({ selected, context });
       } else {
-        createNewContextFromSelected({ selected }); // Tested
+        createNewContext({ selected, context });
       }
 
       if (typeof window !== 'undefined')
