@@ -1,8 +1,7 @@
-import { types, detach, resolveIdentifier } from 'mobx-state-tree';
+import { types, detach } from 'mobx-state-tree';
 import { isEqual } from 'lodash';
 import Context from './context';
 import Column from './column';
-import Item from './item';
 import * as actionTypes from '../../actionTypes';
 
 const lateContext = types.late(() => Context);
@@ -158,23 +157,6 @@ export const actions = self => {
     }
   };
 
-  const changeSelectedItem = selected => {
-    const selectedItem = self.context.getItem(selected);
-    if (selectedItem) {
-      const { column } = selectedItem;
-      column.selected = selectedItem;
-      self.context.column = column;
-      loadNextPageIfInfinite();
-    } else {
-      // Creates a new element at first position
-      const newColumn = Column.create(columnSnapshot(selected));
-      self.context.columns.unshift(newColumn);
-      self.context.column = newColumn;
-    }
-    // Mark as visited
-    self.selected.visited = true;
-  };
-
   const moveSelectedItem = selected => {
     const selectedItem = self.context.getItem(selected);
     const current = self.context.selected;
@@ -235,64 +217,41 @@ export const actions = self => {
     self.selectedContext = newContext; // Select the correct context
   };
 
+  const changeSelectedItem = ({ selected }) => {
+    const selectedItem = self.selectedContext.getItem(selected);
+    selectedItem.parentColumn.selectedItem = selectedItem;
+    self.selectedContext.selectedColumn = selectedItem.parentColumn;
+    // loadNextPageIfInfinite();
+    // self.selectedItem.visited = true; // Mark as visited
+  };
+
   return {
     [actionTypes.ROUTE_CHANGE_SUCCEED]: ({ selected, method, context: actionContext }) => {
-
-      // If there's a previous context...
-      if (self.selectedContext) {
-        const selectedItemIsInContext = self.selectedContext.hasItem(selected);
-        const generatorsAreEqual = isEqual(self.selectedContext.generator, context);
-        if (generatorsAreEqual && selectedItemIsInContext) {
-          
-        }
-      } else {
-        createNewContext({ selected, context });
-      }
-
-
-      const context = actionContext || [[{ ...selected }]];
-
-      // If there's a previous context...
-      if (self.selectedContext) {
-        const selectedItemIsInContext = self.selectedContext.hasItem(selected);
-        const generatorsAreEqual = isEqual(self.selectedContext.generator, context);
-
-        if (!generatorsAreEqual) {
-          if (method === 'replaceContext') replaceSelectedContext({ selected, context });
-          else if (method === 'back') selectInPreviousContext({ selected });
-          else if (method === 'forward') selectInNextContext({ selected });
-          else createNewContext({ selected, context });
-        } else if (!selectedItemIsInContext) {
-          else createNewContext({ selected, context });
-        } else {
-          if (method === 'moveSelected') moveSelectedItem({ selected });
-          else changeSelectedItem({ selected });
-        }
-
-
-        // and selected item is in the previous context and the new context is equal.
-        if (selectedItemIsInContext && generatorsAreEqual) {
-          if (['changeSelected', 'back', 'forward'].includes(method)) changeSelectedItem(selected);
-          else if (method === 'moveSelected') moveSelectedItem(selected);
-          // and generators are not equal.
-        } else if (!generatorsAreEqual) {
-          if (method === 'changeSelected') createNewContext({ selected, context });
-          else if (method === 'replaceContext') replaceSelectedContext(selected, context);
-          else if (method === 'back') selectInPreviousContext(selected);
-          else if (method === 'forward') selectInNextContext(selected);
-          // and item in not in previous context.
-        } else if (!selectedItemIsInContext) {
-          if (method === 'back') selectInPreviousContext(selected);
-          else if (method === 'forward') selectInNextContext(selected);
-          else if (['change', 'move'].includes(method)) createNewContext({ selected, context });
-        }
-        // If there's no previous context.
-      } else {
-        createNewContext({ selected, context });
-      }
-
       if (typeof window !== 'undefined')
         self.siteInfo.headContent = self.siteInfo.headContent.filter(node => node.permanent);
+
+      if (!self.selectedContext) {
+        // If there's not a previous context.
+        const context = actionContext || { columns: [[{ ...selected }]] };
+        return createNewContext({ selected, context });
+      }
+      // If there's a previous context...
+      const context = actionContext || self.selectedContext.generator;
+      const selectedItemInSelectedContext = self.selectedContext.hasItem(selected);
+      const generatorsAreEqual = isEqual(self.selectedContext.generator, context);
+
+      if (generatorsAreEqual && selectedItemInSelectedContext) {
+        // If we are going to use the same context and selected is there.
+        if (method === 'moveSelected') return moveSelectedItem({ selected });
+        return changeSelectedItem({ selected });
+      }
+      if (method === 'changeSelected') return createNewContext({ selected, context });
+      if (method === 'moveSelected')
+        throw new Error("Can't move if selected doesn't exist in the context.");
+      if (method === 'replaceContext') return replaceSelectedContext({ selected, context });
+      if (method === 'backwards') return selectInPreviousContext({ selected });
+      if (method === 'forward') return selectInNextContext({ selected });
+      return null;
     },
   };
 };

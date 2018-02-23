@@ -47,6 +47,7 @@ describe('Connection › Router', () => {
     );
     expect(connection.contexts).toMatchSnapshot();
     expect(getSnapshot(connection).selectedContext).toBe(connection.contexts[1].index);
+    expect(connection.selectedItem.id).toBe(60);
   });
 
   test('Create context from selected list with previous context', () => {
@@ -58,6 +59,7 @@ describe('Connection › Router', () => {
     );
     expect(connection.contexts).toMatchSnapshot();
     expect(getSnapshot(connection).selectedContext).toBe(connection.contexts[1].index);
+    expect(connection.selectedItem.id).toBe(7);
   });
 
   test('Create context from selected single and context object', () => {
