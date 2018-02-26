@@ -28,15 +28,6 @@ const Context = types
     get columns() {
       return self.rawColumns;
     },
-    // getItem({ props, customizer }) {
-    //   let item;
-    //   self.rawColumns.find(column => {
-    //     const i = column.getItem({ props, customizer });
-    //     if (i) item = i;
-    //     return i;
-    //   });
-    //   return item || null;
-    // },
   }))
   .actions(self => {
     const getMstId = ({ type, id, page }) =>
