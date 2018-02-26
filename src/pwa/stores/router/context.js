@@ -57,11 +57,6 @@ const Context = types
         detach(newItem);
         if (newItemParentColumn.items.length === 0) self.columns.remove(newItem.ParentColum);
         self.selectedItem.parentColumn.items.push(newItem);
-        newItem.parentColumn.selectedItem = newItem;
-      },
-      changeSelectedColumnUsingItem: ({ selected }) => {
-        const item = self.getItem({ props: selected });
-        self.selectedColumn = item.parentColumn.mstId;
       },
       afterCreate: () => {},
     };

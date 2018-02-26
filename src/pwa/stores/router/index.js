@@ -161,11 +161,10 @@ export const actions = self => {
     const newItem = self.selectedContext.getItem(selected);
     if (newItem.parentColumn !== self.selectedContext.parentColumn) {
       self.selectedContext.moveItem(selected);
-    } else {
-      newItem.parentColumn.selectedItem = newItem;
     }
-    // loadNextPageIfInfinite();
+    newItem.parentColumn.selectedItem = newItem;
     self.selectedItem.visited = true;
+    // loadNextPageIfInfinite();
   };
 
   const replaceSelectedContext = (selected, context) => {
