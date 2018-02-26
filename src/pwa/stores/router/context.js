@@ -35,21 +35,29 @@ const Context = types
     const addMstIdToItem = ({ item }) => ({ mstId: getMstId({ ...item }), ...item });
     const getRawItems = items => items.map(item => addMstIdToItem({ item }));
     return {
-      addGenerator: generator => {
+      setGenerator: generator => {
         self.generator = generator;
       },
       addColumn: (items, unshift) => {
-        if (unshift) self.rawColumns.unshift({ items: getRawItems(items) })
+        if (unshift) self.rawColumns.unshift({ items: getRawItems(items) });
         else self.rawColumns.push({ items: getRawItems(items) });
       },
       addColumns: columns => {
         columns.map(column => self.addColumn(column));
       },
+      replaceColumns: columns => {
+        self.columns.replace(columns.map(column => ({ items: getRawItems(column) })));
+      },
       hasItem: item => !!resolveIdentifier(Item, self, getMstId(item)),
       getItem: item => resolveIdentifier(Item, self, getMstId(item)),
       addItem: (item, unshift) => {
-        self.addColumn([item], unshift)
+        self.addColumn([item], unshift);
         return self.getItem(item);
+      },
+      addItemIfMissing: (item, unshift) => {
+        if (!self.hasItem(item)) {
+          self.addItem(item, unshift);
+        }
       },
       moveItem: item => {
         const newItem = self.getItem(item);

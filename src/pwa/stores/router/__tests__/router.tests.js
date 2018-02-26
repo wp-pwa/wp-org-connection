@@ -288,13 +288,53 @@ describe('Connection › Router', () => {
         },
       }),
     );
-    expect(() => connection[actionTypes.ROUTE_CHANGE_SUCCEED](
-      actions.routeChangeSucceed({
-        selected: { type: 'post', id: 60 },
-        method: 'moveSelected',
-      }),
-    )).toThrow("Can't move if selected doesn't exist in the previous context.");
+    expect(() =>
+      connection[actionTypes.ROUTE_CHANGE_SUCCEED](
+        actions.routeChangeSucceed({
+          selected: { type: 'post', id: 60 },
+          method: 'moveSelected',
+        }),
+      ),
+    ).toThrow("Can't move if selected doesn't exist in the previous context.");
+  });
 
+  test('Replace context with new one', () => {
+    connection[actionTypes.ROUTE_CHANGE_SUCCEED](
+      actions.routeChangeSucceed({
+        selected: { type: 'post', id: 63 },
+        context: {
+          options: { someThemeOption: 123 },
+          columns: [
+            [{ type: 'post', id: 63 }],
+            [{ type: 'post', id: 62 }],
+            [{ type: 'post', id: 61 }],
+          ],
+        },
+      }),
+    );
+    connection[actionTypes.ROUTE_CHANGE_SUCCEED](
+      actions.routeChangeSucceed({
+        selected: { type: 'latest', id: 'post', page: 1 },
+        method: 'replaceContext',
+        context: {
+          options: { someThemeOption: 456 },
+          columns: [
+            [{ type: 'post', id: 63 }, { type: 'latest', id: 'post', page: 1 }],
+            [{ type: 'category', id: 7, page: 1 }],
+            [{ type: 'category', id: 3, page: 1 }],
+          ],
+        },
+      }),
+    );
+    expect(connection.contexts).toMatchSnapshot();
+    expect(connection.contexts.length).toBe(1);
+    expect(connection.selectedColumn).toBe(connection.contexts[0].columns[0]);
+    expect(connection.selectedItem).toBe(connection.contexts[0].columns[0].items[1]);
+    expect(connection.selectedItem.type).toBe('latest');
+    expect(connection.contexts[0].columns[0].items[0].type).toBe('post');
+    expect(connection.contexts[0].columns[0].items[0].id).toBe(63);
+    expect(connection.contexts[0].columns[1].items[0].type).toBe('category');
+    expect(connection.contexts[0].columns[1].items[0].id).toBe(7);
   });
 
   test.skip('Selected single and context object with extracted', () => {

@@ -157,25 +157,6 @@ export const actions = self => {
     }
   };
 
-  const moveSelectedItem = ({ selected }) => {
-    const newItem = self.selectedContext.getItem(selected);
-    if (newItem.parentColumn !== self.selectedContext.parentColumn) {
-      self.selectedContext.moveItem(selected);
-    }
-    newItem.parentColumn.selectedItem = newItem;
-    self.selectedItem.visited = true;
-    // loadNextPageIfInfinite();
-  };
-
-  const replaceSelectedContext = (selected, context) => {
-    const contextIndex = self.context ? self.context.index : 0;
-    const ctx = self.context;
-    detach(ctx);
-    self.contexts[contextIndex] = createContext(selected, context, contextIndex);
-    self.context = self.contexts[contextIndex];
-    changeSelectedItem(selected);
-  };
-
   const changeToContext = (selected, relativeIndex) => {
     const newIndex = self.context.index + relativeIndex;
     self.context = self.contexts[newIndex];
@@ -191,26 +172,40 @@ export const actions = self => {
     return self.contexts[index];
   };
 
-  const createNewContext = ({ selected, context }) => {
-    const newContext = addNewContext();
-    newContext.addGenerator(context);
-    newContext.addColumns(context.columns);
-    if (!newContext.hasItem(selected)) {
-      newContext.addItem(selected, true); // If selected item is not on the context, add it.
-    }
-    const selectedItem = newContext.getItem(selected);
-    newContext.selectedColumn = selectedItem.parentColumn; // Select the correct column
-    newContext.selectedColumn.selectedItem = selectedItem; // Select the correct item
-    selectedItem.visited = true;
-    self.selectedContext = newContext; // Select the correct context
-  };
-
   const changeSelectedItem = ({ selected }) => {
     const selectedItem = self.selectedContext.getItem(selected);
     selectedItem.parentColumn.selectedItem = selectedItem;
     self.selectedContext.selectedColumn = selectedItem.parentColumn;
+    self.selectedItem.visited = true;
     // loadNextPageIfInfinite();
-    self.selectedItem.visited = true; // Mark as visited
+  };
+
+  const createNewContext = ({ selected, context }) => {
+    const contextInstance = addNewContext();
+    contextInstance.setGenerator(context);
+    contextInstance.addColumns(context.columns);
+    contextInstance.addItemIfMissing(selected, true);
+    self.selectedContext = contextInstance;
+    changeSelectedItem({ selected });
+  };
+
+  const replaceSelectedContext = ({ selected, context }) => {
+    const contextInstance = self.selectedContext;
+    contextInstance.setGenerator(context);
+    contextInstance.replaceColumns(context.columns);
+    contextInstance.addItemIfMissing(selected, true);
+    self.selectedContext = contextInstance;
+    changeSelectedItem({ selected });
+  };
+
+  const moveSelectedItem = ({ selected }) => {
+    const newItem = self.selectedContext.getItem(selected);
+    if (newItem.parentColumn !== self.selectedContext.parentColumn) {
+      self.selectedContext.moveItem(selected);
+    }
+    newItem.parentColumn.selectedItem = newItem;
+    self.selectedItem.visited = true;
+    // loadNextPageIfInfinite();
   };
 
   return {

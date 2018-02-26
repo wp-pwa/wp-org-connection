@@ -166,6 +166,101 @@ Array [
 ]
 `;
 
+exports[`Connection › Router Replace context with new one 1`] = `
+Array [
+  Object {
+    "generator": Object {
+      "columns": Array [
+        Array [
+          Object {
+            "id": 63,
+            "type": "post",
+          },
+          Object {
+            "id": "post",
+            "page": 1,
+            "type": "latest",
+          },
+        ],
+        Array [
+          Object {
+            "id": 7,
+            "page": 1,
+            "type": "category",
+          },
+        ],
+        Array [
+          Object {
+            "id": 3,
+            "page": 1,
+            "type": "category",
+          },
+        ],
+      ],
+      "options": Object {
+        "someThemeOption": 456,
+      },
+    },
+    "index": 0,
+    "infinite": undefined,
+    "options": undefined,
+    "rawColumns": Array [
+      Object {
+        "items": Array [
+          Object {
+            "fromList": Object {
+              "id": "post",
+              "page": 1,
+              "type": "latest",
+            },
+            "id": 63,
+            "mstId": "0_post_63",
+            "type": "post",
+            "visited": false,
+          },
+          Object {
+            "id": "post",
+            "mstId": "0_latest_post_page_1",
+            "page": 1,
+            "type": "latest",
+            "visited": true,
+          },
+        ],
+        "mstId": "mockedId_42",
+        "selectedItem": "0_latest_post_page_1",
+      },
+      Object {
+        "items": Array [
+          Object {
+            "id": 7,
+            "mstId": "0_category_7_page_1",
+            "page": 1,
+            "type": "category",
+            "visited": false,
+          },
+        ],
+        "mstId": "mockedId_43",
+        "selectedItem": "",
+      },
+      Object {
+        "items": Array [
+          Object {
+            "id": 3,
+            "mstId": "0_category_3_page_1",
+            "page": 1,
+            "type": "category",
+            "visited": false,
+          },
+        ],
+        "mstId": "mockedId_44",
+        "selectedItem": "",
+      },
+    ],
+    "selectedColumn": "mockedId_42",
+  },
+]
+`;
+
 exports[`Connection › Router Selected list 1`] = `
 Array [
   Object {
