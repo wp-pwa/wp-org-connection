@@ -51,11 +51,11 @@ const Context = types
         self.addColumn([item], unshift)
         return self.getItem(item);
       },
-      moveItem: selected => {
-        const newItem = self.getItem(selected);
+      moveItem: item => {
+        const newItem = self.getItem(item);
         const newItemParentColumn = newItem.parentColumn;
         detach(newItem);
-        if (newItemParentColumn.items.length === 0) self.columns.remove(newItem.ParentColum);
+        if (newItemParentColumn.items.length === 0) self.columns.remove(newItemParentColumn);
         self.selectedItem.parentColumn.items.push(newItem);
       },
       afterCreate: () => {},

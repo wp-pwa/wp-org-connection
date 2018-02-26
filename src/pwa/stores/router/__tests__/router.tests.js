@@ -246,6 +246,34 @@ describe('Connection › Router', () => {
     expect(connection.selectedItem.id).toBe(62);
   });
 
+  test('Move selected single from column with only that item', () => {
+    connection[actionTypes.ROUTE_CHANGE_SUCCEED](
+      actions.routeChangeSucceed({
+        selected: { type: 'post', id: 62 },
+        context: {
+          options: { someThemeOption: 123 },
+          columns: [
+            [{ type: 'post', id: 63 }],
+            [{ type: 'post', id: 62 }],
+            [{ type: 'post', id: 60 }],
+          ],
+        },
+      }),
+    );
+    connection[actionTypes.ROUTE_CHANGE_SUCCEED](
+      actions.routeChangeSucceed({
+        selected: { type: 'post', id: 60 },
+        method: 'moveSelected',
+      }),
+    );
+    expect(connection.contexts).toMatchSnapshot();
+    expect(connection.contexts.length).toBe(1);
+    expect(connection.contexts[0].columns.length).toBe(2);
+    expect(connection.selectedColumn).toBe(connection.contexts[0].columns[1]);
+    expect(connection.selectedItem).toBe(connection.contexts[0].columns[1].items[1]);
+    expect(connection.selectedItem.id).toBe(60);
+  });
+
   test.skip('Selected single and context object with extracted', () => {
     connection[actionTypes.ROUTE_CHANGE_SUCCEED](
       actions.routeChangeSucceed({
