@@ -235,7 +235,7 @@ export const actions = self => {
       }
       if (method === 'changeSelected') return createNewContext({ selected, context });
       if (method === 'moveSelected')
-        throw new Error("Can't move if selected doesn't exist in the context.");
+        throw new Error("Can't move if selected doesn't exist in the previous context.");
       if (method === 'replaceContext') return replaceSelectedContext({ selected, context });
       if (method === 'backwards') return selectInPreviousContext({ selected });
       if (method === 'forward') return selectInNextContext({ selected });

@@ -274,6 +274,29 @@ describe('Connection › Router', () => {
     expect(connection.selectedItem.id).toBe(60);
   });
 
+  test('Move selected single with previous context without selected', () => {
+    connection[actionTypes.ROUTE_CHANGE_SUCCEED](
+      actions.routeChangeSucceed({
+        selected: { type: 'post', id: 62 },
+        context: {
+          options: { someThemeOption: 123 },
+          columns: [
+            [{ type: 'post', id: 63 }],
+            [{ type: 'post', id: 62 }],
+            [{ type: 'post', id: 61 }],
+          ],
+        },
+      }),
+    );
+    expect(() => connection[actionTypes.ROUTE_CHANGE_SUCCEED](
+      actions.routeChangeSucceed({
+        selected: { type: 'post', id: 60 },
+        method: 'moveSelected',
+      }),
+    )).toThrow("Can't move if selected doesn't exist in the previous context.");
+
+  });
+
   test.skip('Selected single and context object with extracted', () => {
     connection[actionTypes.ROUTE_CHANGE_SUCCEED](
       actions.routeChangeSucceed({
