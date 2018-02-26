@@ -157,27 +157,21 @@ export const actions = self => {
     }
   };
 
-  const moveSelectedItem = selected => {
-    const selectedItem = self.context.getItem(selected);
-    const current = self.context.selected;
-    const { columns } = self.context;
+  const moveSelectedItem = ({ selected }) => {
+    const newItem = self.selectedContext.getItem(selected);
+    const { columns, selectedItem: previousItem } = self.selectedContext;
 
-    if (!selectedItem) return;
-
-    if (current.column._id !== selectedItem.column._id) {
-      const { column } = selectedItem;
-      detach(selectedItem);
-
-      if (column.items.length === 0) columns.remove(column);
-
-      current.column.items.push(selectedItem);
-      selectedItem.column.selected = selectedItem;
-      loadNextPageIfInfinite();
+    if (newItem.parentColumn !== previousItem.parentColumn) {
+      const { parentColumn: newItemParentColum } = newItem;
+      detach(newItem);
+      if (newItemParentColum.items.length === 0) columns.remove(newItemParentColum);
+      previousItem.parentColumn.items.push(newItem);
+      newItem.parentColumn.selectedItem = newItem;
     } else {
-      selectedItem.column.selected = selectedItem;
+      newItem.parentColumn.selectedItem = newItem;
     }
-    // Mark as visited
-    self.selected.visited = true;
+    // loadNextPageIfInfinite();
+    self.selectedItem.visited = true;
   };
 
   const replaceSelectedContext = (selected, context) => {

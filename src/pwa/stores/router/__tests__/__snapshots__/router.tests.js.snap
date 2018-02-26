@@ -1,6 +1,89 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`Connection › Router Create context from selected list 1`] = `
+exports[`Connection › Router Initializes contexts as empty array 1`] = `Array []`;
+
+exports[`Connection › Router Move selected single 1`] = `
+Array [
+  Object {
+    "generator": Object {
+      "columns": Array [
+        Array [
+          Object {
+            "id": 63,
+            "type": "post",
+          },
+        ],
+        Array [
+          Object {
+            "id": 62,
+            "type": "post",
+          },
+          Object {
+            "id": 60,
+            "type": "post",
+          },
+        ],
+      ],
+      "options": Object {
+        "someThemeOption": 123,
+      },
+    },
+    "index": 0,
+    "infinite": undefined,
+    "options": undefined,
+    "rawColumns": Array [
+      Object {
+        "items": Array [
+          Object {
+            "fromList": Object {
+              "id": "post",
+              "page": 1,
+              "type": "latest",
+            },
+            "id": 63,
+            "mstId": "0_post_63",
+            "type": "post",
+            "visited": true,
+          },
+          Object {
+            "fromList": Object {
+              "id": "post",
+              "page": 1,
+              "type": "latest",
+            },
+            "id": 62,
+            "mstId": "0_post_62",
+            "type": "post",
+            "visited": true,
+          },
+        ],
+        "mstId": "mockedId_31",
+        "selectedItem": "0_post_62",
+      },
+      Object {
+        "items": Array [
+          Object {
+            "fromList": Object {
+              "id": "post",
+              "page": 1,
+              "type": "latest",
+            },
+            "id": 60,
+            "mstId": "0_post_60",
+            "type": "post",
+            "visited": false,
+          },
+        ],
+        "mstId": "mockedId_32",
+        "selectedItem": "",
+      },
+    ],
+    "selectedColumn": "mockedId_31",
+  },
+]
+`;
+
+exports[`Connection › Router Selected list 1`] = `
 Array [
   Object {
     "generator": Object {
@@ -37,7 +120,7 @@ Array [
 ]
 `;
 
-exports[`Connection › Router Create context from selected list and context object 1`] = `
+exports[`Connection › Router Selected list and new context with selected 1`] = `
 Array [
   Object {
     "generator": Object {
@@ -117,7 +200,7 @@ Array [
 ]
 `;
 
-exports[`Connection › Router Create context from selected list and context object without selected 1`] = `
+exports[`Connection › Router Selected list and new context without selected 1`] = `
 Array [
   Object {
     "generator": Object {
@@ -210,16 +293,16 @@ Array [
 ]
 `;
 
-exports[`Connection › Router Create context from selected list with previous context 1`] = `
+exports[`Connection › Router Selected list with previous different context 1`] = `
 Array [
   Object {
     "generator": Object {
       "columns": Array [
         Array [
           Object {
-            "id": 5,
-            "page": 1,
-            "type": "category",
+            "id": 60,
+            "page": undefined,
+            "type": "post",
           },
         ],
       ],
@@ -231,15 +314,19 @@ Array [
       Object {
         "items": Array [
           Object {
-            "id": 5,
-            "mstId": "0_category_5_page_1",
-            "page": 1,
-            "type": "category",
+            "fromList": Object {
+              "id": "post",
+              "page": 1,
+              "type": "latest",
+            },
+            "id": 60,
+            "mstId": "0_post_60",
+            "type": "post",
             "visited": true,
           },
         ],
         "mstId": "mockedId_7",
-        "selectedItem": "0_category_5_page_1",
+        "selectedItem": "0_post_60",
       },
     ],
     "selectedColumn": "mockedId_7",
@@ -249,9 +336,9 @@ Array [
       "columns": Array [
         Array [
           Object {
-            "id": 5,
-            "page": 1,
-            "type": "category",
+            "id": 60,
+            "page": undefined,
+            "type": "post",
           },
         ],
       ],
@@ -276,10 +363,14 @@ Array [
       Object {
         "items": Array [
           Object {
-            "id": 5,
-            "mstId": "1_category_5_page_1",
-            "page": 1,
-            "type": "category",
+            "fromList": Object {
+              "id": "post",
+              "page": 1,
+              "type": "latest",
+            },
+            "id": 60,
+            "mstId": "1_post_60",
+            "type": "post",
             "visited": false,
           },
         ],
@@ -292,7 +383,7 @@ Array [
 ]
 `;
 
-exports[`Connection › Router Create context from selected single 1`] = `
+exports[`Connection › Router Selected single 1`] = `
 Array [
   Object {
     "generator": Object {
@@ -333,7 +424,7 @@ Array [
 ]
 `;
 
-exports[`Connection › Router Create context from selected single and context object 1`] = `
+exports[`Connection › Router Selected single and new context with selected 1`] = `
 Array [
   Object {
     "generator": Object {
@@ -414,95 +505,7 @@ Array [
 ]
 `;
 
-exports[`Connection › Router Create context from selected single and context object with duplicate items 1`] = `
-Array [
-  Object {
-    "generator": Array [
-      Object {
-        "items": Array [
-          Object {
-            "id": 63,
-            "type": "post",
-          },
-        ],
-      },
-      Object {
-        "items": Array [
-          Object {
-            "id": 60,
-            "type": "post",
-          },
-          Object {
-            "id": 63,
-            "type": "post",
-          },
-        ],
-      },
-    ],
-    "index": 0,
-    "infinite": undefined,
-    "options": Object {
-      "someThemeOption": 123,
-    },
-    "rawColumns": Array [
-      Object {
-        "items": Array [
-          Object {
-            "fromList": Object {
-              "id": "post",
-              "mstId": "mockedId_39",
-              "page": 1,
-              "type": "latest",
-              "visited": false,
-            },
-            "id": 63,
-            "mstId": "mockedId_38",
-            "type": "post",
-            "visited": false,
-          },
-        ],
-        "mstId": "mockedId_37",
-        "selectedItem": "",
-      },
-      Object {
-        "items": Array [
-          Object {
-            "fromList": Object {
-              "id": "post",
-              "mstId": "mockedId_42",
-              "page": 1,
-              "type": "latest",
-              "visited": false,
-            },
-            "id": 60,
-            "mstId": "mockedId_41",
-            "type": "post",
-            "visited": false,
-          },
-          Object {
-            "fromList": Object {
-              "id": "post",
-              "mstId": "mockedId_44",
-              "page": 1,
-              "type": "latest",
-              "visited": false,
-            },
-            "id": 63,
-            "mstId": "mockedId_43",
-            "type": "post",
-            "visited": false,
-          },
-        ],
-        "mstId": "mockedId_40",
-        "selectedItem": "mockedId_41",
-      },
-    ],
-    "selectedColumn": "mockedId_40",
-  },
-]
-`;
-
-exports[`Connection › Router Create context from selected single and context object without selected 1`] = `
+exports[`Connection › Router Selected single and new context without selected 1`] = `
 Array [
   Object {
     "generator": Object {
@@ -600,7 +603,7 @@ Array [
 ]
 `;
 
-exports[`Connection › Router Create context from selected single and context object, with previous diff context 1`] = `
+exports[`Connection › Router Selected single and new context, with previous diff context 1`] = `
 Array [
   Object {
     "generator": Object {
@@ -717,7 +720,88 @@ Array [
 ]
 `;
 
-exports[`Connection › Router Create context from selected single with previous context 1`] = `
+exports[`Connection › Router Selected single and previous context with selected 1`] = `
+Array [
+  Object {
+    "generator": Object {
+      "columns": Array [
+        Array [
+          Object {
+            "id": 63,
+            "type": "post",
+          },
+        ],
+        Array [
+          Object {
+            "id": 62,
+            "type": "post",
+          },
+          Object {
+            "id": 60,
+            "type": "post",
+          },
+        ],
+      ],
+      "options": Object {
+        "someThemeOption": 123,
+      },
+    },
+    "index": 0,
+    "infinite": undefined,
+    "options": undefined,
+    "rawColumns": Array [
+      Object {
+        "items": Array [
+          Object {
+            "fromList": Object {
+              "id": "post",
+              "page": 1,
+              "type": "latest",
+            },
+            "id": 63,
+            "mstId": "0_post_63",
+            "type": "post",
+            "visited": true,
+          },
+        ],
+        "mstId": "mockedId_26",
+        "selectedItem": "0_post_63",
+      },
+      Object {
+        "items": Array [
+          Object {
+            "fromList": Object {
+              "id": "post",
+              "page": 1,
+              "type": "latest",
+            },
+            "id": 62,
+            "mstId": "0_post_62",
+            "type": "post",
+            "visited": false,
+          },
+          Object {
+            "fromList": Object {
+              "id": "post",
+              "page": 1,
+              "type": "latest",
+            },
+            "id": 60,
+            "mstId": "0_post_60",
+            "type": "post",
+            "visited": true,
+          },
+        ],
+        "mstId": "mockedId_27",
+        "selectedItem": "0_post_60",
+      },
+    ],
+    "selectedColumn": "mockedId_26",
+  },
+]
+`;
+
+exports[`Connection › Router Selected single with previous different context 1`] = `
 Array [
   Object {
     "generator": Object {
@@ -811,7 +895,7 @@ Array [
 ]
 `;
 
-exports[`Connection › Router Create context from selected single with previous equal context 1`] = `
+exports[`Connection › Router Selected single with previous equal context 1`] = `
 Array [
   Object {
     "generator": Object {
@@ -851,5 +935,3 @@ Array [
   },
 ]
 `;
-
-exports[`Connection › Router Initializes contexts as empty array 1`] = `Array []`;

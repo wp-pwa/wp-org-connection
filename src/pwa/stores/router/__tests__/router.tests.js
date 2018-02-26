@@ -22,7 +22,7 @@ describe('Connection › Router', () => {
     expect(connection.selectedContext).toBeNull();
   });
 
-  test('Create context from selected single', () => {
+  test('Selected single', () => {
     connection[actionTypes.ROUTE_CHANGE_SUCCEED](
       actions.routeChangeSucceed({ selected: { type: 'post', id: 60 } }),
     );
@@ -30,7 +30,7 @@ describe('Connection › Router', () => {
     expect(getSnapshot(connection).selectedContext).toBe(connection.contexts[0].index);
   });
 
-  test('Create context from selected list', () => {
+  test('Selected list', () => {
     connection[actionTypes.ROUTE_CHANGE_SUCCEED](
       actions.routeChangeSucceed({ selected: { type: 'category', id: 7, page: 1 } }),
     );
@@ -38,7 +38,7 @@ describe('Connection › Router', () => {
     expect(getSnapshot(connection).selectedContext).toBe(connection.contexts[0].index);
   });
 
-  test('Create context from selected single with previous context', () => {
+  test('Selected single with previous different context', () => {
     connection[actionTypes.ROUTE_CHANGE_SUCCEED](
       actions.routeChangeSucceed({ selected: { type: 'post', id: 63 } }),
     );
@@ -50,9 +50,9 @@ describe('Connection › Router', () => {
     expect(connection.selectedItem.id).toBe(60);
   });
 
-  test('Create context from selected list with previous context', () => {
+  test('Selected list with previous different context', () => {
     connection[actionTypes.ROUTE_CHANGE_SUCCEED](
-      actions.routeChangeSucceed({ selected: { type: 'category', id: 5, page: 1 } }),
+      actions.routeChangeSucceed({ selected: { type: 'post', id: 60 } }),
     );
     connection[actionTypes.ROUTE_CHANGE_SUCCEED](
       actions.routeChangeSucceed({ selected: { type: 'category', id: 7, page: 1 } }),
@@ -62,7 +62,7 @@ describe('Connection › Router', () => {
     expect(connection.selectedItem.id).toBe(7);
   });
 
-  test('Create context from selected single and context object', () => {
+  test('Selected single and new context with selected', () => {
     connection[actionTypes.ROUTE_CHANGE_SUCCEED](
       actions.routeChangeSucceed({
         selected: { type: 'post', id: 60 },
@@ -80,7 +80,7 @@ describe('Connection › Router', () => {
     expect(connection.selectedItem).toBe(connection.contexts[0].columns[1].items[1]);
   });
 
-  test('Create context from selected single and context object without selected', () => {
+  test('Selected single and new context without selected', () => {
     connection[actionTypes.ROUTE_CHANGE_SUCCEED](
       actions.routeChangeSucceed({
         selected: { type: 'post', id: 60 },
@@ -98,7 +98,7 @@ describe('Connection › Router', () => {
     expect(connection.selectedItem.id).toBe(60);
   });
 
-  test('Create context from selected list and context object', () => {
+  test('Selected list and new context with selected', () => {
     connection[actionTypes.ROUTE_CHANGE_SUCCEED](
       actions.routeChangeSucceed({
         selected: { type: 'category', id: 7, page: 1 },
@@ -117,7 +117,7 @@ describe('Connection › Router', () => {
     expect(connection.selectedItem).toBe(connection.contexts[0].columns[1].items[0]);
   });
 
-  test('Create context from selected list and context object without selected', () => {
+  test('Selected list and new context without selected', () => {
     connection[actionTypes.ROUTE_CHANGE_SUCCEED](
       actions.routeChangeSucceed({
         selected: { type: 'category', id: 7, page: 1 },
@@ -137,7 +137,7 @@ describe('Connection › Router', () => {
     expect(connection.selectedItem.id).toBe(7);
   });
 
-  test('Create context from selected single with previous equal context', () => {
+  test('Selected single with previous equal context', () => {
     connection[actionTypes.ROUTE_CHANGE_SUCCEED](
       actions.routeChangeSucceed({ selected: { type: 'post', id: 60 } }),
     );
@@ -149,7 +149,7 @@ describe('Connection › Router', () => {
     expect(connection.selectedItem).toBe(connection.contexts[0].columns[0].items[0]);
   });
 
-  test('Create context from selected single and context object, with previous diff context', () => {
+  test('Selected single and new context, with previous diff context', () => {
     connection[actionTypes.ROUTE_CHANGE_SUCCEED](
       actions.routeChangeSucceed({ selected: { type: 'post', id: 60 } }),
     );
@@ -168,6 +168,28 @@ describe('Connection › Router', () => {
     expect(connection.contexts).toMatchSnapshot();
     expect(connection.selectedColumn).toBe(connection.contexts[1].columns[1]);
     expect(connection.selectedItem).toBe(connection.contexts[1].columns[1].items[1]);
+  });
+
+  test('Selected single and previous context with selected', () => {
+    connection[actionTypes.ROUTE_CHANGE_SUCCEED](
+      actions.routeChangeSucceed({
+        selected: { type: 'post', id: 60 },
+        context: {
+          options: { someThemeOption: 123 },
+          columns: [
+            [{ type: 'post', id: 63 }],
+            [{ type: 'post', id: 62 }, { type: 'post', id: 60 }],
+          ],
+        },
+      }),
+    );
+    connection[actionTypes.ROUTE_CHANGE_SUCCEED](
+      actions.routeChangeSucceed({ selected: { type: 'post', id: 63 } }),
+    );
+    expect(connection.contexts).toMatchSnapshot();
+    expect(connection.contexts.length).toBe(1);
+    expect(connection.selectedColumn).toBe(connection.contexts[0].columns[0]);
+    expect(connection.selectedItem).toBe(connection.contexts[0].columns[0].items[0]);
   });
 
   test('First selected item should be visited', () => {
@@ -198,7 +220,33 @@ describe('Connection › Router', () => {
     expect(connection.selectedContext.getItem({ type: 'post', id: 62 }).visited).toBe(false);
   });
 
-  test.skip('Create context from selected single and context object with extracted', () => {
+  test('Move selected single', () => {
+    connection[actionTypes.ROUTE_CHANGE_SUCCEED](
+      actions.routeChangeSucceed({
+        selected: { type: 'post', id: 63 },
+        context: {
+          options: { someThemeOption: 123 },
+          columns: [
+            [{ type: 'post', id: 63 }],
+            [{ type: 'post', id: 62 }, { type: 'post', id: 60 }],
+          ],
+        },
+      }),
+    );
+    connection[actionTypes.ROUTE_CHANGE_SUCCEED](
+      actions.routeChangeSucceed({
+        selected: { type: 'post', id: 62 },
+        method: 'moveSelected',
+      }),
+    );
+    expect(connection.contexts).toMatchSnapshot();
+    expect(connection.contexts.length).toBe(1);
+    expect(connection.selectedColumn).toBe(connection.contexts[0].columns[0]);
+    expect(connection.selectedItem).toBe(connection.contexts[0].columns[0].items[1]);
+    expect(connection.selectedItem.id).toBe(62);
+  });
+
+  test.skip('Selected single and context object with extracted', () => {
     connection[actionTypes.ROUTE_CHANGE_SUCCEED](
       actions.routeChangeSucceed({
         selected: { type: 'post', id: 60 },
@@ -215,7 +263,7 @@ describe('Connection › Router', () => {
     expect(getSnapshot(connection).selectedContext).toBe(connection.contexts[0].index);
   });
 
-  test.skip('Create context from selected single and context object with duplicate items', () => {
+  test.skip('Selected single and context object with duplicate items', () => {
     connection[actionTypes.ROUTE_CHANGE_SUCCEED](
       actions.routeChangeSucceed({
         selected: { type: 'post', id: 60 },
@@ -233,7 +281,7 @@ describe('Connection › Router', () => {
     expect(connection.contexts[0].columns[1].items[0].id).toBe(60);
   });
 
-  test.skip('Create context from single and extracted list', () => {
+  test.skip('Single and extracted list', () => {
     // connection[actionTypes.ROUTE_CHANGE_SUCCEED](
     //   actions.routeChangeSucceed({ selected: { type: 'category', id: 7, page: 1 } }),
     // );
