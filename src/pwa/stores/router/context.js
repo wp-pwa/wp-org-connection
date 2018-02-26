@@ -1,4 +1,4 @@
-import { types, getRoot, resolveIdentifier } from 'mobx-state-tree';
+import { types, getRoot, resolveIdentifier, detach } from 'mobx-state-tree';
 import Column from './column';
 import Item from './item';
 
@@ -50,6 +50,14 @@ const Context = types
       addItem: (item, unshift) => {
         self.addColumn([item], unshift)
         return self.getItem(item);
+      },
+      moveItem: selected => {
+        const newItem = self.getItem(selected);
+        const newItemParentColumn = newItem.parentColumn;
+        detach(newItem);
+        if (newItemParentColumn.items.length === 0) self.columns.remove(newItem.ParentColum);
+        self.selectedItem.parentColumn.items.push(newItem);
+        newItem.parentColumn.selectedItem = newItem;
       },
       changeSelectedColumnUsingItem: ({ selected }) => {
         const item = self.getItem({ props: selected });

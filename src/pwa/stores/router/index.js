@@ -159,14 +159,8 @@ export const actions = self => {
 
   const moveSelectedItem = ({ selected }) => {
     const newItem = self.selectedContext.getItem(selected);
-    const { columns, selectedItem: previousItem } = self.selectedContext;
-
-    if (newItem.parentColumn !== previousItem.parentColumn) {
-      const { parentColumn: newItemParentColum } = newItem;
-      detach(newItem);
-      if (newItemParentColum.items.length === 0) columns.remove(newItemParentColum);
-      previousItem.parentColumn.items.push(newItem);
-      newItem.parentColumn.selectedItem = newItem;
+    if (newItem.parentColumn !== self.selectedContext.parentColumn) {
+      self.selectedContext.moveItem(selected);
     } else {
       newItem.parentColumn.selectedItem = newItem;
     }
