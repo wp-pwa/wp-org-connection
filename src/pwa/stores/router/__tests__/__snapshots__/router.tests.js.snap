@@ -269,7 +269,7 @@ Array [
         Array [
           Object {
             "id": 7,
-            "page": 1,
+            "page": 2,
             "type": "category",
           },
         ],
@@ -283,14 +283,14 @@ Array [
         "items": Array [
           Object {
             "id": 7,
-            "mstId": "0_category_7_page_1",
-            "page": 1,
+            "mstId": "0_category_7_page_2",
+            "page": 2,
             "type": "category",
             "visited": true,
           },
         ],
         "mstId": "mockedId_3",
-        "selectedItem": "0_category_7_page_1",
+        "selectedItem": "0_category_7_page_2",
       },
     ],
     "selectedColumn": "mockedId_3",

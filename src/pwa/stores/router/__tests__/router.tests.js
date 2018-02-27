@@ -19,7 +19,7 @@ beforeEach(() => {
 describe('Connection › Router', () => {
   test('Initializes contexts as empty array', () => {
     expect(connection.contexts).toMatchSnapshot();
-    expect(connection.selectedContext).toBeNull();
+    expect(connection.selectedContext).toBe(null);
   });
 
   test('Selected single', () => {
@@ -28,14 +28,20 @@ describe('Connection › Router', () => {
     );
     expect(connection.contexts).toMatchSnapshot();
     expect(getSnapshot(connection).selectedContext).toBe(connection.contexts[0].index);
+    expect(connection.selectedItem.page).toBe(undefined);
+    expect(connection.selectedItem.isSingle).toBe(true);
+    expect(connection.selectedItem.isList).toBe(false);
   });
 
   test('Selected list', () => {
     connection[actionTypes.ROUTE_CHANGE_SUCCEED](
-      actions.routeChangeSucceed({ selectedItem: { type: 'category', id: 7, page: 1 } }),
+      actions.routeChangeSucceed({ selectedItem: { type: 'category', id: 7, page: 2 } }),
     );
     expect(connection.contexts).toMatchSnapshot();
     expect(getSnapshot(connection).selectedContext).toBe(connection.contexts[0].index);
+    expect(connection.selectedItem.page).toBe(2);
+    expect(connection.selectedItem.isSingle).toBe(false);
+    expect(connection.selectedItem.isList).toBe(true);
   });
 
   test('Selected single with previous different context', () => {

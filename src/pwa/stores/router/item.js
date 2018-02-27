@@ -18,6 +18,12 @@ const BaseItem = types
     get ready() {
       return self.page.ready;
     },
+    get isSingle() {
+      return !self.page;
+    },
+    get isList() {
+      return !!self.page;
+    },
     get parentColumn() {
       return getParent(self, 2);
     },
