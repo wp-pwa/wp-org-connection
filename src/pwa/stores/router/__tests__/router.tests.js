@@ -24,7 +24,7 @@ describe('Connection › Router', () => {
 
   test('Selected single', () => {
     connection[actionTypes.ROUTE_CHANGE_SUCCEED](
-      actions.routeChangeSucceed({ selected: { type: 'post', id: 60 } }),
+      actions.routeChangeSucceed({ selectedItem: { type: 'post', id: 60 } }),
     );
     expect(connection.contexts).toMatchSnapshot();
     expect(getSnapshot(connection).selectedContext).toBe(connection.contexts[0].index);
@@ -32,7 +32,7 @@ describe('Connection › Router', () => {
 
   test('Selected list', () => {
     connection[actionTypes.ROUTE_CHANGE_SUCCEED](
-      actions.routeChangeSucceed({ selected: { type: 'category', id: 7, page: 1 } }),
+      actions.routeChangeSucceed({ selectedItem: { type: 'category', id: 7, page: 1 } }),
     );
     expect(connection.contexts).toMatchSnapshot();
     expect(getSnapshot(connection).selectedContext).toBe(connection.contexts[0].index);
@@ -40,10 +40,10 @@ describe('Connection › Router', () => {
 
   test('Selected single with previous different context', () => {
     connection[actionTypes.ROUTE_CHANGE_SUCCEED](
-      actions.routeChangeSucceed({ selected: { type: 'post', id: 63 } }),
+      actions.routeChangeSucceed({ selectedItem: { type: 'post', id: 63 } }),
     );
     connection[actionTypes.ROUTE_CHANGE_SUCCEED](
-      actions.routeChangeSucceed({ selected: { type: 'post', id: 60 } }),
+      actions.routeChangeSucceed({ selectedItem: { type: 'post', id: 60 } }),
     );
     expect(connection.contexts).toMatchSnapshot();
     expect(getSnapshot(connection).selectedContext).toBe(connection.contexts[1].index);
@@ -52,10 +52,10 @@ describe('Connection › Router', () => {
 
   test('Selected list with previous different context', () => {
     connection[actionTypes.ROUTE_CHANGE_SUCCEED](
-      actions.routeChangeSucceed({ selected: { type: 'post', id: 60 } }),
+      actions.routeChangeSucceed({ selectedItem: { type: 'post', id: 60 } }),
     );
     connection[actionTypes.ROUTE_CHANGE_SUCCEED](
-      actions.routeChangeSucceed({ selected: { type: 'category', id: 7, page: 1 } }),
+      actions.routeChangeSucceed({ selectedItem: { type: 'category', id: 7, page: 1 } }),
     );
     expect(connection.contexts).toMatchSnapshot();
     expect(getSnapshot(connection).selectedContext).toBe(connection.contexts[1].index);
@@ -65,7 +65,7 @@ describe('Connection › Router', () => {
   test('Selected single and new context with selected', () => {
     connection[actionTypes.ROUTE_CHANGE_SUCCEED](
       actions.routeChangeSucceed({
-        selected: { type: 'post', id: 60 },
+        selectedItem: { type: 'post', id: 60 },
         context: {
           options: { someThemeOption: 123 },
           columns: [
@@ -83,7 +83,7 @@ describe('Connection › Router', () => {
   test('Selected single and new context without selected', () => {
     connection[actionTypes.ROUTE_CHANGE_SUCCEED](
       actions.routeChangeSucceed({
-        selected: { type: 'post', id: 60 },
+        selectedItem: { type: 'post', id: 60 },
         context: {
           options: { someThemeOption: 123 },
           columns: [
@@ -101,7 +101,7 @@ describe('Connection › Router', () => {
   test('Selected list and new context with selected', () => {
     connection[actionTypes.ROUTE_CHANGE_SUCCEED](
       actions.routeChangeSucceed({
-        selected: { type: 'category', id: 7, page: 1 },
+        selectedItem: { type: 'category', id: 7, page: 1 },
         context: {
           options: { someThemeOption: 123 },
           columns: [
@@ -120,7 +120,7 @@ describe('Connection › Router', () => {
   test('Selected list and new context without selected', () => {
     connection[actionTypes.ROUTE_CHANGE_SUCCEED](
       actions.routeChangeSucceed({
-        selected: { type: 'category', id: 7, page: 1 },
+        selectedItem: { type: 'category', id: 7, page: 1 },
         context: {
           options: { someThemeOption: 123 },
           columns: [
@@ -139,10 +139,10 @@ describe('Connection › Router', () => {
 
   test('Selected single with previous equal context', () => {
     connection[actionTypes.ROUTE_CHANGE_SUCCEED](
-      actions.routeChangeSucceed({ selected: { type: 'post', id: 60 } }),
+      actions.routeChangeSucceed({ selectedItem: { type: 'post', id: 60 } }),
     );
     connection[actionTypes.ROUTE_CHANGE_SUCCEED](
-      actions.routeChangeSucceed({ selected: { type: 'post', id: 60 } }),
+      actions.routeChangeSucceed({ selectedItem: { type: 'post', id: 60 } }),
     );
     expect(connection.contexts).toMatchSnapshot();
     expect(connection.selectedColumn).toBe(connection.contexts[0].columns[0]);
@@ -151,11 +151,11 @@ describe('Connection › Router', () => {
 
   test('Selected single and new context, with previous diff context', () => {
     connection[actionTypes.ROUTE_CHANGE_SUCCEED](
-      actions.routeChangeSucceed({ selected: { type: 'post', id: 60 } }),
+      actions.routeChangeSucceed({ selectedItem: { type: 'post', id: 60 } }),
     );
     connection[actionTypes.ROUTE_CHANGE_SUCCEED](
       actions.routeChangeSucceed({
-        selected: { type: 'post', id: 60 },
+        selectedItem: { type: 'post', id: 60 },
         context: {
           options: { someThemeOption: 123 },
           columns: [
@@ -173,7 +173,7 @@ describe('Connection › Router', () => {
   test('Selected single and previous context with selected', () => {
     connection[actionTypes.ROUTE_CHANGE_SUCCEED](
       actions.routeChangeSucceed({
-        selected: { type: 'post', id: 60 },
+        selectedItem: { type: 'post', id: 60 },
         context: {
           options: { someThemeOption: 123 },
           columns: [
@@ -184,7 +184,7 @@ describe('Connection › Router', () => {
       }),
     );
     connection[actionTypes.ROUTE_CHANGE_SUCCEED](
-      actions.routeChangeSucceed({ selected: { type: 'post', id: 63 } }),
+      actions.routeChangeSucceed({ selectedItem: { type: 'post', id: 63 } }),
     );
     expect(connection.contexts).toMatchSnapshot();
     expect(connection.contexts.length).toBe(1);
@@ -194,7 +194,7 @@ describe('Connection › Router', () => {
 
   test('First selected item should be visited', () => {
     connection[actionTypes.ROUTE_CHANGE_SUCCEED](
-      actions.routeChangeSucceed({ selected: { type: 'category', id: 7, page: 1 } }),
+      actions.routeChangeSucceed({ selectedItem: { type: 'category', id: 7, page: 1 } }),
     );
     expect(connection.selectedItem.visited).toBe(true);
   });
@@ -202,7 +202,7 @@ describe('Connection › Router', () => {
   test('Current selected item and previous ones should be visited', () => {
     connection[actionTypes.ROUTE_CHANGE_SUCCEED](
       actions.routeChangeSucceed({
-        selected: { type: 'post', id: 60 },
+        selectedItem: { type: 'post', id: 60 },
         context: {
           options: { someThemeOption: 123 },
           columns: [
@@ -213,7 +213,7 @@ describe('Connection › Router', () => {
       }),
     );
     connection[actionTypes.ROUTE_CHANGE_SUCCEED](
-      actions.routeChangeSucceed({ selected: { type: 'post', id: 63 } }),
+      actions.routeChangeSucceed({ selectedItem: { type: 'post', id: 63 } }),
     );
     expect(connection.selectedContext.getItem({ type: 'post', id: 60 }).visited).toBe(true);
     expect(connection.selectedContext.getItem({ type: 'post', id: 63 }).visited).toBe(true);
@@ -223,7 +223,7 @@ describe('Connection › Router', () => {
   test('Move selected single', () => {
     connection[actionTypes.ROUTE_CHANGE_SUCCEED](
       actions.routeChangeSucceed({
-        selected: { type: 'post', id: 63 },
+        selectedItem: { type: 'post', id: 63 },
         context: {
           options: { someThemeOption: 123 },
           columns: [
@@ -235,7 +235,7 @@ describe('Connection › Router', () => {
     );
     connection[actionTypes.ROUTE_CHANGE_SUCCEED](
       actions.routeChangeSucceed({
-        selected: { type: 'post', id: 62 },
+        selectedItem: { type: 'post', id: 62 },
         method: 'moveSelected',
       }),
     );
@@ -249,7 +249,7 @@ describe('Connection › Router', () => {
   test('Move selected single from column with only that item', () => {
     connection[actionTypes.ROUTE_CHANGE_SUCCEED](
       actions.routeChangeSucceed({
-        selected: { type: 'post', id: 62 },
+        selectedItem: { type: 'post', id: 62 },
         context: {
           options: { someThemeOption: 123 },
           columns: [
@@ -262,7 +262,7 @@ describe('Connection › Router', () => {
     );
     connection[actionTypes.ROUTE_CHANGE_SUCCEED](
       actions.routeChangeSucceed({
-        selected: { type: 'post', id: 60 },
+        selectedItem: { type: 'post', id: 60 },
         method: 'moveSelected',
       }),
     );
@@ -277,7 +277,7 @@ describe('Connection › Router', () => {
   test('Move selected single with previous context without selected', () => {
     connection[actionTypes.ROUTE_CHANGE_SUCCEED](
       actions.routeChangeSucceed({
-        selected: { type: 'post', id: 62 },
+        selectedItem: { type: 'post', id: 62 },
         context: {
           options: { someThemeOption: 123 },
           columns: [
@@ -291,7 +291,7 @@ describe('Connection › Router', () => {
     expect(() =>
       connection[actionTypes.ROUTE_CHANGE_SUCCEED](
         actions.routeChangeSucceed({
-          selected: { type: 'post', id: 60 },
+          selectedItem: { type: 'post', id: 60 },
           method: 'moveSelected',
         }),
       ),
@@ -301,7 +301,7 @@ describe('Connection › Router', () => {
   test('Replace context with new one', () => {
     connection[actionTypes.ROUTE_CHANGE_SUCCEED](
       actions.routeChangeSucceed({
-        selected: { type: 'post', id: 63 },
+        selectedItem: { type: 'post', id: 63 },
         context: {
           options: { someThemeOption: 123 },
           columns: [
@@ -314,7 +314,7 @@ describe('Connection › Router', () => {
     );
     connection[actionTypes.ROUTE_CHANGE_SUCCEED](
       actions.routeChangeSucceed({
-        selected: { type: 'latest', id: 'post', page: 1 },
+        selectedItem: { type: 'latest', id: 'post', page: 1 },
         method: 'replaceContext',
         context: {
           options: { someThemeOption: 456 },
@@ -340,7 +340,7 @@ describe('Connection › Router', () => {
   test.skip('Selected single and context object with extracted', () => {
     connection[actionTypes.ROUTE_CHANGE_SUCCEED](
       actions.routeChangeSucceed({
-        selected: { type: 'post', id: 60 },
+        selectedItem: { type: 'post', id: 60 },
         context: {
           options: { someThemeOption: 123 },
           columns: [
@@ -357,7 +357,7 @@ describe('Connection › Router', () => {
   test.skip('Selected single and context object with duplicate items', () => {
     connection[actionTypes.ROUTE_CHANGE_SUCCEED](
       actions.routeChangeSucceed({
-        selected: { type: 'post', id: 60 },
+        selectedItem: { type: 'post', id: 60 },
         context: {
           options: { someThemeOption: 123 },
           columns: [
@@ -374,7 +374,7 @@ describe('Connection › Router', () => {
 
   test.skip('Single and extracted list', () => {
     // connection[actionTypes.ROUTE_CHANGE_SUCCEED](
-    //   actions.routeChangeSucceed({ selected: { type: 'category', id: 7, page: 1 } }),
+    //   actions.routeChangeSucceed({ selectedItem: { type: 'category', id: 7, page: 1 } }),
     // );
     // expect(connection.contexts).toMatchSnapshot();
     // expect(getSnapshot(connection).selectedContext).toBe(connection.contexts[0].index);

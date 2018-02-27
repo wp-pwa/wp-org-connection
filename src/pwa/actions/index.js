@@ -109,36 +109,36 @@ export const customFailed = ({
 });
 
 export const routeChangeRequested = ({
-  selected: { type, id, page },
+  selectedItem: { type, id, page },
   method = 'changeSelected',
   context = null,
 }) => {
-  const selected = {
+  const selectedItem = {
     type,
     id: parse(id),
     page,
   };
   return {
     type: actionTypes.ROUTE_CHANGE_REQUESTED,
-    selected,
+    selectedItem,
     method,
     context,
   };
 };
 
 export const routeChangeSucceed = ({
-  selected: { type, id, page },
+  selectedItem: { type, id, page },
   method = 'changeSelected',
   context = null,
 }) => {
-  const selected = {
+  const selectedItem = {
     type,
     id: parse(id),
     page,
   };
   return {
     type: actionTypes.ROUTE_CHANGE_SUCCEED,
-    selected,
+    selectedItem,
     method,
     context,
   };

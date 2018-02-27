@@ -172,36 +172,36 @@ export const actions = self => {
     return self.contexts[index];
   };
 
-  const changeSelectedItem = ({ selected }) => {
-    const selectedItem = self.selectedContext.getItem(selected);
-    selectedItem.parentColumn.selectedItem = selectedItem;
-    self.selectedContext.selectedColumn = selectedItem.parentColumn;
+  const changeSelectedItem = ({ selectedItem }) => {
+    const newItem = self.selectedContext.getItem(selectedItem);
+    newItem.parentColumn.selectedItem = newItem;
+    self.selectedContext.selectedColumn = newItem.parentColumn;
     self.selectedItem.visited = true;
     // loadNextPageIfInfinite();
   };
 
-  const createNewContext = ({ selected, context }) => {
+  const createNewContext = ({ selectedItem, context }) => {
     const contextInstance = addNewContext();
     contextInstance.setGenerator(context);
     contextInstance.addColumns(context.columns);
-    contextInstance.addItemIfMissing(selected, true);
+    contextInstance.addItemIfMissing(selectedItem, true);
     self.selectedContext = contextInstance;
-    changeSelectedItem({ selected });
+    changeSelectedItem({ selectedItem });
   };
 
-  const replaceSelectedContext = ({ selected, context }) => {
+  const replaceSelectedContext = ({ selectedItem, context }) => {
     const contextInstance = self.selectedContext;
     contextInstance.setGenerator(context);
     contextInstance.replaceColumns(context.columns);
-    contextInstance.addItemIfMissing(selected, true);
+    contextInstance.addItemIfMissing(selectedItem, true);
     self.selectedContext = contextInstance;
-    changeSelectedItem({ selected });
+    changeSelectedItem({ selectedItem });
   };
 
-  const moveSelectedItem = ({ selected }) => {
-    const newItem = self.selectedContext.getItem(selected);
+  const moveSelectedItem = ({ selectedItem }) => {
+    const newItem = self.selectedContext.getItem(selectedItem);
     if (newItem.parentColumn !== self.selectedContext.parentColumn) {
-      self.selectedContext.moveItem(selected);
+      self.selectedContext.moveItem(selectedItem);
     }
     newItem.parentColumn.selectedItem = newItem;
     self.selectedItem.visited = true;
@@ -209,31 +209,31 @@ export const actions = self => {
   };
 
   return {
-    [actionTypes.ROUTE_CHANGE_SUCCEED]: ({ selected, method, context: actionContext }) => {
+    [actionTypes.ROUTE_CHANGE_SUCCEED]: ({ selectedItem, method, context: actionContext }) => {
       if (typeof window !== 'undefined')
         self.siteInfo.headContent = self.siteInfo.headContent.filter(node => node.permanent);
 
       if (!self.selectedContext) {
         // If there's not a previous context.
-        const context = actionContext || { columns: [[{ ...selected }]] };
-        return createNewContext({ selected, context });
+        const context = actionContext || { columns: [[{ ...selectedItem }]] };
+        return createNewContext({ selectedItem, context });
       }
       // If there's a previous context...
       const context = actionContext || self.selectedContext.generator;
-      const selectedItemInSelectedContext = self.selectedContext.hasItem(selected);
+      const selectedItemInSelectedContext = self.selectedContext.hasItem(selectedItem);
       const generatorsAreEqual = isEqual(self.selectedContext.generator, context);
 
       if (generatorsAreEqual && selectedItemInSelectedContext) {
         // If we are going to use the same context and selected is there.
-        if (method === 'moveSelected') return moveSelectedItem({ selected });
-        return changeSelectedItem({ selected });
+        if (method === 'moveSelected') return moveSelectedItem({ selectedItem });
+        return changeSelectedItem({ selectedItem });
       }
-      if (method === 'changeSelected') return createNewContext({ selected, context });
+      if (method === 'changeSelected') return createNewContext({ selectedItem, context });
       if (method === 'moveSelected')
         throw new Error("Can't move if selected doesn't exist in the previous context.");
-      if (method === 'replaceContext') return replaceSelectedContext({ selected, context });
-      if (method === 'backwards') return selectInPreviousContext({ selected });
-      if (method === 'forward') return selectInNextContext({ selected });
+      if (method === 'replaceContext') return replaceSelectedContext({ selectedItem, context });
+      if (method === 'backwards') return selectInPreviousContext({ selectedItem });
+      if (method === 'forward') return selectInNextContext({ selectedItem });
       return null;
     },
   };
