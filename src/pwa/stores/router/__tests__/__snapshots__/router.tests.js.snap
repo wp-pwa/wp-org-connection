@@ -261,6 +261,91 @@ Array [
 ]
 `;
 
+exports[`Connection › Router Select in next context 1`] = `
+Array [
+  Object {
+    "generator": Object {
+      "columns": Array [
+        Array [
+          Object {
+            "id": 7,
+            "page": 1,
+            "type": "category",
+          },
+          Object {
+            "id": 7,
+            "page": 2,
+            "type": "category",
+          },
+        ],
+      ],
+    },
+    "index": 0,
+    "infinite": undefined,
+    "options": undefined,
+    "rawColumns": Array [
+      Object {
+        "items": Array [
+          Object {
+            "id": 7,
+            "mstId": "0_category_7_page_1",
+            "page": 1,
+            "type": "category",
+            "visited": true,
+          },
+          Object {
+            "id": 7,
+            "mstId": "0_category_7_page_2",
+            "page": 2,
+            "type": "category",
+            "visited": true,
+          },
+        ],
+        "mstId": "mockedId_47",
+        "selectedItem": "0_category_7_page_2",
+      },
+    ],
+    "selectedColumn": "mockedId_47",
+  },
+  Object {
+    "generator": Object {
+      "columns": Array [
+        Array [
+          Object {
+            "id": 62,
+            "page": undefined,
+            "type": "post",
+          },
+        ],
+      ],
+    },
+    "index": 1,
+    "infinite": undefined,
+    "options": undefined,
+    "rawColumns": Array [
+      Object {
+        "items": Array [
+          Object {
+            "fromList": Object {
+              "id": "post",
+              "page": 1,
+              "type": "latest",
+            },
+            "id": 62,
+            "mstId": "1_post_62",
+            "type": "post",
+            "visited": true,
+          },
+        ],
+        "mstId": "mockedId_48",
+        "selectedItem": "1_post_62",
+      },
+    ],
+    "selectedColumn": "mockedId_48",
+  },
+]
+`;
+
 exports[`Connection › Router Select in previous context 1`] = `
 Array [
   Object {

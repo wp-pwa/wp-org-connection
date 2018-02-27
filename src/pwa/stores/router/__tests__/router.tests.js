@@ -367,6 +367,7 @@ describe('Connection › Router', () => {
     expect(connection.contexts).toMatchSnapshot();
     expect(connection.contexts.length).toBe(2);
     expect(connection.selectedContext.index).toBe(0);
+    expect(connection.selectedContext.columns[0].items[1].id).toBe(connection.selectedItem.id);
     expect(connection.selectedItem.id).toBe(7);
   });
 
@@ -387,6 +388,64 @@ describe('Connection › Router', () => {
         actions.routeChangeSucceed({
           selectedItem: { type: 'category', id: 7, page: 3 },
           method: 'selectItemInPreviousContext',
+        }),
+      ),
+    ).toThrow("You are trying to select an item in a context where doesn't exist");
+  });
+
+  test('Select in next context', () => {
+    connection[actionTypes.ROUTE_CHANGE_SUCCEED](
+      actions.routeChangeSucceed({
+        selectedItem: { type: 'category', id: 7, page: 1 },
+        context: {
+          columns: [[{ type: 'category', id: 7, page: 1 }, { type: 'category', id: 7, page: 2 }]],
+        },
+      }),
+    );
+    connection[actionTypes.ROUTE_CHANGE_SUCCEED](
+      actions.routeChangeSucceed({ selectedItem: { type: 'post', id: 62 } }),
+    );
+    connection[actionTypes.ROUTE_CHANGE_SUCCEED](
+      actions.routeChangeSucceed({
+        selectedItem: { type: 'category', id: 7, page: 2 },
+        method: 'selectItemInPreviousContext',
+      }),
+    );
+    connection[actionTypes.ROUTE_CHANGE_SUCCEED](
+      actions.routeChangeSucceed({
+        selectedItem: { type: 'post', id: 62 },
+        method: 'selectItemInNextContext',
+      }),
+    );
+    expect(connection.contexts).toMatchSnapshot();
+    expect(connection.contexts.length).toBe(2);
+    expect(connection.selectedContext.index).toBe(1);
+    expect(connection.selectedItem.id).toBe(62);
+  });
+
+  test('Try to select in next context where item doesnt exist', () => {
+    connection[actionTypes.ROUTE_CHANGE_SUCCEED](
+      actions.routeChangeSucceed({
+        selectedItem: { type: 'category', id: 7, page: 1 },
+        context: {
+          columns: [[{ type: 'category', id: 7, page: 1 }, { type: 'category', id: 7, page: 2 }]],
+        },
+      }),
+    );
+    connection[actionTypes.ROUTE_CHANGE_SUCCEED](
+      actions.routeChangeSucceed({ selectedItem: { type: 'post', id: 62 } }),
+    );
+    connection[actionTypes.ROUTE_CHANGE_SUCCEED](
+      actions.routeChangeSucceed({
+        selectedItem: { type: 'category', id: 7, page: 2 },
+        method: 'selectItemInPreviousContext',
+      }),
+    );
+    expect(() =>
+      connection[actionTypes.ROUTE_CHANGE_SUCCEED](
+        actions.routeChangeSucceed({
+          selectedItem: { type: 'post', id: 63 },
+          method: 'selectItemInNextContext',
         }),
       ),
     ).toThrow("You are trying to select an item in a context where doesn't exist");
