@@ -225,11 +225,11 @@ export const actions = self => {
 
       if (generatorsAreEqual && selectedItemInSelectedContext) {
         // If we are going to use the same context and selected is there.
-        if (method === 'moveSelected') return moveSelectedItem({ selectedItem });
+        if (method === 'moveSelectedItem') return moveSelectedItem({ selectedItem });
         return changeSelectedItem({ selectedItem });
       }
-      if (method === 'changeSelected') return createNewContext({ selectedItem, context });
-      if (method === 'moveSelected')
+      if (method === 'changeSelectedItem') return createNewContext({ selectedItem, context });
+      if (method === 'moveSelectedItem')
         throw new Error("Can't move if selected doesn't exist in the previous context.");
       if (method === 'replaceContext') return replaceSelectedContext({ selectedItem, context });
       if (method === 'backwards') return selectInPreviousContext({ selectedItem });

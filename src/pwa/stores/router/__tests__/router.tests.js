@@ -236,7 +236,7 @@ describe('Connection › Router', () => {
     connection[actionTypes.ROUTE_CHANGE_SUCCEED](
       actions.routeChangeSucceed({
         selectedItem: { type: 'post', id: 62 },
-        method: 'moveSelected',
+        method: 'moveSelectedItem',
       }),
     );
     expect(connection.contexts).toMatchSnapshot();
@@ -263,7 +263,7 @@ describe('Connection › Router', () => {
     connection[actionTypes.ROUTE_CHANGE_SUCCEED](
       actions.routeChangeSucceed({
         selectedItem: { type: 'post', id: 60 },
-        method: 'moveSelected',
+        method: 'moveSelectedItem',
       }),
     );
     expect(connection.contexts).toMatchSnapshot();
@@ -292,7 +292,7 @@ describe('Connection › Router', () => {
       connection[actionTypes.ROUTE_CHANGE_SUCCEED](
         actions.routeChangeSucceed({
           selectedItem: { type: 'post', id: 60 },
-          method: 'moveSelected',
+          method: 'moveSelectedItem',
         }),
       ),
     ).toThrow("Can't move if selected doesn't exist in the previous context.");
