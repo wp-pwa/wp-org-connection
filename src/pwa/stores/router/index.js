@@ -157,15 +157,6 @@ export const actions = self => {
     }
   };
 
-  const changeToContext = (selected, relativeIndex) => {
-    const newIndex = self.context.index + relativeIndex;
-    self.context = self.contexts[newIndex];
-    changeSelectedItem(selected);
-  };
-
-  const selectInPreviousContext = selected => changeToContext(selected, -1);
-  const selectInNextContext = selected => changeToContext(selected, 1);
-
   const addNewContext = () => {
     const index = self.selectedContext ? self.selectedContext.index + 1 : 0;
     self.contexts[index] = { index };
@@ -174,10 +165,22 @@ export const actions = self => {
 
   const changeSelectedItem = ({ selectedItem }) => {
     const newItem = self.selectedContext.getItem(selectedItem);
+    if (!newItem)
+      throw new Error("You are trying to select an item in a context where doesn't exist");
     newItem.parentColumn.selectedItem = newItem;
     self.selectedContext.selectedColumn = newItem.parentColumn;
     self.selectedItem.visited = true;
     // loadNextPageIfInfinite();
+  };
+
+  const selectItemInPreviousContext = ({ selectedItem }) => {
+    self.selectedContext = self.contexts[self.selectedContext.index - 1];
+    changeSelectedItem({ selectedItem });
+  };
+
+  const selectItemInNextContext = ({ selectedItem }) => {
+    self.selectedContext = self.contexts[self.selectedContext.index + 1];
+    changeSelectedItem({ selectedItem });
   };
 
   const createNewContext = ({ selectedItem, context }) => {
@@ -213,14 +216,12 @@ export const actions = self => {
       if (typeof window !== 'undefined')
         self.siteInfo.headContent = self.siteInfo.headContent.filter(node => node.permanent);
 
-      if (!self.selectedContext) {
-        // If there's not a previous context.
-        const context = actionContext || { columns: [[{ ...selectedItem }]] };
-        return createNewContext({ selectedItem, context });
-      }
+      let context = actionContext || { columns: [[{ ...selectedItem }]] };
+      // If there's not a previous context.
+      if (!self.selectedContext) return createNewContext({ selectedItem, context });
       // If there's a previous context...
-      const context = actionContext || self.selectedContext.generator;
       const selectedItemInSelectedContext = self.selectedContext.hasItem(selectedItem);
+      if (!actionContext && selectedItemInSelectedContext) context = self.selectedContext.generator;
       const generatorsAreEqual = isEqual(self.selectedContext.generator, context);
 
       if (generatorsAreEqual && selectedItemInSelectedContext) {
@@ -232,8 +233,9 @@ export const actions = self => {
       if (method === 'moveSelectedItem')
         throw new Error("Can't move if selected doesn't exist in the previous context.");
       if (method === 'replaceContext') return replaceSelectedContext({ selectedItem, context });
-      if (method === 'backwards') return selectInPreviousContext({ selectedItem });
-      if (method === 'forward') return selectInNextContext({ selectedItem });
+      if (method === 'selectItemInPreviousContext')
+        return selectItemInPreviousContext({ selectedItem });
+      if (method === 'selectItemInNextContext') return selectItemInNextContext({ selectedItem });
       return null;
     },
   };

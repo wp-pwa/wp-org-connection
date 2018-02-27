@@ -53,6 +53,9 @@ describe('Connection › Router', () => {
     );
     expect(connection.contexts).toMatchSnapshot();
     expect(getSnapshot(connection).selectedContext).toBe(connection.contexts[1].index);
+    expect(getSnapshot(connection.selectedContext).generator).toEqual({
+      columns: [[{ type: 'post', id: 60, page: undefined }]],
+    });
     expect(connection.selectedItem.id).toBe(60);
   });
 
@@ -341,6 +344,52 @@ describe('Connection › Router', () => {
     expect(connection.contexts[0].columns[0].items[0].id).toBe(63);
     expect(connection.contexts[0].columns[1].items[0].type).toBe('category');
     expect(connection.contexts[0].columns[1].items[0].id).toBe(7);
+  });
+
+  test('Select in previous context', () => {
+    connection[actionTypes.ROUTE_CHANGE_SUCCEED](
+      actions.routeChangeSucceed({
+        selectedItem: { type: 'category', id: 7, page: 1 },
+        context: {
+          columns: [[{ type: 'category', id: 7, page: 1 }, { type: 'category', id: 7, page: 2 }]],
+        },
+      }),
+    );
+    connection[actionTypes.ROUTE_CHANGE_SUCCEED](
+      actions.routeChangeSucceed({ selectedItem: { type: 'post', id: 62 } }),
+    );
+    connection[actionTypes.ROUTE_CHANGE_SUCCEED](
+      actions.routeChangeSucceed({
+        selectedItem: { type: 'category', id: 7, page: 2 },
+        method: 'selectItemInPreviousContext',
+      }),
+    );
+    expect(connection.contexts).toMatchSnapshot();
+    expect(connection.contexts.length).toBe(2);
+    expect(connection.selectedContext.index).toBe(0);
+    expect(connection.selectedItem.id).toBe(7);
+  });
+
+  test('Try to select in previous context where item doesnt exist', () => {
+    connection[actionTypes.ROUTE_CHANGE_SUCCEED](
+      actions.routeChangeSucceed({
+        selectedItem: { type: 'category', id: 7, page: 1 },
+        context: {
+          columns: [[{ type: 'category', id: 7, page: 1 }, { type: 'category', id: 7, page: 2 }]],
+        },
+      }),
+    );
+    connection[actionTypes.ROUTE_CHANGE_SUCCEED](
+      actions.routeChangeSucceed({ selectedItem: { type: 'post', id: 62 } }),
+    );
+    expect(() =>
+      connection[actionTypes.ROUTE_CHANGE_SUCCEED](
+        actions.routeChangeSucceed({
+          selectedItem: { type: 'category', id: 7, page: 3 },
+          method: 'selectItemInPreviousContext',
+        }),
+      ),
+    ).toThrow("You are trying to select an item in a context where doesn't exist");
   });
 
   test.skip('Selected single and context object with extracted', () => {
