@@ -1,11 +1,10 @@
 import * as actions from './actions';
 import * as actionTypes from './actionTypes';
-import * as components from './components';
+import WpOrgConnection, * as components from './components';
 import reducers from './reducers';
 import Store from './stores';
-import sagas from './sagas/client';
-
-const WpOrgConnection = () => null;
+import clientSagas from './sagas/client';
+import serverSagas from './sagas/server';
 
 export default WpOrgConnection;
-export { actions, actionTypes, components, reducers, sagas, Store };
+export { actions, actionTypes, components, reducers, clientSagas, serverSagas, Store };
