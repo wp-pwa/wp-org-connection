@@ -4,7 +4,6 @@ import WpOrgConnection, * as components from './components';
 import reducers from './reducers';
 import Store from './stores';
 import clientSagas from './sagas/client';
-import serverSagas from './sagas/server';
 
 export default WpOrgConnection;
-export { actions, actionTypes, components, reducers, clientSagas, serverSagas, Store };
+export { actions, actionTypes, components, reducers, clientSagas, Store };
