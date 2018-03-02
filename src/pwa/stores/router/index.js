@@ -236,7 +236,7 @@ export const actions = self => {
       if (method === 'selectItemInPreviousContext')
         return selectItemInPreviousContext({ selectedItem });
       if (method === 'selectItemInNextContext') return selectItemInNextContext({ selectedItem });
-      return null;
+      throw new Error('Connection didn\'t know what to do. Please search this error in the code.');
     },
   };
 };

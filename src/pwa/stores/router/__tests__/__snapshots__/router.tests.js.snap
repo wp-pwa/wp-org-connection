@@ -755,6 +755,70 @@ Array [
 ]
 `;
 
+exports[`Connection › Router Selected single and context object with extracted 1`] = `
+Array [
+  Object {
+    "generator": Object {
+      "columns": Array [
+        Array [
+          Object {
+            "id": 60,
+            "type": "post",
+          },
+        ],
+        Array [
+          Object {
+            "extract": true,
+            "id": "post",
+            "page": 1,
+            "type": "latest",
+          },
+        ],
+      ],
+      "options": Object {
+        "someThemeOption": 123,
+      },
+    },
+    "index": 0,
+    "infinite": undefined,
+    "options": undefined,
+    "rawColumns": Array [
+      Object {
+        "items": Array [
+          Object {
+            "fromList": Object {
+              "id": "post",
+              "page": 1,
+              "type": "latest",
+            },
+            "id": 60,
+            "mstId": "0_post_60",
+            "type": "post",
+            "visited": true,
+          },
+        ],
+        "mstId": "mockedId_51",
+        "selectedItem": "0_post_60",
+      },
+      Object {
+        "items": Array [
+          Object {
+            "id": "post",
+            "mstId": "0_latest_post_page_1",
+            "page": 1,
+            "type": "latest",
+            "visited": false,
+          },
+        ],
+        "mstId": "mockedId_52",
+        "selectedItem": "",
+      },
+    ],
+    "selectedColumn": "mockedId_51",
+  },
+]
+`;
+
 exports[`Connection › Router Selected single and new context with selected 1`] = `
 Array [
   Object {

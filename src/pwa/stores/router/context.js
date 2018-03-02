@@ -26,7 +26,7 @@ const Context = types
       return self.selectedColumn.selectedItem;
     },
     get columns() {
-      return self.rawColumns;
+      return self.rawColumns.filter();
     },
   }))
   .actions(self => {

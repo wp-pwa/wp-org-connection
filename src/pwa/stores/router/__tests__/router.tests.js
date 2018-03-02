@@ -1,3 +1,5 @@
+/* eslint-disable */
+import { transaction } from 'mobx';
 import { getSnapshot } from 'mobx-state-tree';
 import Connection from '../../';
 import * as actionTypes from '../../../actionTypes';
@@ -451,23 +453,334 @@ describe('Connection › Router', () => {
     ).toThrow("You are trying to select an item in a context where doesn't exist");
   });
 
-  test.skip('Selected single and context object with extracted', () => {
+  test('Selected single and context object with extracted', () => {
     connection[actionTypes.ROUTE_CHANGE_SUCCEED](
       actions.routeChangeSucceed({
         selectedItem: { type: 'post', id: 60 },
         context: {
           options: { someThemeOption: 123 },
           columns: [
-            { items: [{ type: 'post', id: 60 }] },
-            { items: [{ type: 'latest', id: 'post', page: 1, extracted: true }] },
+            [{ type: 'post', id: 60 }],
+            [{ type: 'latest', id: 'post', page: 1, extract: true }],
           ],
         },
       }),
     );
     expect(connection.contexts).toMatchSnapshot();
-    expect(getSnapshot(connection).selectedContext).toBe(connection.contexts[0].index);
+    expect(connection.selectedContext.columns.length).toBe(1);
   });
 
+  // //////////////////////////////////////////////////////////////////////////////////////////////
+  actions.routeChangeSucceed({
+    selectedItem: { type: 'post', id: 60 },
+    context: {
+      options: { header: 'post' },
+      columns: [
+        {
+          items: [{ type: 'post', id: 62 }],
+          infiniteScroll: 'nextNonVisited',
+        },
+        {
+          items: [{ type: 'post', id: 63 }, { type: 'post', id: 60 }],
+          infiniteScroll: 'nextNonVisited',
+        },
+        {
+          items: [{ type: 'category', id: 7, page: 1 }],
+          infiniteScroll: { type: 'category', id: 7, fromPage: 2 },
+        },
+      ],
+      infiniteSwipe: {
+        type: 'category',
+        id: 7,
+        extract: true,
+        fromPage: 2,
+        infiniteScroll: 'nextNonVisited',
+      },
+    },
+  });
+  // Launched by creator of context.
+  connection.selectedContext = connection.createContext({
+    options: { header: 'post' },
+    selected: { type: 'post', id: 60 },
+    columns: [
+      [{ type: 'post', id: 62 }],
+      [{ type: 'post', id: 63 }, { type: 'post', id: 60 }],
+      [{ type: 'category', id: 7, page: 1 }],
+    ],
+  });
+  autorun(() => {
+    if (connection.selectedItem.isLastNonVisited) {
+      const page = untracked(() => connection.list('category', 7).nextPage.page);
+      connection.selectedContext.pushColumns({ type: 'category', id: 7, page, extract: true });
+      connection.list('category', 7).nextPage.fetch();
+    }
+  });
+  // RouteWaypoint draws this on prefetching POST
+  connection.selectedContext.nextNonVisitedItem;
+  // Launched by RouteWaypoint POST, route change (infiniteScroll)
+  const item = detach(connection.selectedContext.nextNonVisitedItem);
+  connection.selectedColum.pushItem(item);
+  connection.changeSelectedItem(item);
+  // RouteWaypoint draws this on prefetching LIST and starts fetching
+  connection.selectedItem.list.nextPage;
+  connection.selectedItem.list.nextPage.fetch();
+  // Launched by RouteWaypoint LIST, route change (infiniteScroll)
+  const item = connection.selectedColum.pushItem(connection.selectedItem.list.nextPage);
+  connection.changeSelectedItem(item);
+  // When swipe right or "Next" button
+  connection.changeSelectedItem(connection.nextColumn.selectedItem);
+  // When swipe left or "Previous" button
+  connection.changeSelectedItem(connection.previousColumn.selectedItem);
+
+  // //////////////////////////////////////////////////////////////////////////////////////////////
+  actions.routeChangeSucceed({
+    selectedItem: { type: 'post', id: 60 },
+    context: {
+      options: { header: 'list' },
+      columns: [
+        {
+          items: [{ type: 'category', id: 7, page: 1, extract: true }],
+          infiniteScroll: 'moveNextNonVisited',
+        },
+      ],
+      infiniteSwipe: {
+        type: 'category',
+        id: 7,
+        fromPage: 2,
+        extract: true,
+        infiniteScroll: 'moveNextNonVisited',
+      },
+    },
+  });
+  // Launched by creator of context.
+  connection.selectedContext = connection.createContext({
+    options: { header: 'list' },
+    selected: { type: 'post', id: 60 },
+    columns: [{ type: 'category', id: 7, page: 1, extract: true }],
+  });
+  autorun(() => {
+    if (connection.selectedItem.isLastNonVisited) {
+      const page = untracked(() => connection.list('category', 7).nextPage.page);
+      connection.selectedContext.pushColumns({ type: 'category', id: 7, page, extract: true });
+      connection.list('latest', 'post').nextPage.fetch();
+    }
+  });
+  // RouteWaypoint draws this on prefetching
+  connection.selectedContext.nextNonVisitedItem;
+  // Launched by RouteWaypoint, route change (infiniteScroll)
+  const item = detach(connection.selectedContext.nextNonVisitedItem);
+  connection.selectedColum.pushItem(item);
+  connection.changeSelectedItem(item);
+  // When swipe right or "Next" button
+  connection.changeSelectedItem(connection.nextColumn.selectedItem);
+  // When swipe left or "Previous" button
+  connection.changeSelectedItem(connection.previousColumn.selectedItem);
+
+  // //////////////////////////////////////////////////////////////////////////////////////////////
+  actions.routeChangeSucceed({
+    selectedItem: { type: 'post', id: 60 },
+    context: {
+      options: { header: 'directPost' },
+      columns: [
+        {
+          items: [{ type: 'post', id: 60 }],
+          infiniteScroll: { type: 'latest', id: 'post', fromPage: 1 },
+        },
+      ],
+      infiniteSwipe: {
+        type: 'latest',
+        id: 'post',
+        fromPage: 1,
+        extract: true,
+        infiniteScroll: { type: 'latest', id: 'post', fromPage: 1 },
+      },
+    },
+  });
+  // Launched by creator of context.
+  connection.selectedContext = connection.createContext({
+    options: { header: 'directPost' },
+    columns: [[{ type: 'post', id: 60 }], [{ type: 'latest', id: 'post', page: 1, extract: true }]],
+    allowRepeatedItems: false,
+  });
+  autorun(() => {
+    if (connection.selectedItem.isLastNonVisited) {
+      const page = untracked(() => connection.list('latest', 'post').nextPage.page);
+      connection.selectedContext.pushColumns({ type: 'latest', id: 'post', page, extract: true });
+      connection.list('latest', 'post').nextPage.fetch();
+    }
+  });
+  // RouteWaypoint draws this on prefetching
+  connection.selectedContext.nextNonVisitedItem;
+  // Launched by RouteWaypoint, route change (infiniteScroll)
+  const item = detach(connection.selectedContext.nextNonVisitedItem);
+  connection.selectedColum.pushItem(item);
+  connection.changeSelectedItem(item);
+  // When swipe right or button of "Next page"
+  connection.changeSelectedItem(connection.nextColumn.selectedItem);
+  // When swipe left or button of "Previous page"
+  connection.changeSelectedItem(connection.previousColumn.selectedItem);
+
+  // //////////////////////////////////////////////////////////////////////////////////////////////
+  actions.routeChangeSucceed({
+    selectedItem: { type: 'post', id: 60 },
+    context: {
+      options: { header: 'directPost' },
+      columns: [
+        {
+          items: [{ type: 'post', id: 60 }],
+          infiniteScroll: { type: 'latest', id: 'post', fromPage: 1, extract: true },
+        },
+        {
+          items: [{ type: 'latest', id: 'post', page: 1 }],
+          infiniteScroll: { type: 'latest', id: 'post', fromPage: 2 },
+        },
+        {
+          items: [{ type: 'category', id: 7, page: 1 }],
+          infiniteScroll: { type: 'category', id: 7, fromPage: 2 },
+        },
+        {
+          items: [{ type: 'tag', id: 10, page: 1 }],
+          infiniteScroll: { type: 'tag', id: 10, fromPage: 2 },
+        },
+      ],
+    },
+  });
+  // Launched by creator of context.
+  connection.selectedContext = connection.createNewContext({
+    options: { header: 'directPost' },
+    select: { type: 'post', id: 60 },
+    columns: [
+      [{ type: 'post', id: 60 }],
+      [{ type: 'latest', id: 'post', page: 1 }],
+      [{ type: 'category', id: 7, page: 1 }],
+      [{ type: 'tag', id: 10, page: 1 }],
+    ],
+  });
+  autorun(() => connection.nextColumn.selectedItem.fetch())
+  autorun(() => connection.previousColumn.selectedItem.fetch())
+  // Launched by RouteWaypoint of post 60, preload (infiniteScroll)
+  const list = connection.selectedContext.createList({ type: 'latest', id: 'post', page: 1 });
+  // Launched by RouteWaypoint of post 60, route change (infiniteScroll)
+  when(
+    () => list.ready,
+    () => {
+      connection.selectedColum.pushItem(list.selectedItem);
+      connection.changeSelectedItem(list.selectedItem);
+      list.selectedItem = list.selectedItem.nextItem;
+      if (list.selectedItem.isLast) list.nextPage.fetch();
+    },
+  );
+  // Launched by RouteWaypoint of the lists, preload (infiniteScroll)
+  connection.selectedItem.nextPage.fetch();
+  // Launched by RouteWaypoint of the lists, route change (infiniteScroll)
+  connection.selectedColumn.pushItem(connection.selectedItem.nextPage);
+  connection.changeSelectedItem(connection.selectedColumn.nextItem);
+  // When swipe right or button of "Next page"
+  if (connection.nextColumn) connection.changeSelectedItem(connection.nextColumn.selectedItem);
+  // When swipe left or button of "Previous page"
+  if (connection.previousColumn)
+    connection.changeSelectedItem(connection.previousColumn.selectedItem);
+
+  // //////////////////////////////////////////////////////////////////////////////////////////////
+  actions.routeChangeSucceed({
+    selectedItem: { type: 'category', id: 7, page: 5 },
+    context: {
+      options: { someThemeOption: 123 },
+      columns: [
+        {
+          items: [{ type: 'category', id: 7, page: 5 }],
+          infiniteScroll: { type: 'category', id: 7, fromPage: 6 },
+        },
+        {
+          items: [{ type: 'latest', id: 'post', page: 1 }],
+          infiniteScroll: { type: 'latest', id: 'post', fromPage: 2 },
+        },
+        {
+          items: [{ type: 'tag', id: 10, page: 1 }],
+          infiniteScroll: { type: 'tag', id: 10, fromPage: 2 },
+        },
+        {
+          items: [{ type: 'category', id: 7, page: 1 }],
+          infiniteScroll: { type: 'category', id: 7, fromPage: 2 },
+        },
+      ],
+    },
+  });
+
+  // Launched by creator of context.
+  const context = connection.createNewContext({
+    options: { header: 'list' },
+    columns: [
+      [{ type: 'category', id: 7, page: 5 }],
+      [{ type: 'latest', id: 'post', page: 1 }],
+      [{ type: 'tag', id: 10, page: 1 }],
+      [{ type: 'category', id: 7, page: 1 }],
+    ],
+  });
+  const item = context.getItem({ type: 'category', id: 7, page: 5 });
+  connection.changeSelectedItem(item);
+  // On each changeSelectedItem;
+  connection.selectedItem.fetch();
+  if (connection.nextColumn) connection.nextColumn.selectedItem.fetch();
+  if (connection.previousColumn) connection.previousColumn.selectedItem.fetch();
+  // Launched by RouteWaypoint, preload (infiniteScroll)
+  connection.selectedItem.nextPage.fetch();
+  // Launched by RouteWaypoint, route change (infiniteScroll)
+  connection.selectedColumn.pushItem(connection.selectedItem.nextPage);
+  connection.changeSelectedItem(connection.selectedColumn.nextItem);
+  // When swipe right or button of "Next page"
+  connection.changeSelectedItem(connection.nextColumn.selectedItem);
+  // When swipe left or button of "Previous page"
+  connection.changeSelectedItem(connection.previousColumn.selectedItem);
+
+  // //////////////////////////////////////////////////////////////////////////////////////////////
+  actions.routeChangeSucceed({
+    selectedItem: { type: 'category', id: 7, page: 5 },
+    context: {
+      options: { someThemeOption: 123 },
+      columns: [
+        {
+          items: [{ type: 'category', id: 7, page: 5 }],
+          infiniteScroll: { type: 'category', id: 7, fromPage: 4 },
+        },
+      ],
+      infiniteSwipeLeft: { type: 'category', id: 7, fromPage: 4 },
+      infiniteSwipeRight: { type: 'category', id: 7, fromPage: 6 },
+      repeatColumns: false,
+      repeatItems: false,
+    },
+  });
+
+  // Launched by creator of context.
+  const context = connection.createNewContext({
+    options: { header: 'list' },
+    columns: [[{ type: 'category', id: 7, page: 5 }]],
+  });
+  const item = context.getItem({ type: 'category', id: 7, page: 5 });
+  connection.changeSelectedItem(item);
+  // Launched by last component (infiniteSwipeRight)
+  if (connection.selectedItem.nextPage) {
+    connection.selectedContext.pushColumn([connection.selectedItem.nextPage]);
+    connection.selectedItem.nextPage.fetch();
+  }
+  // Launched by first component (infiniteSwipeLeft)
+  if (connection.selectedItem.previousPage) {
+    connection.selectedContext.unshiftColumn([connection.selectedItem.previousPage]);
+    connection.selectedItem.previousPage.fetch();
+  }
+  // Launched by RouteWaypoint, route change (infiniteScroll)
+  if (connection.selectedItem.nextPage)
+    transaction(() => {
+      connection.selectedContext.deleteItem(connection.selectedItem.nextPage);
+      connection.selectedColumn.pushItem(connection.selectedItem.nextPage);
+    });
+  connection.changeSelectedItem(connection.selectedItem.nextPage);
+  // When swipe right or button of "Next page"
+  connection.changeSelectedItem(connection.selectedItem.nextPage);
+  // When swipe left or button of "Previous page"
+  connection.changeSelectedItem(connection.selectedItem.previousPage);
+
+  // //////////////////////////////////////////////////////////////////////////////////////////////
   test.skip('Selected single and context object with duplicate items', () => {
     connection[actionTypes.ROUTE_CHANGE_SUCCEED](
       actions.routeChangeSucceed({
