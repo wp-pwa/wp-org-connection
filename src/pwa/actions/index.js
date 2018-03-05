@@ -112,6 +112,7 @@ export const routeChangeRequested = ({
   selectedItem: { type, id, page },
   method = 'changeSelectedItem',
   context = null,
+  event = null,
 }) => {
   const selectedItem = {
     type,
@@ -123,6 +124,7 @@ export const routeChangeRequested = ({
     selectedItem,
     method,
     context,
+    event,
   };
 };
 
