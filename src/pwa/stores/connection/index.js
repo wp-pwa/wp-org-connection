@@ -120,7 +120,6 @@ export const actions = self => ({
     list.pageMap.get(page - 1).ready = true;
     list.pageMap.get(page - 1).entities = result;
     if (total) list.total = total;
-
     addEntities({ self, entities, ready: true, fetching: false });
     if (self.context) extractList({ listType, listId, page, result }, self.context);
   },

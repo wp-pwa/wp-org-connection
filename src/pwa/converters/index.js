@@ -49,11 +49,12 @@ export const author = entity => ({
 });
 
 export const media = entity => {
-  if (entity.error)
+  if (entity.error) {
     return {
       id: parseInt(entity.id, 10),
       error: entity.error,
     };
+  }
 
   return {
     id: entity.id,
