@@ -789,12 +789,6 @@ Array [
       "columns": Array [
         Array [
           Object {
-            "id": 60,
-            "type": "post",
-          },
-        ],
-        Array [
-          Object {
             "extract": true,
             "id": "post",
             "page": 1,
@@ -802,16 +796,13 @@ Array [
           },
         ],
       ],
-      "options": Object {
-        "someThemeOption": 123,
-      },
     },
     "index": 0,
     "infinite": undefined,
     "options": undefined,
     "rawColumns": Array [
       Object {
-        "mstId": "mockedId_51",
+        "mstId": "mockedId_52",
         "rawItems": Array [
           Object {
             "extract": null,
@@ -829,7 +820,7 @@ Array [
         "selectedItem": "0_post_60",
       },
       Object {
-        "mstId": "mockedId_52",
+        "mstId": "mockedId_51",
         "rawItems": Array [
           Object {
             "extract": true,
@@ -843,7 +834,7 @@ Array [
         "selectedItem": "",
       },
     ],
-    "selectedColumn": "mockedId_51",
+    "selectedColumn": "mockedId_52",
   },
 ]
 `;

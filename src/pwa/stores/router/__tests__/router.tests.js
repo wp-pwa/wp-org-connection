@@ -457,13 +457,7 @@ describe('Connection › Router', () => {
     connection[actionTypes.ROUTE_CHANGE_SUCCEED](
       actions.routeChangeSucceed({
         selectedItem: { type: 'post', id: 60 },
-        context: {
-          options: { someThemeOption: 123 },
-          columns: [
-            [{ type: 'post', id: 60 }],
-            [{ type: 'latest', id: 'post', page: 1, extract: true }],
-          ],
-        },
+        context: { columns: [[{ type: 'latest', id: 'post', page: 1, extract: true }]] },
       }),
     );
     expect(connection.contexts).toMatchSnapshot();
@@ -567,7 +561,6 @@ describe('Connection › Router', () => {
   //   },
   // });
 
-
   // //////////////////////////////////////////////////////////////////////////////////////////////
   // actions.routeChangeSucceed({
   //   selectedItem: { type: 'category', id: 7, page: 5 },
@@ -613,29 +606,4 @@ describe('Connection › Router', () => {
   // });
 
   // //////////////////////////////////////////////////////////////////////////////////////////////
-  test.skip('Selected single and context object with duplicate items', () => {
-    connection[actionTypes.ROUTE_CHANGE_SUCCEED](
-      actions.routeChangeSucceed({
-        selectedItem: { type: 'post', id: 60 },
-        context: {
-          options: { someThemeOption: 123 },
-          columns: [
-            { items: [{ type: 'post', id: 63 }] },
-            { items: [{ type: 'post', id: 63 }, { type: 'post', id: 60 }] },
-          ],
-        },
-      }),
-    );
-    expect(connection.contexts).toMatchSnapshot();
-    expect(connection.contexts[0].columns[1].items.length).toBe(1);
-    expect(connection.contexts[0].columns[1].items[0].id).toBe(60);
-  });
-
-  test.skip('Single and extracted list', () => {
-    // connection[actionTypes.ROUTE_CHANGE_SUCCEED](
-    //   actions.routeChangeSucceed({ selectedItem: { type: 'category', id: 7, page: 1 } }),
-    // );
-    // expect(connection.contexts).toMatchSnapshot();
-    // expect(getSnapshot(connection).selectedContext).toBe(connection.contexts[0].index);
-  });
 });
