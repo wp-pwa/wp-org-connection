@@ -140,7 +140,7 @@ export default compose(
     const { singleType, singleId, listType, listId, page } = selected;
     const type = listType || singleType;
     const id = listType ? listId : singleId;
-    let href = connection.siteInfo.home.url || '/';
+    let href = connection.siteInfo.home.url;
     if (type === 'latest') href = page > 1 ? `${href}/page/${page}` : href;
     else if (connection.single[type] && connection.single[type][id]) {
       const { link } = connection.single[type][id];
