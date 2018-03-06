@@ -499,7 +499,7 @@ describe('Connection › Router', () => {
     },
   });
   // Launched by creator of context.
-  connection.selectedContext = connection.createContext({
+  actions.routeChangeSucceed({
     options: { header: 'post' },
     selected: { type: 'post', id: 60 },
     columns: [
@@ -508,6 +508,11 @@ describe('Connection › Router', () => {
       [{ type: 'category', id: 7, page: 1 }],
     ],
   });
+  actions.addColumnsToContext({ type: 'category', id: 7, page: 2, extract: true });
+  actions.listPageRequested({ type: 'category', id: 7, page: 2 });
+
+
+  
   autorun(() => {
     if (connection.selectedItem.isLastNonVisited) {
       const page = untracked(() => connection.list('category', 7).nextPage.page);
