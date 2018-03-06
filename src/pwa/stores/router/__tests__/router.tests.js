@@ -1,9 +1,10 @@
-/* eslint-disable */
-import { transaction } from 'mobx';
 import { getSnapshot } from 'mobx-state-tree';
+import { normalize } from 'normalizr';
+import { list } from '../../../schemas';
 import Connection from '../../';
 import * as actionTypes from '../../../actionTypes';
 import * as actions from '../../../actions';
+import postsFromCategory7 from '../../../__tests__/posts-from-category-7.json';
 
 jest.mock('uuid/v4', () => {
   let id = 0;
@@ -12,6 +13,11 @@ jest.mock('uuid/v4', () => {
     return `mockedId_${id}`;
   });
 });
+
+const { result: resultFromCategory7, entities: entitiesFromCategory } = normalize(
+  postsFromCategory7,
+  list,
+);
 
 let connection;
 beforeEach(() => {
@@ -462,6 +468,25 @@ describe('Connection › Router', () => {
     );
     expect(connection.contexts).toMatchSnapshot();
     expect(connection.selectedContext.columns.length).toBe(1);
+  });
+
+  test('Add items to extracted once they are ready', () => {
+    connection[actionTypes.ROUTE_CHANGE_SUCCEED](
+      actions.routeChangeSucceed({
+        selectedItem: { type: 'post', id: 60 },
+        context: { columns: [[{ type: 'category', id: 7, page: 1, extract: true }]] },
+      }),
+    );
+    connection[actionTypes.LIST_SUCCEED](
+      actions.listSucceed({
+        listType: 'category',
+        listId: 7,
+        result: resultFromCategory7,
+        entities: entitiesFromCategory,
+      }),
+    );
+    expect(connection.contexts).toMatchSnapshot();
+    expect(connection.selectedContext.columns.length).toBe(11);
   });
 
   // //////////////////////////////////////////////////////////////////////////////////////////////

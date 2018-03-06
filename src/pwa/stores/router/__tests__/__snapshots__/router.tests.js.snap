@@ -1,5 +1,62 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
+exports[`Connection › Router Add items to extracted once they are ready 1`] = `
+Array [
+  Object {
+    "generator": Object {
+      "columns": Array [
+        Array [
+          Object {
+            "extract": true,
+            "id": 7,
+            "page": 1,
+            "type": "category",
+          },
+        ],
+      ],
+    },
+    "index": 0,
+    "infinite": undefined,
+    "options": undefined,
+    "rawColumns": Array [
+      Object {
+        "mstId": "mockedId_54",
+        "rawItems": Array [
+          Object {
+            "extract": null,
+            "fromList": Object {
+              "id": "post",
+              "page": 1,
+              "type": "latest",
+            },
+            "id": 60,
+            "mstId": "0_post_60",
+            "type": "post",
+            "visited": true,
+          },
+        ],
+        "selectedItem": "0_post_60",
+      },
+      Object {
+        "mstId": "mockedId_53",
+        "rawItems": Array [
+          Object {
+            "extract": true,
+            "id": 7,
+            "mstId": "0_category_7_page_1",
+            "page": 1,
+            "type": "category",
+            "visited": false,
+          },
+        ],
+        "selectedItem": "",
+      },
+    ],
+    "selectedColumn": "mockedId_54",
+  },
+]
+`;
+
 exports[`Connection › Router Initializes contexts as empty array 1`] = `Array []`;
 
 exports[`Connection › Router Move selected single 1`] = `
