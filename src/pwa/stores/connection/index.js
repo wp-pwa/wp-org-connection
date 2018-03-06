@@ -11,7 +11,7 @@ export const props = {
   singleMap: types.optional(types.map(types.map(Any)), {}),
   listMap: types.optional(types.map(types.map(List)), {}),
   customMap: types.optional(types.map(Custom), {}),
-  siteInfo: types.optional(SiteInfo, {})
+  siteInfo: types.optional(SiteInfo, {}),
 };
 
 export const views = self => {
@@ -48,7 +48,7 @@ export const views = self => {
         if (!custom[name]) custom[name] = self.customMap.get(name);
       });
       return custom;
-    }
+    },
   };
 };
 
@@ -156,12 +156,11 @@ export const actions = self => ({
     custom.fetching = false;
     custom.pageMap.get(page - 1).fetching = false;
   },
-  [actionTypes.SITE_INFO_SUCCEED]({ home: { title, description }, perPage }) {
-    self.siteInfo.home.title = title;
-    self.siteInfo.home.description = description;
+  [actionTypes.SITE_INFO_SUCCEED]({ home, perPage }) {
+    self.siteInfo.home = home;
     self.siteInfo.perPage = perPage;
   },
   [actionTypes.HEAD_CONTENT_SUCCEED]({ content }) {
     self.siteInfo.headContent = content;
-  }
+  },
 });
