@@ -33,8 +33,10 @@ Array [
     "options": undefined,
     "rawColumns": Array [
       Object {
-        "items": Array [
+        "mstId": "mockedId_29",
+        "rawItems": Array [
           Object {
+            "extract": null,
             "fromList": Object {
               "id": "post",
               "page": 1,
@@ -46,6 +48,7 @@ Array [
             "visited": true,
           },
           Object {
+            "extract": null,
             "fromList": Object {
               "id": "post",
               "page": 1,
@@ -57,12 +60,13 @@ Array [
             "visited": true,
           },
         ],
-        "mstId": "mockedId_29",
         "selectedItem": "0_post_62",
       },
       Object {
-        "items": Array [
+        "mstId": "mockedId_30",
+        "rawItems": Array [
           Object {
+            "extract": null,
             "fromList": Object {
               "id": "post",
               "page": 1,
@@ -74,7 +78,6 @@ Array [
             "visited": false,
           },
         ],
-        "mstId": "mockedId_30",
         "selectedItem": "",
       },
     ],
@@ -116,8 +119,10 @@ Array [
     "options": undefined,
     "rawColumns": Array [
       Object {
-        "items": Array [
+        "mstId": "mockedId_31",
+        "rawItems": Array [
           Object {
+            "extract": null,
             "fromList": Object {
               "id": "post",
               "page": 1,
@@ -129,12 +134,13 @@ Array [
             "visited": false,
           },
         ],
-        "mstId": "mockedId_31",
         "selectedItem": "",
       },
       Object {
-        "items": Array [
+        "mstId": "mockedId_32",
+        "rawItems": Array [
           Object {
+            "extract": null,
             "fromList": Object {
               "id": "post",
               "page": 1,
@@ -146,6 +152,7 @@ Array [
             "visited": true,
           },
           Object {
+            "extract": null,
             "fromList": Object {
               "id": "post",
               "page": 1,
@@ -157,7 +164,6 @@ Array [
             "visited": true,
           },
         ],
-        "mstId": "mockedId_32",
         "selectedItem": "0_post_60",
       },
     ],
@@ -206,8 +212,10 @@ Array [
     "options": undefined,
     "rawColumns": Array [
       Object {
-        "items": Array [
+        "mstId": "mockedId_40",
+        "rawItems": Array [
           Object {
+            "extract": null,
             "fromList": Object {
               "id": "post",
               "page": 1,
@@ -219,6 +227,7 @@ Array [
             "visited": false,
           },
           Object {
+            "extract": null,
             "id": "post",
             "mstId": "0_latest_post_page_1",
             "page": 1,
@@ -226,12 +235,13 @@ Array [
             "visited": true,
           },
         ],
-        "mstId": "mockedId_40",
         "selectedItem": "0_latest_post_page_1",
       },
       Object {
-        "items": Array [
+        "mstId": "mockedId_41",
+        "rawItems": Array [
           Object {
+            "extract": null,
             "id": 7,
             "mstId": "0_category_7_page_1",
             "page": 1,
@@ -239,12 +249,13 @@ Array [
             "visited": false,
           },
         ],
-        "mstId": "mockedId_41",
         "selectedItem": "",
       },
       Object {
-        "items": Array [
+        "mstId": "mockedId_42",
+        "rawItems": Array [
           Object {
+            "extract": null,
             "id": 3,
             "mstId": "0_category_3_page_1",
             "page": 1,
@@ -252,7 +263,6 @@ Array [
             "visited": false,
           },
         ],
-        "mstId": "mockedId_42",
         "selectedItem": "",
       },
     ],
@@ -285,8 +295,10 @@ Array [
     "options": undefined,
     "rawColumns": Array [
       Object {
-        "items": Array [
+        "mstId": "mockedId_47",
+        "rawItems": Array [
           Object {
+            "extract": null,
             "id": 7,
             "mstId": "0_category_7_page_1",
             "page": 1,
@@ -294,6 +306,7 @@ Array [
             "visited": true,
           },
           Object {
+            "extract": null,
             "id": 7,
             "mstId": "0_category_7_page_2",
             "page": 2,
@@ -301,7 +314,6 @@ Array [
             "visited": true,
           },
         ],
-        "mstId": "mockedId_47",
         "selectedItem": "0_category_7_page_2",
       },
     ],
@@ -324,8 +336,10 @@ Array [
     "options": undefined,
     "rawColumns": Array [
       Object {
-        "items": Array [
+        "mstId": "mockedId_48",
+        "rawItems": Array [
           Object {
+            "extract": null,
             "fromList": Object {
               "id": "post",
               "page": 1,
@@ -337,7 +351,6 @@ Array [
             "visited": true,
           },
         ],
-        "mstId": "mockedId_48",
         "selectedItem": "1_post_62",
       },
     ],
@@ -370,8 +383,10 @@ Array [
     "options": undefined,
     "rawColumns": Array [
       Object {
-        "items": Array [
+        "mstId": "mockedId_43",
+        "rawItems": Array [
           Object {
+            "extract": null,
             "id": 7,
             "mstId": "0_category_7_page_1",
             "page": 1,
@@ -379,6 +394,7 @@ Array [
             "visited": true,
           },
           Object {
+            "extract": null,
             "id": 7,
             "mstId": "0_category_7_page_2",
             "page": 2,
@@ -386,7 +402,6 @@ Array [
             "visited": true,
           },
         ],
-        "mstId": "mockedId_43",
         "selectedItem": "0_category_7_page_2",
       },
     ],
@@ -409,8 +424,10 @@ Array [
     "options": undefined,
     "rawColumns": Array [
       Object {
-        "items": Array [
+        "mstId": "mockedId_44",
+        "rawItems": Array [
           Object {
+            "extract": null,
             "fromList": Object {
               "id": "post",
               "page": 1,
@@ -422,7 +439,6 @@ Array [
             "visited": true,
           },
         ],
-        "mstId": "mockedId_44",
         "selectedItem": "1_post_62",
       },
     ],
@@ -450,8 +466,10 @@ Array [
     "options": undefined,
     "rawColumns": Array [
       Object {
-        "items": Array [
+        "mstId": "mockedId_3",
+        "rawItems": Array [
           Object {
+            "extract": null,
             "id": 7,
             "mstId": "0_category_7_page_2",
             "page": 2,
@@ -459,7 +477,6 @@ Array [
             "visited": true,
           },
         ],
-        "mstId": "mockedId_3",
         "selectedItem": "0_category_7_page_2",
       },
     ],
@@ -504,8 +521,10 @@ Array [
     "options": undefined,
     "rawColumns": Array [
       Object {
-        "items": Array [
+        "mstId": "mockedId_13",
+        "rawItems": Array [
           Object {
+            "extract": null,
             "id": "post",
             "mstId": "0_latest_post_page_1",
             "page": 1,
@@ -513,12 +532,13 @@ Array [
             "visited": false,
           },
         ],
-        "mstId": "mockedId_13",
         "selectedItem": "",
       },
       Object {
-        "items": Array [
+        "mstId": "mockedId_14",
+        "rawItems": Array [
           Object {
+            "extract": null,
             "id": 7,
             "mstId": "0_category_7_page_1",
             "page": 1,
@@ -526,12 +546,13 @@ Array [
             "visited": true,
           },
         ],
-        "mstId": "mockedId_14",
         "selectedItem": "0_category_7_page_1",
       },
       Object {
-        "items": Array [
+        "mstId": "mockedId_15",
+        "rawItems": Array [
           Object {
+            "extract": null,
             "id": 10,
             "mstId": "0_tag_10_page_1",
             "page": 1,
@@ -539,7 +560,6 @@ Array [
             "visited": false,
           },
         ],
-        "mstId": "mockedId_15",
         "selectedItem": "",
       },
     ],
@@ -584,8 +604,10 @@ Array [
     "options": undefined,
     "rawColumns": Array [
       Object {
-        "items": Array [
+        "mstId": "mockedId_19",
+        "rawItems": Array [
           Object {
+            "extract": null,
             "id": 7,
             "mstId": "0_category_7_page_1",
             "page": 1,
@@ -593,12 +615,13 @@ Array [
             "visited": true,
           },
         ],
-        "mstId": "mockedId_19",
         "selectedItem": "0_category_7_page_1",
       },
       Object {
-        "items": Array [
+        "mstId": "mockedId_16",
+        "rawItems": Array [
           Object {
+            "extract": null,
             "id": "post",
             "mstId": "0_latest_post_page_1",
             "page": 1,
@@ -606,12 +629,13 @@ Array [
             "visited": false,
           },
         ],
-        "mstId": "mockedId_16",
         "selectedItem": "",
       },
       Object {
-        "items": Array [
+        "mstId": "mockedId_17",
+        "rawItems": Array [
           Object {
+            "extract": null,
             "id": 3,
             "mstId": "0_category_3_page_1",
             "page": 1,
@@ -619,12 +643,13 @@ Array [
             "visited": false,
           },
         ],
-        "mstId": "mockedId_17",
         "selectedItem": "",
       },
       Object {
-        "items": Array [
+        "mstId": "mockedId_18",
+        "rawItems": Array [
           Object {
+            "extract": null,
             "id": 10,
             "mstId": "0_tag_10_page_1",
             "page": 1,
@@ -632,7 +657,6 @@ Array [
             "visited": false,
           },
         ],
-        "mstId": "mockedId_18",
         "selectedItem": "",
       },
     ],
@@ -660,8 +684,10 @@ Array [
     "options": undefined,
     "rawColumns": Array [
       Object {
-        "items": Array [
+        "mstId": "mockedId_6",
+        "rawItems": Array [
           Object {
+            "extract": null,
             "fromList": Object {
               "id": "post",
               "page": 1,
@@ -673,7 +699,6 @@ Array [
             "visited": true,
           },
         ],
-        "mstId": "mockedId_6",
         "selectedItem": "0_post_60",
       },
     ],
@@ -696,8 +721,10 @@ Array [
     "options": undefined,
     "rawColumns": Array [
       Object {
-        "items": Array [
+        "mstId": "mockedId_7",
+        "rawItems": Array [
           Object {
+            "extract": null,
             "id": 7,
             "mstId": "1_category_7_page_1",
             "page": 1,
@@ -705,7 +732,6 @@ Array [
             "visited": true,
           },
         ],
-        "mstId": "mockedId_7",
         "selectedItem": "1_category_7_page_1",
       },
     ],
@@ -733,8 +759,10 @@ Array [
     "options": undefined,
     "rawColumns": Array [
       Object {
-        "items": Array [
+        "mstId": "mockedId_2",
+        "rawItems": Array [
           Object {
+            "extract": null,
             "fromList": Object {
               "id": "post",
               "page": 1,
@@ -746,7 +774,6 @@ Array [
             "visited": true,
           },
         ],
-        "mstId": "mockedId_2",
         "selectedItem": "0_post_60",
       },
     ],
@@ -784,8 +811,10 @@ Array [
     "options": undefined,
     "rawColumns": Array [
       Object {
-        "items": Array [
+        "mstId": "mockedId_51",
+        "rawItems": Array [
           Object {
+            "extract": null,
             "fromList": Object {
               "id": "post",
               "page": 1,
@@ -797,12 +826,13 @@ Array [
             "visited": true,
           },
         ],
-        "mstId": "mockedId_51",
         "selectedItem": "0_post_60",
       },
       Object {
-        "items": Array [
+        "mstId": "mockedId_52",
+        "rawItems": Array [
           Object {
+            "extract": true,
             "id": "post",
             "mstId": "0_latest_post_page_1",
             "page": 1,
@@ -810,7 +840,6 @@ Array [
             "visited": false,
           },
         ],
-        "mstId": "mockedId_52",
         "selectedItem": "",
       },
     ],
@@ -850,8 +879,10 @@ Array [
     "options": undefined,
     "rawColumns": Array [
       Object {
-        "items": Array [
+        "mstId": "mockedId_8",
+        "rawItems": Array [
           Object {
+            "extract": null,
             "fromList": Object {
               "id": "post",
               "page": 1,
@@ -863,12 +894,13 @@ Array [
             "visited": false,
           },
         ],
-        "mstId": "mockedId_8",
         "selectedItem": "",
       },
       Object {
-        "items": Array [
+        "mstId": "mockedId_9",
+        "rawItems": Array [
           Object {
+            "extract": null,
             "fromList": Object {
               "id": "post",
               "page": 1,
@@ -880,6 +912,7 @@ Array [
             "visited": false,
           },
           Object {
+            "extract": null,
             "fromList": Object {
               "id": "post",
               "page": 1,
@@ -891,7 +924,6 @@ Array [
             "visited": true,
           },
         ],
-        "mstId": "mockedId_9",
         "selectedItem": "0_post_60",
       },
     ],
@@ -931,8 +963,10 @@ Array [
     "options": undefined,
     "rawColumns": Array [
       Object {
-        "items": Array [
+        "mstId": "mockedId_12",
+        "rawItems": Array [
           Object {
+            "extract": null,
             "fromList": Object {
               "id": "post",
               "page": 1,
@@ -944,12 +978,13 @@ Array [
             "visited": true,
           },
         ],
-        "mstId": "mockedId_12",
         "selectedItem": "0_post_60",
       },
       Object {
-        "items": Array [
+        "mstId": "mockedId_10",
+        "rawItems": Array [
           Object {
+            "extract": null,
             "fromList": Object {
               "id": "post",
               "page": 1,
@@ -961,12 +996,13 @@ Array [
             "visited": false,
           },
         ],
-        "mstId": "mockedId_10",
         "selectedItem": "",
       },
       Object {
-        "items": Array [
+        "mstId": "mockedId_11",
+        "rawItems": Array [
           Object {
+            "extract": null,
             "fromList": Object {
               "id": "post",
               "page": 1,
@@ -978,6 +1014,7 @@ Array [
             "visited": false,
           },
           Object {
+            "extract": null,
             "fromList": Object {
               "id": "post",
               "page": 1,
@@ -989,7 +1026,6 @@ Array [
             "visited": false,
           },
         ],
-        "mstId": "mockedId_11",
         "selectedItem": "",
       },
     ],
@@ -1017,8 +1053,10 @@ Array [
     "options": undefined,
     "rawColumns": Array [
       Object {
-        "items": Array [
+        "mstId": "mockedId_21",
+        "rawItems": Array [
           Object {
+            "extract": null,
             "fromList": Object {
               "id": "post",
               "page": 1,
@@ -1030,7 +1068,6 @@ Array [
             "visited": true,
           },
         ],
-        "mstId": "mockedId_21",
         "selectedItem": "0_post_60",
       },
     ],
@@ -1065,8 +1102,10 @@ Array [
     "options": undefined,
     "rawColumns": Array [
       Object {
-        "items": Array [
+        "mstId": "mockedId_22",
+        "rawItems": Array [
           Object {
+            "extract": null,
             "fromList": Object {
               "id": "post",
               "page": 1,
@@ -1078,12 +1117,13 @@ Array [
             "visited": false,
           },
         ],
-        "mstId": "mockedId_22",
         "selectedItem": "",
       },
       Object {
-        "items": Array [
+        "mstId": "mockedId_23",
+        "rawItems": Array [
           Object {
+            "extract": null,
             "fromList": Object {
               "id": "post",
               "page": 1,
@@ -1095,6 +1135,7 @@ Array [
             "visited": false,
           },
           Object {
+            "extract": null,
             "fromList": Object {
               "id": "post",
               "page": 1,
@@ -1106,7 +1147,6 @@ Array [
             "visited": true,
           },
         ],
-        "mstId": "mockedId_23",
         "selectedItem": "1_post_60",
       },
     ],
@@ -1146,8 +1186,10 @@ Array [
     "options": undefined,
     "rawColumns": Array [
       Object {
-        "items": Array [
+        "mstId": "mockedId_24",
+        "rawItems": Array [
           Object {
+            "extract": null,
             "fromList": Object {
               "id": "post",
               "page": 1,
@@ -1159,12 +1201,13 @@ Array [
             "visited": true,
           },
         ],
-        "mstId": "mockedId_24",
         "selectedItem": "0_post_63",
       },
       Object {
-        "items": Array [
+        "mstId": "mockedId_25",
+        "rawItems": Array [
           Object {
+            "extract": null,
             "fromList": Object {
               "id": "post",
               "page": 1,
@@ -1176,6 +1219,7 @@ Array [
             "visited": false,
           },
           Object {
+            "extract": null,
             "fromList": Object {
               "id": "post",
               "page": 1,
@@ -1187,7 +1231,6 @@ Array [
             "visited": true,
           },
         ],
-        "mstId": "mockedId_25",
         "selectedItem": "0_post_60",
       },
     ],
@@ -1215,8 +1258,10 @@ Array [
     "options": undefined,
     "rawColumns": Array [
       Object {
-        "items": Array [
+        "mstId": "mockedId_4",
+        "rawItems": Array [
           Object {
+            "extract": null,
             "fromList": Object {
               "id": "post",
               "page": 1,
@@ -1228,7 +1273,6 @@ Array [
             "visited": true,
           },
         ],
-        "mstId": "mockedId_4",
         "selectedItem": "0_post_63",
       },
     ],
@@ -1251,8 +1295,10 @@ Array [
     "options": undefined,
     "rawColumns": Array [
       Object {
-        "items": Array [
+        "mstId": "mockedId_5",
+        "rawItems": Array [
           Object {
+            "extract": null,
             "fromList": Object {
               "id": "post",
               "page": 1,
@@ -1264,7 +1310,6 @@ Array [
             "visited": true,
           },
         ],
-        "mstId": "mockedId_5",
         "selectedItem": "1_post_60",
       },
     ],
@@ -1292,8 +1337,10 @@ Array [
     "options": undefined,
     "rawColumns": Array [
       Object {
-        "items": Array [
+        "mstId": "mockedId_20",
+        "rawItems": Array [
           Object {
+            "extract": null,
             "fromList": Object {
               "id": "post",
               "page": 1,
@@ -1305,7 +1352,6 @@ Array [
             "visited": true,
           },
         ],
-        "mstId": "mockedId_20",
         "selectedItem": "0_post_60",
       },
     ],

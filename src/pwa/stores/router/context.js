@@ -26,30 +26,27 @@ const Context = types
       return self.selectedColumn.selectedItem;
     },
     get columns() {
-      debugger;
-      return self.rawColumns
-        .map(column => ({ ...column, items: column.items.filter(item => !item.extract)}))
-        .filter(column => column.items.length > 0);
+      return self.rawColumns.filter(column => column.items.length > 0);
     },
   }))
   .actions(self => {
     const getMstId = ({ type, id, page }) =>
       page ? `${self.index}_${type}_${id}_page_${page}` : `${self.index}_${type}_${id}`;
     const addMstIdToItem = ({ item }) => ({ mstId: getMstId({ ...item }), ...item });
-    const getRawItems = items => items.map(item => addMstIdToItem({ item }));
+    const addMstIdToItems = items => items.map(item => addMstIdToItem({ item }));
     return {
       setGenerator: generator => {
         self.generator = generator;
       },
       addColumn: (items, unshift) => {
-        if (unshift) self.rawColumns.unshift({ items: getRawItems(items) });
-        else self.rawColumns.push({ items: getRawItems(items) });
+        if (unshift) self.rawColumns.unshift({ rawItems: addMstIdToItems(items) });
+        else self.rawColumns.push({ rawItems: addMstIdToItems(items) });
       },
       addColumns: columns => {
         columns.map(column => self.addColumn(column));
       },
       replaceColumns: columns => {
-        self.rawColumns.replace(columns.map(column => ({ items: getRawItems(column) })));
+        self.rawColumns.replace(columns.map(column => ({ rawItems: addMstIdToItems(column) })));
       },
       hasItem: item => !!resolveIdentifier(Item, self, getMstId(item)),
       getItem: item => resolveIdentifier(Item, self, getMstId(item)),
@@ -67,7 +64,7 @@ const Context = types
         const newItemParentColumn = newItem.parentColumn;
         detach(newItem);
         if (newItemParentColumn.items.length === 0) self.rawColumns.remove(newItemParentColumn);
-        self.selectedItem.parentColumn.items.push(newItem);
+        self.selectedItem.parentColumn.rawItems.push(newItem);
       },
       afterCreate: () => {},
     };

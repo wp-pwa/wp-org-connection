@@ -6,6 +6,7 @@ const BaseItem = types
     mstId: types.identifier(types.string),
     type: types.string,
     id: types.union(types.string, types.number),
+    extract: types.maybe(types.boolean),
     visited: false,
   })
   .views(self => ({
