@@ -157,7 +157,7 @@ export const actions = self => ({
     custom.pageMap.get(page - 1).fetching = false;
   },
   [actionTypes.SITE_INFO_SUCCEED]({ home, perPage }) {
-    self.siteInfo.home = home;
+    self.siteInfo.home = { ...home, url: home.url || '/' };
     self.siteInfo.perPage = perPage;
   },
   [actionTypes.HEAD_CONTENT_SUCCEED]({ content }) {
