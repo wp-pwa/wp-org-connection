@@ -7,7 +7,7 @@ const Column = types
   .model('Column')
   .props({
     mstId: types.optional(types.identifier(types.string), uuid),
-    items: types.optional(types.array(types.late(() => Item)), []),
+    rawItems: types.optional(types.array(types.late(() => Item)), []),
     selectedItem: types.optional(types.reference(types.late(() => Item), {
       get: (mstId, parent) => resolveIdentifier(Item, parent, mstId) || parent.items[0],
       set: item => item.mstId || item,
@@ -16,6 +16,9 @@ const Column = types
   .views(self => ({
     getItem({ props, customizer }) {
       return self.items.find(i => isMatchWith(i, omitBy(props, isUndefined), customizer)) || null;
+    },
+    get items() {
+      return self.rawItems;
     },
     get nextColumn() {
       const columns = getParent(self);

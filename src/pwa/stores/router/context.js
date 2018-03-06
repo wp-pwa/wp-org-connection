@@ -26,7 +26,10 @@ const Context = types
       return self.selectedColumn.selectedItem;
     },
     get columns() {
-      return self.rawColumns;
+      debugger;
+      return self.rawColumns
+        .map(column => ({ ...column, items: column.items.filter(item => !item.extract)}))
+        .filter(column => column.items.length > 0);
     },
   }))
   .actions(self => {
@@ -46,7 +49,7 @@ const Context = types
         columns.map(column => self.addColumn(column));
       },
       replaceColumns: columns => {
-        self.columns.replace(columns.map(column => ({ items: getRawItems(column) })));
+        self.rawColumns.replace(columns.map(column => ({ items: getRawItems(column) })));
       },
       hasItem: item => !!resolveIdentifier(Item, self, getMstId(item)),
       getItem: item => resolveIdentifier(Item, self, getMstId(item)),
@@ -63,7 +66,7 @@ const Context = types
         const newItem = self.getItem(item);
         const newItemParentColumn = newItem.parentColumn;
         detach(newItem);
-        if (newItemParentColumn.items.length === 0) self.columns.remove(newItemParentColumn);
+        if (newItemParentColumn.items.length === 0) self.rawColumns.remove(newItemParentColumn);
         self.selectedItem.parentColumn.items.push(newItem);
       },
       afterCreate: () => {},
