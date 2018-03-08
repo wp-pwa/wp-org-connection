@@ -190,4 +190,9 @@ export const moveItemToColumn = ({ item: { type, id, page, extract } }) => ({
     page,
     extract,
   },
-})
+});
+
+export const replaceContext = ({ context }) => ({
+  type: actionTypes.REPLACE_CONTEXT,
+  context,
+});

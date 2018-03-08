@@ -17,7 +17,7 @@ const BaseItem = types
       return self.connection.entity(self.type, self.id);
     },
     get ready() {
-      return self.page.ready;
+      return self.entity.ready;
     },
     get isSingle() {
       return !self.page;

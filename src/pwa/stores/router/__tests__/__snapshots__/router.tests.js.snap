@@ -89,7 +89,7 @@ Array [
     "options": undefined,
     "rawColumns": Array [
       Object {
-        "mstId": "mockedId_53",
+        "mstId": "mockedId_55",
         "rawItems": Array [
           Object {
             "extract": null,
@@ -107,7 +107,7 @@ Array [
         "selectedItem": "0_post_60",
       },
       Object {
-        "mstId": "mockedId_54",
+        "mstId": "mockedId_56",
         "rawItems": Array [
           Object {
             "extract": true,
@@ -121,7 +121,7 @@ Array [
         "selectedItem": "",
       },
       Object {
-        "mstId": "mockedId_55",
+        "mstId": "mockedId_57",
         "rawItems": Array [
           Object {
             "extract": null,
@@ -139,7 +139,7 @@ Array [
         "selectedItem": "",
       },
     ],
-    "selectedColumn": "mockedId_53",
+    "selectedColumn": "mockedId_55",
   },
 ]
 `;
@@ -176,7 +176,7 @@ Array [
     "options": undefined,
     "rawColumns": Array [
       Object {
-        "mstId": "mockedId_56",
+        "mstId": "mockedId_58",
         "rawItems": Array [
           Object {
             "extract": null,
@@ -194,7 +194,7 @@ Array [
         "selectedItem": "",
       },
       Object {
-        "mstId": "mockedId_57",
+        "mstId": "mockedId_59",
         "rawItems": Array [
           Object {
             "extract": true,
@@ -208,7 +208,7 @@ Array [
         "selectedItem": "",
       },
       Object {
-        "mstId": "mockedId_58",
+        "mstId": "mockedId_60",
         "rawItems": Array [
           Object {
             "extract": null,
@@ -226,7 +226,7 @@ Array [
         "selectedItem": "0_post_63",
       },
     ],
-    "selectedColumn": "mockedId_58",
+    "selectedColumn": "mockedId_60",
   },
 ]
 `;
@@ -430,13 +430,10 @@ Array [
           Object {
             "id": 3,
             "page": 1,
-            "type": "category",
+            "type": "tag",
           },
         ],
       ],
-      "options": Object {
-        "someThemeOption": 456,
-      },
     },
     "index": 0,
     "infinite": undefined,
@@ -463,10 +460,10 @@ Array [
             "mstId": "0_latest_post_page_1",
             "page": 1,
             "type": "latest",
-            "visited": true,
+            "visited": false,
           },
         ],
-        "selectedItem": "0_latest_post_page_1",
+        "selectedItem": "",
       },
       Object {
         "mstId": "mockedId_41",
@@ -488,16 +485,16 @@ Array [
           Object {
             "extract": null,
             "id": 3,
-            "mstId": "0_category_3_page_1",
+            "mstId": "0_tag_3_page_1",
             "page": 1,
-            "type": "category",
+            "type": "tag",
             "visited": false,
           },
         ],
         "selectedItem": "",
       },
     ],
-    "selectedColumn": "mockedId_40",
+    "selectedColumn": "mockedId_37",
   },
 ]
 `;
@@ -526,7 +523,7 @@ Array [
     "options": undefined,
     "rawColumns": Array [
       Object {
-        "mstId": "mockedId_47",
+        "mstId": "mockedId_49",
         "rawItems": Array [
           Object {
             "extract": null,
@@ -548,7 +545,7 @@ Array [
         "selectedItem": "0_category_7_page_2",
       },
     ],
-    "selectedColumn": "mockedId_47",
+    "selectedColumn": "mockedId_49",
   },
   Object {
     "generator": Object {
@@ -567,7 +564,7 @@ Array [
     "options": undefined,
     "rawColumns": Array [
       Object {
-        "mstId": "mockedId_48",
+        "mstId": "mockedId_50",
         "rawItems": Array [
           Object {
             "extract": null,
@@ -585,7 +582,7 @@ Array [
         "selectedItem": "1_post_62",
       },
     ],
-    "selectedColumn": "mockedId_48",
+    "selectedColumn": "mockedId_50",
   },
 ]
 `;
@@ -614,7 +611,7 @@ Array [
     "options": undefined,
     "rawColumns": Array [
       Object {
-        "mstId": "mockedId_43",
+        "mstId": "mockedId_45",
         "rawItems": Array [
           Object {
             "extract": null,
@@ -636,7 +633,7 @@ Array [
         "selectedItem": "0_category_7_page_2",
       },
     ],
-    "selectedColumn": "mockedId_43",
+    "selectedColumn": "mockedId_45",
   },
   Object {
     "generator": Object {
@@ -655,7 +652,7 @@ Array [
     "options": undefined,
     "rawColumns": Array [
       Object {
-        "mstId": "mockedId_44",
+        "mstId": "mockedId_46",
         "rawItems": Array [
           Object {
             "extract": null,
@@ -673,7 +670,7 @@ Array [
         "selectedItem": "1_post_62",
       },
     ],
-    "selectedColumn": "mockedId_44",
+    "selectedColumn": "mockedId_46",
   },
 ]
 `;
@@ -1033,7 +1030,7 @@ Array [
     "options": undefined,
     "rawColumns": Array [
       Object {
-        "mstId": "mockedId_52",
+        "mstId": "mockedId_54",
         "rawItems": Array [
           Object {
             "extract": null,
@@ -1051,7 +1048,7 @@ Array [
         "selectedItem": "0_post_60",
       },
       Object {
-        "mstId": "mockedId_51",
+        "mstId": "mockedId_53",
         "rawItems": Array [
           Object {
             "extract": true,
@@ -1065,7 +1062,7 @@ Array [
         "selectedItem": "",
       },
     ],
-    "selectedColumn": "mockedId_52",
+    "selectedColumn": "mockedId_54",
   },
 ]
 `;

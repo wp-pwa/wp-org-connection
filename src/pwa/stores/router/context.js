@@ -1,5 +1,4 @@
-import { reaction } from 'mobx';
-import { types, getRoot, resolveIdentifier, detach } from 'mobx-state-tree';
+import { types, getRoot, resolveIdentifier, detach, getSnapshot } from 'mobx-state-tree';
 import Column from './column';
 import Item from './item';
 
@@ -28,7 +27,7 @@ const Context = types
     },
     get columns() {
       const selectedColumnIndex = self.rawColumns.findIndex(
-        ({ mstId }) => mstId === self.selectedColumn.mstId,
+        ({ mstId }) => mstId === getSnapshot(self).selectedColumn,
       );
       const columns = [];
       // Traverse the columns from 0 to selectedColumnIndex until we find an extracted item. This

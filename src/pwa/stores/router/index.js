@@ -170,7 +170,6 @@ export const actions = self => {
     newItem.parentColumn.selectedItem = newItem;
     self.selectedContext.selectedColumn = newItem.parentColumn;
     self.selectedItem.visited = true;
-    // loadNextPageIfInfinite();
   };
 
   const selectItemInPreviousContext = ({ selectedItem }) => {
@@ -192,13 +191,11 @@ export const actions = self => {
     changeSelectedItem({ selectedItem });
   };
 
-  const replaceSelectedContext = ({ selectedItem, context }) => {
+  const replaceSelectedContext = ({ context }) => {
     const contextInstance = self.selectedContext;
     contextInstance.setGenerator(context);
     contextInstance.replaceColumns(context.columns);
-    contextInstance.addItemIfMissing(selectedItem, true);
     self.selectedContext = contextInstance;
-    changeSelectedItem({ selectedItem });
   };
 
   const moveItemToSelectedColumn = ({ item }) => {
@@ -207,7 +204,6 @@ export const actions = self => {
     if (newItem.parentColumn !== self.selectedContext.parentColumn) {
       self.selectedContext.moveItem(item);
     }
-    // loadNextPageIfInfinite();
   };
 
   return {
@@ -234,6 +230,9 @@ export const actions = self => {
     },
     [actionTypes.MOVE_ITEM_TO_COLUMN]: ({ item }) => {
       moveItemToSelectedColumn({ item });
+    },
+    [actionTypes.REPLACE_CONTEXT]: ({ context }) => {
+      replaceSelectedContext({ context });
     },
   };
 };

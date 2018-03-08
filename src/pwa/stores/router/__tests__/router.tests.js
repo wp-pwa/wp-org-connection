@@ -1,10 +1,12 @@
+import { autorun } from 'mobx';
 import { getSnapshot } from 'mobx-state-tree';
 import { normalize } from 'normalizr';
-import { list } from '../../../schemas';
+import { entity, list } from '../../../schemas';
 import Connection from '../../';
 import * as actionTypes from '../../../actionTypes';
 import * as actions from '../../../actions';
 import postsFromCategory7 from '../../../__tests__/posts-from-category-7.json';
+import post60 from '../../../__tests__/post-60.json';
 
 jest.mock('uuid/v4', () => {
   let id = 0;
@@ -18,6 +20,9 @@ const { result: resultFromCategory7, entities: entitiesFromCategory } = normaliz
   postsFromCategory7,
   list,
 );
+
+const { entities: entitiesFromPost60 } = normalize(post60, entity );
+
 
 let connection;
 beforeEach(() => {
@@ -312,7 +317,6 @@ describe('Connection › Router', () => {
       actions.routeChangeSucceed({
         selectedItem: { type: 'post', id: 63 },
         context: {
-          options: { someThemeOption: 123 },
           columns: [
             [{ type: 'post', id: 63 }],
             [{ type: 'post', id: 62 }],
@@ -321,16 +325,13 @@ describe('Connection › Router', () => {
         },
       }),
     );
-    connection[actionTypes.ROUTE_CHANGE_SUCCEED](
-      actions.routeChangeSucceed({
-        selectedItem: { type: 'latest', id: 'post', page: 1 },
-        method: 'replaceContext',
+    connection[actionTypes.REPLACE_CONTEXT](
+      actions.replaceContext({
         context: {
-          options: { someThemeOption: 456 },
           columns: [
             [{ type: 'post', id: 63 }, { type: 'latest', id: 'post', page: 1 }],
             [{ type: 'category', id: 7, page: 1 }],
-            [{ type: 'category', id: 3, page: 1 }],
+            [{ type: 'tag', id: 3, page: 1 }],
           ],
         },
       }),
@@ -338,12 +339,34 @@ describe('Connection › Router', () => {
     expect(connection.contexts).toMatchSnapshot();
     expect(connection.contexts.length).toBe(1);
     expect(connection.selectedColumn).toBe(connection.contexts[0].columns[0]);
-    expect(connection.selectedItem).toBe(connection.contexts[0].columns[0].items[1]);
-    expect(connection.selectedItem.type).toBe('latest');
+    expect(connection.selectedItem).toBe(connection.contexts[0].columns[0].items[0]);
+    expect(connection.selectedItem.type).toBe('post');
     expect(connection.contexts[0].columns[0].items[0].type).toBe('post');
-    expect(connection.contexts[0].columns[0].items[0].id).toBe(63);
+    expect(connection.contexts[0].columns[0].items[1].type).toBe('latest');
     expect(connection.contexts[0].columns[1].items[0].type).toBe('category');
-    expect(connection.contexts[0].columns[1].items[0].id).toBe(7);
+    expect(connection.contexts[0].columns[2].items[0].type).toBe('tag');
+  });
+
+  test('Subscribe to selectedItem when context is replaced', done => {
+    connection[actionTypes.ROUTE_CHANGE_SUCCEED](
+      actions.routeChangeSucceed({
+        selectedItem: { type: 'post', id: 60 },
+        context: { columns: [[{ type: 'post', id: 60 }]] },
+      }),
+    );
+    autorun(() => {
+      if (connection.selectedItem.ready) done();
+    });
+    connection[actionTypes.REPLACE_CONTEXT](
+      actions.replaceContext({ context: { columns: [[{ type: 'post', id: 60 }]] } }),
+    );
+    connection[actionTypes.SINGLE_SUCCEED](
+      actions.singleSucceed({
+        singleType: 'post',
+        singleId: 60,
+        entities: entitiesFromPost60,
+      }),
+    );
   });
 
   test('Select in previous context', () => {
