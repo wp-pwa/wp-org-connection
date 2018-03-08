@@ -110,7 +110,7 @@ export const customFailed = ({
 
 export const routeChangeRequested = ({
   selectedItem: { type, id, page },
-  method = 'changeSelectedItem',
+  method = 'push',
   context = null,
   event = null,
 }) => {
@@ -130,7 +130,7 @@ export const routeChangeRequested = ({
 
 export const routeChangeSucceed = ({
   selectedItem: { type, id, page },
-  method = 'changeSelectedItem',
+  method = 'push',
   context = null,
 }) => {
   const selectedItem = {
