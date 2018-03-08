@@ -11,7 +11,7 @@ export const post = entity => ({
   _link: entity.link,
   guid: entity.guid.rendered,
   content: entity.content.rendered,
-  excerpt: entity.excerpt.rendered,
+  excerpt: entity.excerpt && entity.excerpt.rendered,
   author: entity.author,
   featured: entity.featured_media || null,
   taxonomiesMap: entity.taxonomiesMap,
