@@ -21,3 +21,5 @@ export const SITE_INFO_FAILED = 'connection/SITE_INFO_FAILED';
 export const HEAD_CONTENT_REQUESTED = 'connection/HEAD_CONTENT_REQUESTED';
 export const HEAD_CONTENT_SUCCEED = 'connection/HEAD_CONTENT_SUCCEED';
 export const HEAD_CONTENT_FAILED = 'connection/HEAD_CONTENT_FAILED';
+
+export const MOVE_ITEM_TO_COLUMN = 'MOVE_ITEM_TO_COLUMN';

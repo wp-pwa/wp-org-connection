@@ -201,13 +201,12 @@ export const actions = self => {
     changeSelectedItem({ selectedItem });
   };
 
-  const moveSelectedItem = ({ selectedItem }) => {
-    const newItem = self.selectedContext.getItem(selectedItem);
+  const moveItemToSelectedColumn = ({ item }) => {
+    const newItem = self.selectedContext.getItem(item);
+    if (!newItem) throw new Error("Can't move if selected doesn't exist in the previous context.");
     if (newItem.parentColumn !== self.selectedContext.parentColumn) {
-      self.selectedContext.moveItem(selectedItem);
+      self.selectedContext.moveItem(item);
     }
-    newItem.parentColumn.selectedItem = newItem;
-    self.selectedItem.visited = true;
     // loadNextPageIfInfinite();
   };
 
@@ -224,19 +223,17 @@ export const actions = self => {
       if (!actionContext && selectedItemInSelectedContext) context = self.selectedContext.generator;
       const generatorsAreEqual = isEqual(self.selectedContext.generator, context);
 
-      if (generatorsAreEqual && selectedItemInSelectedContext) {
-        // If we are going to use the same context and selected is there.
-        if (method === 'moveSelectedItem') return moveSelectedItem({ selectedItem });
+      if (generatorsAreEqual && selectedItemInSelectedContext)
         return changeSelectedItem({ selectedItem });
-      }
       if (method === 'push') return createNewContext({ selectedItem, context });
-      if (method === 'moveSelectedItem')
-        throw new Error("Can't move if selected doesn't exist in the previous context.");
       if (method === 'replaceContext') return replaceSelectedContext({ selectedItem, context });
       if (method === 'selectItemInPreviousContext')
         return selectItemInPreviousContext({ selectedItem });
       if (method === 'selectItemInNextContext') return selectItemInNextContext({ selectedItem });
       throw new Error('Connection didn\'t know what to do. Please search this error in the code.');
+    },
+    [actionTypes.MOVE_ITEM_TO_COLUMN]: ({ item }) => {
+      moveItemToSelectedColumn({ item });
     },
   };
 };

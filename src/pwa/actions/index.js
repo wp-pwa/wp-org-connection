@@ -181,3 +181,13 @@ export const headContentFailed = ({ error }) => ({
   type: actionTypes.HEAD_CONTENT_FAILED,
   error,
 });
+
+export const moveItemToColumn = ({ item: { type, id, page, extract } }) => ({
+  type: actionTypes.MOVE_ITEM_TO_COLUMN,
+  item: {
+    type,
+    id,
+    page,
+    extract,
+  },
+})

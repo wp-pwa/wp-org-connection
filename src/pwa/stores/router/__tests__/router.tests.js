@@ -250,17 +250,16 @@ describe('Connection › Router', () => {
         },
       }),
     );
-    connection[actionTypes.ROUTE_CHANGE_SUCCEED](
-      actions.routeChangeSucceed({
-        selectedItem: { type: 'post', id: 62 },
-        method: 'moveSelectedItem',
-      }),
+    connection[actionTypes.MOVE_ITEM_TO_COLUMN](
+      actions.moveItemToColumn({ item: { type: 'post', id: 62 } }),
     );
     expect(connection.contexts).toMatchSnapshot();
     expect(connection.contexts.length).toBe(1);
     expect(connection.selectedColumn).toBe(connection.contexts[0].columns[0]);
-    expect(connection.selectedItem).toBe(connection.contexts[0].columns[0].items[1]);
-    expect(connection.selectedItem.id).toBe(62);
+    expect(connection.selectedItem).toBe(connection.contexts[0].columns[0].items[0]);
+    expect(connection.selectedItem.id).toBe(63);
+    expect(connection.selectedItem.nextItem.id).toBe(62);
+    expect(connection.contexts[0].columns[1].items[0].id).toBe(60);
   });
 
   test('Move selected single from column with only that item', () => {
@@ -277,18 +276,14 @@ describe('Connection › Router', () => {
         },
       }),
     );
-    connection[actionTypes.ROUTE_CHANGE_SUCCEED](
-      actions.routeChangeSucceed({
-        selectedItem: { type: 'post', id: 60 },
-        method: 'moveSelectedItem',
-      }),
+    connection[actionTypes.MOVE_ITEM_TO_COLUMN](
+      actions.moveItemToColumn({ item: { type: 'post', id: 60 } }),
     );
     expect(connection.contexts).toMatchSnapshot();
-    expect(connection.contexts.length).toBe(1);
     expect(connection.contexts[0].columns.length).toBe(2);
     expect(connection.selectedColumn).toBe(connection.contexts[0].columns[1]);
-    expect(connection.selectedItem).toBe(connection.contexts[0].columns[1].items[1]);
-    expect(connection.selectedItem.id).toBe(60);
+    expect(connection.selectedItem).toBe(connection.contexts[0].columns[1].items[0]);
+    expect(connection.selectedItem.nextItem.id).toBe(60);
   });
 
   test('Move selected single with previous context without selected', () => {
@@ -306,11 +301,8 @@ describe('Connection › Router', () => {
       }),
     );
     expect(() =>
-      connection[actionTypes.ROUTE_CHANGE_SUCCEED](
-        actions.routeChangeSucceed({
-          selectedItem: { type: 'post', id: 60 },
-          method: 'moveSelectedItem',
-        }),
+      connection[actionTypes.MOVE_ITEM_TO_COLUMN](
+        actions.moveItemToColumn({ item: { type: 'post', id: 60 } }),
       ),
     ).toThrow("Can't move if selected doesn't exist in the previous context.");
   });
