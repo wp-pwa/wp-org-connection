@@ -34,6 +34,9 @@ const Column = types
       const columns = getParent(self);
       return columns ? columns.indexOf(self) : -1;
     },
+    get hasExtracted() {
+      return self.rawItems.reduce((acc, item) => acc || item.extract === true, false);
+    },
   }));
 
 export default Column;

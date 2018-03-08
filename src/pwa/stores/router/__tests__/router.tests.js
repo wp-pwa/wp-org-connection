@@ -470,7 +470,41 @@ describe('Connection › Router', () => {
     expect(connection.selectedContext.columns.length).toBe(1);
   });
 
-  test('Add items to extracted once they are ready', () => {
+  test('Columns should not show next items if extracted after that item is not resolved', () => {
+    connection[actionTypes.ROUTE_CHANGE_SUCCEED](
+      actions.routeChangeSucceed({
+        selectedItem: { type: 'post', id: 60 },
+        context: {
+          columns: [
+            [{ type: 'post', id: 60 }],
+            [{ type: 'latest', id: 'post', page: 1, extract: true }],
+            [{ type: 'post', id: 63 }],
+          ],
+        },
+      }),
+    );
+    expect(connection.contexts).toMatchSnapshot();
+    expect(connection.selectedContext.columns.length).toBe(1);
+  });
+
+  test('Columns should not show previous items if extracted before that item is not resolved', () => {
+    connection[actionTypes.ROUTE_CHANGE_SUCCEED](
+      actions.routeChangeSucceed({
+        selectedItem: { type: 'post', id: 63 },
+        context: {
+          columns: [
+            [{ type: 'post', id: 60 }],
+            [{ type: 'latest', id: 'post', page: 1, extract: true }],
+            [{ type: 'post', id: 63 }],
+          ],
+        },
+      }),
+    );
+    expect(connection.contexts).toMatchSnapshot();
+    expect(connection.selectedContext.columns.length).toBe(1);
+  });
+
+  test.skip('Add items to extracted once they are ready', () => {
     connection[actionTypes.ROUTE_CHANGE_SUCCEED](
       actions.routeChangeSucceed({
         selectedItem: { type: 'post', id: 60 },

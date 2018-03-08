@@ -1,3 +1,4 @@
+import { reaction } from 'mobx';
 import { types, getRoot, resolveIdentifier, detach } from 'mobx-state-tree';
 import Column from './column';
 import Item from './item';
@@ -26,7 +27,23 @@ const Context = types
       return self.selectedColumn.selectedItem;
     },
     get columns() {
-      return self.rawColumns.filter(column => column.items.length > 0);
+      const selectedColumnIndex = self.rawColumns.findIndex(
+        ({ mstId }) => mstId === self.selectedColumn.mstId,
+      );
+      const columns = [];
+      // Traverse the columns from 0 to selectedColumnIndex until we find an extracted item. This
+      // includes the selectedColumn as well.
+      for (let i = selectedColumnIndex; i >= 0; i -= 1) {
+        if (self.rawColumns[i].hasExtracted) break;
+        columns[i] = self.rawColumns[i];
+      }
+      // Traverse the columns from selectedColumnIndex + 1 till the end until we find an
+      // extracted item.
+      for (let i = selectedColumnIndex + 1; i < self.rawColumns.length; i += 1) {
+        if (self.rawColumns[i].hasExtracted) break;
+        columns[i] = self.rawColumns[i];
+      }
+      return columns.filter(column => column.items.length > 0);
     },
   }))
   .actions(self => {
@@ -66,7 +83,6 @@ const Context = types
         if (newItemParentColumn.items.length === 0) self.rawColumns.remove(newItemParentColumn);
         self.selectedItem.parentColumn.rawItems.push(newItem);
       },
-      afterCreate: () => {},
     };
   });
 

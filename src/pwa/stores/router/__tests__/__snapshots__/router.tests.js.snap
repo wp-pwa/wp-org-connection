@@ -57,6 +57,180 @@ Array [
 ]
 `;
 
+exports[`Connection › Router Columns should not show next items if extracted after that item is not resolved 1`] = `
+Array [
+  Object {
+    "generator": Object {
+      "columns": Array [
+        Array [
+          Object {
+            "id": 60,
+            "type": "post",
+          },
+        ],
+        Array [
+          Object {
+            "extract": true,
+            "id": "post",
+            "page": 1,
+            "type": "latest",
+          },
+        ],
+        Array [
+          Object {
+            "id": 63,
+            "type": "post",
+          },
+        ],
+      ],
+    },
+    "index": 0,
+    "infinite": undefined,
+    "options": undefined,
+    "rawColumns": Array [
+      Object {
+        "mstId": "mockedId_53",
+        "rawItems": Array [
+          Object {
+            "extract": null,
+            "fromList": Object {
+              "id": "post",
+              "page": 1,
+              "type": "latest",
+            },
+            "id": 60,
+            "mstId": "0_post_60",
+            "type": "post",
+            "visited": true,
+          },
+        ],
+        "selectedItem": "0_post_60",
+      },
+      Object {
+        "mstId": "mockedId_54",
+        "rawItems": Array [
+          Object {
+            "extract": true,
+            "id": "post",
+            "mstId": "0_latest_post_page_1",
+            "page": 1,
+            "type": "latest",
+            "visited": false,
+          },
+        ],
+        "selectedItem": "",
+      },
+      Object {
+        "mstId": "mockedId_55",
+        "rawItems": Array [
+          Object {
+            "extract": null,
+            "fromList": Object {
+              "id": "post",
+              "page": 1,
+              "type": "latest",
+            },
+            "id": 63,
+            "mstId": "0_post_63",
+            "type": "post",
+            "visited": false,
+          },
+        ],
+        "selectedItem": "",
+      },
+    ],
+    "selectedColumn": "mockedId_53",
+  },
+]
+`;
+
+exports[`Connection › Router Columns should not show previous items if extracted before that item is not resolved 1`] = `
+Array [
+  Object {
+    "generator": Object {
+      "columns": Array [
+        Array [
+          Object {
+            "id": 60,
+            "type": "post",
+          },
+        ],
+        Array [
+          Object {
+            "extract": true,
+            "id": "post",
+            "page": 1,
+            "type": "latest",
+          },
+        ],
+        Array [
+          Object {
+            "id": 63,
+            "type": "post",
+          },
+        ],
+      ],
+    },
+    "index": 0,
+    "infinite": undefined,
+    "options": undefined,
+    "rawColumns": Array [
+      Object {
+        "mstId": "mockedId_56",
+        "rawItems": Array [
+          Object {
+            "extract": null,
+            "fromList": Object {
+              "id": "post",
+              "page": 1,
+              "type": "latest",
+            },
+            "id": 60,
+            "mstId": "0_post_60",
+            "type": "post",
+            "visited": false,
+          },
+        ],
+        "selectedItem": "",
+      },
+      Object {
+        "mstId": "mockedId_57",
+        "rawItems": Array [
+          Object {
+            "extract": true,
+            "id": "post",
+            "mstId": "0_latest_post_page_1",
+            "page": 1,
+            "type": "latest",
+            "visited": false,
+          },
+        ],
+        "selectedItem": "",
+      },
+      Object {
+        "mstId": "mockedId_58",
+        "rawItems": Array [
+          Object {
+            "extract": null,
+            "fromList": Object {
+              "id": "post",
+              "page": 1,
+              "type": "latest",
+            },
+            "id": 63,
+            "mstId": "0_post_63",
+            "type": "post",
+            "visited": true,
+          },
+        ],
+        "selectedItem": "0_post_63",
+      },
+    ],
+    "selectedColumn": "mockedId_58",
+  },
+]
+`;
+
 exports[`Connection › Router Initializes contexts as empty array 1`] = `Array []`;
 
 exports[`Connection › Router Move selected single 1`] = `
