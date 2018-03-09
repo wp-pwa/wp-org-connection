@@ -164,7 +164,7 @@ export const actions = self => {
   };
 
   const changeSelectedItem = ({ selectedItem }) => {
-    const newItem = self.selectedContext.getItem(selectedItem);
+    const newItem = self.selectedContext.getItem({ item: selectedItem });
     if (!newItem)
       throw new Error("You are trying to select an item in a context where doesn't exist");
     newItem.parentColumn.selectedItem = newItem;
@@ -184,25 +184,25 @@ export const actions = self => {
 
   const createNewContext = ({ selectedItem, context }) => {
     const contextInstance = addNewContext();
-    contextInstance.setGenerator(context);
-    contextInstance.addColumns(context.columns);
-    contextInstance.addItemIfMissing(selectedItem, true);
+    contextInstance.setGenerator({ generator: context });
+    contextInstance.addColumns({ columns: context.columns });
+    contextInstance.addItemIfMissing({ item: selectedItem, index: 0 });
     self.selectedContext = contextInstance;
     changeSelectedItem({ selectedItem });
   };
 
   const replaceSelectedContext = ({ context }) => {
     const contextInstance = self.selectedContext;
-    contextInstance.setGenerator(context);
-    contextInstance.replaceColumns(context.columns);
+    contextInstance.setGenerator({ generator: context });
+    contextInstance.replaceColumns({ columns: context.columns });
     self.selectedContext = contextInstance;
   };
 
   const moveItemToSelectedColumn = ({ item }) => {
-    const newItem = self.selectedContext.getItem(item);
+    const newItem = self.selectedContext.getItem({ item });
     if (!newItem) throw new Error("Can't move if selected doesn't exist in the previous context.");
     if (newItem.parentColumn !== self.selectedContext.parentColumn) {
-      self.selectedContext.moveItem(item);
+      self.selectedContext.moveItem({ item });
     }
   };
 
@@ -220,14 +220,13 @@ export const actions = self => {
       } else {
         // If there's a previous context...
         // First, get some info:
-        const selectedItemIsInSelectedContext = self.selectedContext.hasItem(selectedItem);
-        if (!actionContext && selectedItemIsInSelectedContext)
-          context = self.selectedContext.generator;
+        const itemInSelectedContext = self.selectedContext.hasItem({ item: selectedItem });
+        if (!actionContext && itemInSelectedContext) context = self.selectedContext.generator;
         const generatorsAreEqual = isEqual(self.selectedContext.generator, context);
 
         // Then check conditions:
         // If we are in the same context and we just want to change the selected.
-        if (generatorsAreEqual && selectedItemIsInSelectedContext)
+        if (generatorsAreEqual && itemInSelectedContext)
           changeSelectedItem({ selectedItem });
         else if (method === 'backward')
           // If we are going backward or forward in the history

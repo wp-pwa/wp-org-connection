@@ -21,8 +21,7 @@ const { result: resultFromCategory7, entities: entitiesFromCategory } = normaliz
   list,
 );
 
-const { entities: entitiesFromPost60 } = normalize(post60, entity );
-
+const { entities: entitiesFromPost60 } = normalize(post60, entity);
 
 let connection;
 beforeEach(() => {
@@ -237,9 +236,15 @@ describe('Connection › Router', () => {
     connection[actionTypes.ROUTE_CHANGE_SUCCEED](
       actions.routeChangeSucceed({ selectedItem: { type: 'post', id: 63 } }),
     );
-    expect(connection.selectedContext.getItem({ type: 'post', id: 60 }).visited).toBe(true);
-    expect(connection.selectedContext.getItem({ type: 'post', id: 63 }).visited).toBe(true);
-    expect(connection.selectedContext.getItem({ type: 'post', id: 62 }).visited).toBe(false);
+    expect(connection.selectedContext.getItem({ item: { type: 'post', id: 60 } }).visited).toBe(
+      true,
+    );
+    expect(connection.selectedContext.getItem({ item: { type: 'post', id: 63 } }).visited).toBe(
+      true,
+    );
+    expect(connection.selectedContext.getItem({ item: { type: 'post', id: 62 } }).visited).toBe(
+      false,
+    );
   });
 
   test('Move selected single', () => {

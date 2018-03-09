@@ -54,34 +54,51 @@ const Context = types
     const getMstId = ({ type, id, page }) =>
       page ? `${self.index}_${type}_${id}_page_${page}` : `${self.index}_${type}_${id}`;
     const addMstIdToItem = ({ item }) => ({ mstId: getMstId({ ...item }), ...item });
-    const addMstIdToItems = items => items.map(item => addMstIdToItem({ item }));
+    const addMstIdToItems = ({ items }) => items.map(item => addMstIdToItem({ item }));
     return {
-      setGenerator: generator => {
+      setGenerator: ({ generator }) => {
         self.generator = generator;
       },
-      addColumn: (items, unshift) => {
-        if (unshift)
-          self.rawColumns.unshift({ mstId: getNextMstId(), rawItems: addMstIdToItems(items) });
-        else self.rawColumns.push({ mstId: getNextMstId(), rawItems: addMstIdToItems(items) });
+      getItem: ({ item: { type, id, page } }) =>
+        resolveIdentifier(Item, self, getMstId({ type, id, page })),
+      hasItem: ({ item }) => !!self.getItem({ item }),
+      addItem: ({ item, index }) => {
+        self.addColumn({ column: [item], index });
+        return self.getItem({ item });
       },
-      addColumns: columns => {
-        columns.map(column => self.addColumn(column));
+      addItems: ({ items, index }) => {
+        let i = index || self.rawColumns.length;
+        items.forEach(item => {
+          self.addColumn({ column: [item], index: i });
+          i += 1;
+        });
       },
-      replaceColumns: columns => {
-        self.rawColumns.replace(
-          columns.map(column => ({ mstId: getNextMstId(), rawItems: addMstIdToItems(column) })),
-        );
-      },
-      hasItem: item => !!resolveIdentifier(Item, self, getMstId(item)),
-      getItem: item => resolveIdentifier(Item, self, getMstId(item)),
-      addItem: (item, unshift) => {
-        self.addColumn([item], unshift);
-        return self.getItem(item);
-      },
-      addItemIfMissing: (item, unshift) => {
-        if (!self.hasItem(item)) {
-          self.addItem(item, unshift);
+      addItemIfMissing: ({ item, index }) => {
+        if (!self.hasItem({ item })) {
+          self.addItem({ item, index });
         }
+      },
+      addColumn: ({ column, index }) => {
+        const i = typeof index !== 'undefined' ? index : self.rawColumns.length
+        self.rawColumns.splice(i, 0, {
+          mstId: getNextMstId(),
+          rawItems: addMstIdToItems({ items: column }),
+        });
+      },
+      addColumns: ({ columns, index }) => {
+        let i = index || self.rawColumns.length;
+        columns.forEach(column => {
+          self.addColumn({ column, index: i });
+          i += 1;
+        });
+      },
+      replaceColumns: ({ columns }) => {
+        self.rawColumns.replace(
+          columns.map(column => ({
+            mstId: getNextMstId(),
+            rawItems: addMstIdToItems({ items: column }),
+          })),
+        );
       },
       moveItem: item => {
         const newItem = self.getItem(item);
@@ -89,6 +106,19 @@ const Context = types
         detach(newItem);
         if (newItemParentColumn.items.length === 0) self.rawColumns.remove(newItemParentColumn);
         self.selectedItem.parentColumn.rawItems.push(newItem);
+      },
+      replaceItem: ({ oldItem, newItem }) => {},
+      replaceExtractedList: ({ type, id, page }) => {
+        const oldItem = self.getItem({ type, id, page });
+        const newEntities = self.connection.list(type, id).page(page).entities;
+        // If there's no entities in the result, just delete the old item.
+        if (newEntities.length === 0) self.deleteItem(oldItem);
+        else if (newEntities.length >= 1)
+          // Replace the oldItem for the first entity of the list.
+          self.replaceItem({ oldItem, newItem: newEntities[0] });
+        // Insert the rest of the list in new columns, right after the column of the extracted.
+        const oldItemColumnIndex = oldItem.parentColumn.index;
+        if (newEntities.length >= 2) self.addItems({ items, index: oldItemColumnIndex });
       },
     };
   });

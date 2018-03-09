@@ -1,3 +1,4 @@
+import { when } from 'mobx';
 import { types, getParent, getRoot } from 'mobx-state-tree';
 
 const BaseItem = types
@@ -28,6 +29,9 @@ const BaseItem = types
     get parentColumn() {
       return getParent(self, 2);
     },
+    get parentContext() {
+      return getParent(self, 4);
+    },
     get nextItem() {
       const items = getParent(self);
       const index = items.indexOf(self);
@@ -44,6 +48,17 @@ export const List = BaseItem.named('List')
   .views(self => ({
     get list() {
       return self.connection.list(self.type, self.id);
+    },
+  }))
+  .actions(self => ({
+    afterCreate: () => {
+      if (self.extract === true) {
+        const { type, id, page } = self;
+        when(
+          () => self.connection.list(type, id).page(page).ready === true,
+          () => self.parentContext.replaceExtractedList({ type, id, page }),
+        );
+      }
     },
   }));
 
