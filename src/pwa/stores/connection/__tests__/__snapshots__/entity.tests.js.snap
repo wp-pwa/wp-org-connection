@@ -1,6 +1,6 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`Store › Entity Get entity shape when entity is not ready 1`] = `
+exports[`Connection › Entity Get entity shape when entity is not ready 1`] = `
 Object {
   "alt": "",
   "author": Object {

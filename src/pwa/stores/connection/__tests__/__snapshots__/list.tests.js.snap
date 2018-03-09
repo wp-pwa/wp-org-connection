@@ -1,6 +1,6 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`Store › List Get list snapshot when entity is not ready 1`] = `
+exports[`Connection › List Get list snapshot when entity is not ready 1`] = `
 Object {
   "entities": Array [],
   "entity": Object {

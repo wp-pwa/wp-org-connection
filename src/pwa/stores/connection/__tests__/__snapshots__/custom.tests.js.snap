@@ -1,6 +1,6 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`Store › Custom Get custom snapshot when it is not ready 1`] = `
+exports[`Connection › Custom Get custom snapshot when it is not ready 1`] = `
 Object {
   "entities": Array [],
   "fetching": false,
