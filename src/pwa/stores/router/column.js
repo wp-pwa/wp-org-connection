@@ -1,12 +1,11 @@
 import { types, getParent, resolveIdentifier } from 'mobx-state-tree';
 import { isMatchWith, omitBy, isUndefined } from 'lodash';
-import uuid from 'uuid/v4';
 import Item from './item';
 
 const Column = types
   .model('Column')
   .props({
-    mstId: types.optional(types.identifier(types.string), uuid),
+    mstId: types.identifier(types.string),
     rawItems: types.optional(types.array(types.late(() => Item)), []),
     selectedItem: types.optional(
       types.reference(types.late(() => Item), {

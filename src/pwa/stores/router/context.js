@@ -17,6 +17,7 @@ const Context = types
     ),
     generator: types.frozen,
     infinite: types.frozen,
+    mstIdForColumn: 0,
   })
   .views(self => ({
     get connection() {
@@ -46,6 +47,10 @@ const Context = types
     },
   }))
   .actions(self => {
+    const getNextMstId = () => {
+      self.mstIdForColumn += 1;
+      return `context_${self.index}_column_${self.mstIdForColumn}`;
+    };
     const getMstId = ({ type, id, page }) =>
       page ? `${self.index}_${type}_${id}_page_${page}` : `${self.index}_${type}_${id}`;
     const addMstIdToItem = ({ item }) => ({ mstId: getMstId({ ...item }), ...item });
@@ -55,14 +60,17 @@ const Context = types
         self.generator = generator;
       },
       addColumn: (items, unshift) => {
-        if (unshift) self.rawColumns.unshift({ rawItems: addMstIdToItems(items) });
-        else self.rawColumns.push({ rawItems: addMstIdToItems(items) });
+        if (unshift)
+          self.rawColumns.unshift({ mstId: getNextMstId(), rawItems: addMstIdToItems(items) });
+        else self.rawColumns.push({ mstId: getNextMstId(), rawItems: addMstIdToItems(items) });
       },
       addColumns: columns => {
         columns.map(column => self.addColumn(column));
       },
       replaceColumns: columns => {
-        self.rawColumns.replace(columns.map(column => ({ rawItems: addMstIdToItems(column) })));
+        self.rawColumns.replace(
+          columns.map(column => ({ mstId: getNextMstId(), rawItems: addMstIdToItems(column) })),
+        );
       },
       hasItem: item => !!resolveIdentifier(Item, self, getMstId(item)),
       getItem: item => resolveIdentifier(Item, self, getMstId(item)),
