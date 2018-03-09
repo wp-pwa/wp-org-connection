@@ -4,6 +4,7 @@ import { isMatch, isEqual } from 'lodash';
 import { takeEvery, put, call } from 'redux-saga/effects';
 import { eventChannel } from 'redux-saga';
 import createHistory from 'history/createBrowserHistory';
+import { parse } from 'url';
 import * as actionTypes from '../actionTypes';
 
 import * as actions from '../actions';
@@ -19,7 +20,8 @@ const getUrl = (selected, connection) => {
   const id = listType ? listId : singleId;
 
   if (type === 'latest' || !id) {
-    return page > 1 ? `/page/${page}` : '/';
+    const { pathname } = parse(connection.siteInfo.home.url);
+    return page > 1 ? `${pathname}/page/${page}` : pathname;
   }
 
   const { link } = connection.single[type][id];

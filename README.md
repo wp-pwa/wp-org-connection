@@ -8,6 +8,15 @@ Finally, use `npm run start:pwa` to start the development environment.
 
 ## Changelog
 
+#### 1.3.2
+
+- Make excerpt optional
+
+#### 1.3.1
+
+- Add url in site info for blogs without home on /
+- Fix problem with missing info on media
+
 #### 1.2.0
 
 - Add analytic events

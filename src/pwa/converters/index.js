@@ -11,7 +11,7 @@ export const single = entity => ({
   slug: entity.slug,
   link: entity.link,
   content: entity.content.rendered,
-  excerpt: entity.excerpt.rendered,
+  excerpt: entity.excerpt && entity.excerpt.rendered,
   author: entity.author,
   featured: entity.featured_media || null,
   taxonomies: entity.taxonomiesMap,
