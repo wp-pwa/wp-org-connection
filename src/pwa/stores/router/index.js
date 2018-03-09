@@ -212,21 +212,25 @@ export const actions = self => {
         self.siteInfo.headContent = self.siteInfo.headContent.filter(node => node.permanent);
 
       let context = actionContext || { columns: [[{ ...selectedItem }]] };
-      // If there's not a previous context.
+      // If there's not a previous context we create one.
       if (!self.selectedContext) return createNewContext({ selectedItem, context });
+
       // If there's a previous context...
+
+      // First, get some info:
       const selectedItemInSelectedContext = self.selectedContext.hasItem(selectedItem);
       if (!actionContext && selectedItemInSelectedContext) context = self.selectedContext.generator;
       const generatorsAreEqual = isEqual(self.selectedContext.generator, context);
 
+      // Then check conditions:
+      // If we are in the same context and we just want to change the selected.
       if (generatorsAreEqual && selectedItemInSelectedContext)
         return changeSelectedItem({ selectedItem });
-      if (method === 'push') return createNewContext({ selectedItem, context });
-      if (method === 'replaceContext') return replaceSelectedContext({ selectedItem, context });
-      if (method === 'selectItemInPreviousContext')
-        return selectItemInPreviousContext({ selectedItem });
-      if (method === 'selectItemInNextContext') return selectItemInNextContext({ selectedItem });
-      throw new Error('Connection didn\'t know what to do. Please search this error in the code.');
+      // If we are going backward or forward in the history
+      if (method === 'backward') return selectItemInPreviousContext({ selectedItem });
+      if (method === 'forward') return selectItemInNextContext({ selectedItem });
+      // If nothing of the previous, we just create a new context
+      return createNewContext({ selectedItem, context });
     },
     [actionTypes.MOVE_ITEM_TO_COLUMN]: ({ item }) => {
       moveItemToSelectedColumn({ item });

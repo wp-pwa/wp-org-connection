@@ -384,7 +384,7 @@ describe('Connection › Router', () => {
     connection[actionTypes.ROUTE_CHANGE_SUCCEED](
       actions.routeChangeSucceed({
         selectedItem: { type: 'category', id: 7, page: 2 },
-        method: 'selectItemInPreviousContext',
+        method: 'backward',
       }),
     );
     expect(connection.contexts).toMatchSnapshot();
@@ -410,7 +410,7 @@ describe('Connection › Router', () => {
       connection[actionTypes.ROUTE_CHANGE_SUCCEED](
         actions.routeChangeSucceed({
           selectedItem: { type: 'category', id: 7, page: 3 },
-          method: 'selectItemInPreviousContext',
+          method: 'backward',
         }),
       ),
     ).toThrow("You are trying to select an item in a context where doesn't exist");
@@ -431,13 +431,13 @@ describe('Connection › Router', () => {
     connection[actionTypes.ROUTE_CHANGE_SUCCEED](
       actions.routeChangeSucceed({
         selectedItem: { type: 'category', id: 7, page: 2 },
-        method: 'selectItemInPreviousContext',
+        method: 'backward',
       }),
     );
     connection[actionTypes.ROUTE_CHANGE_SUCCEED](
       actions.routeChangeSucceed({
         selectedItem: { type: 'post', id: 62 },
-        method: 'selectItemInNextContext',
+        method: 'forward',
       }),
     );
     expect(connection.contexts).toMatchSnapshot();
@@ -461,14 +461,14 @@ describe('Connection › Router', () => {
     connection[actionTypes.ROUTE_CHANGE_SUCCEED](
       actions.routeChangeSucceed({
         selectedItem: { type: 'category', id: 7, page: 2 },
-        method: 'selectItemInPreviousContext',
+        method: 'backward',
       }),
     );
     expect(() =>
       connection[actionTypes.ROUTE_CHANGE_SUCCEED](
         actions.routeChangeSucceed({
           selectedItem: { type: 'post', id: 63 },
-          method: 'selectItemInNextContext',
+          method: 'forward',
         }),
       ),
     ).toThrow("You are trying to select an item in a context where doesn't exist");
