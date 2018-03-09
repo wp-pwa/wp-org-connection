@@ -54,9 +54,12 @@ export const List = BaseItem.named('List')
     afterCreate: () => {
       if (self.extract === true) {
         const { type, id, page } = self;
-        when(
+        const stopReplace = when(
           () => self.connection.list(type, id).page(page).ready === true,
-          () => self.parentContext.replaceExtractedList({ type, id, page }),
+          () => {
+            stopReplace();
+            self.parentContext.replaceExtractedList({ type, id, page });
+          },
         );
       }
     },

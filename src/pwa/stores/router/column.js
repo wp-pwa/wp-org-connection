@@ -1,5 +1,4 @@
 import { types, getParent, resolveIdentifier } from 'mobx-state-tree';
-import { isMatchWith, omitBy, isUndefined } from 'lodash';
 import Item from './item';
 
 const Column = types
@@ -16,11 +15,6 @@ const Column = types
     ),
   })
   .views(self => ({
-    getItem({ props, customizer }) {
-      return (
-        self.rawItems.find(i => isMatchWith(i, omitBy(props, isUndefined), customizer)) || null
-      );
-    },
     get items() {
       return self.rawItems.filter(item => !item.extract);
     },

@@ -78,6 +78,7 @@ const Context = types
           self.addItem({ item, index });
         }
       },
+      deleteItem: ({ item }) => item.parentColumn.rawItems.remove(item),
       addColumn: ({ column, index }) => {
         const i = typeof index !== 'undefined' ? index : self.rawColumns.length
         self.rawColumns.splice(i, 0, {
@@ -107,18 +108,11 @@ const Context = types
         if (newItemParentColumn.items.length === 0) self.rawColumns.remove(newItemParentColumn);
         self.selectedItem.parentColumn.rawItems.push(newItem);
       },
-      replaceItem: ({ oldItem, newItem }) => {},
       replaceExtractedList: ({ type, id, page }) => {
-        const oldItem = self.getItem({ type, id, page });
-        const newEntities = self.connection.list(type, id).page(page).entities;
-        // If there's no entities in the result, just delete the old item.
-        if (newEntities.length === 0) self.deleteItem(oldItem);
-        else if (newEntities.length >= 1)
-          // Replace the oldItem for the first entity of the list.
-          self.replaceItem({ oldItem, newItem: newEntities[0] });
-        // Insert the rest of the list in new columns, right after the column of the extracted.
-        const oldItemColumnIndex = oldItem.parentColumn.index;
-        if (newEntities.length >= 2) self.addItems({ items, index: oldItemColumnIndex });
+        const oldItem = self.getItem({ item: { type, id, page } });
+        self.deleteItem({ item: oldItem });
+        const items = self.connection.list(type, id).page(page).entities;
+        if (items.length > 0) self.addItems({ items, index: oldItem.parentColumn.index });
       },
     };
   });

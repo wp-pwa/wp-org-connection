@@ -524,7 +524,7 @@ describe('Connection › Router', () => {
     expect(connection.selectedContext.columns.length).toBe(1);
   });
 
-  test.skip('Add items to extracted once they are ready', () => {
+  test('Add items to extracted once they are ready', () => {
     connection[actionTypes.ROUTE_CHANGE_SUCCEED](
       actions.routeChangeSucceed({
         selectedItem: { type: 'post', id: 60 },
