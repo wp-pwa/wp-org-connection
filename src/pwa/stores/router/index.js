@@ -211,26 +211,32 @@ export const actions = self => {
       if (typeof window !== 'undefined')
         self.siteInfo.headContent = self.siteInfo.headContent.filter(node => node.permanent);
 
+      // Initialize context.
       let context = actionContext || { columns: [[{ ...selectedItem }]] };
-      // If there's not a previous context we create one.
-      if (!self.selectedContext) return createNewContext({ selectedItem, context });
 
-      // If there's a previous context...
+      if (!self.selectedContext) {
+        // If there's not a previous context we create one.
+        createNewContext({ selectedItem, context });
+      } else {
+        // If there's a previous context...
+        // First, get some info:
+        const selectedItemIsInSelectedContext = self.selectedContext.hasItem(selectedItem);
+        if (!actionContext && selectedItemIsInSelectedContext)
+          context = self.selectedContext.generator;
+        const generatorsAreEqual = isEqual(self.selectedContext.generator, context);
 
-      // First, get some info:
-      const selectedItemInSelectedContext = self.selectedContext.hasItem(selectedItem);
-      if (!actionContext && selectedItemInSelectedContext) context = self.selectedContext.generator;
-      const generatorsAreEqual = isEqual(self.selectedContext.generator, context);
-
-      // Then check conditions:
-      // If we are in the same context and we just want to change the selected.
-      if (generatorsAreEqual && selectedItemInSelectedContext)
-        return changeSelectedItem({ selectedItem });
-      // If we are going backward or forward in the history
-      if (method === 'backward') return selectItemInPreviousContext({ selectedItem });
-      if (method === 'forward') return selectItemInNextContext({ selectedItem });
-      // If nothing of the previous, we just create a new context
-      return createNewContext({ selectedItem, context });
+        // Then check conditions:
+        // If we are in the same context and we just want to change the selected.
+        if (generatorsAreEqual && selectedItemIsInSelectedContext)
+          changeSelectedItem({ selectedItem });
+        else if (method === 'backward')
+          // If we are going backward or forward in the history
+          selectItemInPreviousContext({ selectedItem });
+        else if (method === 'forward') selectItemInNextContext({ selectedItem });
+        else
+          // If nothing of the previous, we just create a new context
+          createNewContext({ selectedItem, context });
+      }
     },
     [actionTypes.MOVE_ITEM_TO_COLUMN]: ({ item }) => {
       moveItemToSelectedColumn({ item });
