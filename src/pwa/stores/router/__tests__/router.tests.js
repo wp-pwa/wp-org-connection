@@ -8,14 +8,6 @@ import * as actions from '../../../actions';
 import postsFromCategory7 from '../../../__tests__/posts-from-category-7.json';
 import post60 from '../../../__tests__/post-60.json';
 
-jest.mock('uuid/v4', () => {
-  let id = 0;
-  return jest.fn(() => {
-    id += 1;
-    return `mockedId_${id}`;
-  });
-});
-
 const { result: resultFromCategory7, entities: entitiesFromCategory } = normalize(
   postsFromCategory7,
   list,
@@ -524,13 +516,15 @@ describe('Connection › Router', () => {
     expect(connection.selectedContext.columns.length).toBe(1);
   });
 
-  test('Add items to extracted once they are ready', () => {
+  test('Add items from extracted once they are ready', () => {
     connection[actionTypes.ROUTE_CHANGE_SUCCEED](
       actions.routeChangeSucceed({
         selectedItem: { type: 'post', id: 60 },
         context: { columns: [[{ type: 'category', id: 7, page: 1, extract: true }]] },
       }),
     );
+    expect(connection.selectedContext.rawColumns.length).toBe(2);
+    expect(connection.selectedContext.columns.length).toBe(1);
     connection[actionTypes.LIST_SUCCEED](
       actions.listSucceed({
         listType: 'category',
@@ -540,7 +534,21 @@ describe('Connection › Router', () => {
       }),
     );
     expect(connection.contexts).toMatchSnapshot();
-    expect(connection.selectedContext.columns.length).toBe(11);
+    expect(resultFromCategory7.length).toBe(5);
+    expect(connection.selectedContext.rawColumns.length).toBe(6);
+    expect(connection.selectedContext.columns.length).toBe(6);
+  });
+
+  test('Throw if extracted is added in a column with more stuff', () => {
+    expect(() => connection[actionTypes.ROUTE_CHANGE_SUCCEED](
+      actions.routeChangeSucceed({
+        selectedItem: { type: 'post', id: 60 },
+        context: { columns: [
+          [{ type: 'post', id: 60 }],
+          [{ type: 'post', id: 63 }, { type: 'category', id: 7, page: 1, extract: true }],
+        ] },
+      }),
+    )).toThrow();
   });
 
   // //////////////////////////////////////////////////////////////////////////////////////////////

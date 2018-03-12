@@ -80,11 +80,13 @@ const Context = types
       },
       deleteItem: ({ item }) => item.parentColumn.rawItems.remove(item),
       addColumn: ({ column, index }) => {
-        const i = typeof index !== 'undefined' ? index : self.rawColumns.length
+        const i = typeof index !== 'undefined' ? index : self.rawColumns.length;
         self.rawColumns.splice(i, 0, {
           mstId: getNextMstId(),
           rawItems: addMstIdToItems({ items: column }),
         });
+        if (self.rawColumns[i].hasExtracted && self.rawColumns[i].rawItems.length > 1)
+          throw new Error("Don't add extracted lists with other items in the same column.");
       },
       addColumns: ({ columns, index }) => {
         let i = index || self.rawColumns.length;
@@ -101,6 +103,7 @@ const Context = types
           })),
         );
       },
+      deleteColumn: ({ column }) => self.rawColumns.remove(column),
       moveItem: item => {
         const newItem = self.getItem(item);
         const newItemParentColumn = newItem.parentColumn;
@@ -110,9 +113,12 @@ const Context = types
       },
       replaceExtractedList: ({ type, id, page }) => {
         const oldItem = self.getItem({ item: { type, id, page } });
+        const oldColumn = oldItem.parentColumn;
+        const oldIndex = oldItem.parentColumn.index;
         self.deleteItem({ item: oldItem });
+        if (oldColumn.rawItems.length === 0) self.deleteColumn({ column: oldColumn });
         const items = self.connection.list(type, id).page(page).entities;
-        if (items.length > 0) self.addItems({ items, index: oldItem.parentColumn.index });
+        if (items.length > 0) self.addItems({ items, index: oldIndex });
       },
     };
   });
