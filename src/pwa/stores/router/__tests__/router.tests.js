@@ -475,7 +475,7 @@ describe('Connection › Router', () => {
     connection[actionTypes.ROUTE_CHANGE_SUCCEED](
       actions.routeChangeSucceed({
         selectedItem: { type: 'post', id: 60 },
-        context: { columns: [[{ type: 'latest', id: 'post', page: 1, extract: 'right' }]] },
+        context: { columns: [[{ type: 'latest', id: 'post', page: 1, extract: true }]] },
       }),
     );
     expect(connection.contexts).toMatchSnapshot();
@@ -489,7 +489,7 @@ describe('Connection › Router', () => {
         context: {
           columns: [
             [{ type: 'post', id: 60 }],
-            [{ type: 'latest', id: 'post', page: 1, extract: 'right' }],
+            [{ type: 'latest', id: 'post', page: 1, extract: true }],
             [{ type: 'post', id: 63 }],
           ],
         },
@@ -506,7 +506,7 @@ describe('Connection › Router', () => {
         context: {
           columns: [
             [{ type: 'post', id: 60 }],
-            [{ type: 'latest', id: 'post', page: 1, extract: 'right' }],
+            [{ type: 'latest', id: 'post', page: 1, extract: true }],
             [{ type: 'post', id: 63 }],
           ],
         },
@@ -520,7 +520,7 @@ describe('Connection › Router', () => {
     connection[actionTypes.ROUTE_CHANGE_SUCCEED](
       actions.routeChangeSucceed({
         selectedItem: { type: 'post', id: 60 },
-        context: { columns: [[{ type: 'category', id: 7, page: 1, extract: 'right' }]] },
+        context: { columns: [[{ type: 'category', id: 7, page: 1, extract: true }]] },
       }),
     );
     expect(connection.selectedContext.rawColumns.length).toBe(2);
@@ -540,19 +540,15 @@ describe('Connection › Router', () => {
   });
 
   test('Throw if extracted is added in a column with more stuff', () => {
-    expect(() =>
-      connection[actionTypes.ROUTE_CHANGE_SUCCEED](
-        actions.routeChangeSucceed({
-          selectedItem: { type: 'post', id: 60 },
-          context: {
-            columns: [
-              [{ type: 'post', id: 60 }],
-              [{ type: 'post', id: 63 }, { type: 'category', id: 7, page: 1, extract: 'right' }],
-            ],
-          },
-        }),
-      ),
-    ).toThrow();
+    expect(() => connection[actionTypes.ROUTE_CHANGE_SUCCEED](
+      actions.routeChangeSucceed({
+        selectedItem: { type: 'post', id: 60 },
+        context: { columns: [
+          [{ type: 'post', id: 60 }],
+          [{ type: 'post', id: 63 }, { type: 'category', id: 7, page: 1, extract: true }],
+        ] },
+      }),
+    )).toThrow();
   });
 
   // //////////////////////////////////////////////////////////////////////////////////////////////

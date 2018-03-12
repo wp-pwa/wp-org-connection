@@ -30,10 +30,6 @@ const Column = types
     get hasExtracted() {
       return self.rawItems.reduce((acc, item) => acc || item.extract === true, false);
     },
-  }))
-  .actions(self => ({
-    addItems: ({ items, index }) =>
-      self.rawItems.splice(index || self.rawItems.length, 0, ...items),
   }));
 
 export default Column;

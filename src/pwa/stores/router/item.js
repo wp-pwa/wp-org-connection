@@ -7,7 +7,7 @@ const BaseItem = types
     mstId: types.identifier(types.string),
     type: types.string,
     id: types.union(types.string, types.number),
-    extract: types.maybe(types.string),
+    extract: types.maybe(types.boolean),
     visited: false,
   })
   .views(self => ({
@@ -52,7 +52,7 @@ export const List = BaseItem.named('List')
   }))
   .actions(self => ({
     afterCreate: () => {
-      if (['right', 'left', 'bottom'].includes(self.extract)) {
+      if (self.extract === true) {
         const { type, id, page } = self;
         const stopReplace = when(
           () => self.connection.list(type, id).page(page).ready === true,
