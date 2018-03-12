@@ -113,12 +113,14 @@ const Context = types
       },
       replaceExtractedList: ({ type, id, page }) => {
         const oldItem = self.getItem({ item: { type, id, page } });
-        const oldColumn = oldItem.parentColumn;
+        const { parentColumn, extract } = oldItem.parentColumn;
         const oldIndex = oldItem.parentColumn.index;
         self.deleteItem({ item: oldItem });
-        if (oldColumn.rawItems.length === 0) self.deleteColumn({ column: oldColumn });
+        if (parentColumn.rawItems.length === 0) self.deleteColumn({ column: parentColumn });
         const items = self.connection.list(type, id).page(page).entities;
-        if (items.length > 0) self.addItems({ items, index: oldIndex });
+        if (extract === 'left') self.addItems({ items, index: oldIndex, direction: 'left' });
+        else if (extract === 'down') self.addItemsToColumn({ items, index: oldIndex, direction: 'left' });
+        else self.addItemsT({ items, index: oldIndex, direction: 'left' });
       },
     };
   });
