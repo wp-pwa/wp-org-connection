@@ -78,6 +78,7 @@ export const customSucceed = ({
   total = { entities: 0, pages: 0 },
   result,
   entities,
+  endpoint,
 }) => ({
   type: actionTypes.CUSTOM_SUCCEED,
   url,
@@ -88,6 +89,7 @@ export const customSucceed = ({
   total,
   result,
   entities,
+  endpoint,
 });
 export const customFailed = ({
   url = '/',
