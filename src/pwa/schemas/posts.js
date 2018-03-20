@@ -20,10 +20,13 @@ export const post = new schema.Entity(
         if (entity._embedded['wp:term']) {
           result.taxonomiesMap = {};
           entity._embedded['wp:term'].forEach(term =>
-            term.forEach(item => {
-              const type = item.taxonomy === 'post_tag' ? 'tag' : item.taxonomy;
-              result.taxonomiesMap[type] = result.taxonomiesMap[type] || [];
-              result.taxonomiesMap[type].push(item.id);
+            term.forEach((item, index) => {
+              if (item.taxonomy === 'latest') term.splice(index, 1);
+              else {
+                const type = item.taxonomy === 'post_tag' ? 'tag' : item.taxonomy;
+                result.taxonomiesMap[type] = result.taxonomiesMap[type] || [];
+                result.taxonomiesMap[type].push(item.id);
+              }
             }),
           );
         }
