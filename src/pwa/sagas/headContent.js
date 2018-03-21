@@ -1,7 +1,7 @@
 import { takeEvery, put, select } from 'redux-saga/effects';
 import request from 'superagent';
 import { parse } from 'himalaya';
-import urlparser from 'url';
+import { format, parse as urlparser } from 'url';
 import { dep } from 'worona-deps';
 import * as actions from '../actions';
 import * as actionTypes from '../actionTypes';
@@ -86,11 +86,10 @@ export const headContentRequested = () =>
   function* headContentRequestedSaga() {
     try {
       let url = yield select(dep('build', 'selectors', 'getInitialUrl'));
-      if (!url) {
-        const pathname = yield select(dep('build', 'selectors', 'getInitialUri'));
+      if (!urlparser(url).host || !urlparser(url).protocol) {
         const siteUrl =  yield select(dep('settings', 'selectorCreators', 'getSetting')('generalSite', 'url'));
-        const { protocol, host } = urlparser.parse(siteUrl);
-        url = urlparser.format({ protocol, host, pathname });
+        const { protocol, host } = urlparser(siteUrl);
+        url = format({ protocol, host, pathname: url });
       }
       const site = yield request(url);
       const headString = site.text.match(/<\s*?head[^>]*>([\w\W]+)<\s*?\/\s*?head\s*?>/)[1];
