@@ -475,7 +475,7 @@ describe('Connection › Router', () => {
     connection[actionTypes.ROUTE_CHANGE_SUCCEED](
       actions.routeChangeSucceed({
         selectedItem: { type: 'post', id: 60 },
-        context: { columns: [[{ type: 'latest', id: 'post', page: 1, extract: true }]] },
+        context: { columns: [[{ type: 'latest', id: 'post', page: 1, extract: 'horizontal' }]] },
       }),
     );
     expect(connection.contexts).toMatchSnapshot();
@@ -489,7 +489,7 @@ describe('Connection › Router', () => {
         context: {
           columns: [
             [{ type: 'post', id: 60 }],
-            [{ type: 'latest', id: 'post', page: 1, extract: true }],
+            [{ type: 'latest', id: 'post', page: 1, extract: 'horizontal' }],
             [{ type: 'post', id: 63 }],
           ],
         },
@@ -506,7 +506,7 @@ describe('Connection › Router', () => {
         context: {
           columns: [
             [{ type: 'post', id: 60 }],
-            [{ type: 'latest', id: 'post', page: 1, extract: true }],
+            [{ type: 'latest', id: 'post', page: 1, extract: 'horizontal' }],
             [{ type: 'post', id: 63 }],
           ],
         },
@@ -523,15 +523,15 @@ describe('Connection › Router', () => {
         context: {
           columns: [
             [{ type: 'post', id: 1 }],
-            [{ type: 'category', id: 2, page: 1, extract: true }],
+            [{ type: 'category', id: 2, page: 1, extract: 'horizontal' }],
             [{ type: 'post', id: 3 }],
-            [{ type: 'post', id: 4 }, { type: 'post', id: 5 }, { type: 'category', id: 6, page: 1, extract: true }, { type: 'post', id: 7 }],
+            [{ type: 'post', id: 4 }, { type: 'post', id: 5 }, { type: 'category', id: 6, page: 1, extract: 'horizontal' }, { type: 'post', id: 7 }],
             [{ type: 'post', id: 8 }],
-            [{ type: 'post', id: 9 }, { type: 'post', id: 10 }, { type: 'category', id: 11, page: 1, extract: true }, { type: 'post', id: 12 }],
+            [{ type: 'post', id: 9 }, { type: 'post', id: 10 }, { type: 'category', id: 11, page: 1, extract: 'horizontal' }, { type: 'post', id: 12 }],
             [{ type: 'post', id: 13 }],
-            [{ type: 'post', id: 14 }, { type: 'post', id: 15 }, { type: 'category', id: 16, page: 1, extract: true }, { type: 'post', id: 17 }],
+            [{ type: 'post', id: 14 }, { type: 'post', id: 15 }, { type: 'category', id: 16, page: 1, extract: 'horizontal' }, { type: 'post', id: 17 }],
             [{ type: 'post', id: 18 }],
-            [{ type: 'category', id: 19, page: 1, extract: true }, { type: 'post', id: 20 }],
+            [{ type: 'category', id: 19, page: 1, extract: 'horizontal' }, { type: 'post', id: 20 }],
             [{ type: 'post', id: 21 }],
           ],
         },
@@ -546,7 +546,7 @@ describe('Connection › Router', () => {
     connection[actionTypes.ROUTE_CHANGE_SUCCEED](
       actions.routeChangeSucceed({
         selectedItem: { type: 'post', id: 60 },
-        context: { columns: [[{ type: 'category', id: 7, page: 1, extract: true }]] },
+        context: { columns: [[{ type: 'category', id: 7, page: 1, extract: 'horizontal' }]] },
       }),
     );
     expect(connection.selectedContext.rawColumns.length).toBe(2);
@@ -587,7 +587,7 @@ describe('Connection › Router', () => {
   //     infiniteSwipe: {
   //       type: 'category',
   //       id: 7,
-  //       extract: true,
+  //       extract: 'horizontal',
   //       fromPage: 2,
   //       infiniteScroll: 'nextNonVisited',
   //     },
@@ -601,7 +601,7 @@ describe('Connection › Router', () => {
   //     options: { header: 'list' },
   //     columns: [
   //       {
-  //         items: [{ type: 'category', id: 7, page: 1, extract: true }],
+  //         items: [{ type: 'category', id: 7, page: 1, extract: 'horizontal' }],
   //         infiniteScroll: 'moveNextNonVisited',
   //       },
   //     ],
@@ -609,7 +609,7 @@ describe('Connection › Router', () => {
   //       type: 'category',
   //       id: 7,
   //       fromPage: 2,
-  //       extract: true,
+  //       extract: 'horizontal',
   //       infiniteScroll: 'moveNextNonVisited',
   //     },
   //   },
@@ -630,7 +630,7 @@ describe('Connection › Router', () => {
   //       type: 'latest',
   //       id: 'post',
   //       fromPage: 1,
-  //       extract: true,
+  //       extract: 'horizontal',
   //       infiniteScroll: { type: 'latest', id: 'post', fromPage: 1 },
   //     },
   //   },
@@ -644,7 +644,7 @@ describe('Connection › Router', () => {
   //     columns: [
   //       {
   //         items: [{ type: 'post', id: 60 }],
-  //         infiniteScroll: { type: 'latest', id: 'post', fromPage: 1, extract: true },
+  //         infiniteScroll: { type: 'latest', id: 'post', fromPage: 1, extract: 'horizontal' },
   //       },
   //       {
   //         items: [{ type: 'latest', id: 'post', page: 1 }],

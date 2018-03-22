@@ -7,7 +7,7 @@ Array [
       "columns": Array [
         Array [
           Object {
-            "extract": true,
+            "extract": "horizontal",
             "id": 7,
             "page": 1,
             "type": "category",
@@ -147,7 +147,7 @@ Array [
         ],
         Array [
           Object {
-            "extract": true,
+            "extract": "horizontal",
             "id": 2,
             "page": 1,
             "type": "category",
@@ -169,7 +169,7 @@ Array [
             "type": "post",
           },
           Object {
-            "extract": true,
+            "extract": "horizontal",
             "id": 6,
             "page": 1,
             "type": "category",
@@ -195,7 +195,7 @@ Array [
             "type": "post",
           },
           Object {
-            "extract": true,
+            "extract": "horizontal",
             "id": 11,
             "page": 1,
             "type": "category",
@@ -221,7 +221,7 @@ Array [
             "type": "post",
           },
           Object {
-            "extract": true,
+            "extract": "horizontal",
             "id": 16,
             "page": 1,
             "type": "category",
@@ -239,7 +239,7 @@ Array [
         ],
         Array [
           Object {
-            "extract": true,
+            "extract": "horizontal",
             "id": 19,
             "page": 1,
             "type": "category",
@@ -284,7 +284,7 @@ Array [
         "mstId": "context_0_column_2",
         "rawItems": Array [
           Object {
-            "extract": true,
+            "extract": "horizontal",
             "id": 2,
             "mstId": "0_category_2_page_1",
             "page": 1,
@@ -340,7 +340,7 @@ Array [
             "visited": false,
           },
           Object {
-            "extract": true,
+            "extract": "horizontal",
             "id": 6,
             "mstId": "0_category_6_page_1",
             "page": 1,
@@ -408,7 +408,7 @@ Array [
             "visited": false,
           },
           Object {
-            "extract": true,
+            "extract": "horizontal",
             "id": 11,
             "mstId": "0_category_11_page_1",
             "page": 1,
@@ -476,7 +476,7 @@ Array [
             "visited": false,
           },
           Object {
-            "extract": true,
+            "extract": "horizontal",
             "id": 16,
             "mstId": "0_category_16_page_1",
             "page": 1,
@@ -520,7 +520,7 @@ Array [
         "mstId": "context_0_column_10",
         "rawItems": Array [
           Object {
-            "extract": true,
+            "extract": "horizontal",
             "id": 19,
             "mstId": "0_category_19_page_1",
             "page": 1,
@@ -579,7 +579,7 @@ Array [
         ],
         Array [
           Object {
-            "extract": true,
+            "extract": "horizontal",
             "id": "post",
             "page": 1,
             "type": "latest",
@@ -620,7 +620,7 @@ Array [
         "mstId": "context_0_column_2",
         "rawItems": Array [
           Object {
-            "extract": true,
+            "extract": "horizontal",
             "id": "post",
             "mstId": "0_latest_post_page_1",
             "page": 1,
@@ -667,7 +667,7 @@ Array [
         ],
         Array [
           Object {
-            "extract": true,
+            "extract": "horizontal",
             "id": "post",
             "page": 1,
             "type": "latest",
@@ -708,7 +708,7 @@ Array [
         "mstId": "context_0_column_2",
         "rawItems": Array [
           Object {
-            "extract": true,
+            "extract": "horizontal",
             "id": "post",
             "mstId": "0_latest_post_page_1",
             "page": 1,
@@ -1541,7 +1541,7 @@ Array [
       "columns": Array [
         Array [
           Object {
-            "extract": true,
+            "extract": "horizontal",
             "id": "post",
             "page": 1,
             "type": "latest",
@@ -1576,7 +1576,7 @@ Array [
         "mstId": "context_0_column_1",
         "rawItems": Array [
           Object {
-            "extract": true,
+            "extract": "horizontal",
             "id": "post",
             "mstId": "0_latest_post_page_1",
             "page": 1,

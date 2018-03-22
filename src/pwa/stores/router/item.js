@@ -7,7 +7,7 @@ const BaseItem = types
     mstId: types.identifier(types.string),
     type: types.string,
     id: types.union(types.string, types.number),
-    extract: types.maybe(types.boolean),
+    extract: types.maybe(types.enumeration('Extract', ['horizontal', 'vertical'])),
     visited: false,
   })
   .views(self => ({
@@ -49,10 +49,13 @@ export const List = BaseItem.named('List')
     get list() {
       return self.connection.list(self.type, self.id);
     },
+    get isExtracted() {
+      return !!self.extracted;
+    },
   }))
   .actions(self => ({
     afterCreate: () => {
-      if (self.extract === true) {
+      if (['horizontal', 'vertical'].includes(self.extract)) {
         const { type, id, page } = self;
         const stopReplace = when(
           () => self.connection.list(type, id).page(page).ready === true,

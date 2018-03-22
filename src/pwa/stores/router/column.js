@@ -28,7 +28,10 @@ const Column = types
       return columns ? columns.indexOf(self) : -1;
     },
     get hasExtracted() {
-      return self.rawItems.reduce((acc, item) => acc || item.extract === true, false);
+      return self.rawItems.reduce(
+        (acc, item) => acc || ['horizontal', 'vertical'].includes(item.extract),
+        false,
+      );
     },
   }));
 
