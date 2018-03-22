@@ -135,6 +135,7 @@ export const customRequested = connection =>
           params,
           result: result.map(item => item.id),
           entities,
+          endpoint: getCustom({ connection, singleType, page, params }).toString(),
         }),
       );
     } catch (error) {

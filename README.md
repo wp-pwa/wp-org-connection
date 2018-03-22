@@ -8,6 +8,11 @@ Finally, use `npm run start:pwa` to start the development environment.
 
 ## Changelog
 
+#### 1.4.0
+
+- Add initialUri compatibility
+- Remove latest from connection until the new connection is here
+
 #### 1.3.2
 
 - Make excerpt optional
