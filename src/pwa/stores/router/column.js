@@ -16,7 +16,12 @@ const Column = types
   })
   .views(self => ({
     get items() {
-      return self.rawItems.filter(item => !item.extract);
+      const items = [];
+      for (let i = 0; i < self.rawItems.length; i += 1) {
+        if (self.rawItems[i].isExtracted()) break;
+        items[i] = self.rawItems[i];
+      }
+      return items;
     },
     get nextColumn() {
       const columns = getParent(self);

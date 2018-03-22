@@ -7,7 +7,6 @@ const BaseItem = types
     mstId: types.identifier(types.string),
     type: types.string,
     id: types.union(types.string, types.number),
-    extract: types.maybe(types.enumeration('Extract', ['horizontal', 'vertical'])),
     visited: false,
   })
   .views(self => ({
@@ -39,18 +38,21 @@ const BaseItem = types
         ? self.column.nextColumn && self.column.nextColumn.items[0]
         : items[index + 1];
     },
+    isExtracted() { return false; },
   }));
 
 export const List = BaseItem.named('List')
   .props({
     page: types.number,
+    extract: types.maybe(types.enumeration('Extract', ['horizontal', 'vertical'])),
   })
   .views(self => ({
     get list() {
       return self.connection.list(self.type, self.id);
     },
-    get isExtracted() {
-      return !!self.extracted;
+    isExtracted(direction) {
+      direction = direction ? [direction] : ['horizontal', 'vertical'];
+      return direction.includes(self.extract);
     },
   }))
   .actions(self => ({

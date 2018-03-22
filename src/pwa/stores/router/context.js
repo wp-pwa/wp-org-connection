@@ -31,23 +31,18 @@ const Context = types
         ({ mstId }) => mstId === getSnapshot(self).selectedColumn,
       );
       const columns = [];
-      // Traverse the columns from 0 to selectedColumnIndex until we find an extracted item. This
+      // Traverse the columns from selectedColumnIndex to 0 until we find an empty column. This
       // includes the selectedColumn as well.
       for (let i = selectedColumnIndex; i >= 0; i -= 1) {
-        if (self.rawColumns[i].hasExtracted()) break;
+        if (self.rawColumns[i].items.length === 0) break;
         columns[i] = self.rawColumns[i];
       }
       // Traverse the columns from selectedColumnIndex + 1 till the end until we find an
-      // extracted item.
+      // empty column.
       for (let i = selectedColumnIndex + 1; i < self.rawColumns.length; i += 1) {
-        if (self.rawColumns[i].hasExtracted()) break;
+        if (self.rawColumns[i].items.length === 0) break;
         columns[i] = self.rawColumns[i];
       }
-      // Traverse the items from until we find an extracted item.
-      // for (let j = 0; j < self.rawColumns[i].items.length; j += 1) {
-      //   if (self.rawColumns[i].items[j].isExtracted) break;
-      //   columns[i] = self.rawColumns[i];
-      // }
       return columns.filter(column => column.items.length > 0);
     },
   }))

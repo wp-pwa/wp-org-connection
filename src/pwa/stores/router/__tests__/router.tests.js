@@ -517,29 +517,41 @@ describe('Connection › Router', () => {
   });
 
   test('Columns should not below items if extracted before that item is not resolved', () => {
+    // +-++-++-++-++-++-++-++-++-++-++-+
+    // |P  E  P  P  P  P  P  P  P  E  P|
+    // +-++-++-++-++-++-++-++-++-++-++-+
+    //          |P|  >|P|<   |P|   |P|
+    //          +-+   +-+   +-+   +-+
+    //          |E|   |E|   |E|
+    //          +-+   +-+   +-+
+    //          |P|   |P|   |P|
+    //          +-+   +-+   +-+
     connection[actionTypes.ROUTE_CHANGE_SUCCEED](
       actions.routeChangeSucceed({
-        selectedItem: { type: 'post', id: 9 },
+        selectedItem: { type: 'post', id: 10 },
         context: {
           columns: [
             [{ type: 'post', id: 1 }],
             [{ type: 'category', id: 2, page: 1, extract: 'horizontal' }],
             [{ type: 'post', id: 3 }],
-            [{ type: 'post', id: 4 }, { type: 'post', id: 5 }, { type: 'category', id: 6, page: 1, extract: 'horizontal' }, { type: 'post', id: 7 }],
+            [{ type: 'post', id: 4 }, { type: 'post', id: 5 }, { type: 'category', id: 6, page: 1, extract: 'vertical' }, { type: 'post', id: 7 }],
             [{ type: 'post', id: 8 }],
-            [{ type: 'post', id: 9 }, { type: 'post', id: 10 }, { type: 'category', id: 11, page: 1, extract: 'horizontal' }, { type: 'post', id: 12 }],
+            [{ type: 'post', id: 9 }, { type: 'post', id: 10 }, { type: 'category', id: 11, page: 1, extract: 'vertical' }, { type: 'post', id: 12 }],
             [{ type: 'post', id: 13 }],
-            [{ type: 'post', id: 14 }, { type: 'post', id: 15 }, { type: 'category', id: 16, page: 1, extract: 'horizontal' }, { type: 'post', id: 17 }],
+            [{ type: 'post', id: 14 }, { type: 'post', id: 15 }, { type: 'category', id: 16, page: 1, extract: 'vertical' }, { type: 'post', id: 17 }],
             [{ type: 'post', id: 18 }],
-            [{ type: 'category', id: 19, page: 1, extract: 'horizontal' }, { type: 'post', id: 20 }],
+            [{ type: 'category', id: 19, page: 1, extract: 'vertical' }, { type: 'post', id: 20 }],
             [{ type: 'post', id: 21 }],
           ],
         },
       }),
     );
     expect(connection.contexts).toMatchSnapshot();
-    expect(connection.selectedContext.columns.length).toBe(3);
-    expect(connection.selectedContext.columns[2].items.length).toBe(1);
+    expect(connection.selectedContext.columns.length).toBe(7);
+    expect(connection.selectedContext.columns[0].items.length).toBe(1);
+    expect(connection.selectedContext.columns[1].items.length).toBe(2);
+    expect(connection.selectedContext.columns[3].items.length).toBe(2);
+    expect(connection.selectedContext.columns[5].items.length).toBe(2);
   });
 
   test('Add items from extracted once they are ready', () => {
