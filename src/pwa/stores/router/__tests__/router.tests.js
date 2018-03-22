@@ -521,11 +521,11 @@ describe('Connection › Router', () => {
     // |P  E  P  P  P  P  P  P  P  E  P|
     // +-++-++-++-++-++-++-++-++-++-++-+
     //          |P|  >|P|<   |P|   |P|
-    //          +-+   +-+   +-+   +-+
-    //          |E|   |E|   |E|
-    //          +-+   +-+   +-+
-    //          |P|   |P|   |P|
-    //          +-+   +-+   +-+
+    //          +-+   +-+    +-+   +-+
+    //          |E|   |E|    |E|
+    //          +-+   +-+    +-+
+    //          |P|   |P|    |P|
+    //          +-+   +-+    +-+
     connection[actionTypes.ROUTE_CHANGE_SUCCEED](
       actions.routeChangeSucceed({
         selectedItem: { type: 'post', id: 10 },
