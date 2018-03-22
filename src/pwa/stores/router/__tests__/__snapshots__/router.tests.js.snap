@@ -134,6 +134,438 @@ Array [
 ]
 `;
 
+exports[`Connection › Router Columns should not below items if extracted before that item is not resolved 1`] = `
+Array [
+  Object {
+    "generator": Object {
+      "columns": Array [
+        Array [
+          Object {
+            "id": 1,
+            "type": "post",
+          },
+        ],
+        Array [
+          Object {
+            "extract": true,
+            "id": 2,
+            "page": 1,
+            "type": "category",
+          },
+        ],
+        Array [
+          Object {
+            "id": 3,
+            "type": "post",
+          },
+        ],
+        Array [
+          Object {
+            "id": 4,
+            "type": "post",
+          },
+          Object {
+            "id": 5,
+            "type": "post",
+          },
+          Object {
+            "extract": true,
+            "id": 6,
+            "page": 1,
+            "type": "category",
+          },
+          Object {
+            "id": 7,
+            "type": "post",
+          },
+        ],
+        Array [
+          Object {
+            "id": 8,
+            "type": "post",
+          },
+        ],
+        Array [
+          Object {
+            "id": 9,
+            "type": "post",
+          },
+          Object {
+            "id": 10,
+            "type": "post",
+          },
+          Object {
+            "extract": true,
+            "id": 11,
+            "page": 1,
+            "type": "category",
+          },
+          Object {
+            "id": 12,
+            "type": "post",
+          },
+        ],
+        Array [
+          Object {
+            "id": 13,
+            "type": "post",
+          },
+        ],
+        Array [
+          Object {
+            "id": 14,
+            "type": "post",
+          },
+          Object {
+            "id": 15,
+            "type": "post",
+          },
+          Object {
+            "extract": true,
+            "id": 16,
+            "page": 1,
+            "type": "category",
+          },
+          Object {
+            "id": 17,
+            "type": "post",
+          },
+        ],
+        Array [
+          Object {
+            "id": 18,
+            "type": "post",
+          },
+        ],
+        Array [
+          Object {
+            "extract": true,
+            "id": 19,
+            "page": 1,
+            "type": "category",
+          },
+          Object {
+            "id": 20,
+            "type": "post",
+          },
+        ],
+        Array [
+          Object {
+            "id": 21,
+            "type": "post",
+          },
+        ],
+      ],
+    },
+    "index": 0,
+    "infinite": undefined,
+    "mstIdForColumn": 11,
+    "options": undefined,
+    "rawColumns": Array [
+      Object {
+        "mstId": "context_0_column_1",
+        "rawItems": Array [
+          Object {
+            "extract": null,
+            "fromList": Object {
+              "id": "post",
+              "page": 1,
+              "type": "latest",
+            },
+            "id": 1,
+            "mstId": "0_post_1",
+            "type": "post",
+            "visited": false,
+          },
+        ],
+        "selectedItem": "",
+      },
+      Object {
+        "mstId": "context_0_column_2",
+        "rawItems": Array [
+          Object {
+            "extract": true,
+            "id": 2,
+            "mstId": "0_category_2_page_1",
+            "page": 1,
+            "type": "category",
+            "visited": false,
+          },
+        ],
+        "selectedItem": "",
+      },
+      Object {
+        "mstId": "context_0_column_3",
+        "rawItems": Array [
+          Object {
+            "extract": null,
+            "fromList": Object {
+              "id": "post",
+              "page": 1,
+              "type": "latest",
+            },
+            "id": 3,
+            "mstId": "0_post_3",
+            "type": "post",
+            "visited": false,
+          },
+        ],
+        "selectedItem": "",
+      },
+      Object {
+        "mstId": "context_0_column_4",
+        "rawItems": Array [
+          Object {
+            "extract": null,
+            "fromList": Object {
+              "id": "post",
+              "page": 1,
+              "type": "latest",
+            },
+            "id": 4,
+            "mstId": "0_post_4",
+            "type": "post",
+            "visited": false,
+          },
+          Object {
+            "extract": null,
+            "fromList": Object {
+              "id": "post",
+              "page": 1,
+              "type": "latest",
+            },
+            "id": 5,
+            "mstId": "0_post_5",
+            "type": "post",
+            "visited": false,
+          },
+          Object {
+            "extract": true,
+            "id": 6,
+            "mstId": "0_category_6_page_1",
+            "page": 1,
+            "type": "category",
+            "visited": false,
+          },
+          Object {
+            "extract": null,
+            "fromList": Object {
+              "id": "post",
+              "page": 1,
+              "type": "latest",
+            },
+            "id": 7,
+            "mstId": "0_post_7",
+            "type": "post",
+            "visited": false,
+          },
+        ],
+        "selectedItem": "",
+      },
+      Object {
+        "mstId": "context_0_column_5",
+        "rawItems": Array [
+          Object {
+            "extract": null,
+            "fromList": Object {
+              "id": "post",
+              "page": 1,
+              "type": "latest",
+            },
+            "id": 8,
+            "mstId": "0_post_8",
+            "type": "post",
+            "visited": false,
+          },
+        ],
+        "selectedItem": "",
+      },
+      Object {
+        "mstId": "context_0_column_6",
+        "rawItems": Array [
+          Object {
+            "extract": null,
+            "fromList": Object {
+              "id": "post",
+              "page": 1,
+              "type": "latest",
+            },
+            "id": 9,
+            "mstId": "0_post_9",
+            "type": "post",
+            "visited": true,
+          },
+          Object {
+            "extract": null,
+            "fromList": Object {
+              "id": "post",
+              "page": 1,
+              "type": "latest",
+            },
+            "id": 10,
+            "mstId": "0_post_10",
+            "type": "post",
+            "visited": false,
+          },
+          Object {
+            "extract": true,
+            "id": 11,
+            "mstId": "0_category_11_page_1",
+            "page": 1,
+            "type": "category",
+            "visited": false,
+          },
+          Object {
+            "extract": null,
+            "fromList": Object {
+              "id": "post",
+              "page": 1,
+              "type": "latest",
+            },
+            "id": 12,
+            "mstId": "0_post_12",
+            "type": "post",
+            "visited": false,
+          },
+        ],
+        "selectedItem": "0_post_9",
+      },
+      Object {
+        "mstId": "context_0_column_7",
+        "rawItems": Array [
+          Object {
+            "extract": null,
+            "fromList": Object {
+              "id": "post",
+              "page": 1,
+              "type": "latest",
+            },
+            "id": 13,
+            "mstId": "0_post_13",
+            "type": "post",
+            "visited": false,
+          },
+        ],
+        "selectedItem": "",
+      },
+      Object {
+        "mstId": "context_0_column_8",
+        "rawItems": Array [
+          Object {
+            "extract": null,
+            "fromList": Object {
+              "id": "post",
+              "page": 1,
+              "type": "latest",
+            },
+            "id": 14,
+            "mstId": "0_post_14",
+            "type": "post",
+            "visited": false,
+          },
+          Object {
+            "extract": null,
+            "fromList": Object {
+              "id": "post",
+              "page": 1,
+              "type": "latest",
+            },
+            "id": 15,
+            "mstId": "0_post_15",
+            "type": "post",
+            "visited": false,
+          },
+          Object {
+            "extract": true,
+            "id": 16,
+            "mstId": "0_category_16_page_1",
+            "page": 1,
+            "type": "category",
+            "visited": false,
+          },
+          Object {
+            "extract": null,
+            "fromList": Object {
+              "id": "post",
+              "page": 1,
+              "type": "latest",
+            },
+            "id": 17,
+            "mstId": "0_post_17",
+            "type": "post",
+            "visited": false,
+          },
+        ],
+        "selectedItem": "",
+      },
+      Object {
+        "mstId": "context_0_column_9",
+        "rawItems": Array [
+          Object {
+            "extract": null,
+            "fromList": Object {
+              "id": "post",
+              "page": 1,
+              "type": "latest",
+            },
+            "id": 18,
+            "mstId": "0_post_18",
+            "type": "post",
+            "visited": false,
+          },
+        ],
+        "selectedItem": "",
+      },
+      Object {
+        "mstId": "context_0_column_10",
+        "rawItems": Array [
+          Object {
+            "extract": true,
+            "id": 19,
+            "mstId": "0_category_19_page_1",
+            "page": 1,
+            "type": "category",
+            "visited": false,
+          },
+          Object {
+            "extract": null,
+            "fromList": Object {
+              "id": "post",
+              "page": 1,
+              "type": "latest",
+            },
+            "id": 20,
+            "mstId": "0_post_20",
+            "type": "post",
+            "visited": false,
+          },
+        ],
+        "selectedItem": "",
+      },
+      Object {
+        "mstId": "context_0_column_11",
+        "rawItems": Array [
+          Object {
+            "extract": null,
+            "fromList": Object {
+              "id": "post",
+              "page": 1,
+              "type": "latest",
+            },
+            "id": 21,
+            "mstId": "0_post_21",
+            "type": "post",
+            "visited": false,
+          },
+        ],
+        "selectedItem": "",
+      },
+    ],
+    "selectedColumn": "context_0_column_6",
+  },
+]
+`;
+
 exports[`Connection › Router Columns should not show next items if extracted after that item is not resolved 1`] = `
 Array [
   Object {

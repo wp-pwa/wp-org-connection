@@ -516,6 +516,32 @@ describe('Connection › Router', () => {
     expect(connection.selectedContext.columns.length).toBe(1);
   });
 
+  test('Columns should not below items if extracted before that item is not resolved', () => {
+    connection[actionTypes.ROUTE_CHANGE_SUCCEED](
+      actions.routeChangeSucceed({
+        selectedItem: { type: 'post', id: 9 },
+        context: {
+          columns: [
+            [{ type: 'post', id: 1 }],
+            [{ type: 'category', id: 2, page: 1, extract: true }],
+            [{ type: 'post', id: 3 }],
+            [{ type: 'post', id: 4 }, { type: 'post', id: 5 }, { type: 'category', id: 6, page: 1, extract: true }, { type: 'post', id: 7 }],
+            [{ type: 'post', id: 8 }],
+            [{ type: 'post', id: 9 }, { type: 'post', id: 10 }, { type: 'category', id: 11, page: 1, extract: true }, { type: 'post', id: 12 }],
+            [{ type: 'post', id: 13 }],
+            [{ type: 'post', id: 14 }, { type: 'post', id: 15 }, { type: 'category', id: 16, page: 1, extract: true }, { type: 'post', id: 17 }],
+            [{ type: 'post', id: 18 }],
+            [{ type: 'category', id: 19, page: 1, extract: true }, { type: 'post', id: 20 }],
+            [{ type: 'post', id: 21 }],
+          ],
+        },
+      }),
+    );
+    expect(connection.contexts).toMatchSnapshot();
+    expect(connection.selectedContext.columns.length).toBe(3);
+    expect(connection.selectedContext.columns[2].items.length).toBe(1);
+  });
+
   test('Add items from extracted once they are ready', () => {
     connection[actionTypes.ROUTE_CHANGE_SUCCEED](
       actions.routeChangeSucceed({
@@ -537,18 +563,6 @@ describe('Connection › Router', () => {
     expect(resultFromCategory7.length).toBe(5);
     expect(connection.selectedContext.rawColumns.length).toBe(6);
     expect(connection.selectedContext.columns.length).toBe(6);
-  });
-
-  test('Throw if extracted is added in a column with more stuff', () => {
-    expect(() => connection[actionTypes.ROUTE_CHANGE_SUCCEED](
-      actions.routeChangeSucceed({
-        selectedItem: { type: 'post', id: 60 },
-        context: { columns: [
-          [{ type: 'post', id: 60 }],
-          [{ type: 'post', id: 63 }, { type: 'category', id: 7, page: 1, extract: true }],
-        ] },
-      }),
-    )).toThrow();
   });
 
   // //////////////////////////////////////////////////////////////////////////////////////////////
