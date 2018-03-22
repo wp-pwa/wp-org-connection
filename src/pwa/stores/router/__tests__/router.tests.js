@@ -565,6 +565,30 @@ describe('Connection › Router', () => {
     expect(connection.selectedContext.columns.length).toBe(6);
   });
 
+  test('Don\'t throw if vertical extracted is added in a column with more stuff', () => {
+    expect(() => connection[actionTypes.ROUTE_CHANGE_SUCCEED](
+      actions.routeChangeSucceed({
+        selectedItem: { type: 'post', id: 60 },
+        context: { columns: [
+          [{ type: 'post', id: 60 }],
+          [{ type: 'post', id: 63 }, { type: 'category', id: 7, page: 1, extract: 'vertical' }],
+        ] },
+      }),
+    )).not.toThrow();
+  });
+
+  test('Throw if horizontal extracted is added in a column with more stuff', () => {
+    expect(() => connection[actionTypes.ROUTE_CHANGE_SUCCEED](
+      actions.routeChangeSucceed({
+        selectedItem: { type: 'post', id: 60 },
+        context: { columns: [
+          [{ type: 'post', id: 60 }],
+          [{ type: 'post', id: 63 }, { type: 'category', id: 7, page: 1, extract: 'horizontal' }],
+        ] },
+      }),
+    )).toThrow();
+  });
+
   // //////////////////////////////////////////////////////////////////////////////////////////////
   // actions.routeChangeSucceed({
   //   selectedItem: { type: 'post', id: 60 },

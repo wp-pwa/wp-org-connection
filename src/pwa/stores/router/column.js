@@ -27,11 +27,9 @@ const Column = types
       const columns = getParent(self);
       return columns ? columns.indexOf(self) : -1;
     },
-    get hasExtracted() {
-      return self.rawItems.reduce(
-        (acc, item) => acc || ['horizontal', 'vertical'].includes(item.extract),
-        false,
-      );
+    hasExtracted(direction) {
+      direction = direction ? [direction] : ['horizontal', 'vertical'];
+      return self.rawItems.reduce((acc, item) => acc || direction.includes(item.extract), false);
     },
   }));
 
