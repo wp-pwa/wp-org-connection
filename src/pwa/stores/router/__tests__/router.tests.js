@@ -534,11 +534,26 @@ describe('Connection › Router', () => {
             [{ type: 'post', id: 1 }],
             [{ type: 'category', id: 2, page: 1, extract: 'horizontal' }],
             [{ type: 'post', id: 3 }],
-            [{ type: 'post', id: 4 }, { type: 'post', id: 5 }, { type: 'category', id: 6, page: 1, extract: 'vertical' }, { type: 'post', id: 7 }],
+            [
+              { type: 'post', id: 4 },
+              { type: 'post', id: 5 },
+              { type: 'category', id: 6, page: 1, extract: 'vertical' },
+              { type: 'post', id: 7 },
+            ],
             [{ type: 'post', id: 8 }],
-            [{ type: 'post', id: 9 }, { type: 'post', id: 10 }, { type: 'category', id: 11, page: 1, extract: 'vertical' }, { type: 'post', id: 12 }],
+            [
+              { type: 'post', id: 9 },
+              { type: 'post', id: 10 },
+              { type: 'category', id: 11, page: 1, extract: 'vertical' },
+              { type: 'post', id: 12 },
+            ],
             [{ type: 'post', id: 13 }],
-            [{ type: 'post', id: 14 }, { type: 'post', id: 15 }, { type: 'category', id: 16, page: 1, extract: 'vertical' }, { type: 'post', id: 17 }],
+            [
+              { type: 'post', id: 14 },
+              { type: 'post', id: 15 },
+              { type: 'category', id: 16, page: 1, extract: 'vertical' },
+              { type: 'post', id: 17 },
+            ],
             [{ type: 'post', id: 18 }],
             [{ type: 'category', id: 19, page: 1, extract: 'vertical' }, { type: 'post', id: 20 }],
             [{ type: 'post', id: 21 }],
@@ -577,28 +592,39 @@ describe('Connection › Router', () => {
     expect(connection.selectedContext.columns.length).toBe(6);
   });
 
-  test('Don\'t throw if vertical extracted is added in a column with more stuff', () => {
-    expect(() => connection[actionTypes.ROUTE_CHANGE_SUCCEED](
-      actions.routeChangeSucceed({
-        selectedItem: { type: 'post', id: 60 },
-        context: { columns: [
-          [{ type: 'post', id: 60 }],
-          [{ type: 'post', id: 63 }, { type: 'category', id: 7, page: 1, extract: 'vertical' }],
-        ] },
-      }),
-    )).not.toThrow();
+  test("Don't throw if vertical extracted is added in a column with more stuff", () => {
+    expect(() =>
+      connection[actionTypes.ROUTE_CHANGE_SUCCEED](
+        actions.routeChangeSucceed({
+          selectedItem: { type: 'post', id: 60 },
+          context: {
+            columns: [
+              [{ type: 'post', id: 60 }],
+              [{ type: 'post', id: 63 }, { type: 'category', id: 7, page: 1, extract: 'vertical' }],
+            ],
+          },
+        }),
+      ),
+    ).not.toThrow();
   });
 
   test('Throw if horizontal extracted is added in a column with more stuff', () => {
-    expect(() => connection[actionTypes.ROUTE_CHANGE_SUCCEED](
-      actions.routeChangeSucceed({
-        selectedItem: { type: 'post', id: 60 },
-        context: { columns: [
-          [{ type: 'post', id: 60 }],
-          [{ type: 'post', id: 63 }, { type: 'category', id: 7, page: 1, extract: 'horizontal' }],
-        ] },
-      }),
-    )).toThrow();
+    expect(() =>
+      connection[actionTypes.ROUTE_CHANGE_SUCCEED](
+        actions.routeChangeSucceed({
+          selectedItem: { type: 'post', id: 60 },
+          context: {
+            columns: [
+              [{ type: 'post', id: 60 }],
+              [
+                { type: 'post', id: 63 },
+                { type: 'category', id: 7, page: 1, extract: 'horizontal' },
+              ],
+            ],
+          },
+        }),
+      ),
+    ).toThrow();
   });
 
   // //////////////////////////////////////////////////////////////////////////////////////////////
