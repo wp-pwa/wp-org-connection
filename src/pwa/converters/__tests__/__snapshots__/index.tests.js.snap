@@ -35,12 +35,12 @@ Object {
   "caption": "",
   "creationDate": 1490628231000,
   "description": "",
+  "headMeta": Object {
+    "title": "road-trip - Demo Worona",
+  },
   "id": 193,
   "link": "https://demo.worona.org/audio-test/about-us/road-trip/",
   "mediaType": "image",
-  "meta": Object {
-    "title": "road-trip - Demo Worona",
-  },
   "mimeType": "image/png",
   "mst": "media",
   "original": Object {
@@ -82,12 +82,12 @@ Object {
   "caption": undefined,
   "creationDate": 946681200000,
   "description": undefined,
+  "headMeta": Object {
+    "title": "iceland - Demo Worona",
+  },
   "id": 62,
   "link": "https://demo.worona.org/the-beauties-of-gullfoss/iceland-test/",
   "mediaType": "image",
-  "meta": Object {
-    "title": "iceland - Demo Worona",
-  },
   "mimeType": "image/jpeg",
   "mst": "media",
   "original": Object {
