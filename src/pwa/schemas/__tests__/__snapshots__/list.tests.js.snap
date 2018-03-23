@@ -194,8 +194,7 @@ Object {
       "taxonomy": "category",
       "type": "category",
       "yoast_meta": Object {
-        "yoast_wpseo_metadesc": "",
-        "yoast_wpseo_title": "Cities Archives - Demo Worona",
+        "title": "Cities Archives - Demo Worona",
       },
     },
     "5": Object {
@@ -237,8 +236,7 @@ Object {
             "slug": "cities",
             "taxonomy": "category",
             "yoast_meta": Object {
-              "yoast_wpseo_metadesc": "",
-              "yoast_wpseo_title": "Cities Archives - Demo Worona",
+              "title": "Cities Archives - Demo Worona",
             },
           },
         ],
@@ -290,8 +288,7 @@ Object {
       "taxonomy": "category",
       "type": "category",
       "yoast_meta": Object {
-        "yoast_wpseo_metadesc": "",
-        "yoast_wpseo_title": "Architecture Archives - Demo Worona",
+        "title": "Architecture Archives - Demo Worona",
       },
     },
     "6": Object {
@@ -336,8 +333,7 @@ Object {
       "taxonomy": "category",
       "type": "category",
       "yoast_meta": Object {
-        "yoast_wpseo_metadesc": "",
-        "yoast_wpseo_title": "Culture Archives - Demo Worona",
+        "title": "Culture Archives - Demo Worona",
       },
     },
   },
