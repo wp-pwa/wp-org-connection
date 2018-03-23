@@ -15,6 +15,7 @@ test('Convert post using entity', () => {
   expect(entities.taxonomy[3]).toMatchSnapshot();
   expect(entities.taxonomy[10]).toMatchSnapshot();
   expect(entities.author[4]).toMatchSnapshot();
+  expect(entities.taxonomy.post).toMatchSnapshot();
 });
 
 test('Convert a category using entity', () => {

@@ -554,7 +554,9 @@ Object {
         13,
         11,
       ],
-      Array [],
+      Array [
+        "post",
+      ],
     ],
   },
   "_links": Object {
@@ -721,6 +723,9 @@ Category: <a href=\\"https://demo.worona.org/wp-cat/travel/\\">Travel</a></p>
     "category": Array [
       3,
       8,
+    ],
+    "latest": Array [
+      "post",
     ],
     "tag": Array [
       10,
@@ -985,5 +990,21 @@ Object {
   "slug": "alan",
   "type": "author",
   "url": "",
+}
+`;
+
+exports[`Convert post using entity 6`] = `
+Object {
+  "count": 15,
+  "id": "post",
+  "link": "https://demo.worona.org",
+  "mst": "taxonomy",
+  "name": "Posts",
+  "slug": "post",
+  "taxonomy": "latest",
+  "type": "latest",
+  "yoast_meta": Object {
+    "title": "Demo Worona - Just another WordPress site",
+  },
 }
 `;
