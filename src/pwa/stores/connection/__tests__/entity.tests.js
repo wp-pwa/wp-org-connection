@@ -4,8 +4,8 @@ import { types, unprotect } from 'mobx-state-tree';
 import { normalize } from 'normalizr';
 import * as connect from '../';
 import post60 from '../../../__tests__/post-60.json';
-import page260 from '../../../__tests__/page-with-subpage.json';
-import page231 from '../../../__tests__/page-231.json';
+import page184 from '../../../__tests__/page-with-subpage.json';
+import page211 from '../../../__tests__/page-211.json';
 import { entity } from '../../../schemas';
 import convert from '../../../converters';
 
@@ -292,17 +292,17 @@ describe('Connection › Entity', () => {
   });
 
   test('Get parent page', done => {
-    expect(connection.entity('page', 260).parent).toBe(null);
-    const { entities: entitiesFromPage260 } = normalize(page260, entity);
-    connection.addEntity({ entity: entitiesFromPage260.single[260] });
-    expect(connection.entity('page', 260).parent.id).toBe(231);
-    expect(connection.entity('page', 260).parent.title).toBe('');
+    expect(connection.entity('page', 184).parent).toBe(null);
+    const { entities: entitiesFromPage184 } = normalize(page184, entity);
+    connection.addEntity({ entity: entitiesFromPage184.single[184] });
+    expect(connection.entity('page', 184).parent.id).toBe(211);
+    expect(connection.entity('page', 184).parent.title).toBe('');
     autorun(() => {
-      if (connection.entity('page', 260).parent.title === 'Aplicaciones') done();
+      if (connection.entity('page', 184).parent.title === 'Aplicaciones') done();
     });
-    const { entities: entitiesFromPage231 } = normalize(page231, entity);
-    connection.addEntity({ entity: entitiesFromPage231.single[231] });
-    expect(connection.entity('page', 260).parent.id).toBe(231);
-    expect(connection.entity('page', 260).parent.title).toBe('Aplicaciones');
+    const { entities: entitiesFromPage211 } = normalize(page211, entity);
+    connection.addEntity({ entity: entitiesFromPage211.single[211] });
+    expect(connection.entity('page', 184).parent.id).toBe(211);
+    expect(connection.entity('page', 184).parent.title).toBe('Aplicaciones');
   });
 });
