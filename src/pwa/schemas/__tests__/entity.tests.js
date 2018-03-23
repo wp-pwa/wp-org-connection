@@ -1,9 +1,14 @@
 import { normalize } from 'normalizr';
+// https://demo.worona.org/?rest_route=/wp/v2/posts/60&_embed=true
 import post60 from '../../__tests__/post-60.json';
+// https://demo.worona.org/?rest_route=/wp/v2/categories/7&_embed=true
 import category7 from '../../__tests__/category-7.json';
+// https://demo.worona.org/?rest_route=/wp/v2/tags/10&_embed=true
 import tag10 from '../../__tests__/tag-10.json';
+// https://demo.worona.org/?rest_route=/wp/v2/users/4&_embed=true
 import author4 from '../../__tests__/author-4.json';
-import media2687 from '../../__tests__/media-2687.json';
+// https://demo.worona.org/?rest_route=/wp/v2/media/212&_embed=true
+import media212 from '../../__tests__/media-212.json';
 import page260 from '../../__tests__/page-with-subpage.json';
 import latestMovie from '../../__tests__/latest-movie.json'
 import { entity } from '../';
@@ -34,8 +39,8 @@ test('Convert a author using entity', () => {
 });
 
 test('Convert a media using entity', () => {
-  const { entities } = normalize(media2687, entity);
-  expect(entities.media[2687]).toMatchSnapshot();
+  const { entities } = normalize(media212, entity);
+  expect(entities.media[212]).toMatchSnapshot();
 });
 
 test('Convert a page using entity and ignore subpages', () => {
