@@ -6,7 +6,7 @@ import entityShape, {
   pagedLink,
   mediaShape,
   authorShape,
-  metaShape,
+  headMetaShape,
   originalShape,
 } from './entity-shape';
 
@@ -76,8 +76,8 @@ const single = self => ({
       authorShape('author', self.ready && self.entity.author)
     );
   },
-  get meta() {
-    return (self.ready && self.entity.meta) || metaShape;
+  get headMeta() {
+    return (self.ready && self.entity.headMeta) || headMetaShape;
   },
 });
 

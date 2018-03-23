@@ -41,14 +41,12 @@ Object {
     "creationDate": null,
     "description": "",
     "fetching": false,
+    "headMeta": Object {
+      "title": "",
+    },
     "id": null,
     "link": "/",
     "mediaType": "",
-    "meta": Object {
-      "canonical": "",
-      "description": "",
-      "title": "",
-    },
     "mimeType": "",
     "mstId": "",
     "original": Object {
@@ -65,14 +63,12 @@ Object {
     "type": "media",
   },
   "fetching": false,
+  "headMeta": Object {
+    "title": "",
+  },
   "id": "someId",
   "link": "/",
   "mediaType": "",
-  "meta": Object {
-    "canonical": "",
-    "description": "",
-    "title": "",
-  },
   "mimeType": "",
   "modificationDate": null,
   "mstId": "someType_someId",

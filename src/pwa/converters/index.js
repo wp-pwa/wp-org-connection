@@ -62,7 +62,7 @@ export const media = entity => ({
   description: entity.description && entity.description.rendered,
   caption: entity.caption && entity.caption.rendered,
   author: entity.author,
-  meta: {
+  headMeta: {
     title: decode(
       (entity.yoast_meta && entity.yoast_meta.title) || entity.title.rendered,
     ),
