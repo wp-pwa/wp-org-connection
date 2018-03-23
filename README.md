@@ -8,6 +8,10 @@ Finally, use `npm run start:pwa` to start the development environment.
 
 ## Changelog
 
+#### 1.4.1
+
+- Go back to initialUrl and check if it's complete
+
 #### 1.4.0
 
 - Add initialUri compatibility
