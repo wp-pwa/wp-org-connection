@@ -436,8 +436,7 @@ Object {
   "taxonomy": "tag",
   "type": "tag",
   "yoast_meta": Object {
-    "yoast_wpseo_metadesc": "",
-    "yoast_wpseo_title": "Gullfoss Archives - Demo Worona",
+    "title": "Gullfoss Archives - Demo Worona",
   },
 }
 `;

@@ -7,10 +7,7 @@
   "slug": "gullfoss",
   "taxonomy": "post_tag",
   "meta": {},
-  "yoast_meta": {
-    "yoast_wpseo_title": "Gullfoss Archives - Demo Worona",
-    "yoast_wpseo_metadesc": ""
-  },
+  "yoast_meta": { "title": "Gullfoss Archives - Demo Worona" },
   "_links": {
     "self": [{ "href": "https://demo.worona.org/wp-json/wp/v2/tags/10" }],
     "collection": [{ "href": "https://demo.worona.org/wp-json/wp/v2/tags" }],
