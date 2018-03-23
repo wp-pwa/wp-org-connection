@@ -85,6 +85,18 @@ Object {
     "author": Array [
       6,
     ],
+    "wp:term": Array [
+      Array [
+        Object {
+          "count": 0,
+          "id": "attachment",
+          "link": false,
+          "name": "Media",
+          "slug": "attachment",
+          "taxonomy": "latest",
+        },
+      ],
+    ],
   },
   "_links": Object {
     "about": Array [
@@ -103,6 +115,13 @@ Object {
         "href": "https://blog.worona.org/wp-json/wp/v2/media",
       },
     ],
+    "curies": Array [
+      Object {
+        "href": "https://api.w.org/{rel}",
+        "name": "wp",
+        "templated": true,
+      },
+    ],
     "replies": Array [
       Object {
         "embeddable": true,
@@ -112,6 +131,13 @@ Object {
     "self": Array [
       Object {
         "href": "https://blog.worona.org/wp-json/wp/v2/media/2687",
+      },
+    ],
+    "wp:term": Array [
+      Object {
+        "embeddable": true,
+        "href": "https://blog.worona.org/wp-json/wp/v2/latest?attachment=2687",
+        "taxonomy": "latest",
       },
     ],
   },
@@ -124,13 +150,16 @@ Object {
   "date": "2018-01-15T16:12:44",
   "date_gmt": "2018-01-15T16:12:44",
   "description": Object {
-    "rendered": "<p class=\\"attachment\\"><a href='https://blog.worona.org/wp-content/uploads/2016/03/faq-questions-answers.jpg'><img width=\\"300\\" height=\\"177\\" src=\\"https://blog.worona.org/wp-content/uploads/2016/03/faq-questions-answers-300x177.jpg\\" class=\\"attachment-medium size-medium\\" alt=\\"faq-questions-answers\\" srcset=\\"https://blog.worona.org/wp-content/uploads/2016/03/faq-questions-answers-300x177.jpg 300w, https://blog.worona.org/wp-content/uploads/2016/03/faq-questions-answers-768x452.jpg 768w, https://blog.worona.org/wp-content/uploads/2016/03/faq-questions-answers-1024x603.jpg 1024w, https://blog.worona.org/wp-content/uploads/2016/03/faq-questions-answers-700x412.jpg 700w\\" sizes=\\"(max-width: 300px) 100vw, 300px\\" /></a></p>
+    "rendered": "<p class=\\"attachment\\"><a href='https://blog.worona.org/wp-content/uploads/2016/03/faq-questions-answers.jpg'><img data-attachment-id=\\"0\\" width=\\"300\\" height=\\"177\\" src=\\"https://blog.worona.org/wp-content/uploads/2016/03/faq-questions-answers-300x177.jpg\\" class=\\"attachment-medium size-medium\\" alt=\\"faq-questions-answers\\" srcset=\\"https://blog.worona.org/wp-content/uploads/2016/03/faq-questions-answers-300x177.jpg 300w, https://blog.worona.org/wp-content/uploads/2016/03/faq-questions-answers-768x452.jpg 768w, https://blog.worona.org/wp-content/uploads/2016/03/faq-questions-answers-1024x603.jpg 1024w, https://blog.worona.org/wp-content/uploads/2016/03/faq-questions-answers-700x412.jpg 700w\\" sizes=\\"(max-width: 300px) 100vw, 300px\\" /></a></p>
 ",
   },
   "guid": Object {
     "rendered": "https://blog.worona.org/wp-content/uploads/2016/03/faq-questions-answers.jpg",
   },
   "id": 2687,
+  "latest": Array [
+    "attachment",
+  ],
   "link": "https://blog.worona.org/the-google-amp-phenomenon/faq-questions-answers/",
   "media_details": Object {
     "file": "2016/03/faq-questions-answers.jpg",

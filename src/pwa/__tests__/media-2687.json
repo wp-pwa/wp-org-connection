@@ -17,9 +17,10 @@
   "ping_status": "closed",
   "template": "",
   "meta": [],
+  "latest": ["attachment"],
   "description": {
     "rendered":
-      "<p class=\"attachment\"><a href='https://blog.worona.org/wp-content/uploads/2016/03/faq-questions-answers.jpg'><img width=\"300\" height=\"177\" src=\"https://blog.worona.org/wp-content/uploads/2016/03/faq-questions-answers-300x177.jpg\" class=\"attachment-medium size-medium\" alt=\"faq-questions-answers\" srcset=\"https://blog.worona.org/wp-content/uploads/2016/03/faq-questions-answers-300x177.jpg 300w, https://blog.worona.org/wp-content/uploads/2016/03/faq-questions-answers-768x452.jpg 768w, https://blog.worona.org/wp-content/uploads/2016/03/faq-questions-answers-1024x603.jpg 1024w, https://blog.worona.org/wp-content/uploads/2016/03/faq-questions-answers-700x412.jpg 700w\" sizes=\"(max-width: 300px) 100vw, 300px\" /></a></p>\n"
+      "<p class=\"attachment\"><a href='https://blog.worona.org/wp-content/uploads/2016/03/faq-questions-answers.jpg'><img data-attachment-id=\"0\" width=\"300\" height=\"177\" src=\"https://blog.worona.org/wp-content/uploads/2016/03/faq-questions-answers-300x177.jpg\" class=\"attachment-medium size-medium\" alt=\"faq-questions-answers\" srcset=\"https://blog.worona.org/wp-content/uploads/2016/03/faq-questions-answers-300x177.jpg 300w, https://blog.worona.org/wp-content/uploads/2016/03/faq-questions-answers-768x452.jpg 768w, https://blog.worona.org/wp-content/uploads/2016/03/faq-questions-answers-1024x603.jpg 1024w, https://blog.worona.org/wp-content/uploads/2016/03/faq-questions-answers-700x412.jpg 700w\" sizes=\"(max-width: 300px) 100vw, 300px\" /></a></p>\n"
   },
   "caption": {
     "rendered":
@@ -113,7 +114,15 @@
     "author": [{ "embeddable": true, "href": "https://blog.worona.org/wp-json/wp/v2/users/6" }],
     "replies": [
       { "embeddable": true, "href": "https://blog.worona.org/wp-json/wp/v2/comments?post=2687" }
-    ]
+    ],
+    "wp:term": [
+      {
+        "taxonomy": "latest",
+        "embeddable": true,
+        "href": "https://blog.worona.org/wp-json/wp/v2/latest?attachment=2687"
+      }
+    ],
+    "curies": [{ "name": "wp", "href": "https://api.w.org/{rel}", "templated": true }]
   },
   "_embedded": {
     "author": [
@@ -134,6 +143,18 @@
           "collection": [{ "href": "https://blog.worona.org/wp-json/wp/v2/users" }]
         }
       }
+    ],
+    "wp:term": [
+      [
+        {
+          "id": "attachment",
+          "link": false,
+          "count": 0,
+          "name": "Media",
+          "slug": "attachment",
+          "taxonomy": "latest"
+        }
+      ]
     ]
   }
 }
