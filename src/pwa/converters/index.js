@@ -17,7 +17,7 @@ export const single = entity => ({
   taxonomies: entity.taxonomiesMap,
   parent: entity.parent,
   target: entity['post-target'],
-  head_meta: {
+  headMeta: {
     title: decode(
       (entity.yoast_meta && entity.yoast_meta.title) || entity.title.rendered,
     ),
@@ -32,7 +32,7 @@ export const taxonomy = entity => ({
   link: entity.link,
   type: entity.type,
   target: entity['term-target'],
-  head_meta: {
+  headMeta: {
     title: (entity.yoast_meta && entity.yoast_meta.title) || entity.name,
   },
 });

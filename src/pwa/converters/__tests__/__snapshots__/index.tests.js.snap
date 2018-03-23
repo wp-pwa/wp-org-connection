@@ -15,7 +15,7 @@ Object {
 
 exports[`Convert category 1`] = `
 Object {
-  "head_meta": Object {
+  "headMeta": Object {
     "title": "Photography Archives - Demo Worona",
   },
   "id": 3,
@@ -149,7 +149,7 @@ Object {
   "excerpt": "<p>If you are just curious about our story you&#8217;re in the right spot 🙂 This site features articles on cities in Europe and around the world. We’re passionate about travelling— doing something fun, seeing cool things, and meeting different people. “Twenty years from now you will be more disappointed by the things you didn’t do &hellip; <a href=\\"https://demo.worona.org/audio-test/about-us/\\" class=\\"more-link\\">Continue reading<span class=\\"screen-reader-text\\"> &#8220;About us&#8221;</span></a></p>
 ",
   "featured": null,
-  "head_meta": Object {
+  "headMeta": Object {
     "title": "About us - Demo Worona",
   },
   "id": 184,
@@ -228,7 +228,7 @@ Category: <a href=\\"https://demo.worona.org/wp-cat/travel/\\">Travel</a></p>
   "excerpt": "<p>Gullfoss is a waterfall located in the canyon of the Hvítá river in southwest Iceland.</p>
 ",
   "featured": 62,
-  "head_meta": Object {
+  "headMeta": Object {
     "title": "The Beauties of Gullfoss - Demo Worona",
   },
   "id": 60,
@@ -260,7 +260,7 @@ Category: <a href=\\"https://demo.worona.org/wp-cat/travel/\\">Travel</a></p>
 
 exports[`Convert tag 1`] = `
 Object {
-  "head_meta": Object {
+  "headMeta": Object {
     "title": "Iceland Archives - Demo Worona",
   },
   "id": 9,
