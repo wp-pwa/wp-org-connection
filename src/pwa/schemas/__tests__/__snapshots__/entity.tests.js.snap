@@ -74,8 +74,7 @@ Object {
   "taxonomy": "category",
   "type": "category",
   "yoast_meta": Object {
-    "yoast_wpseo_metadesc": "",
-    "yoast_wpseo_title": "Nature Archives - Demo Worona",
+    "title": "Nature Archives - Demo Worona",
   },
 }
 `;
