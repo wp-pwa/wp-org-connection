@@ -17,12 +17,10 @@ export const single = entity => ({
   taxonomies: entity.taxonomiesMap,
   parent: entity.parent,
   target: entity['post-target'],
-  meta: {
+  head_meta: {
     title: decode(
-      (entity.yoast_meta && entity.yoast_meta.yoast_wpseo_title) || entity.title.rendered,
+      (entity.yoast_meta && entity.yoast_meta.title) || entity.title.rendered,
     ),
-    description: (entity.yoast_meta && entity.yoast_meta.yoast_wpseo_desc) || '',
-    canonical: (entity.yoast_meta && entity.yoast_meta.yoast_wpseo_canonical) || '',
   },
 });
 
@@ -34,10 +32,8 @@ export const taxonomy = entity => ({
   link: entity.link,
   type: entity.type,
   target: entity['term-target'],
-  meta: {
-    title: (entity.yoast_meta && entity.yoast_meta.yoast_wpseo_title) || entity.name,
-    description: (entity.yoast_meta && entity.yoast_meta.yoast_wpseo_desc) || '',
-    canonical: (entity.yoast_meta && entity.yoast_meta.yoast_wpseo_canonical) || '',
+  head_meta: {
+    title: (entity.yoast_meta && entity.yoast_meta.title) || entity.name,
   },
 });
 
@@ -68,10 +64,8 @@ export const media = entity => ({
   author: entity.author,
   meta: {
     title: decode(
-      (entity.yoast_meta && entity.yoast_meta.yoast_wpseo_title) || entity.title.rendered,
+      (entity.yoast_meta && entity.yoast_meta.title) || entity.title.rendered,
     ),
-    description: (entity.yoast_meta && entity.yoast_meta.yoast_wpseo_desc) || '',
-    canonical: (entity.yoast_meta && entity.yoast_meta.yoast_wpseo_canonical) || '',
   },
   original: {
     height: entity.media_details.height,
