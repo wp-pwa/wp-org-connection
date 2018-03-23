@@ -79,6 +79,22 @@ Object {
 }
 `;
 
+exports[`Convert a latest taxonomy using entity 1`] = `
+Object {
+  "count": 1,
+  "id": "movie",
+  "link": "https://demo.worona.test/aaa/?post_type=movie",
+  "mst": "taxonomy",
+  "name": "Movies",
+  "slug": "movie",
+  "taxonomy": "latest",
+  "type": "latest",
+  "yoast_meta": Object {
+    "title": "Movies aarchivesss | Demo Worona",
+  },
+}
+`;
+
 exports[`Convert a media using entity 1`] = `
 Object {
   "_embedded": Object {

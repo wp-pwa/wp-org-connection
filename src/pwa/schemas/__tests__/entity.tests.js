@@ -5,6 +5,7 @@ import tag10 from '../../__tests__/tag-10.json';
 import author4 from '../../__tests__/author-4.json';
 import media2687 from '../../__tests__/media-2687.json';
 import page260 from '../../__tests__/page-with-subpage.json';
+import latestMovie from '../../__tests__/latest-movie.json'
 import { entity } from '../';
 
 test('Convert post using entity', () => {
@@ -40,4 +41,9 @@ test('Convert a page using entity and ignore subpages', () => {
   const { entities } = normalize(page260, entity);
   expect(entities.single[260]).toMatchSnapshot();
   expect(entities.single[231]).toBe(undefined);
+});
+
+test('Convert a latest taxonomy using entity', () => {
+  const { entities } = normalize(latestMovie, entity);
+  expect(entities.taxonomy.movie).toMatchSnapshot();
 });
