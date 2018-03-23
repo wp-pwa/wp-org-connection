@@ -30,28 +30,47 @@ Object {
 
 exports[`Convert media 1`] = `
 Object {
-  "alt": "",
-  "author": 6,
+  "alt": "road-trip",
+  "author": 2,
   "caption": "",
-  "creationDate": 1498558207000,
-  "description": undefined,
-  "id": 212,
-  "link": "https://demo.worona.org/audio-test/peter-griffin-tada/",
-  "mediaType": "file",
+  "creationDate": 1490628231000,
+  "description": "",
+  "id": 193,
+  "link": "https://demo.worona.org/audio-test/about-us/road-trip/",
+  "mediaType": "image",
   "meta": Object {
-    "title": "peter-griffin-tada - Demo Worona",
+    "title": "road-trip - Demo Worona",
   },
-  "mimeType": "audio/mpeg",
+  "mimeType": "image/png",
   "mst": "media",
   "original": Object {
-    "filename": undefined,
-    "height": undefined,
-    "url": "https://demo.worona.org/wp-content/uploads/2017/06/Peter-Griffin-TADA.mp3",
-    "width": undefined,
+    "filename": "2017/03/road-trip.png",
+    "height": 467,
+    "url": "https://demo.worona.org/wp-content/uploads/2017/03/road-trip.png",
+    "width": 700,
   },
-  "sizes": Array [],
-  "slug": "peter-griffin-tada",
-  "title": "peter-griffin-tada",
+  "sizes": Array [
+    Object {
+      "filename": "road-trip-150x150.png",
+      "height": 150,
+      "url": "https://demo.worona.org/wp-content/uploads/2017/03/road-trip-150x150.png",
+      "width": 150,
+    },
+    Object {
+      "filename": "road-trip-300x200.png",
+      "height": 200,
+      "url": "https://demo.worona.org/wp-content/uploads/2017/03/road-trip-300x200.png",
+      "width": 300,
+    },
+    Object {
+      "filename": "road-trip.png",
+      "height": 467,
+      "url": "https://demo.worona.org/wp-content/uploads/2017/03/road-trip.png",
+      "width": 700,
+    },
+  ],
+  "slug": "road-trip",
+  "title": "road-trip",
   "type": "media",
 }
 `;

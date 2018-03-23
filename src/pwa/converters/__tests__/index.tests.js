@@ -1,7 +1,7 @@
 import { normalize } from 'normalizr';
 import convert from '../';
 import post60 from '../../__tests__/post-60.json';
-import media212 from '../../__tests__/media-212.json';
+import media193 from '../../__tests__/media-193.json';
 import page184 from '../../__tests__/page-with-subpage.json';
 import { entity } from '../../schemas';
 
@@ -27,9 +27,9 @@ test('Convert media from post', () => {
   expect(convert(entitiesFromPost60.media[62])).toMatchSnapshot();
 });
 
-const { entities: entitiesFromMedia212 } = normalize(media212, entity);
+const { entities: entitiesFromMedia193 } = normalize(media193, entity);
 test('Convert media', () => {
-  expect(convert(entitiesFromMedia212.media[212])).toMatchSnapshot();
+  expect(convert(entitiesFromMedia193.media[193])).toMatchSnapshot();
 });
 
 const { entities: entitiesFromPage184 } = normalize(page184, entity);
