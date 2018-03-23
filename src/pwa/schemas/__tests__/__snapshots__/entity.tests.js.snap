@@ -216,7 +216,219 @@ Object {
 }
 `;
 
-exports[`Convert a page using entity and ignore subpages 1`] = `undefined`;
+exports[`Convert a page using entity and ignore subpages 1`] = `
+Object {
+  "_embedded": Object {
+    "author": Array [
+      1,
+    ],
+    "up": Array [
+      Object {
+        "_links": Object {
+          "about": Array [
+            Object {
+              "href": "https://demo.worona.org/wp-json/wp/v2/types/page",
+            },
+          ],
+          "author": Array [
+            Object {
+              "embeddable": true,
+              "href": "https://demo.worona.org/wp-json/wp/v2/users/6",
+            },
+          ],
+          "collection": Array [
+            Object {
+              "href": "https://demo.worona.org/wp-json/wp/v2/pages",
+            },
+          ],
+          "curies": Array [
+            Object {
+              "href": "https://api.w.org/{rel}",
+              "name": "wp",
+              "templated": true,
+            },
+          ],
+          "replies": Array [
+            Object {
+              "embeddable": true,
+              "href": "https://demo.worona.org/wp-json/wp/v2/comments?post=211",
+            },
+          ],
+          "self": Array [
+            Object {
+              "href": "https://demo.worona.org/wp-json/wp/v2/pages/211",
+            },
+          ],
+          "version-history": Array [
+            Object {
+              "href": "https://demo.worona.org/wp-json/wp/v2/pages/211/revisions",
+            },
+          ],
+          "wp:attachment": Array [
+            Object {
+              "href": "https://demo.worona.org/wp-json/wp/v2/media?parent=211",
+            },
+          ],
+          "wp:term": Array [
+            Object {
+              "embeddable": true,
+              "href": "https://demo.worona.org/wp-json/wp/v2/latest?page=211",
+              "taxonomy": "latest",
+            },
+          ],
+        },
+        "author": 6,
+        "date": "2017-06-27T10:10:25",
+        "excerpt": Object {
+          "protected": false,
+          "rendered": "<p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. &nbsp;</p>
+",
+        },
+        "id": 211,
+        "latest": Array [
+          "page",
+        ],
+        "link": "https://demo.worona.org/audio-test/",
+        "slug": "audio-test",
+        "title": Object {
+          "rendered": "Audio TEST",
+        },
+        "type": "page",
+        "yoast_meta": Object {
+          "title": "Audio TEST - Demo Worona",
+        },
+      },
+    ],
+    "wp:term": Array [
+      Array [
+        "page",
+      ],
+    ],
+  },
+  "_links": Object {
+    "about": Array [
+      Object {
+        "href": "https://demo.worona.org/wp-json/wp/v2/types/page",
+      },
+    ],
+    "author": Array [
+      Object {
+        "embeddable": true,
+        "href": "https://demo.worona.org/wp-json/wp/v2/users/1",
+      },
+    ],
+    "collection": Array [
+      Object {
+        "href": "https://demo.worona.org/wp-json/wp/v2/pages",
+      },
+    ],
+    "curies": Array [
+      Object {
+        "href": "https://api.w.org/{rel}",
+        "name": "wp",
+        "templated": true,
+      },
+    ],
+    "replies": Array [
+      Object {
+        "embeddable": true,
+        "href": "https://demo.worona.org/wp-json/wp/v2/comments?post=184",
+      },
+    ],
+    "self": Array [
+      Object {
+        "href": "https://demo.worona.org/wp-json/wp/v2/pages/184",
+      },
+    ],
+    "up": Array [
+      Object {
+        "embeddable": true,
+        "href": "https://demo.worona.org/wp-json/wp/v2/pages/211",
+      },
+    ],
+    "version-history": Array [
+      Object {
+        "href": "https://demo.worona.org/wp-json/wp/v2/pages/184/revisions",
+      },
+    ],
+    "wp:attachment": Array [
+      Object {
+        "href": "https://demo.worona.org/wp-json/wp/v2/media?parent=184",
+      },
+    ],
+    "wp:term": Array [
+      Object {
+        "embeddable": true,
+        "href": "https://demo.worona.org/wp-json/wp/v2/latest?page=184",
+        "taxonomy": "latest",
+      },
+    ],
+  },
+  "author": 1,
+  "comment_status": "closed",
+  "content": Object {
+    "protected": false,
+    "rendered": "<h5>If you are just curious about our story you&#8217;re in the right spot 🙂</h5>
+<p>This site features articles on cities in Europe and around the world. We’re passionate about travelling— doing something fun, seeing cool things, and meeting different people.</p>
+<blockquote><p>“Twenty years from now you will be more disappointed by the things you didn’t do than by the ones you did do.” – Mark Twain</p></blockquote>
+<p><img class=\\"alignnone size-full wp-image-185\\" src=\\"https://demo.worona.org/wp-content/uploads/2017/03/pexels-photo-297755.png\\" alt=\\"about-us-team\\" width=\\"700\\" height=\\"458\\" srcset=\\"https://demo.worona.org/wp-content/uploads/2017/03/pexels-photo-297755.png 700w, https://demo.worona.org/wp-content/uploads/2017/03/pexels-photo-297755-300x196.png 300w\\" sizes=\\"(max-width: 700px) 85vw, 700px\\" /></p>
+<h6><em>Alan Martin</em></h6>
+<p>Alan is a blogger and WordPress enthusiast. He loves travelling, music and pizza. Check out his latest post about <a href=\\"https://demo.worona.org/sunrise-at-phu-quoc-island/\\">Phú Quốc Island (Vietnam)</a>.</p>
+<h6><em>Reyes Martínez</em></h6>
+<p>Reyes loves travelling, photography and writing. Don&#8217;t miss her latest post about the amazing <a href=\\"https://demo.worona.org/small-and-picturesque-french-villages/\\">Picturesque French Villages</a>.</p>
+<h6><em>Luis Herranz</em></h6>
+<p>Luis is an entrepreneur that enjoys travelling and reading. In his latest post, he writes about India and The <a href=\\"https://demo.worona.org/latest-trip-to-india/\\">Taj Mahal</a>, one of the universally admired masterpieces of the world’s heritage.</p>
+<p><img class=\\"alignnone size-full wp-image-193\\" src=\\"https://demo.worona.org/wp-content/uploads/2017/03/road-trip.png\\" alt=\\"road-trip\\" width=\\"700\\" height=\\"467\\" srcset=\\"https://demo.worona.org/wp-content/uploads/2017/03/road-trip.png 700w, https://demo.worona.org/wp-content/uploads/2017/03/road-trip-300x200.png 300w\\" sizes=\\"(max-width: 700px) 85vw, 700px\\" /></p>
+<p>This is just a demo blog, but you might want to check out some of the really good travel bloggers out there:</p>
+<ul>
+<li><strong>Nomadic Matt</strong>. Each month over 1.000.000 people use his advice to travel better, cheaper, and longer.</li>
+<li><strong>Expert Vagabond</strong> by Matt &#8211; adventure travel photographer and professional blogger.</li>
+<li><strong>The Aussie Nomad</strong> by Chris. He has been living abroad as an expat and exploring the world since the beginning of 2010.</li>
+</ul>
+<p>You can see the full list of top travel blogs <a href=\\"http://www.theexpeditioner.com/the-top-50-travel-blogs/\\">here</a>.</p>
+<h4>See you down the road!</h4>
+<p><iframe style=\\"border: 0;\\" src=\\"https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d31758.896101501236!2d13.36989231715827!3d52.510655459236325!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x47a84e373f035901%3A0x42120465b5e3b70!2sBerl%C3%ADn%2C+Alemania!5e0!3m2!1ses!2ses!4v1490629160374\\" width=\\"600\\" height=\\"450\\" frameborder=\\"0\\" allowfullscreen=\\"allowfullscreen\\"></iframe></p>
+",
+  },
+  "date": "2017-03-27T15:09:22",
+  "date_gmt": "2017-03-27T15:09:22",
+  "excerpt": Object {
+    "protected": false,
+    "rendered": "<p>If you are just curious about our story you&#8217;re in the right spot 🙂 This site features articles on cities in Europe and around the world. We’re passionate about travelling— doing something fun, seeing cool things, and meeting different people. “Twenty years from now you will be more disappointed by the things you didn’t do &hellip; <a href=\\"https://demo.worona.org/audio-test/about-us/\\" class=\\"more-link\\">Continue reading<span class=\\"screen-reader-text\\"> &#8220;About us&#8221;</span></a></p>
+",
+  },
+  "featured_media": 0,
+  "guid": Object {
+    "rendered": "https://demo.worona.org/?page_id=184",
+  },
+  "id": 184,
+  "latest": Array [
+    "page",
+  ],
+  "link": "https://demo.worona.org/audio-test/about-us/",
+  "menu_order": 0,
+  "meta": Object {},
+  "modified": "2018-03-23T15:35:51",
+  "modified_gmt": "2018-03-23T15:35:51",
+  "mst": "single",
+  "parent": 211,
+  "ping_status": "closed",
+  "slug": "about-us",
+  "taxonomiesMap": Object {
+    "latest": Array [
+      "page",
+    ],
+  },
+  "template": "",
+  "title": Object {
+    "rendered": "About us",
+  },
+  "type": "page",
+  "yoast_meta": Object {
+    "title": "About us - Demo Worona",
+  },
+}
+`;
 
 exports[`Convert a tag using entity 1`] = `
 Object {

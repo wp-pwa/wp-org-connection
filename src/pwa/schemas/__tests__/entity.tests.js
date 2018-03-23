@@ -10,7 +10,8 @@ import author4 from '../../__tests__/author-4.json';
 // https://demo.worona.org/?rest_route=/wp/v2/media/212&_embed=true
 import media212 from '../../__tests__/media-212.json';
 // https://demo.worona.org/?rest_route=/wp/v2/pages/184&_embed=true
-import page260 from '../../__tests__/page-with-subpage.json';
+import page184 from '../../__tests__/page-with-subpage.json';
+
 import latestMovie from '../../__tests__/latest-movie.json'
 import { entity } from '../';
 
@@ -45,9 +46,9 @@ test('Convert a media using entity', () => {
 });
 
 test('Convert a page using entity and ignore subpages', () => {
-  const { entities } = normalize(page260, entity);
-  expect(entities.single[260]).toMatchSnapshot();
-  expect(entities.single[231]).toBe(undefined);
+  const { entities } = normalize(page184, entity);
+  expect(entities.single[184]).toMatchSnapshot();
+  expect(entities.single[211]).toBe(undefined);
 });
 
 test('Convert a latest taxonomy using entity', () => {
