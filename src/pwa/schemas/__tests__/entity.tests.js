@@ -7,8 +7,8 @@ import category7 from '../../__tests__/category-7.json';
 import tag10 from '../../__tests__/tag-10.json';
 // https://demo.worona.org/?rest_route=/wp/v2/users/4&_embed=true
 import author4 from '../../__tests__/author-4.json';
-// https://demo.worona.org/?rest_route=/wp/v2/media/212&_embed=true
-import media212 from '../../__tests__/media-212.json';
+// https://demo.worona.org/?rest_route=/wp/v2/media/193&_embed=true
+import media193 from '../../__tests__/media-193.json';
 // https://demo.worona.org/?rest_route=/wp/v2/pages/184&_embed=true
 import page184 from '../../__tests__/page-with-subpage.json';
 
@@ -41,8 +41,8 @@ test('Convert a author using entity', () => {
 });
 
 test('Convert a media using entity', () => {
-  const { entities } = normalize(media212, entity);
-  expect(entities.media[212]).toMatchSnapshot();
+  const { entities } = normalize(media193, entity);
+  expect(entities.media[193]).toMatchSnapshot();
 });
 
 test('Convert a page using entity and ignore subpages', () => {
