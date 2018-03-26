@@ -29,89 +29,108 @@ export function* initConnection() {
   return connection;
 }
 
-export const getList = ({ connection, listType, listId, singleType, page }) => {
-  const endpoint = typesToEndpoints(singleType);
+export const getList = ({ connection, type, id, page }) => {
+  const endpoint = typesToEndpoints('post');
   const params = { _embed: true };
-  if (['category', 'tag', 'author'].includes(listType)) params[typesToParams(listType)] = listId;
+
+  if (['category', 'tag', 'author'].includes(type)) {
+    params[typesToParams(type)] = id;
+  }
+
   let query = connection[endpoint]().page(page);
+
   forOwn(params, (value, key) => {
     query = query.param(key, value);
   });
+
   return query;
 };
 
-export const getSingle = ({ connection, singleType, singleId }) =>
-  connection[typesToEndpoints(singleType)]()
-    .id(singleId)
+export const getSingle = ({ connection, type, id }) =>
+  connection[typesToEndpoints(type)]()
+    .id(id)
     .embed();
 
 export const getCustom = ({ connection, singleType, page, params }) => {
   let query = connection[typesToEndpoints(singleType)]()
     .page(page)
     .embed();
+
   forOwn(params, (value, key) => {
     query = query.param(key, value);
   });
+
   return query;
 };
 
 export const listRequested = connection =>
-  function* listRequestedSaga({ listType, listId = null, page = 1 }) {
-    const singleType = 'post';
-    if (!['latest', 'category', 'tag', 'author'].includes(listType))
+  function* listRequestedSaga({ list: { type, id, page } }) {
+    if (!['latest', 'category', 'tag', 'author'].includes(type)) {
       throw new Error(
         'Custom taxonomies should retrieve their custom post types first. NOT IMPLEMENTED.',
       );
+    }
+
     try {
-      const response = yield call(getList, { connection, listType, listId, singleType, page });
+      const response = yield call(getList, { connection, type, id, page });
       const { entities, result } = normalize(response, schemas.list);
       const totalEntities = response._paging ? parseInt(response._paging.total, 10) : 0;
       const totalPages = response._paging ? parseInt(response._paging.totalPages, 10) : 0;
       const total = { entities: totalEntities, pages: totalPages };
+
       yield put(
         actions.listSucceed({
+          list: {
+            type,
+            id,
+            page,
+          },
           entities,
-          result: result.map(item => item.id),
-          listType,
-          listId,
-          page,
+          result,
           total,
-          endpoint: getList({ connection, listType, listId, singleType, page }).toString(),
+          endpoint: getList({ connection, type, id, page }).toString(),
         }),
       );
     } catch (error) {
       yield put(
         actions.listFailed({
-          listType,
-          listId,
-          page,
+          list: {
+            type,
+            id,
+            page,
+          },
           error,
-          endpoint: getList({ connection, listType, listId, singleType, page }).toString(),
+          endpoint: getList({ connection, type, id, page }).toString(),
         }),
       );
     }
   };
 
-export const singleRequested = connection =>
-  function* singleRequestedSaga({ singleType, singleId }) {
+export const entityRequested = connection =>
+  function* entityRequestedSaga({ entity: { type, id } }) {
     try {
-      const response = yield call(getSingle, { connection, singleType, singleId });
+      const response = yield call(getSingle, { connection, type, id });
       const { entities } = normalize(response, schemas.single);
+
       yield put(
         actions.singleSucceed({
-          singleType,
-          singleId,
+          entity: {
+            type,
+            id,
+          },
           entities,
-          endpoint: getSingle({ connection, singleType, singleId }).toString(),
+          endpoint: getSingle({ connection, type, id }).toString(),
         }),
       );
     } catch (error) {
       yield put(
         actions.singleFailed({
-          singleType,
-          singleId,
+          entity: {
+            type,
+            id,
+          },
           error,
-          endpoint: getSingle({ connection, singleType, singleId }).toString(),
+          endpoint: getSingle({ connection, type, id }).toString(),
         }),
       );
     }
@@ -155,17 +174,21 @@ export const customRequested = connection =>
 
 export const routeChangeSucceed = stores =>
   function* routeChangeSucceedSaga(action) {
-    if (action.selected.listType) {
-      const { selected: { listType, listId, page } } = action;
-      const listPage = stores.connection.list[listType][listId].page[page - 1];
+    const { connection } = stores;
+
+    if (action.selectedItem.page) {
+      const { type, id, page } = action.selectedItem;
+      const listPage = connection.list(type, id).page(page - 1);
+
       if (listPage.ready === false && listPage.fetching === false) {
-        yield put(actions.listRequested({ listType, listId, page }));
+        yield put(actions.listRequested({ list: { type, id, page } }));
       }
-    } else if (action.selected.singleId) {
-      const { selected: { singleType, singleId } } = action;
-      const entity = stores.connection.single[singleType][singleId];
+    } else {
+      const { type, id } = action.selectedItem;
+      const entity = connection.entity(type, id);
+
       if (entity.ready === false && entity.fetching === false) {
-        yield put(actions.singleRequested({ singleType, singleId }));
+        yield put(actions.entityRequested({ entity: { type, id } }));
       }
     }
   };
@@ -190,7 +213,7 @@ export default function* wpApiWatchersSaga(stores) {
   const connection = yield call(initConnection);
   yield all([
     takeEvery(actionTypes.ROUTE_CHANGE_SUCCEED, routeChangeSucceed(stores)),
-    takeEvery(actionTypes.SINGLE_REQUESTED, singleRequested(connection)),
+    takeEvery(actionTypes.ENTITY_REQUESTED, entityRequested(connection)),
     takeEvery(actionTypes.LIST_REQUESTED, listRequested(connection)),
     takeEvery(actionTypes.CUSTOM_REQUESTED, customRequested(connection)),
     takeEvery(actionTypes.SITE_INFO_REQUESTED, siteInfoRequested(connection)),

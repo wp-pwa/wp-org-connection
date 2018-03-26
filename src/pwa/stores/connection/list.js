@@ -67,7 +67,7 @@ const List = types
       return values(self.pageMap);
     },
     get entity() {
-      return resolveIdentifier(Entity, self, self.mstId) || entityShape(self.type, self.id)
+      return resolveIdentifier(Entity, self, self.mstId) || entityShape(self.type, self.id);
     },
   }));
 
