@@ -131,7 +131,7 @@ const Entity = types
   .props({
     mstId: types.identifier(types.string), // post_60, category_7, movie_34, author_3, media_35
     type: types.string,
-    id: types.number,
+    id: types.union(types.number, types.string),
     fetching: false,
     entity: types.frozen,
   })
