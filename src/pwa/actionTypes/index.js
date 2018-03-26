@@ -22,5 +22,5 @@ export const HEAD_CONTENT_REQUESTED = 'connection/HEAD_CONTENT_REQUESTED';
 export const HEAD_CONTENT_SUCCEED = 'connection/HEAD_CONTENT_SUCCEED';
 export const HEAD_CONTENT_FAILED = 'connection/HEAD_CONTENT_FAILED';
 
-export const MOVE_ITEM_TO_COLUMN = 'MOVE_ITEM_TO_COLUMN';
-export const REPLACE_CONTEXT = 'REPLACE_CONTEXT';
+export const MOVE_ITEM_TO_COLUMN = 'connection/MOVE_ITEM_TO_COLUMN';
+export const REPLACE_CONTEXT = 'connection/REPLACE_CONTEXT';
