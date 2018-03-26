@@ -41,7 +41,7 @@ export const views = self => ({
 export const actions = self => ({
   getEntity({ type, id }) {
     const mstId = join(type, id);
-    if (!self.entities.get(mstId)) self.entities.put({ mstId, type, id });
+    if (!self.entities.get(mstId)) self.entities.set(mstId, { mstId, type, id });
     return self.entities.get(mstId);
   },
   fetchingEntity({ type, id }) {
@@ -62,12 +62,12 @@ export const actions = self => ({
   },
   getList({ type, id }) {
     const mstId = join(type, id);
-    if (!self.lists.get(mstId)) self.lists.put({ mstId, type, id });
+    if (!self.lists.get(mstId)) self.lists.set(mstId, { mstId, type, id });
     return self.lists.get(mstId);
   },
   getListPage({ type, id, page }) {
     const list = self.getList({ type, id });
-    if (!list.pageMap.get(page)) list.pageMap.put({ page });
+    if (!list.pageMap.get(page)) list.pageMap.set(page, { page });
     return list.pageMap.get(page);
   },
   fetchingListPage({ type, id, page }) {
@@ -87,12 +87,12 @@ export const actions = self => ({
     }
   },
   getCustom({ name }) {
-    if (!self.customs.get(name)) self.customs.put({ name });
+    if (!self.customs.get(name)) self.customs.set(name, { name });
     return self.customs.get(name);
   },
   getCustomPage({ name, page = 1 }) {
     const custom = self.getCustom({ name });
-    if (!custom.pageMap.get(page)) custom.pageMap.put({ page });
+    if (!custom.pageMap.get(page)) custom.pageMap.set(page, { page });
     return custom.pageMap.get(page);
   },
   fetchingCustomPage({ name, page = 1 }) {
