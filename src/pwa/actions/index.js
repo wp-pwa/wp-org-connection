@@ -28,41 +28,49 @@ export const entityFailed = ({ entity: { type, id }, error, endpoint }) => ({
   endpoint,
 });
 
-export const listRequested = ({ listType, listId, page = 1 }) => {
-  if (listType === 'latest' && !listId) listId = 'post';
+export const listRequested = ({ list: { type, id, page } }) => {
+  if (typeof page === 'undefined') {
+    throw new Error('The field `page` is mandatory in listRequested.');
+  }
+
+  if (type === 'latest' && !id) id = 'post';
   return {
     type: actionTypes.LIST_REQUESTED,
-    listType,
-    listId: parse(listId),
-    page: parse(page),
+    list: {
+      type,
+      id: parse(id),
+      page: parse(page),
+    },
   };
 };
 export const listSucceed = ({
-  listType,
-  listId = null,
-  page = 1,
+  list: { type, id = null, page },
   total = { entities: 0, pages: 0 },
   result,
   entities,
   endpoint,
 }) => {
-  if (listType === 'latest' && !listId) listId = 'post';
+  if (type === 'latest' && !id) id = 'post';
   return {
     type: actionTypes.LIST_SUCCEED,
-    listType,
-    listId: parse(listId),
-    page: parse(page),
+    list: {
+      type,
+      id: parse(id),
+      page: parse(page),
+    },
     total,
     result,
     entities,
     endpoint,
   };
 };
-export const listFailed = ({ listType, listId, page = 1, error, endpoint }) => ({
+export const listFailed = ({ list: { type, id, page }, error, endpoint }) => ({
   type: actionTypes.LIST_FAILED,
-  listType,
-  listId: parse(listId),
-  page: parse(page),
+  list: {
+    type,
+    id: parse(id),
+    page: parse(page),
+  },
   error,
   endpoint,
 });
