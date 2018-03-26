@@ -62,6 +62,20 @@ describe('Connection › Entity', () => {
     expect(connection.entity('author', 4).pagedLink(2)).toBe('/?author=4&paged=2');
   });
 
+  test('Get latest post taxonomy shape when entity is not ready', () => {
+    expect(connection.entity('latest', 'post').ready).toBe(false);
+    expect(connection.entity('latest', 'post').name).toBe('');
+    expect(connection.entity('latest', 'post').link).toBe('/');
+    expect(connection.entity('latest', 'post').pagedLink(3)).toBe('/page/3');
+  });
+
+  test('Get latest movie taxonomy shape when entity is not ready', () => {
+    expect(connection.entity('latest', 'movie').ready).toBe(false);
+    expect(connection.entity('latest', 'movie').name).toBe('');
+    expect(connection.entity('latest', 'movie').link).toBe('/');
+    expect(connection.entity('latest', 'movie').pagedLink(3)).toBe('/page/3');
+  });
+
   test('Get media shape when entity is not ready', () => {
     expect(connection.entity('media', 62).ready).toBe(false);
     expect(connection.entity('media', 62).link).toBe('/?attachement_id=62');
@@ -228,7 +242,9 @@ describe('Connection › Entity', () => {
     expect(connection.entity('category', 3).headMeta.title).toBe('');
     expect(connection.entity('media', 62).headMeta.title).toBe('');
     connection.addEntity({ entity: entities.single[60] });
-    expect(connection.entity('post', 60).headMeta.title).toBe(convert(entities.single[60]).headMeta.title);
+    expect(connection.entity('post', 60).headMeta.title).toBe(
+      convert(entities.single[60]).headMeta.title,
+    );
     connection.addEntity({ entity: entities.taxonomy[3] });
     expect(connection.entity('category', 3).headMeta.title).toBe(
       convert(entities.taxonomy[3]).headMeta.title,
@@ -304,5 +320,13 @@ describe('Connection › Entity', () => {
     connection.addEntity({ entity: entitiesFromPage211.single[211] });
     expect(connection.entity('page', 184).parent.id).toBe(211);
     expect(connection.entity('page', 184).parent.title).toBe('Audio TEST');
+  });
+
+  test('Get latest taxonomy', () => {
+    expect(connection.entity('latest', 'post').ready).toBe(false);
+    expect(connection.entity('latest', 'post').link).toBe('/');
+    connection.addEntity({ entity: entities.taxonomy.post });
+    expect(connection.entity('latest', 'post').ready).toBe(true);
+    expect(connection.entity('latest', 'post').link).toBe('https://demo.worona.org');
   });
 });
