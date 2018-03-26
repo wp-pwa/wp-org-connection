@@ -1,3 +1,4 @@
+import { values } from 'mobx';
 import { types, resolveIdentifier, getSnapshot } from 'mobx-state-tree';
 import { flatten } from 'lodash';
 import Entity from './entity';
@@ -15,14 +16,12 @@ const Custom = types
   })
   .views(self => ({
     get ready() {
-      return self.pageMap
-        .values()
+      return values(self.pageMap)
         .map(page => page.ready)
         .reduce((acc, cur) => acc || cur, false);
     },
     get fetching() {
-      return self.pageMap
-        .values()
+      return values(self.pageMap)
         .map(page => page.fetching)
         .reduce((acc, cur) => acc || cur, false);
     },
@@ -34,7 +33,7 @@ const Custom = types
       return self.pageMap.get(page) || pageShape;
     },
     get pages() {
-      return self.pageMap.values();
+      return values(self.pageMap);
     },
   }));
 
