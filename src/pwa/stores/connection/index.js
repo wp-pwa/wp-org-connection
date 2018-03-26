@@ -132,17 +132,17 @@ export const actions = self => ({
     const item = self.getListPage({ type, id, page });
     item.fetching = false;
   },
-  [actionTypes.CUSTOM_REQUESTED]({ name, page = 1, params, url }) {
+  [actionTypes.CUSTOM_REQUESTED]({ custom: { name, page }, params, url }) {
     const custom = self.getCustom({ name });
     custom.params = params;
     custom.url = url;
     const item = self.getCustomPage({ name, page });
     item.fetching = true;
   },
-  [actionTypes.CUSTOM_SUCCEED]({ name, page = 1, total, result, entities }) {
+  [actionTypes.CUSTOM_SUCCEED]({ custom: { name, page }, total, result, entities }) {
     self.addCustomPage({ name, page, total, result, entities });
   },
-  [actionTypes.CUSTOM_FAILED]({ name, page }) {
+  [actionTypes.CUSTOM_FAILED]({ custom: { name, page } }) {
     const item = self.getCustomPage({ name, page });
     item.fetching = false;
   },

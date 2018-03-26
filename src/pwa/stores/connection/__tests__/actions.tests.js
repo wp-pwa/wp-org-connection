@@ -214,7 +214,7 @@ describe('Connection › Actions', () => {
     expect(connection.list('category', 7).page(1).fetching).toBe(false);
   });
 
-  test('List: Throw an error if list is requested without a page', () => {
+  test('List: Throw an error if page is not provided', () => {
     expect(() => {
       connection[actionTypes.LIST_REQUESTED](
         actions.listRequested({
@@ -235,7 +235,10 @@ describe('Connection › Actions', () => {
     const params = { a: 'b' };
     connection[actionTypes.CUSTOM_REQUESTED](
       actions.customRequested({
-        name: 'test',
+        custom: {
+          name: 'test',
+          page: 1,
+        },
         params,
         url: '/#test',
       }),
@@ -248,7 +251,9 @@ describe('Connection › Actions', () => {
     expect(connection.custom('test').page(1).fetching).toBe(true);
     connection[actionTypes.CUSTOM_SUCCEED](
       actions.customSucceed({
-        name: 'test',
+        custom: {
+          name: 'test',
+        },
         result: resultFromCategory7,
         entities: entitiesFromCategory,
       }),
@@ -262,14 +267,30 @@ describe('Connection › Actions', () => {
   test('Custom: Action Failed', () => {
     connection[actionTypes.CUSTOM_REQUESTED](
       actions.customRequested({
-        name: 'test',
+        custom: {
+          name: 'test',
+          page: 1,
+        },
         params: {},
       }),
     );
-    connection[actionTypes.CUSTOM_FAILED](actions.customFailed({ name: 'test' }));
+    connection[actionTypes.CUSTOM_FAILED](actions.customFailed({ custom: { name: 'test' } }));
     expect(connection.custom('test').ready).toBe(false);
     expect(connection.custom('test').fetching).toBe(false);
     expect(connection.custom('test').page(1).ready).toBe(false);
     expect(connection.custom('test').page(1).fetching).toBe(false);
+  });
+
+  test('Custom: Throw an error if page is not provided', () => {
+    expect(() => {
+      connection[actionTypes.CUSTOM_REQUESTED](
+        actions.customRequested({
+          custom: {
+            name: 'test',
+          },
+          params: {},
+        }),
+      );
+    }).toThrow('The field `page` is mandatory in customRequested.');
   });
 });

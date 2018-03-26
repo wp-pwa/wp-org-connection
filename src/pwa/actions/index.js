@@ -75,51 +75,59 @@ export const listFailed = ({ list: { type, id, page }, error, endpoint }) => ({
   endpoint,
 });
 
-export const customRequested = ({ url = '/', name, singleType, page = 1, params = {} }) => ({
-  type: actionTypes.CUSTOM_REQUESTED,
-  url,
-  name,
-  singleType,
-  page: parse(page),
-  params,
-});
+export const customRequested = ({ custom: { name, type, page }, url = '/', params = {} }) => {
+  if (typeof page === 'undefined') {
+    throw new Error('The field `page` is mandatory in customRequested.');
+  }
+
+  return {
+    type: actionTypes.CUSTOM_REQUESTED,
+    custom: {
+      name,
+      type,
+      page: parse(page),
+    },
+    url,
+    params,
+  };
+};
 export const customSucceed = ({
+  custom: { name, type, page },
   url = '/',
-  name,
-  singleType,
   params = {},
-  page = 1,
   total = { entities: 0, pages: 0 },
   result,
   entities,
   endpoint,
 }) => ({
   type: actionTypes.CUSTOM_SUCCEED,
+  custom: {
+    name,
+    type,
+    page: parse(page),
+  },
   url,
-  name,
-  singleType,
   params,
-  page: parse(page),
   total,
   result,
   entities,
   endpoint,
 });
 export const customFailed = ({
+  custom: { name, type, page },
   url = '/',
-  name,
-  singleType,
   params = {},
-  page = 1,
   error,
   endpoint,
 }) => ({
   type: actionTypes.CUSTOM_FAILED,
+  custom: {
+    name,
+    type,
+    page: parse(page),
+  },
   url,
-  name,
-  singleType,
   params,
-  page: parse(page),
   error,
   endpoint,
 });
