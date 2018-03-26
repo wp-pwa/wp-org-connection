@@ -1,6 +1,6 @@
-export const SINGLE_REQUESTED = 'connection/SINGLE_REQUESTED';
-export const SINGLE_SUCCEED = 'connection/SINGLE_SUCCEED';
-export const SINGLE_FAILED = 'connection/SINGLE_FAILED';
+export const ENTITY_REQUESTED = 'connection/ENTITY_REQUESTED';
+export const ENTITY_SUCCEED = 'connection/ENTITY_SUCCEED';
+export const ENTITY_FAILED = 'connection/ENTITY_FAILED';
 
 export const LIST_REQUESTED = 'connection/LIST_REQUESTED';
 export const LIST_SUCCEED = 'connection/LIST_SUCCEED';

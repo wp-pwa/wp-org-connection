@@ -2,22 +2,28 @@ import * as actionTypes from '../actionTypes';
 
 const parse = id => (Number.isFinite(parseInt(id, 10)) ? parseInt(id, 10) : id);
 
-export const singleRequested = ({ singleType, singleId }) => ({
-  type: actionTypes.SINGLE_REQUESTED,
-  singleType,
-  singleId: parse(singleId),
+export const entityRequested = ({ entity: { type, id } }) => ({
+  type: actionTypes.ENTITY_REQUESTED,
+  entity: {
+    type,
+    id: parse(id),
+  },
 });
-export const singleSucceed = ({ singleType, singleId, entities, endpoint }) => ({
-  type: actionTypes.SINGLE_SUCCEED,
-  singleType,
-  singleId: parse(singleId),
+export const entitySucceed = ({ entity: { type, id }, entities, endpoint }) => ({
+  type: actionTypes.ENTITY_SUCCEED,
+  entity: {
+    type,
+    id: parse(id),
+  },
   entities,
   endpoint,
 });
-export const singleFailed = ({ singleType, singleId, error, endpoint }) => ({
-  type: actionTypes.SINGLE_FAILED,
-  singleType,
-  singleId: parse(singleId),
+export const entityFailed = ({ entity: { type, id }, error, endpoint }) => ({
+  type: actionTypes.ENTITY_FAILED,
+  entity: {
+    type,
+    id: parse(id),
+  },
   error,
   endpoint,
 });

@@ -111,13 +111,13 @@ export const actions = self => ({
       if (total.pages) list.total.pages = total.pages;
     }
   },
-  [actionTypes.SINGLE_REQUESTED]({ singleType: type, singleId: id }) {
+  [actionTypes.ENTITY_REQUESTED]({ entity: { type, id } }) {
     self.fetchingEntity({ type, id });
   },
-  [actionTypes.SINGLE_SUCCEED]({ entities }) {
+  [actionTypes.ENTITY_SUCCEED]({ entities }) {
     self.addEntities({ entities });
   },
-  [actionTypes.SINGLE_FAILED]({ singleType: type, singleId: id }) {
+  [actionTypes.ENTITY_FAILED]({ entity: { type, id } }) {
     const item = self.getEntity({ type, id });
     item.fetching = false;
   },
