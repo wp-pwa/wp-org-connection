@@ -226,8 +226,7 @@ export const actions = self => {
 
         // Then check conditions:
         // If we are in the same context and we just want to change the selected.
-        if (generatorsAreEqual && itemInSelectedContext)
-          changeSelectedItem({ selectedItem });
+        if (generatorsAreEqual && itemInSelectedContext) changeSelectedItem({ selectedItem });
         else if (method === 'backward')
           // If we are going backward or forward in the history
           selectItemInPreviousContext({ selectedItem });

@@ -627,6 +627,25 @@ describe('Connection › Router', () => {
     ).toThrow();
   });
 
+  test('Throw if one column is not an array', () => {
+    expect(() =>
+      connection[actionTypes.ROUTE_CHANGE_SUCCEED](
+        actions.routeChangeSucceed({
+          selectedItem: { type: 'post', id: 60 },
+          context: {
+            columns: [
+              { type: 'post', id: 60 },
+              [
+                { type: 'post', id: 63 },
+                { type: 'category', id: 7, page: 1, extract: 'horizontal' },
+              ],
+            ],
+          },
+        }),
+      ),
+    ).toThrow('Columns should be arrays and not single objects.');
+  });
+
   // //////////////////////////////////////////////////////////////////////////////////////////////
   // actions.routeChangeSucceed({
   //   selectedItem: { type: 'post', id: 60 },

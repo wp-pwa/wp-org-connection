@@ -80,6 +80,9 @@ const Context = types
       },
       deleteItem: ({ item }) => item.parentColumn.rawItems.remove(item),
       addColumn: ({ column, index }) => {
+        if (!Array.isArray(column)) {
+          throw new Error('Columns should be arrays and not single objects.');
+        }
         const i = typeof index !== 'undefined' ? index : self.rawColumns.length;
         self.rawColumns.splice(i, 0, {
           mstId: getNextMstId(),
