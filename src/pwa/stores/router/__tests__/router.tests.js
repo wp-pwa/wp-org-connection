@@ -582,8 +582,11 @@ describe('Connection › Router', () => {
     expect(connection.selectedContext.columns.length).toBe(1);
     connection[actionTypes.LIST_SUCCEED](
       actions.listSucceed({
-        listType: 'category',
-        listId: 7,
+        list: {
+          type: 'category',
+          id: 7,
+          page: 1,
+        },
         result: resultFromCategory7,
         entities: entitiesFromCategory,
       }),
