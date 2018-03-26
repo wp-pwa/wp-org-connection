@@ -18,15 +18,13 @@ export default store => {
       case actionTypes.CUSTOM_REQUESTED:
       case actionTypes.CUSTOM_SUCCEED:
       case actionTypes.CUSTOM_FAILED:
-      case actionTypes.ROUTE_CHANGE_REQUESTED:
       case actionTypes.ROUTE_CHANGE_SUCCEED:
-      case actionTypes.SITE_INFO_SUCCEED:
       case actionTypes.HEAD_CONTENT_SUCCEED:
-        store[type](action)
+        store[type](action);
         break;
       default:
         break;
     }
     return getSnapshot(store);
-  }
-}
+  };
+};
