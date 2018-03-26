@@ -51,15 +51,17 @@ const Context = types
       self.mstIdForColumn += 1;
       return `context_${self.index}_column_${self.mstIdForColumn}`;
     },
-    getMstId: ({ type, id, page }) =>
-      page ? `${self.index}_${type}_${id}_page_${page}` : `${self.index}_${type}_${id}`,
+    getMstId: ({ type, id, page, extract }) =>
+      page
+        ? `${self.index}_${type}_${id}_page_${page}${extract ? `_${extract}` : ''}`
+        : `${self.index}_${type}_${id}`,
     addMstIdToItem: ({ item }) => ({ mstId: self.getMstId({ ...item }), ...item }),
     addMstIdToItems: ({ items }) => items.map(item => self.addMstIdToItem({ item })),
     setGenerator: ({ generator }) => {
       self.generator = generator;
     },
-    getItem: ({ item: { type, id, page } }) =>
-      resolveIdentifier(Item, self, self.getMstId({ type, id, page })),
+    getItem: ({ item: { type, id, page, extract } }) =>
+      resolveIdentifier(Item, self, self.getMstId({ type, id, page, extract })),
     hasItem: ({ item }) => !!self.getItem({ item }),
     addItem: ({ item, index }) => {
       self.addColumn({ column: [item], index });
@@ -113,8 +115,8 @@ const Context = types
       if (newItemParentColumn.items.length === 0) self.rawColumns.remove(newItemParentColumn);
       self.selectedItem.parentColumn.rawItems.push(newItem);
     },
-    replaceExtractedList: ({ type, id, page }) => {
-      const oldItem = self.getItem({ item: { type, id, page } });
+    replaceExtractedList: ({ type, id, page, extract }) => {
+      const oldItem = self.getItem({ item: { type, id, page, extract } });
       const oldColumn = oldItem.parentColumn;
       const oldIndex = oldItem.parentColumn.index;
       self.deleteItem({ item: oldItem });

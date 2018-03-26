@@ -522,12 +522,12 @@ describe('Connection › Router', () => {
     // +-++-++-++-++-++-++-++-++-++-++-+
     // |P  E  P  P  P  P  P  P  P  E  P|
     // +-++-++-++-++-++-++-++-++-++-++-+
-    //          |P|  >|P|<   |P|   |P|
-    //          +-+   +-+    +-+   +-+
-    //          |E|   |E|    |E|
-    //          +-+   +-+    +-+
-    //          |P|   |P|    |P|
-    //          +-+   +-+    +-+
+    //          |P|  >|P|<  |P|   |P|
+    //          +-+   +-+   +-+   +-+
+    //          |E|   |E|   |E|
+    //          +-+   +-+   +-+
+    //          |P|   |P|   |P|
+    //          +-+   +-+   +-+
     connection[actionTypes.ROUTE_CHANGE_SUCCEED](
       actions.routeChangeSucceed({
         selectedItem: { type: 'post', id: 10 },
@@ -666,6 +666,61 @@ describe('Connection › Router', () => {
     );
     connection[actionTypes.ADD_ITEM_TO_COLUMN](
       actions.addItemToColumn({ item: { type: 'post', id: 64 } }),
+    );
+    expect(connection.contexts).toMatchSnapshot();
+    expect(connection.contexts[0].columns.length).toBe(3);
+    expect(connection.selectedColumn).toBe(connection.contexts[0].columns[1]);
+    expect(connection.selectedItem).toBe(connection.contexts[0].columns[1].items[0]);
+    expect(connection.contexts[0].columns[1].items[1].id).toBe(64);
+  });
+
+  test('Add both extracted list and normal list to context', () => {
+    connection[actionTypes.ROUTE_CHANGE_SUCCEED](
+      actions.routeChangeSucceed({
+        selectedItem: { type: 'post', id: 60 },
+        context: {
+          columns: [
+            [{ type: 'post', id: 60 }],
+            [{ type: 'category', id: 7, page: 1 }],
+            [{ type: 'category', id: 7, page: 1, extract: 'horizontal' }],
+          ],
+        },
+      }),
+    );
+    expect(connection.contexts).toMatchSnapshot();
+    expect(connection.contexts[0].columns.length).toBe(2);
+    connection[actionTypes.LIST_SUCCEED](
+      actions.listSucceed({
+        list: {
+          type: 'category',
+          id: 7,
+          page: 1,
+        },
+        result: resultFromCategory7,
+        entities: entitiesFromCategory,
+      }),
+    );
+    expect(connection.contexts).toMatchSnapshot();
+    expect(connection.contexts[0].columns.length).toBe(7);
+  });
+
+  test.skip('Add new extracted list to column', () => {
+    connection[actionTypes.ROUTE_CHANGE_SUCCEED](
+      actions.routeChangeSucceed({
+        selectedItem: { type: 'post', id: 62 },
+        context: {
+          columns: [
+            [{ type: 'post', id: 63 }],
+            [{ type: 'post', id: 62 }],
+            [{ type: 'post', id: 60 }],
+          ],
+        },
+      }),
+    );
+    connection[actionTypes.ADD_ITEM_TO_COLUMN](
+      actions.addItemToColumn({
+        item: { type: 'category', id: 7, page: 1, extract: 'horizontal' },
+      }),
     );
     expect(connection.contexts).toMatchSnapshot();
     expect(connection.contexts[0].columns.length).toBe(3);

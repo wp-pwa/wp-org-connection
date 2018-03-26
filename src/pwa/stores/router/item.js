@@ -58,12 +58,12 @@ export const List = BaseItem.named('List')
   .actions(self => ({
     afterCreate: () => {
       if (['horizontal', 'vertical'].includes(self.extract)) {
-        const { type, id, page } = self;
+        const { type, id, page, extract } = self;
         const stopReplace = when(
           () => self.connection.list(type, id).page(page).ready === true,
           () => {
             stopReplace();
-            self.parentContext.replaceExtractedList({ type, id, page });
+            self.parentContext.replaceExtractedList({ type, id, page, extract });
           },
         );
       }
