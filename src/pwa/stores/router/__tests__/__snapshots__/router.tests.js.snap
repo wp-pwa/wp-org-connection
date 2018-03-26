@@ -128,6 +128,104 @@ Array [
 ]
 `;
 
+exports[`Connection › Router Add new item to column 1`] = `
+Array [
+  Object {
+    "generator": Object {
+      "columns": Array [
+        Array [
+          Object {
+            "id": 63,
+            "type": "post",
+          },
+        ],
+        Array [
+          Object {
+            "id": 62,
+            "type": "post",
+          },
+        ],
+        Array [
+          Object {
+            "id": 60,
+            "type": "post",
+          },
+        ],
+      ],
+    },
+    "index": 0,
+    "infinite": undefined,
+    "mstIdForColumn": 3,
+    "options": undefined,
+    "rawColumns": Array [
+      Object {
+        "mstId": "context_0_column_1",
+        "rawItems": Array [
+          Object {
+            "fromList": Object {
+              "id": "post",
+              "page": 1,
+              "type": "latest",
+            },
+            "id": 63,
+            "mstId": "0_post_63",
+            "type": "post",
+            "visited": false,
+          },
+        ],
+        "selectedItem": "",
+      },
+      Object {
+        "mstId": "context_0_column_2",
+        "rawItems": Array [
+          Object {
+            "fromList": Object {
+              "id": "post",
+              "page": 1,
+              "type": "latest",
+            },
+            "id": 62,
+            "mstId": "0_post_62",
+            "type": "post",
+            "visited": true,
+          },
+          Object {
+            "fromList": Object {
+              "id": "post",
+              "page": 1,
+              "type": "latest",
+            },
+            "id": 64,
+            "mstId": "0_post_64",
+            "type": "post",
+            "visited": false,
+          },
+        ],
+        "selectedItem": "0_post_62",
+      },
+      Object {
+        "mstId": "context_0_column_3",
+        "rawItems": Array [
+          Object {
+            "fromList": Object {
+              "id": "post",
+              "page": 1,
+              "type": "latest",
+            },
+            "id": 60,
+            "mstId": "0_post_60",
+            "type": "post",
+            "visited": false,
+          },
+        ],
+        "selectedItem": "",
+      },
+    ],
+    "selectedColumn": "context_0_column_2",
+  },
+]
+`;
+
 exports[`Connection › Router Columns should not below items if extracted before that item is not resolved 1`] = `
 Array [
   Object {
