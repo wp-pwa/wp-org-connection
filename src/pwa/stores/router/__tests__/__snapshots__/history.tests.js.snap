@@ -1,0 +1,90 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Connection › Router > History Initializes url if not populated 1`] = `
+Object {
+  "hash": "",
+  "pathname": "/",
+  "search": "",
+  "state": undefined,
+}
+`;
+
+exports[`Connection › Router > History Initializes url if populated 1`] = `
+Object {
+  "hash": "",
+  "pathname": "/",
+  "search": "?cat=7&paged=1",
+  "state": Object {
+    "context": Object {
+      "columns": Array [
+        Array [
+          Object {
+            "id": 7,
+            "page": 1,
+            "type": "category",
+          },
+          Object {
+            "id": 7,
+            "page": 2,
+            "type": "category",
+          },
+        ],
+        Array [
+          Object {
+            "id": 63,
+            "type": "post",
+          },
+        ],
+        Array [
+          Object {
+            "id": 60,
+            "type": "post",
+          },
+        ],
+      ],
+    },
+    "method": "push",
+    "selectedItem": Object {
+      "extract": null,
+      "id": 7,
+      "mstId": "0_category_7_page_1",
+      "page": 1,
+      "type": "category",
+      "visited": true,
+    },
+  },
+}
+`;
+
+exports[`Connection › Router > History dispatchs ROUTE_CHANGE_SUCCEED when push or replace 1`] = `
+Object {
+  "hash": "",
+  "pathname": "/",
+  "search": "?cat=7&paged=2",
+  "state": Object {
+    "context": null,
+    "method": "push",
+    "selectedItem": Object {
+      "id": 7,
+      "page": 2,
+      "type": "category",
+    },
+    "type": "connection/ROUTE_CHANGE_SUCCEED",
+  },
+}
+`;
+
+exports[`Connection › Router > History dispatchs ROUTE_CHANGE_SUCCEED when push or replace 2`] = `
+Array [
+  Object {
+    "context": null,
+    "method": "push",
+    "selectedItem": Object {
+      "id": 7,
+      "page": 2,
+      "type": "category",
+    },
+    "type": "connection/ROUTE_CHANGE_SUCCEED",
+  },
+]
+`;
