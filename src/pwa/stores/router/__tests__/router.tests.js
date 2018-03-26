@@ -613,25 +613,6 @@ describe('Connection › Router', () => {
     ).not.toThrow();
   });
 
-  test('Throw if horizontal extracted is added in a column with more stuff', () => {
-    expect(() =>
-      connection[actionTypes.ROUTE_CHANGE_SUCCEED](
-        actions.routeChangeSucceed({
-          selectedItem: { type: 'post', id: 60 },
-          context: {
-            columns: [
-              [{ type: 'post', id: 60 }],
-              [
-                { type: 'post', id: 63 },
-                { type: 'category', id: 7, page: 1, extract: 'horizontal' },
-              ],
-            ],
-          },
-        }),
-      ),
-    ).toThrow();
-  });
-
   test('Throw if one column is not an array', () => {
     expect(() =>
       connection[actionTypes.ROUTE_CHANGE_SUCCEED](
@@ -702,30 +683,5 @@ describe('Connection › Router', () => {
     );
     expect(connection.contexts).toMatchSnapshot();
     expect(connection.contexts[0].columns.length).toBe(7);
-  });
-
-  test.skip('Add new extracted list to column', () => {
-    connection[actionTypes.ROUTE_CHANGE_SUCCEED](
-      actions.routeChangeSucceed({
-        selectedItem: { type: 'post', id: 62 },
-        context: {
-          columns: [
-            [{ type: 'post', id: 63 }],
-            [{ type: 'post', id: 62 }],
-            [{ type: 'post', id: 60 }],
-          ],
-        },
-      }),
-    );
-    connection[actionTypes.ADD_ITEM_TO_COLUMN](
-      actions.addItemToColumn({
-        item: { type: 'category', id: 7, page: 1, extract: 'horizontal' },
-      }),
-    );
-    expect(connection.contexts).toMatchSnapshot();
-    expect(connection.contexts[0].columns.length).toBe(3);
-    expect(connection.selectedColumn).toBe(connection.contexts[0].columns[1]);
-    expect(connection.selectedItem).toBe(connection.contexts[0].columns[1].items[0]);
-    expect(connection.contexts[0].columns[1].items[1].id).toBe(64);
   });
 });

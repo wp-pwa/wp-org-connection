@@ -89,8 +89,6 @@ const Context = types
         mstId: self.getNextMstId(),
         rawItems: self.addMstIdToItems({ items: column }),
       });
-      if (self.rawColumns[i].hasExtracted('horizontal') && self.rawColumns[i].rawItems.length > 1)
-        throw new Error("Don't add extracted lists with other items in the same column.");
     },
     addColumns: ({ columns, index }) => {
       let i = index || self.rawColumns.length;

@@ -1,3 +1,4 @@
+import { autorun } from 'mobx';
 import { types, getParent, resolveIdentifier } from 'mobx-state-tree';
 import Item from './item';
 
@@ -40,11 +41,24 @@ const Column = types
       return getParent(self, 2);
     },
   }))
-  .actions(self => ({
-    addItem: ({ item, index }) => {
-      const i = index || self.rawItems.length;
-      self.rawItems.splice(i, 0, self.parentContext.addMstIdToItem({ item }));
-    },
-  }));
+  .actions(self => {
+    let stopExtractCheck = null;
+    return {
+      addItem: ({ item, index }) => {
+        const i = index || self.rawItems.length;
+        self.rawItems.splice(i, 0, self.parentContext.addMstIdToItem({ item }));
+      },
+      beforeDestroy: () => {
+        stopExtractCheck();
+      },
+      afterCreate: () => {
+        stopExtractCheck = autorun(() => {
+          if (self.hasExtracted('horizontal') && self.rawItems.length > 1) {
+            throw new Error("Don't add extracted lists with other items in the same column.");
+          }
+        });
+      },
+    };
+  });
 
 export default Column;
