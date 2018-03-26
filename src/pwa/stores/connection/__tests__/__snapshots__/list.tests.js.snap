@@ -7,13 +7,11 @@ Object {
     "avatar": "",
     "description": "",
     "fetching": false,
-    "id": 7,
-    "link": "/?cat=7",
-    "meta": Object {
-      "canonical": "",
-      "description": "",
+    "headMeta": Object {
       "title": "",
     },
+    "id": 7,
+    "link": "/?cat=7",
     "mstId": "category_7",
     "name": "",
     "pagedLink": [Function],

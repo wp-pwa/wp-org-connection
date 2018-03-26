@@ -10,8 +10,7 @@
     "parent": 4,
     "meta": {},
     "yoast_meta": {
-      "yoast_wpseo_title": "Architecture Archives - Demo Worona",
-      "yoast_wpseo_metadesc": ""
+      "title": "Architecture Archives - Demo Worona"
     },
     "_links": {
       "self": [
@@ -57,8 +56,7 @@
           "slug": "cities",
           "taxonomy": "category",
           "yoast_meta": {
-            "yoast_wpseo_title": "Cities Archives - Demo Worona",
-            "yoast_wpseo_metadesc": ""
+            "title": "Cities Archives - Demo Worona"
           },
           "_links": {
             "self": [
@@ -104,8 +102,7 @@
     "parent": 0,
     "meta": {},
     "yoast_meta": {
-      "yoast_wpseo_title": "Cities Archives - Demo Worona",
-      "yoast_wpseo_metadesc": ""
+      "title": "Cities Archives - Demo Worona"
     },
     "_links": {
       "self": [
@@ -148,8 +145,7 @@
     "parent": 0,
     "meta": {},
     "yoast_meta": {
-      "yoast_wpseo_title": "Culture Archives - Demo Worona",
-      "yoast_wpseo_metadesc": ""
+      "title": "Culture Archives - Demo Worona"
     },
     "_links": {
       "self": [

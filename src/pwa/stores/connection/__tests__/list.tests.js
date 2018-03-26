@@ -4,7 +4,9 @@ import { types, unprotect } from 'mobx-state-tree';
 import { normalize } from 'normalizr';
 import * as connect from '../';
 import { list } from '../../../schemas';
+// https://demo.worona.org/?rest_route=/wp/v2/posts&categories=7&_embed=true&per_page=5&page=1
 import postsFromCategory7 from '../../../__tests__/posts-from-category-7.json';
+// https://demo.worona.org/?rest_route=/wp/v2/posts&categories=7&_embed=true&per_page=5&page=2
 import postsFromCategory7Page2 from '../../../__tests__/posts-from-category-7-page-2.json';
 
 const { result: resultFromCategory7, entities: entitiesFromCategory } = normalize(

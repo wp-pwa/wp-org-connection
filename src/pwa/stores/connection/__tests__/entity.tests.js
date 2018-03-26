@@ -4,8 +4,8 @@ import { types, unprotect } from 'mobx-state-tree';
 import { normalize } from 'normalizr';
 import * as connect from '../';
 import post60 from '../../../__tests__/post-60.json';
-import page260 from '../../../__tests__/page-with-subpage.json';
-import page231 from '../../../__tests__/page-231.json';
+import page184 from '../../../__tests__/page-with-subpage.json';
+import page211 from '../../../__tests__/page-211.json';
 import { entity } from '../../../schemas';
 import convert from '../../../converters';
 
@@ -224,23 +224,23 @@ describe('Connection › Entity', () => {
   });
 
   test('Get meta inside post before entity is ready', () => {
-    expect(connection.entity('post', 60).meta.title).toBe('');
-    expect(connection.entity('category', 3).meta.title).toBe('');
-    expect(connection.entity('media', 62).meta.title).toBe('');
+    expect(connection.entity('post', 60).headMeta.title).toBe('');
+    expect(connection.entity('category', 3).headMeta.title).toBe('');
+    expect(connection.entity('media', 62).headMeta.title).toBe('');
     connection.addEntity({ entity: entities.single[60] });
-    expect(connection.entity('post', 60).meta.title).toBe(convert(entities.single[60]).meta.title);
+    expect(connection.entity('post', 60).headMeta.title).toBe(convert(entities.single[60]).headMeta.title);
     connection.addEntity({ entity: entities.taxonomy[3] });
-    expect(connection.entity('category', 3).meta.title).toBe(
-      convert(entities.taxonomy[3]).meta.title,
+    expect(connection.entity('category', 3).headMeta.title).toBe(
+      convert(entities.taxonomy[3]).headMeta.title,
     );
     connection.addEntity({ entity: entities.media[62] });
-    expect(connection.entity('media', 62).meta.title).toBe('iceland');
+    expect(connection.entity('media', 62).headMeta.title).toBe('iceland - Demo Worona');
   });
 
   test('Subscribe to meta fields before entity is ready', done => {
-    expect(connection.entity('post', 60).meta.title).toBe('');
+    expect(connection.entity('post', 60).headMeta.title).toBe('');
     autorun(() => {
-      if (connection.entity('post', 60).meta.title === 'The Beauties of Gullfoss - Demo Worona')
+      if (connection.entity('post', 60).headMeta.title === 'The Beauties of Gullfoss - Demo Worona')
         done();
     });
     connection.addEntity({ entity: entities.single[60] });
@@ -292,17 +292,17 @@ describe('Connection › Entity', () => {
   });
 
   test('Get parent page', done => {
-    expect(connection.entity('page', 260).parent).toBe(null);
-    const { entities: entitiesFromPage260 } = normalize(page260, entity);
-    connection.addEntity({ entity: entitiesFromPage260.single[260] });
-    expect(connection.entity('page', 260).parent.id).toBe(231);
-    expect(connection.entity('page', 260).parent.title).toBe('');
+    expect(connection.entity('page', 184).parent).toBe(null);
+    const { entities: entitiesFromPage184 } = normalize(page184, entity);
+    connection.addEntity({ entity: entitiesFromPage184.single[184] });
+    expect(connection.entity('page', 184).parent.id).toBe(211);
+    expect(connection.entity('page', 184).parent.title).toBe('');
     autorun(() => {
-      if (connection.entity('page', 260).parent.title === 'Aplicaciones') done();
+      if (connection.entity('page', 184).parent.title === 'Audio TEST') done();
     });
-    const { entities: entitiesFromPage231 } = normalize(page231, entity);
-    connection.addEntity({ entity: entitiesFromPage231.single[231] });
-    expect(connection.entity('page', 260).parent.id).toBe(231);
-    expect(connection.entity('page', 260).parent.title).toBe('Aplicaciones');
+    const { entities: entitiesFromPage211 } = normalize(page211, entity);
+    connection.addEntity({ entity: entitiesFromPage211.single[211] });
+    expect(connection.entity('page', 184).parent.id).toBe(211);
+    expect(connection.entity('page', 184).parent.title).toBe('Audio TEST');
   });
 });

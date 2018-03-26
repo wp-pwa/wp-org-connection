@@ -31,10 +31,8 @@ const common = (type, id) => ({
   pagedLink: page => pagedLink({ type, id, page }),
 });
 
-export const metaShape = {
+export const headMetaShape = {
   title: '',
-  description: '',
-  canonical: '',
 };
 
 export const originalShape = {
@@ -63,7 +61,7 @@ export const mediaShape = (type, id) => ({
   mimeType: '',
   mediaType: '',
   original: originalShape,
-  meta: metaShape,
+  headMeta: headMetaShape,
   sizes: [],
   ...common(type, id),
 });
@@ -79,7 +77,7 @@ export const singleShape = (type, id) => ({
   featured: mediaShape('media'),
   author: authorShape('author'),
   target: '',
-  meta: metaShape,
+  headMeta: headMetaShape,
   parent: null,
   ...common(type, id),
 });
@@ -88,7 +86,7 @@ export const taxonomyShape = (type, id) => ({
   name: '',
   slug: '',
   target: '',
-  meta: metaShape,
+  headMeta: headMetaShape,
   ...common(type, id),
 });
 

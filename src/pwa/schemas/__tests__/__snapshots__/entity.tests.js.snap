@@ -74,8 +74,23 @@ Object {
   "taxonomy": "category",
   "type": "category",
   "yoast_meta": Object {
-    "yoast_wpseo_metadesc": "",
-    "yoast_wpseo_title": "Nature Archives - Demo Worona",
+    "title": "Nature Archives - Demo Worona",
+  },
+}
+`;
+
+exports[`Convert a latest taxonomy using entity 1`] = `
+Object {
+  "count": 1,
+  "id": "movie",
+  "link": "https://demo.worona.test/aaa/?post_type=movie",
+  "mst": "taxonomy",
+  "name": "Movies",
+  "slug": "movie",
+  "taxonomy": "latest",
+  "type": "latest",
+  "yoast_meta": Object {
+    "title": "Movies aarchivesss | Demo Worona",
   },
 }
 `;
@@ -84,58 +99,85 @@ exports[`Convert a media using entity 1`] = `
 Object {
   "_embedded": Object {
     "author": Array [
-      6,
+      2,
+    ],
+    "wp:term": Array [
+      Array [
+        Object {
+          "count": 0,
+          "id": "attachment",
+          "link": false,
+          "name": "Media",
+          "slug": "attachment",
+          "taxonomy": "latest",
+          "yoast_meta": Object {
+            "title": "attachment",
+          },
+        },
+      ],
     ],
   },
   "_links": Object {
     "about": Array [
       Object {
-        "href": "https://blog.worona.org/wp-json/wp/v2/types/attachment",
+        "href": "https://demo.worona.org/wp-json/wp/v2/types/attachment",
       },
     ],
     "author": Array [
       Object {
         "embeddable": true,
-        "href": "https://blog.worona.org/wp-json/wp/v2/users/6",
+        "href": "https://demo.worona.org/wp-json/wp/v2/users/2",
       },
     ],
     "collection": Array [
       Object {
-        "href": "https://blog.worona.org/wp-json/wp/v2/media",
+        "href": "https://demo.worona.org/wp-json/wp/v2/media",
+      },
+    ],
+    "curies": Array [
+      Object {
+        "href": "https://api.w.org/{rel}",
+        "name": "wp",
+        "templated": true,
       },
     ],
     "replies": Array [
       Object {
         "embeddable": true,
-        "href": "https://blog.worona.org/wp-json/wp/v2/comments?post=2687",
+        "href": "https://demo.worona.org/wp-json/wp/v2/comments?post=193",
       },
     ],
     "self": Array [
       Object {
-        "href": "https://blog.worona.org/wp-json/wp/v2/media/2687",
+        "href": "https://demo.worona.org/wp-json/wp/v2/media/193",
+      },
+    ],
+    "wp:term": Array [
+      Object {
+        "embeddable": true,
+        "href": "https://demo.worona.org/wp-json/wp/v2/latest?attachment=193",
+        "taxonomy": "latest",
       },
     ],
   },
-  "alt_text": "faq-questions-answers",
-  "author": 6,
-  "caption": Object {
-    "rendered": "<a href=\\"https://blog.worona.org/the-google-amp-phenomenon/faq-questions-answers/\\" rel=\\"bookmark\\" title=\\"Permalink to faq-questions-answers\\"></a>",
-  },
+  "alt_text": "road-trip",
+  "author": 2,
+  "caption": "",
   "comment_status": "open",
-  "date": "2018-01-15T16:12:44",
-  "date_gmt": "2018-01-15T16:12:44",
-  "description": Object {
-    "rendered": "<p class=\\"attachment\\"><a href='https://blog.worona.org/wp-content/uploads/2016/03/faq-questions-answers.jpg'><img width=\\"300\\" height=\\"177\\" src=\\"https://blog.worona.org/wp-content/uploads/2016/03/faq-questions-answers-300x177.jpg\\" class=\\"attachment-medium size-medium\\" alt=\\"faq-questions-answers\\" srcset=\\"https://blog.worona.org/wp-content/uploads/2016/03/faq-questions-answers-300x177.jpg 300w, https://blog.worona.org/wp-content/uploads/2016/03/faq-questions-answers-768x452.jpg 768w, https://blog.worona.org/wp-content/uploads/2016/03/faq-questions-answers-1024x603.jpg 1024w, https://blog.worona.org/wp-content/uploads/2016/03/faq-questions-answers-700x412.jpg 700w\\" sizes=\\"(max-width: 300px) 100vw, 300px\\" /></a></p>
-",
-  },
+  "date": "2017-03-27T15:23:51",
+  "date_gmt": "2017-03-27T15:23:51",
+  "description": "",
   "guid": Object {
-    "rendered": "https://blog.worona.org/wp-content/uploads/2016/03/faq-questions-answers.jpg",
+    "rendered": "https://demo.worona.org/wp-content/uploads/2017/03/road-trip.png",
   },
-  "id": 2687,
-  "link": "https://blog.worona.org/the-google-amp-phenomenon/faq-questions-answers/",
+  "id": 193,
+  "latest": Array [
+    "attachment",
+  ],
+  "link": "https://demo.worona.org/audio-test/about-us/road-trip/",
   "media_details": Object {
-    "file": "2016/03/faq-questions-answers.jpg",
-    "height": 1088,
+    "file": "2017/03/road-trip.png",
+    "height": 467,
     "image_meta": Object {
       "aperture": "0",
       "camera": "",
@@ -152,73 +194,46 @@ Object {
     },
     "sizes": Object {
       "full": Object {
-        "file": "faq-questions-answers.jpg",
-        "height": 1088,
-        "mime_type": "image/jpeg",
-        "source_url": "https://blog.worona.org/wp-content/uploads/2016/03/faq-questions-answers.jpg",
-        "width": 1848,
-      },
-      "independent_publisher_post_thumbnail": Object {
-        "file": "faq-questions-answers-700x412.jpg",
-        "height": 412,
-        "mime_type": "image/jpeg",
-        "source_url": "https://blog.worona.org/wp-content/uploads/2016/03/faq-questions-answers-700x412.jpg",
+        "file": "road-trip.png",
+        "height": 467,
+        "mime_type": "image/png",
+        "source_url": "https://demo.worona.org/wp-content/uploads/2017/03/road-trip.png",
         "width": 700,
       },
-      "large": Object {
-        "file": "faq-questions-answers-1024x603.jpg",
-        "height": 603,
-        "mime_type": "image/jpeg",
-        "source_url": "https://blog.worona.org/wp-content/uploads/2016/03/faq-questions-answers-1024x603.jpg",
-        "width": 1024,
-      },
       "medium": Object {
-        "file": "faq-questions-answers-300x177.jpg",
-        "height": 177,
-        "mime_type": "image/jpeg",
-        "source_url": "https://blog.worona.org/wp-content/uploads/2016/03/faq-questions-answers-300x177.jpg",
-        "width": 300,
-      },
-      "medium_large": Object {
-        "file": "faq-questions-answers-768x452.jpg",
-        "height": 452,
-        "mime_type": "image/jpeg",
-        "source_url": "https://blog.worona.org/wp-content/uploads/2016/03/faq-questions-answers-768x452.jpg",
-        "width": 768,
-      },
-      "shareaholic-thumbnail": Object {
-        "file": "faq-questions-answers-300x177.jpg",
-        "height": 177,
-        "mime_type": "image/jpeg",
-        "source_url": "https://blog.worona.org/wp-content/uploads/2016/03/faq-questions-answers-300x177.jpg",
+        "file": "road-trip-300x200.png",
+        "height": 200,
+        "mime_type": "image/png",
+        "source_url": "https://demo.worona.org/wp-content/uploads/2017/03/road-trip-300x200.png",
         "width": 300,
       },
       "thumbnail": Object {
-        "file": "faq-questions-answers-150x150.jpg",
+        "file": "road-trip-150x150.png",
         "height": 150,
-        "mime_type": "image/jpeg",
-        "source_url": "https://blog.worona.org/wp-content/uploads/2016/03/faq-questions-answers-150x150.jpg",
+        "mime_type": "image/png",
+        "source_url": "https://demo.worona.org/wp-content/uploads/2017/03/road-trip-150x150.png",
         "width": 150,
       },
     },
-    "width": 1848,
+    "width": 700,
   },
   "media_type": "image",
-  "meta": Array [],
-  "mime_type": "image/jpeg",
-  "modified": "2018-01-15T16:12:50",
-  "modified_gmt": "2018-01-15T16:12:50",
+  "meta": Object {},
+  "mime_type": "image/png",
+  "modified": "2017-03-27T15:23:58",
+  "modified_gmt": "2017-03-27T15:23:58",
   "mst": "media",
   "ping_status": "closed",
-  "post": 875,
-  "slug": "faq-questions-answers",
-  "source_url": "https://blog.worona.org/wp-content/uploads/2016/03/faq-questions-answers.jpg",
-  "status": "inherit",
-  "template": "",
+  "post": 184,
+  "slug": "road-trip",
+  "source_url": "https://demo.worona.org/wp-content/uploads/2017/03/road-trip.png",
   "title": Object {
-    "rendered": "faq-questions-answers",
+    "rendered": "road-trip",
   },
   "type": "media",
+  "yoast_meta": Object {
+    "title": "road-trip - Demo Worona",
+  },
 }
 `;
 
@@ -226,25 +241,25 @@ exports[`Convert a page using entity and ignore subpages 1`] = `
 Object {
   "_embedded": Object {
     "author": Array [
-      2,
+      1,
     ],
     "up": Array [
       Object {
         "_links": Object {
           "about": Array [
             Object {
-              "href": "https://androidayuda.com/wp-json/wp/v2/types/page",
+              "href": "https://demo.worona.org/wp-json/wp/v2/types/page",
             },
           ],
           "author": Array [
             Object {
               "embeddable": true,
-              "href": "https://androidayuda.com/wp-json/wp/v2/users/2",
+              "href": "https://demo.worona.org/wp-json/wp/v2/users/6",
             },
           ],
           "collection": Array [
             Object {
-              "href": "https://androidayuda.com/wp-json/wp/v2/pages",
+              "href": "https://demo.worona.org/wp-json/wp/v2/pages",
             },
           ],
           "curies": Array [
@@ -257,63 +272,75 @@ Object {
           "replies": Array [
             Object {
               "embeddable": true,
-              "href": "https://androidayuda.com/wp-json/wp/v2/comments?post=231",
+              "href": "https://demo.worona.org/wp-json/wp/v2/comments?post=211",
             },
           ],
           "self": Array [
             Object {
-              "href": "https://androidayuda.com/wp-json/wp/v2/pages/231",
+              "href": "https://demo.worona.org/wp-json/wp/v2/pages/211",
             },
           ],
           "version-history": Array [
             Object {
-              "href": "https://androidayuda.com/wp-json/wp/v2/pages/231/revisions",
+              "href": "https://demo.worona.org/wp-json/wp/v2/pages/211/revisions",
             },
           ],
           "wp:attachment": Array [
             Object {
-              "href": "https://androidayuda.com/wp-json/wp/v2/media?parent=231",
+              "href": "https://demo.worona.org/wp-json/wp/v2/media?parent=211",
+            },
+          ],
+          "wp:term": Array [
+            Object {
+              "embeddable": true,
+              "href": "https://demo.worona.org/wp-json/wp/v2/latest?page=211",
+              "taxonomy": "latest",
             },
           ],
         },
-        "author": 2,
-        "date": "2012-03-08T10:16:32",
+        "author": 6,
+        "date": "2017-06-27T10:10:25",
         "excerpt": Object {
           "protected": false,
-          "rendered": "<p>A continuación puedes encontrar una selección de las mejores aplicaciones de Android gratuitas y de pago. Puedes elegir la categoría para seleccionar las &#8220;apps&#8221; que más te interesan. Recuerda que además puedes comentar tus impresiones y compartir las aplicaciones en las redes sociales.</p>
+          "rendered": "<p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. &nbsp;</p>
 ",
         },
-        "featured_media": 0,
-        "id": 231,
-        "link": "https://androidayuda.com/aplicaciones-android/",
-        "slug": "aplicaciones-android",
+        "id": 211,
+        "latest": Array [
+          "page",
+        ],
+        "link": "https://demo.worona.org/audio-test/",
+        "slug": "audio-test",
         "title": Object {
-          "rendered": "Aplicaciones",
+          "rendered": "Audio TEST",
         },
         "type": "page",
         "yoast_meta": Object {
-          "yoast_wpseo_canonical": "https://androidayuda.com/aplicaciones-android/",
-          "yoast_wpseo_metadesc": "Aplicaciones Android : descarga las mejores Apps para tu móvil o tablet Android. Seguridad, mensajería, utilidades, entretenimiento, fotografía",
-          "yoast_wpseo_title": "Aplicaciones de Android gratuitas - Las mejores aplicaciones Andriod gratis",
+          "title": "Audio TEST - Demo Worona",
         },
       },
+    ],
+    "wp:term": Array [
+      Array [
+        "page",
+      ],
     ],
   },
   "_links": Object {
     "about": Array [
       Object {
-        "href": "https://androidayuda.com/wp-json/wp/v2/types/page",
+        "href": "https://demo.worona.org/wp-json/wp/v2/types/page",
       },
     ],
     "author": Array [
       Object {
         "embeddable": true,
-        "href": "https://androidayuda.com/wp-json/wp/v2/users/2",
+        "href": "https://demo.worona.org/wp-json/wp/v2/users/1",
       },
     ],
     "collection": Array [
       Object {
-        "href": "https://androidayuda.com/wp-json/wp/v2/pages",
+        "href": "https://demo.worona.org/wp-json/wp/v2/pages",
       },
     ],
     "curies": Array [
@@ -326,71 +353,100 @@ Object {
     "replies": Array [
       Object {
         "embeddable": true,
-        "href": "https://androidayuda.com/wp-json/wp/v2/comments?post=260",
+        "href": "https://demo.worona.org/wp-json/wp/v2/comments?post=184",
       },
     ],
     "self": Array [
       Object {
-        "href": "https://androidayuda.com/wp-json/wp/v2/pages/260",
+        "href": "https://demo.worona.org/wp-json/wp/v2/pages/184",
       },
     ],
     "up": Array [
       Object {
         "embeddable": true,
-        "href": "https://androidayuda.com/wp-json/wp/v2/pages/231",
+        "href": "https://demo.worona.org/wp-json/wp/v2/pages/211",
       },
     ],
     "version-history": Array [
       Object {
-        "href": "https://androidayuda.com/wp-json/wp/v2/pages/260/revisions",
+        "href": "https://demo.worona.org/wp-json/wp/v2/pages/184/revisions",
       },
     ],
     "wp:attachment": Array [
       Object {
-        "href": "https://androidayuda.com/wp-json/wp/v2/media?parent=260",
+        "href": "https://demo.worona.org/wp-json/wp/v2/media?parent=184",
+      },
+    ],
+    "wp:term": Array [
+      Object {
+        "embeddable": true,
+        "href": "https://demo.worona.org/wp-json/wp/v2/latest?page=184",
+        "taxonomy": "latest",
       },
     ],
   },
-  "author": 2,
-  "comment_status": "open",
+  "author": 1,
+  "comment_status": "closed",
   "content": Object {
     "protected": false,
-    "rendered": "<p>En esta sección hemos seleccionado las mejores aplicaciones para proteger a tu smartphone Android del malware y aplicaciones de dudosa procedencia. Con el aumento de dispositivos Android, el malware se ha multiplicado exponencialmente en los últimos meses. Es esencial proteger forma precisa el terminal para evitar sustos o problemas de seguridad.</p>
+    "rendered": "<h5>If you are just curious about our story you&#8217;re in the right spot 🙂</h5>
+<p>This site features articles on cities in Europe and around the world. We’re passionate about travelling— doing something fun, seeing cool things, and meeting different people.</p>
+<blockquote><p>“Twenty years from now you will be more disappointed by the things you didn’t do than by the ones you did do.” – Mark Twain</p></blockquote>
+<p><img class=\\"alignnone size-full wp-image-185\\" src=\\"https://demo.worona.org/wp-content/uploads/2017/03/pexels-photo-297755.png\\" alt=\\"about-us-team\\" width=\\"700\\" height=\\"458\\" srcset=\\"https://demo.worona.org/wp-content/uploads/2017/03/pexels-photo-297755.png 700w, https://demo.worona.org/wp-content/uploads/2017/03/pexels-photo-297755-300x196.png 300w\\" sizes=\\"(max-width: 700px) 85vw, 700px\\" /></p>
+<h6><em>Alan Martin</em></h6>
+<p>Alan is a blogger and WordPress enthusiast. He loves travelling, music and pizza. Check out his latest post about <a href=\\"https://demo.worona.org/sunrise-at-phu-quoc-island/\\">Phú Quốc Island (Vietnam)</a>.</p>
+<h6><em>Reyes Martínez</em></h6>
+<p>Reyes loves travelling, photography and writing. Don&#8217;t miss her latest post about the amazing <a href=\\"https://demo.worona.org/small-and-picturesque-french-villages/\\">Picturesque French Villages</a>.</p>
+<h6><em>Luis Herranz</em></h6>
+<p>Luis is an entrepreneur that enjoys travelling and reading. In his latest post, he writes about India and The <a href=\\"https://demo.worona.org/latest-trip-to-india/\\">Taj Mahal</a>, one of the universally admired masterpieces of the world’s heritage.</p>
+<p><img class=\\"alignnone size-full wp-image-193\\" src=\\"https://demo.worona.org/wp-content/uploads/2017/03/road-trip.png\\" alt=\\"road-trip\\" width=\\"700\\" height=\\"467\\" srcset=\\"https://demo.worona.org/wp-content/uploads/2017/03/road-trip.png 700w, https://demo.worona.org/wp-content/uploads/2017/03/road-trip-300x200.png 300w\\" sizes=\\"(max-width: 700px) 85vw, 700px\\" /></p>
+<p>This is just a demo blog, but you might want to check out some of the really good travel bloggers out there:</p>
+<ul>
+<li><strong>Nomadic Matt</strong>. Each month over 1.000.000 people use his advice to travel better, cheaper, and longer.</li>
+<li><strong>Expert Vagabond</strong> by Matt &#8211; adventure travel photographer and professional blogger.</li>
+<li><strong>The Aussie Nomad</strong> by Chris. He has been living abroad as an expat and exploring the world since the beginning of 2010.</li>
+</ul>
+<p>You can see the full list of top travel blogs <a href=\\"http://www.theexpeditioner.com/the-top-50-travel-blogs/\\">here</a>.</p>
+<h4>See you down the road!</h4>
+<p><iframe style=\\"border: 0;\\" src=\\"https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d31758.896101501236!2d13.36989231715827!3d52.510655459236325!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x47a84e373f035901%3A0x42120465b5e3b70!2sBerl%C3%ADn%2C+Alemania!5e0!3m2!1ses!2ses!4v1490629160374\\" width=\\"600\\" height=\\"450\\" frameborder=\\"0\\" allowfullscreen=\\"allowfullscreen\\"></iframe></p>
 ",
   },
-  "date": "2012-03-08T10:41:58",
-  "date_gmt": "2012-03-08T09:41:58",
+  "date": "2017-03-27T15:09:22",
+  "date_gmt": "2017-03-27T15:09:22",
   "excerpt": Object {
     "protected": false,
-    "rendered": "<p>En esta sección hemos seleccionado las mejores aplicaciones para proteger a tu smartphone Android del malware y aplicaciones de dudosa procedencia. Con el aumento de dispositivos Android, el malware se ha multiplicado exponencialmente en los últimos meses. Es esencial proteger forma precisa el terminal para evitar sustos o problemas de seguridad.</p>
+    "rendered": "<p>If you are just curious about our story you&#8217;re in the right spot 🙂 This site features articles on cities in Europe and around the world. We’re passionate about travelling— doing something fun, seeing cool things, and meeting different people. “Twenty years from now you will be more disappointed by the things you didn’t do &hellip; <a href=\\"https://demo.worona.org/audio-test/about-us/\\" class=\\"more-link\\">Continue reading<span class=\\"screen-reader-text\\"> &#8220;About us&#8221;</span></a></p>
 ",
   },
   "featured_media": 0,
   "guid": Object {
-    "rendered": "http://androidayuda.com/?page_id=260",
+    "rendered": "https://demo.worona.org/?page_id=184",
   },
-  "id": 260,
-  "link": "https://androidayuda.com/aplicaciones-android/seguridad/",
+  "id": 184,
+  "latest": Array [
+    "page",
+  ],
+  "link": "https://demo.worona.org/audio-test/about-us/",
   "menu_order": 0,
-  "meta": Object {
-    "amp_status": "",
-  },
-  "modified": "2017-06-16T12:51:28",
-  "modified_gmt": "2017-06-16T10:51:28",
+  "meta": Object {},
+  "modified": "2018-03-23T15:35:51",
+  "modified_gmt": "2018-03-23T15:35:51",
   "mst": "single",
-  "parent": 231,
-  "ping_status": "open",
-  "slug": "seguridad",
-  "status": "publish",
-  "template": "template-apps-category-index.php",
+  "parent": 211,
+  "ping_status": "closed",
+  "slug": "about-us",
+  "taxonomiesMap": Object {
+    "latest": Array [
+      "page",
+    ],
+  },
+  "template": "",
   "title": Object {
-    "rendered": "Seguridad",
+    "rendered": "About us",
   },
   "type": "page",
   "yoast_meta": Object {
-    "yoast_wpseo_canonical": "https://androidayuda.com/aplicaciones-android/seguridad/",
-    "yoast_wpseo_metadesc": "Aplicaciones de seguridad para Android. Descarga los mejores antivirus y apps para proteger tu smartphone o tablet Android",
-    "yoast_wpseo_title": "Aplicaciones para proteger móvil Android | Aplicaciones de seguridad",
+    "title": "About us - Demo Worona",
   },
 }
 `;
@@ -437,8 +493,7 @@ Object {
   "taxonomy": "tag",
   "type": "tag",
   "yoast_meta": Object {
-    "yoast_wpseo_metadesc": "",
-    "yoast_wpseo_title": "Gullfoss Archives - Demo Worona",
+    "title": "Gullfoss Archives - Demo Worona",
   },
 }
 `;
@@ -511,6 +566,9 @@ Object {
         13,
         11,
       ],
+      Array [
+        "post",
+      ],
     ],
   },
   "_links": Object {
@@ -575,6 +633,11 @@ Object {
         "href": "https://demo.worona.org/wp-json/wp/v2/tags?post=60",
         "taxonomy": "post_tag",
       },
+      Object {
+        "embeddable": true,
+        "href": "https://demo.worona.org/wp-json/wp/v2/latest?post=60",
+        "taxonomy": "latest",
+      },
     ],
   },
   "author": 4,
@@ -585,19 +648,20 @@ Object {
   "comment_status": "open",
   "content": Object {
     "protected": false,
-    "rendered": "<p>Gullfoss is a waterfall located in the canyon of the Hvítá river in southwest Iceland.<!--more--></p>
-<p><a href=\\"https://en.wikipedia.org/wiki/Gullfoss\\" target=\\"_blank\\">Gullfoss</a> is one of the most popular <a href=\\"https://demo.worona.org/iceland/\\">tourist attractions in Iceland</a>. The wide Hvítá rushes southward, and about a kilometre above the falls it turns sharply to the right and flows down into a wide curved three-step &#8220;staircase&#8221; and then abruptly plunges in two stages (11 metres or 36 feet, and 21 metres or 69 feet) into a crevice 32 metres (105 ft) deep. The crevice, about 20 metres (66 ft) wide and 2.5 kilometres (1.6 mi) in length, extends perpendicular to the flow of the river. The average amount of water running down the waterfall is 140 cubic metres (4,900 cu ft) per second in the summer and 80 cubic metres (2,800 cu ft) per second in the winter. The <a href=\\"https://demo.worona.org/sample-page/\\">highest flood</a> measured was 2,000 cubic metres (71,000 cu ft) per second.</p>
+    "rendered": "<p>Gullfoss is a waterfall located in the canyon of the Hvítá river in southwest Iceland.</p>
+<p><a href=\\"https://en.wikipedia.org/wiki/Gullfoss\\">Gullfoss</a> is one of the most popular <a href=\\"https://demo.worona.org/iceland/\\">tourist attractions in Iceland</a>. The wide Hvítá rushes southward, and about a kilometre above the falls it turns sharply to the right and flows down into a wide curved three-step “staircase” and then abruptly plunges in two stages (11 metres or 36 feet, and 21 metres or 69 feet) into a crevice 32 metres (105 ft) deep. The crevice, about 20 metres (66 ft) wide and 2.5 kilometres (1.6 mi) in length, extends perpendicular to the flow of the river. The average amount of water running down the waterfall is 140 cubic metres (4,900 cu ft) per second in the summer and 80 cubic metres (2,800 cu ft) per second in the winter. The <a href=\\"https://demo.worona.org/sample-page/\\">highest flood</a> measured was 2,000 cubic metres (71,000 cu ft) per second.</p>
 <h3>An iconic waterfall of Iceland</h3>
-<figure id=\\"attachment_70\\" style=\\"width: 840px\\" class=\\"wp-caption alignnone\\"><img class=\\"wp-image-70 size-large\\" src=\\"https://demo.worona.org/wp-content/uploads/2016/11/Gullfoss-1024x577.jpg\\" alt=\\"gullfoss\\" width=\\"840\\" height=\\"473\\" srcset=\\"https://demo.worona.org/wp-content/uploads/2016/11/Gullfoss-1024x577.jpg 1024w, https://demo.worona.org/wp-content/uploads/2016/11/Gullfoss-300x169.jpg 300w, https://demo.worona.org/wp-content/uploads/2016/11/Gullfoss-768x433.jpg 768w, https://demo.worona.org/wp-content/uploads/2016/11/Gullfoss-1200x676.jpg 1200w\\" sizes=\\"(max-width: 709px) 85vw, (max-width: 909px) 67vw, (max-width: 1362px) 62vw, 840px\\" /><figcaption class=\\"wp-caption-text\\">Gullfoss, an iconic waterfall of Iceland.</figcaption></figure>
-<p>During the first half of the 20th century and some years into the late 20th century, there was much speculation about using Gullfoss to generate electricity. During this period, the waterfall was rented indirectly by its owners, Tómas Tómasson and Halldór Halldórsson, to foreign investors. However, the investors&#8217; attempts were unsuccessful, partly due to lack of money. The waterfall was later sold to the state of Iceland, and is now protected.</p>
+<figure id=\\"attachment_70\\" style=\\"width:840px;\\" class=\\"wp-caption alignnone\\"><img class=\\"wp-image-70 size-large\\" src=\\"https://demo.worona.org/wp-content/uploads/2016/11/Gullfoss-1024x577.jpg\\" alt=\\"gullfoss\\" width=\\"840\\" height=\\"473\\"><figcaption class=\\"wp-caption-text\\">Gullfoss, an iconic waterfall of Iceland.</figcaption></figure>
+
+<div class=\\"4\\">During the first half of the 20th century and some years into the late 20th century, there was much speculation about using Gullfoss to generate electricity. During this period, the waterfall was rented indirectly by its owners, Tómas Tómasson and Halldór Halldórsson, to foreign investors. However, the investors’ attempts were unsuccessful, partly due to lack of money. The waterfall was later sold to the state of Iceland, and is now protected.</div>
+
 <blockquote>
-<p style=\\"text-align: left;\\">Iceland is not a destination. It’s an adventure set in stunning scenery.</p>
+<p style=\\"text-align:left;\\">Iceland is not a destination. It’s an adventure set in stunning scenery.</p>
 </blockquote>
-<p>Sigríður Tómasdóttir, the daughter of Tómas Tómasson, was determined to preserve the waterfall&#8217;s condition and even threatened to throw herself down. Although it is widely believed, the very popular story that Sigríður saved the waterfall from exploitation is untrue. <a href=\\"http://www.nat.is/travelguideeng/gullfoss_sigridur_tomasdottir.htm\\" target=\\"_blank\\">A stone memorial to Sigriður</a>, located above the falls, depicts her profile.</p>
-<p><iframe width=\\"840\\" height=\\"473\\" src=\\"https://www.youtube.com/embed/3bUtvUAeX8s?feature=oembed\\" frameborder=\\"0\\" gesture=\\"media\\" allowfullscreen></iframe></p>
-<p>&nbsp;</p>
-<ul>
-<li><a title=\\"Geography of Iceland\\" href=\\"https://en.wikipedia.org/wiki/Geography_of_Iceland\\">Geography of Iceland</a></li>
+<p>Sigríður Tómasdóttir, the daughter of Tómas Tómasson, was determined to preserve the waterfall’s condition and even threatened to throw herself down. Although it is widely believed, the very popular story that Sigríður saved the waterfall from exploitation is untrue. <a href=\\"http://www.nat.is/travelguideeng/gullfoss_sigridur_tomasdottir.htm\\">A stone memorial to Sigriður</a>, located above the falls, depicts her profile.</p>
+<p><iframe width=\\"840\\" height=\\"473\\" src=\\"https://www.youtube.com/embed/3bUtvUAeX8s?feature=oembed\\" frameborder=\\"0\\" allowfullscreen></iframe></p>
+
+<ul><li><a title=\\"Geography of Iceland\\" href=\\"https://en.wikipedia.org/wiki/Geography_of_Iceland\\">Geography of Iceland</a></li>
 <li><a title=\\"Iceland plume\\" href=\\"https://en.wikipedia.org/wiki/Iceland_plume\\">Iceland plume</a></li>
 <li><a title=\\"List of lakes of Iceland\\" href=\\"https://en.wikipedia.org/wiki/List_of_lakes_of_Iceland\\">List of lakes of Iceland</a></li>
 <li><a class=\\"mw-redirect\\" title=\\"List of islands off Iceland\\" href=\\"https://en.wikipedia.org/wiki/List_of_islands_off_Iceland\\">List of islands off Iceland</a></li>
@@ -607,18 +671,34 @@ Object {
 <li><a class=\\"mw-redirect\\" title=\\"Volcanism in Iceland\\" href=\\"https://en.wikipedia.org/wiki/Volcanism_in_Iceland\\">Volcanism in Iceland</a></li>
 <li><a class=\\"mw-redirect\\" title=\\"Waterfalls of Iceland\\" href=\\"https://en.wikipedia.org/wiki/Waterfalls_of_Iceland\\">Waterfalls of Iceland</a></li>
 </ul>
-<p>Source: <a href=\\"https://en.wikipedia.org/wiki/Gullfoss\\">Gullfoss</a>.<br />
+
+<p>Source: <a href=\\"https://en.wikipedia.org/wiki/Gullfoss\\">Gullfoss</a>.<br>
 Category: <a href=\\"https://demo.worona.org/wp-cat/travel/\\">Travel</a></p>
-<blockquote class=\\"twitter-tweet\\" data-width=\\"550\\"><p lang=\\"en\\" dir=\\"ltr\\">Exploring Iceland <a href=\\"https://t.co/G5c2iVAKHg\\">pic.twitter.com/G5c2iVAKHg</a></p>
-<p>&mdash; Traveling Ideas (@Travel_Places_) <a href=\\"https://twitter.com/Travel_Places_/status/911998747198009344?ref_src=twsrc%5Etfw\\">September 24, 2017</a></p></blockquote>
-<p><script async src=\\"https://platform.twitter.com/widgets.js\\" charset=\\"utf-8\\"></script></p>
-<p><script type=\\"text/javascript\\">
-  var st = String(/batudiropecingu/);
-  st = st.substring(1, st.length-1);
-  var un = String(/undefined/);
-  un = un.substring(1, un.length-1);
-  if (typeof __worona_public_path__ !== un) document.write(st);
-</script></p>
+<blockquote class=\\"twitter-tweet\\"><p lang=\\"en\\" dir=\\"ltr\\">Exploring Iceland <a href=\\"https://t.co/G5c2iVAKHg\\">pic.twitter.com/G5c2iVAKHg</a></p>
+<p>— Traveling Ideas (@Travel_Places_) <a href=\\"https://twitter.com/Travel_Places_/status/911998747198009344?ref_src=twsrc%5Etfw\\">September 24, 2017</a></p></blockquote>
+
+
+<blockquote class=\\"instagram-media\\" style=\\"background:#FFF;border:0;margin:1px;max-width:658px;padding:0;width:99.375%;\\"><div style=\\"padding:8px;\\">
+<div style=\\"background:#F8F8F8;line-height:0;margin-top:40px;padding:50% 0;text-align:center;width:100%;\\">
+
+</div>
+<p style=\\"margin:8px 0 0 0;padding:0 4px;\\"> <a href=\\"https://www.instagram.com/p/BdqJaLiAYfe/\\" style=\\"color:#000;font-family:Arial, sans-serif;font-size:14px;font-style:normal;font-weight:normal;line-height:17px;text-decoration:none;\\">Presents PHOTOGRAPHER | @sentinelphotography LOVES OF THE DAY January 7, 2018 LOCATION | #Gullfoss Waterfall SELECTED BY ADMIN | Linda – @photobylindamoelgaard OUR TAG | #LOVES_UNITED_SCANDINAVIA VISIT PARTNERS COMMUNITY: * @loves_united_family * @loves_united_life * @loves_united_denmark * @loves_united_norway * @loves_united_finland * @loves_united_copenhagen * @traveling__night * @rsa_light_ * @igworld_global * @ig_eternity * OUR MAIL | loves.members@gmail.com * #lo_un_sc_sentinelphotography * #l_u_t_c_e_2018_january _________________________________________ #bestofscandinavia #igscandinavia #visitscandinavia #nordic2day #unlimitedscandinavia #scandinavia #ig_week_scandinavia #loves_united_life #loves_united_europe #exceptional_pictures #allbeauty_addiction #marvelouz_world #igworld_global #earth_shotz #ig_eternity #thehub_landscape #loves_united_landscape #loves_united_earth #tv_landscapes #bns_landscape #planet_earth_shots #zonephotographer #magic_marvels #earth_deluxe #landscape #landscapelover</a></p>
+<p style=\\"color:#c9c8cd;font-family:Arial, sans-serif;font-size:14px;line-height:17px;margin-bottom:0;margin-top:8px;overflow:hidden;padding:8px 0 7px;text-align:center;white-space:nowrap;\\">A post shared by <a href=\\"https://www.instagram.com/loves_united_scandinavia/\\" style=\\"color:#c9c8cd;font-family:Arial, sans-serif;font-size:14px;font-style:normal;font-weight:normal;line-height:17px;\\"> LOVES ☆  AMAZING SCANDINAVIA</a> (@loves_united_scandinavia) on Jan 7, 2018 at 10:37am PST</p>
+</div>
+</blockquote>
+
+<div id=\\"gallery-1\\" class=\\"gallery galleryid-60 gallery-columns-3 gallery-size-thumbnail\\"><figure class=\\"gallery-item\\"><div class=\\"gallery-icon landscape\\">
+				<a href=\\"https://demo.worona.org/the-beauties-of-gullfoss/iceland-test/\\"><img data-attachment-id=\\"62\\" width=\\"150\\" height=\\"150\\" src=\\"https://demo.worona.org/wp-content/uploads/2016/11/Iceland-test-150x150.jpg\\" class=\\"attachment-thumbnail size-thumbnail\\" alt=\\"iceland\\"></a>
+			</div></figure><figure class=\\"gallery-item\\"><div class=\\"gallery-icon landscape\\">
+				<a href=\\"https://demo.worona.org/sunrise-at-phu-quoc-island/pexels-photo-225203/\\"><img data-attachment-id=\\"84\\" width=\\"150\\" height=\\"150\\" src=\\"https://demo.worona.org/wp-content/uploads/2016/11/pexels-photo-225203-150x150.jpeg\\" class=\\"attachment-thumbnail size-thumbnail\\" alt=\\"pexels-photo-225203\\"></a>
+			</div></figure><figure class=\\"gallery-item\\"><div class=\\"gallery-icon landscape\\">
+				<a href=\\"https://demo.worona.org/somewhere-in-romania/romania/\\"><img data-attachment-id=\\"13\\" width=\\"150\\" height=\\"150\\" src=\\"https://demo.worona.org/wp-content/uploads/2016/11/Romania-150x150.jpg\\" class=\\"attachment-thumbnail size-thumbnail\\" alt=\\"romania\\"></a>
+			</div></figure><figure class=\\"gallery-item\\"><div class=\\"gallery-icon landscape\\">
+				<a href=\\"https://demo.worona.org/banff-national-park/national-park/\\"><img data-attachment-id=\\"95\\" width=\\"150\\" height=\\"150\\" src=\\"https://demo.worona.org/wp-content/uploads/2016/11/national-park-150x150.jpg\\" class=\\"attachment-thumbnail size-thumbnail\\" alt=\\"national-park\\"></a>
+			</div></figure><figure class=\\"gallery-item\\"><div class=\\"gallery-icon landscape\\">
+				<a href=\\"https://demo.worona.org/switzerlands-mountains/lake/\\"><img data-attachment-id=\\"118\\" width=\\"150\\" height=\\"150\\" src=\\"https://demo.worona.org/wp-content/uploads/2016/11/lake-150x150.jpg\\" class=\\"attachment-thumbnail size-thumbnail\\" alt=\\"lake\\"></a>
+			</div></figure></div>
+
 ",
   },
   "date": "2016-11-25T18:31:11",
@@ -634,10 +714,13 @@ Category: <a href=\\"https://demo.worona.org/wp-cat/travel/\\">Travel</a></p>
     "rendered": "https://demo.worona.org/?p=60",
   },
   "id": 60,
+  "latest": Array [
+    "post",
+  ],
   "link": "https://demo.worona.org/the-beauties-of-gullfoss/",
   "meta": Object {},
-  "modified": "2017-11-10T14:51:46",
-  "modified_gmt": "2017-11-10T14:51:46",
+  "modified": "2018-03-22T17:09:55",
+  "modified_gmt": "2018-03-22T17:09:55",
   "mst": "single",
   "ping_status": "open",
   "slug": "the-beauties-of-gullfoss",
@@ -653,6 +736,9 @@ Category: <a href=\\"https://demo.worona.org/wp-cat/travel/\\">Travel</a></p>
       3,
       8,
     ],
+    "latest": Array [
+      "post",
+    ],
     "tag": Array [
       10,
       9,
@@ -665,9 +751,7 @@ Category: <a href=\\"https://demo.worona.org/wp-cat/travel/\\">Travel</a></p>
   },
   "type": "post",
   "yoast_meta": Object {
-    "yoast_wpseo_canonical": "https://demo.worona.org/the-beauties-of-gullfoss/",
-    "yoast_wpseo_metadesc": "",
-    "yoast_wpseo_title": "The Beauties of Gullfoss - Demo Worona",
+    "title": "The Beauties of Gullfoss - Demo Worona",
   },
 }
 `;
@@ -691,6 +775,13 @@ Object {
         "href": "https://demo.worona.org/wp-json/wp/v2/media",
       },
     ],
+    "curies": Array [
+      Object {
+        "href": "https://api.w.org/{rel}",
+        "name": "wp",
+        "templated": true,
+      },
+    ],
     "replies": Array [
       Object {
         "embeddable": true,
@@ -702,11 +793,21 @@ Object {
         "href": "https://demo.worona.org/wp-json/wp/v2/media/62",
       },
     ],
+    "wp:term": Array [
+      Object {
+        "embeddable": true,
+        "href": "https://demo.worona.org/wp-json/wp/v2/latest?attachment=62",
+        "taxonomy": "latest",
+      },
+    ],
   },
   "alt_text": "iceland",
   "author": 2,
   "date": "2016-11-25T18:33:33",
   "id": 62,
+  "latest": Array [
+    "attachment",
+  ],
   "link": "https://demo.worona.org/the-beauties-of-gullfoss/iceland-test/",
   "media_details": Object {
     "file": "2016/11/Iceland-test.jpg",
@@ -780,6 +881,9 @@ Object {
     "rendered": "iceland",
   },
   "type": "media",
+  "yoast_meta": Object {
+    "title": "iceland - Demo Worona",
+  },
 }
 `;
 
@@ -822,8 +926,7 @@ Object {
   "taxonomy": "category",
   "type": "category",
   "yoast_meta": Object {
-    "yoast_wpseo_metadesc": "",
-    "yoast_wpseo_title": "Photography Archives - Demo Worona",
+    "title": "Photography Archives - Demo Worona",
   },
 }
 `;
@@ -867,8 +970,7 @@ Object {
   "taxonomy": "tag",
   "type": "tag",
   "yoast_meta": Object {
-    "yoast_wpseo_metadesc": "",
-    "yoast_wpseo_title": "Gullfoss Archives - Demo Worona",
+    "title": "Gullfoss Archives - Demo Worona",
   },
 }
 `;
@@ -900,5 +1002,21 @@ Object {
   "slug": "alan",
   "type": "author",
   "url": "",
+}
+`;
+
+exports[`Convert post using entity 6`] = `
+Object {
+  "count": 15,
+  "id": "post",
+  "link": "https://demo.worona.org",
+  "mst": "taxonomy",
+  "name": "Posts",
+  "slug": "post",
+  "taxonomy": "latest",
+  "type": "latest",
+  "yoast_meta": Object {
+    "title": "Demo Worona - Just another WordPress site",
+  },
 }
 `;
