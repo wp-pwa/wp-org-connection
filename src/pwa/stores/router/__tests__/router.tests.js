@@ -357,10 +357,12 @@ describe('Connection › Router', () => {
     connection[actionTypes.REPLACE_CONTEXT](
       actions.replaceContext({ context: { columns: [[{ type: 'post', id: 60 }]] } }),
     );
-    connection[actionTypes.SINGLE_SUCCEED](
-      actions.singleSucceed({
-        singleType: 'post',
-        singleId: 60,
+    connection[actionTypes.ENTITY_SUCCEED](
+      actions.entitySucceed({
+        entity: {
+          type: 'post',
+          id: 60,
+        },
         entities: entitiesFromPost60,
       }),
     );
