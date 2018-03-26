@@ -36,6 +36,15 @@ const Column = types
       direction = direction ? [direction] : ['horizontal', 'vertical'];
       return self.rawItems.reduce((acc, item) => acc || direction.includes(item.extract), false);
     },
+    get parentContext() {
+      return getParent(self, 2);
+    },
+  }))
+  .actions(self => ({
+    addItem: ({ item, index }) => {
+      const i = index || self.rawItems.length;
+      self.rawItems.splice(i, 0, self.parentContext.addMstIdToItem({ item }));
+    },
   }));
 
 export default Column;

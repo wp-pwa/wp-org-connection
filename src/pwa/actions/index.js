@@ -197,6 +197,16 @@ export const moveItemToColumn = ({ item: { type, id, page, extract } }) => ({
   },
 });
 
+export const addItemToColumn = ({ item: { type, id, page, extract } }) => ({
+  type: actionTypes.ADD_ITEM_TO_COLUMN,
+  item: {
+    type,
+    id,
+    page,
+    extract,
+  },
+});
+
 export const replaceContext = ({ context }) => ({
   type: actionTypes.REPLACE_CONTEXT,
   context,

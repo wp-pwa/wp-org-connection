@@ -647,4 +647,27 @@ describe('Connection › Router', () => {
       ),
     ).toThrow('Columns should be arrays and not single objects.');
   });
+
+  test('Add new item to column', () => {
+    connection[actionTypes.ROUTE_CHANGE_SUCCEED](
+      actions.routeChangeSucceed({
+        selectedItem: { type: 'post', id: 62 },
+        context: {
+          columns: [
+            [{ type: 'post', id: 63 }],
+            [{ type: 'post', id: 62 }],
+            [{ type: 'post', id: 60 }],
+          ],
+        },
+      }),
+    );
+    connection[actionTypes.ADD_ITEM_TO_COLUMN](
+      actions.addItemToColumn({ item: { type: 'post', id: 64 } }),
+    );
+    expect(connection.contexts).toMatchSnapshot();
+    expect(connection.contexts[0].columns.length).toBe(3);
+    expect(connection.selectedColumn).toBe(connection.contexts[0].columns[1]);
+    expect(connection.selectedItem).toBe(connection.contexts[0].columns[1].items[0]);
+    expect(connection.contexts[0].columns[1].items[1].id).toBe(64);
+  });
 });

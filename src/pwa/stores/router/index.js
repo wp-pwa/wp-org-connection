@@ -73,6 +73,10 @@ export const actions = self => {
     }
   };
 
+  const addItemToSelectedColumn = ({ item }) => {
+    self.selectedContext.selectedColumn.addItem({ item });
+  };
+
   return {
     [actionTypes.ROUTE_CHANGE_SUCCEED]: ({ selectedItem, method, context: actionContext }) => {
       if (typeof window !== 'undefined')
@@ -105,6 +109,9 @@ export const actions = self => {
     },
     [actionTypes.MOVE_ITEM_TO_COLUMN]: ({ item }) => {
       moveItemToSelectedColumn({ item });
+    },
+    [actionTypes.ADD_ITEM_TO_COLUMN]: ({ item }) => {
+      addItemToSelectedColumn({ item });
     },
     [actionTypes.REPLACE_CONTEXT]: ({ context }) => {
       replaceSelectedContext({ context });
