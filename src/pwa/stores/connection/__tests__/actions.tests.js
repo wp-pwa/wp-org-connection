@@ -32,21 +32,25 @@ beforeEach(() => {
 });
 
 describe('Connection › Actions', () => {
-  test('Single: Action Succeed', () => {
+  test('Entity: Action Succeed', () => {
     expect(connection.entity('post', 60).ready).toBe(false);
     expect(connection.entity('post', 60).fetching).toBe(false);
-    connection[actionTypes.SINGLE_REQUESTED](
-      actions.singleRequested({
-        singleType: 'post',
-        singleId: 60,
+    connection[actionTypes.ENTITY_REQUESTED](
+      actions.entityRequested({
+        entity: {
+          type: 'post',
+          id: 60,
+        },
       }),
     );
     expect(connection.entity('post', 60).ready).toBe(false);
     expect(connection.entity('post', 60).fetching).toBe(true);
-    connection[actionTypes.SINGLE_SUCCEED](
-      actions.singleSucceed({
-        singleType: 'post',
-        singleId: 60,
+    connection[actionTypes.ENTITY_SUCCEED](
+      actions.entitySucceed({
+        entity: {
+          type: 'post',
+          id: 60,
+        },
         entities: entitiesFromPost60,
       }),
     );
@@ -56,17 +60,21 @@ describe('Connection › Actions', () => {
     expect(connection.entity('author', 4).name).toBe('Alan Martin');
   });
 
-  test('Single: Action Failed', () => {
-    connection[actionTypes.SINGLE_REQUESTED](
-      actions.singleRequested({
-        singleType: 'post',
-        singleId: 60,
+  test('Entity: Action Failed', () => {
+    connection[actionTypes.ENTITY_REQUESTED](
+      actions.entityRequested({
+        entity: {
+          type: 'post',
+          id: 60,
+        },
       }),
     );
-    connection[actionTypes.SINGLE_FAILED](
-      actions.singleSucceed({
-        singleType: 'post',
-        singleId: 60,
+    connection[actionTypes.ENTITY_FAILED](
+      actions.entityFailed({
+        entity: {
+          type: 'post',
+          id: 60,
+        },
       }),
     );
     expect(connection.entity('post', 60).ready).toBe(false);
@@ -225,9 +233,7 @@ describe('Connection › Actions', () => {
         params: {},
       }),
     );
-    connection[actionTypes.CUSTOM_FAILED](
-      actions.customFailed({ name: 'test' }),
-    );
+    connection[actionTypes.CUSTOM_FAILED](actions.customFailed({ name: 'test' }));
     expect(connection.custom('test').ready).toBe(false);
     expect(connection.custom('test').fetching).toBe(false);
     expect(connection.custom('test').page(1).ready).toBe(false);
