@@ -42,17 +42,17 @@ const Column = types
     },
   }))
   .actions(self => {
-    let stopExtractCheck = null;
+    self.stopExtractCheck = null;
     return {
       addItem: ({ item, index }) => {
         const i = index || self.rawItems.length;
         self.rawItems.splice(i, 0, self.parentContext.addMstIdToItem({ item }));
       },
       beforeDestroy: () => {
-        stopExtractCheck();
+        self.stopExtractCheck();
       },
       afterCreate: () => {
-        stopExtractCheck = autorun(() => {
+        self.stopExtractCheck = autorun(() => {
           if (self.hasExtracted('horizontal') && self.rawItems.length > 1) {
             throw new Error("Don't add extracted lists with other items in the same column.");
           }

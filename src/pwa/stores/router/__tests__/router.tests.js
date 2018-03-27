@@ -1,4 +1,4 @@
-import { autorun } from 'mobx';
+import { autorun, onReactionError } from 'mobx';
 import { getSnapshot } from 'mobx-state-tree';
 import { normalize } from 'normalizr';
 import { entity, list } from '../../../schemas';
@@ -32,9 +32,7 @@ describe('Connection › Router', () => {
         selectedItem: { type: 'post', id: 60 },
         context: {
           options: { someThemeOption: 123 },
-          columns: [
-            [{ type: 'post', id: 60 }],
-          ],
+          columns: [[{ type: 'post', id: 60 }]],
         },
       }),
     );
@@ -700,5 +698,92 @@ describe('Connection › Router', () => {
     );
     expect(connection.contexts).toMatchSnapshot();
     expect(connection.contexts[0].columns.length).toBe(7);
+  });
+
+  // Test passes but it throws anyway. Skipping until we figure it out.
+  test.skip('Throw if horizontal extracted is added in a column with more stuff', () => {
+    const mockCallback = jest.fn();
+    onReactionError(mockCallback);
+    connection[actionTypes.ROUTE_CHANGE_SUCCEED](
+      actions.routeChangeSucceed({
+        selectedItem: { type: 'post', id: 60 },
+        context: {
+          columns: [
+            [{ type: 'post', id: 60 }],
+            [{ type: 'post', id: 63 }, { type: 'category', id: 7, page: 1, extract: 'horizontal' }],
+          ],
+        },
+      }),
+    );
+    expect(mockCallback).toBeCalled();
+  });
+
+  // Test passes but it throws anyway. Skipping until we figure it out.
+  test.skip('Throw if new extracted list is added to column', () => {
+    const mockCallback = jest.fn();
+    onReactionError(mockCallback);
+    connection[actionTypes.ROUTE_CHANGE_SUCCEED](
+      actions.routeChangeSucceed({
+        selectedItem: { type: 'post', id: 62 },
+        context: {
+          columns: [
+            [{ type: 'post', id: 63 }],
+            [{ type: 'post', id: 62 }],
+            [{ type: 'post', id: 60 }],
+          ],
+        },
+      }),
+    );
+    connection[actionTypes.ADD_ITEM_TO_COLUMN](
+      actions.addItemToColumn({
+        item: { type: 'category', id: 7, page: 1, extract: 'horizontal' },
+      }),
+    );
+    expect(mockCallback).toBeCalled();
+  });
+
+  test('Throw if trying to preview an extracted item', () => {
+    connection[actionTypes.ROUTE_CHANGE_SUCCEED](
+      actions.routeChangeSucceed({
+        selectedItem: { type: 'post', id: 62 },
+        context: {
+          columns: [
+            [{ type: 'post', id: 63 }],
+            [{ type: 'post', id: 62 }],
+            [{ type: 'post', id: 60 }],
+          ],
+        },
+      }),
+    );
+    expect(() =>
+      connection[actionTypes.PREVIEW_ITEM_IN_COLUMN](
+        actions.previewItemInColumn({
+          item: { type: 'category', id: 7, page: 1, extract: 'horizontal' },
+        }),
+      ),
+    ).toThrow("Can't preview an extracted item");
+  });
+
+  test.skip('Preview item in column', () => {
+    connection[actionTypes.ROUTE_CHANGE_SUCCEED](
+      actions.routeChangeSucceed({
+        selectedItem: { type: 'post', id: 62 },
+        context: {
+          columns: [
+            [{ type: 'post', id: 63 }],
+            [{ type: 'post', id: 62 }],
+            [{ type: 'post', id: 60 }],
+          ],
+        },
+      }),
+    );
+    connection[actionTypes.PREVIEW_ITEM_IN_COLUMN](
+      actions.previewItemInColumn({ item: { type: 'post', id: 60 } }),
+    );
+    expect(connection.contexts).toMatchSnapshot();
+    expect(connection.contexts[0].columns.length).toBe(3);
+    expect(connection.selectedColumn).toBe(connection.contexts[0].columns[1]);
+    expect(connection.selectedItem).toBe(connection.contexts[0].columns[1].items[0]);
+    expect(connection.contexts[0].columns[1].items[1].id).toBe(64);
   });
 });
