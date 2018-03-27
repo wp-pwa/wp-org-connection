@@ -45,6 +45,9 @@ const Context = types
       }
       return columns.filter(column => column.items.length > 0);
     },
+    get nextNonVisited() {
+      return self.columns.find(column => column.nextNonVisited).nextNonVisited;
+    },
   }))
   .actions(self => ({
     getNextMstId: () => {

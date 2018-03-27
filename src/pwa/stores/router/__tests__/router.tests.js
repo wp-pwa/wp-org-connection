@@ -741,4 +741,43 @@ describe('Connection › Router', () => {
     );
     expect(mockCallback).toBeCalled();
   });
+
+  test('Get next non visited item', () => {
+    connection[actionTypes.ROUTE_CHANGE_SUCCEED](
+      actions.routeChangeSucceed({
+        selectedItem: { type: 'post', id: 62 },
+        context: {
+          columns: [
+            [{ type: 'post', id: 61 }],
+            [{ type: 'post', id: 62 }],
+            [{ type: 'post', id: 63 }],
+          ],
+        },
+      }),
+    );
+    expect(connection.contexts).toMatchSnapshot();
+    expect(connection.selectedContext.nextNonVisited.id).toBe(61);
+  });
+
+  test('Get next non visited item after visiting two', () => {
+    connection[actionTypes.ROUTE_CHANGE_SUCCEED](
+      actions.routeChangeSucceed({
+        selectedItem: { type: 'post', id: 62 },
+        context: {
+          columns: [
+            [{ type: 'post', id: 61 }],
+            [{ type: 'post', id: 62 }],
+            [{ type: 'post', id: 63 }],
+          ],
+        },
+      }),
+    );
+    connection[actionTypes.ROUTE_CHANGE_SUCCEED](
+      actions.routeChangeSucceed({
+        selectedItem: { type: 'post', id: 61 },
+      }),
+    );
+    expect(connection.contexts).toMatchSnapshot();
+    expect(connection.selectedContext.nextNonVisited.id).toBe(63);
+  });
 });
