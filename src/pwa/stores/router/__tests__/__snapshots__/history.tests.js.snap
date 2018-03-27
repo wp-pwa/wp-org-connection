@@ -122,35 +122,16 @@ Array [
 ]
 `;
 
-exports[`Connection › Router > History ignores ROUTE_CHANGE_SUCCEED when replacing (history.length + 1) 1`] = `
+exports[`Connection › Router > History does not dispatch a succeed when just updating the url 1`] = `
 Object {
-  "hash": "",
-  "pathname": "/wp-cat/nature/page/2",
-  "search": "",
-  "state": Object {
-    "context": null,
-    "method": "push",
-    "selectedItem": Object {
-      "id": 7,
-      "page": 2,
-      "type": "category",
-    },
-    "type": "connection/ROUTE_CHANGE_SUCCEED",
-  },
+  "pathname": "/",
+  "search": "?p=30",
 }
 `;
 
-exports[`Connection › Router > History ignores ROUTE_CHANGE_SUCCEED when replacing (history.length + 1) 2`] = `
-Array [
-  Object {
-    "context": null,
-    "method": "push",
-    "selectedItem": Object {
-      "id": 7,
-      "page": 2,
-      "type": "category",
-    },
-    "type": "connection/ROUTE_CHANGE_SUCCEED",
-  },
-]
+exports[`Connection › Router > History does not dispatch a succeed when just updating the url 2`] = `
+Object {
+  "pathname": "/",
+  "search": "?p=30",
+}
 `;

@@ -103,20 +103,58 @@ describe('Connection › Router > History', () => {
     expect(dispatch.mock.calls[0]).toMatchSnapshot();
   });
 
-  test.skip('ignores ROUTE_CHANGE_SUCCEED when replacing (history.length + 1)', () => {
+  test('does not dispatch a succeed when just updating the url', () => {
     const dispatch = jest.fn();
-    const connection = Connection.create(initialState, { dispatch });
+    const connection = Connection.create({}, { dispatch });
+    connection.addListPage({
+      type: 'category',
+      id: 7,
+      page: 1,
+      result: resultFromCategory7,
+      entities: entitiesFromCategory,
+    });
     connection[actionTypes.ROUTE_CHANGE_REQUESTED](
-      actions.routeChangeSucceed({
-        method: 'push',
-        selectedItem: { type: 'category', id: 7, page: 2 },
+      actions.routeChangeRequested({
+        selectedItem: { type: 'post', id: 30 },
+        context: {
+          columns: [
+            [{ type: 'category', id: 7, page: 1 }, { type: 'category', id: 7, page: 2 }],
+            [{ type: 'post', id: 57 }],
+            [{ type: 'post', id: 30 }],
+          ],
+        },
       }),
     );
-    const { key, ...rest } = connection.history.location;
-    expect(rest).toMatchSnapshot();
-    expect(connection.history.length).toBe(2);
-    expect(dispatch.mock.calls.length).toBe(1);
-    expect(dispatch.mock.calls[0]).toMatchSnapshot();
+
+    let pathname;
+    let search;
+
+    ({ pathname, search } = connection.history.location);
+    expect({ pathname, search }).toMatchSnapshot();
+    // expect(connection.history.length).toBe(2);
+
+    debugger;
+
+    console.log(connection.selectedItem.ready, connection.selectedItem.link)
+
+    connection[actionTypes.LIST_SUCCEED]({
+      list: {
+        type: 'category',
+        id: 7,
+        page: 2,
+      },
+      total: 4,
+      result: resultFromCategory7Page2,
+      entities: entitiesFromCategoryPage2,
+    });
+
+    console.log(connection.selectedItem.ready, connection.selectedItem.link)
+
+    ({ pathname, search } = connection.history.location);
+    expect({ pathname, search }).toMatchSnapshot();
+
+    // expect(dispatch.mock.calls.length).toBe(1);
+    // expect(dispatch.mock.calls[0]).toMatchSnapshot();
   });
 
   test('Url updates when items is ready, and dispatch is not sent again');

@@ -83,6 +83,7 @@ export const actions = self => {
       const path = getPath(selectedItem);
       if (['push', 'replace'].includes(method)) history[method](path, action);
     },
+    replacePath: path => history.replace(path, history.location.state),
     afterCreate: () => {
       const { selectedItem, selectedContext } = self;
 
