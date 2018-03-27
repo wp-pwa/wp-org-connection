@@ -15,6 +15,8 @@ const { result: resultFromCategory7, entities: entitiesFromCategory } = normaliz
 
 const { entities: entitiesFromPost60 } = normalize(post60, entity);
 
+configure({ disableErrorBoundaries: true });
+
 let connection;
 beforeEach(() => {
   connection = Connection.create({});
@@ -701,8 +703,6 @@ describe('Connection › Router', () => {
   });
 
   test('Throw if horizontal extracted is added in a column with more items', () => {
-    _resetGlobalState();
-    configure({ disableErrorBoundaries: true });
     expect(() => connection[actionTypes.ROUTE_CHANGE_SUCCEED](
       actions.routeChangeSucceed({
         selectedItem: { type: 'post', id: 60 },
@@ -714,11 +714,10 @@ describe('Connection › Router', () => {
         },
       }),
     )).toThrow();
+    _resetGlobalState();
   });
 
   test('Throw if new extracted list is added to column', () => {
-    _resetGlobalState();
-    configure({ disableErrorBoundaries: true });
     connection[actionTypes.ROUTE_CHANGE_SUCCEED](
       actions.routeChangeSucceed({
         selectedItem: { type: 'post', id: 62 },
@@ -736,6 +735,7 @@ describe('Connection › Router', () => {
         item: { type: 'category', id: 7, page: 1, extract: 'horizontal' },
       }),
     )).toThrow();
+    _resetGlobalState();
   });
 
   test('Get next non visited item', () => {
