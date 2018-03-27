@@ -741,49 +741,4 @@ describe('Connection › Router', () => {
     );
     expect(mockCallback).toBeCalled();
   });
-
-  test('Throw if trying to preview an extracted item', () => {
-    connection[actionTypes.ROUTE_CHANGE_SUCCEED](
-      actions.routeChangeSucceed({
-        selectedItem: { type: 'post', id: 62 },
-        context: {
-          columns: [
-            [{ type: 'post', id: 63 }],
-            [{ type: 'post', id: 62 }],
-            [{ type: 'post', id: 60 }],
-          ],
-        },
-      }),
-    );
-    expect(() =>
-      connection[actionTypes.PREVIEW_ITEM_IN_COLUMN](
-        actions.previewItemInColumn({
-          item: { type: 'category', id: 7, page: 1, extract: 'horizontal' },
-        }),
-      ),
-    ).toThrow("Can't preview an extracted item");
-  });
-
-  test.skip('Preview item in column', () => {
-    connection[actionTypes.ROUTE_CHANGE_SUCCEED](
-      actions.routeChangeSucceed({
-        selectedItem: { type: 'post', id: 62 },
-        context: {
-          columns: [
-            [{ type: 'post', id: 63 }],
-            [{ type: 'post', id: 62 }],
-            [{ type: 'post', id: 60 }],
-          ],
-        },
-      }),
-    );
-    connection[actionTypes.PREVIEW_ITEM_IN_COLUMN](
-      actions.previewItemInColumn({ item: { type: 'post', id: 60 } }),
-    );
-    expect(connection.contexts).toMatchSnapshot();
-    expect(connection.contexts[0].columns.length).toBe(3);
-    expect(connection.selectedColumn).toBe(connection.contexts[0].columns[1]);
-    expect(connection.selectedItem).toBe(connection.contexts[0].columns[1].items[0]);
-    expect(connection.contexts[0].columns[1].items[1].id).toBe(64);
-  });
 });
