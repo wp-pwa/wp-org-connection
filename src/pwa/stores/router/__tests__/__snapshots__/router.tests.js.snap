@@ -1084,7 +1084,9 @@ Array [
     "index": 0,
     "infinite": undefined,
     "mstIdForColumn": 2,
-    "options": undefined,
+    "options": Object {
+      "someThemeOption": 123,
+    },
     "rawColumns": Array [
       Object {
         "mstId": "context_0_column_1",
@@ -1168,7 +1170,9 @@ Array [
     "index": 0,
     "infinite": undefined,
     "mstIdForColumn": 3,
-    "options": undefined,
+    "options": Object {
+      "someThemeOption": 123,
+    },
     "rawColumns": Array [
       Object {
         "mstId": "context_0_column_1",
@@ -1217,6 +1221,52 @@ Array [
       },
     ],
     "selectedColumn": "context_0_column_2",
+  },
+]
+`;
+
+exports[`Connection › Router Options should be populated 1`] = `
+Array [
+  Object {
+    "generator": Object {
+      "columns": Array [
+        Array [
+          Object {
+            "id": 60,
+            "type": "post",
+          },
+        ],
+      ],
+      "options": Object {
+        "someThemeOption": 123,
+      },
+    },
+    "index": 0,
+    "infinite": undefined,
+    "mstIdForColumn": 1,
+    "options": Object {
+      "someThemeOption": 123,
+    },
+    "rawColumns": Array [
+      Object {
+        "mstId": "context_0_column_1",
+        "rawItems": Array [
+          Object {
+            "fromList": Object {
+              "id": "post",
+              "page": 1,
+              "type": "latest",
+            },
+            "id": 60,
+            "mstId": "0_post_60",
+            "type": "post",
+            "visited": true,
+          },
+        ],
+        "selectedItem": "0_post_60",
+      },
+    ],
+    "selectedColumn": "context_0_column_1",
   },
 ]
 `;
@@ -1568,7 +1618,9 @@ Array [
     "index": 0,
     "infinite": undefined,
     "mstIdForColumn": 3,
-    "options": undefined,
+    "options": Object {
+      "someThemeOption": 123,
+    },
     "rawColumns": Array [
       Object {
         "mstId": "context_0_column_1",
@@ -1652,7 +1704,9 @@ Array [
     "index": 0,
     "infinite": undefined,
     "mstIdForColumn": 4,
-    "options": undefined,
+    "options": Object {
+      "someThemeOption": 123,
+    },
     "rawColumns": Array [
       Object {
         "mstId": "context_0_column_4",
@@ -1920,7 +1974,9 @@ Array [
     "index": 0,
     "infinite": undefined,
     "mstIdForColumn": 2,
-    "options": undefined,
+    "options": Object {
+      "someThemeOption": 123,
+    },
     "rawColumns": Array [
       Object {
         "mstId": "context_0_column_1",
@@ -2002,7 +2058,9 @@ Array [
     "index": 0,
     "infinite": undefined,
     "mstIdForColumn": 3,
-    "options": undefined,
+    "options": Object {
+      "someThemeOption": 123,
+    },
     "rawColumns": Array [
       Object {
         "mstId": "context_0_column_3",
@@ -2138,7 +2196,9 @@ Array [
     "index": 1,
     "infinite": undefined,
     "mstIdForColumn": 2,
-    "options": undefined,
+    "options": Object {
+      "someThemeOption": 123,
+    },
     "rawColumns": Array [
       Object {
         "mstId": "context_1_column_1",
@@ -2220,7 +2280,9 @@ Array [
     "index": 0,
     "infinite": undefined,
     "mstIdForColumn": 2,
-    "options": undefined,
+    "options": Object {
+      "someThemeOption": 123,
+    },
     "rawColumns": Array [
       Object {
         "mstId": "context_0_column_1",

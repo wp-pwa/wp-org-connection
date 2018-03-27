@@ -52,6 +52,7 @@ export const actions = self => {
   const createNewContext = ({ selectedItem, context }) => {
     const contextInstance = addNewContext();
     contextInstance.setGenerator({ generator: context });
+    contextInstance.setOptions({ options: context.options });
     contextInstance.addColumns({ columns: context.columns });
     contextInstance.addItemIfMissing({ item: selectedItem, index: 0 });
     self.selectedContext = contextInstance;

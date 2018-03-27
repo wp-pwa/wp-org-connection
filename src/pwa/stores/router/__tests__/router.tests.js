@@ -26,6 +26,23 @@ describe('Connection › Router', () => {
     expect(connection.selectedContext).toBe(null);
   });
 
+  test('Options should be populated', () => {
+    connection[actionTypes.ROUTE_CHANGE_SUCCEED](
+      actions.routeChangeSucceed({
+        selectedItem: { type: 'post', id: 60 },
+        context: {
+          options: { someThemeOption: 123 },
+          columns: [
+            [{ type: 'post', id: 60 }],
+          ],
+        },
+      }),
+    );
+    expect(connection.contexts).toMatchSnapshot();
+    expect(connection.selectedContext.options).toEqual({ someThemeOption: 123 });
+    expect(connection.contexts[0].options).toEqual({ someThemeOption: 123 });
+  });
+
   test('Selected single', () => {
     connection[actionTypes.ROUTE_CHANGE_SUCCEED](
       actions.routeChangeSucceed({ selectedItem: { type: 'post', id: 60 } }),

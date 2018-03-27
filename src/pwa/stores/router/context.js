@@ -60,6 +60,9 @@ const Context = types
     setGenerator: ({ generator }) => {
       self.generator = generator;
     },
+    setOptions: ({ options }) => {
+      self.options = options;
+    },
     getItem: ({ item: { type, id, page, extract } }) =>
       resolveIdentifier(Item, self, self.getMstId({ type, id, page, extract })),
     hasItem: ({ item }) => !!self.getItem({ item }),
