@@ -1,6 +1,6 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`Connection › Router > History Initializes url if not populated 1`] = `
+exports[`Connection › Router > History Initializes blank if not populated 1`] = `
 Object {
   "hash": "",
   "pathname": "/",
@@ -12,8 +12,8 @@ Object {
 exports[`Connection › Router > History Initializes url if populated 1`] = `
 Object {
   "hash": "",
-  "pathname": "/",
-  "search": "?cat=7&paged=1",
+  "pathname": "/wp-cat/nature/",
+  "search": "",
   "state": Object {
     "context": Object {
       "columns": Array [
@@ -31,13 +31,13 @@ Object {
         ],
         Array [
           Object {
-            "id": 63,
+            "id": 57,
             "type": "post",
           },
         ],
         Array [
           Object {
-            "id": 60,
+            "id": 54,
             "type": "post",
           },
         ],
@@ -56,11 +56,11 @@ Object {
 }
 `;
 
-exports[`Connection › Router > History dispatchs ROUTE_CHANGE_SUCCEED when push or replace 1`] = `
+exports[`Connection › Router > History dispatchs succeed when 'push' (history length increases) 1`] = `
 Object {
   "hash": "",
-  "pathname": "/",
-  "search": "?cat=7&paged=2",
+  "pathname": "/wp-cat/nature/page/2",
+  "search": "",
   "state": Object {
     "context": null,
     "method": "push",
@@ -74,7 +74,73 @@ Object {
 }
 `;
 
-exports[`Connection › Router > History dispatchs ROUTE_CHANGE_SUCCEED when push or replace 2`] = `
+exports[`Connection › Router > History dispatchs succeed when 'push' (history length increases) 2`] = `
+Array [
+  Object {
+    "context": null,
+    "method": "push",
+    "selectedItem": Object {
+      "id": 7,
+      "page": 2,
+      "type": "category",
+    },
+    "type": "connection/ROUTE_CHANGE_SUCCEED",
+  },
+]
+`;
+
+exports[`Connection › Router > History dispatchs succeed when 'replace' (same history length) 1`] = `
+Object {
+  "hash": "",
+  "pathname": "/wp-cat/nature/page/2",
+  "search": "",
+  "state": Object {
+    "context": null,
+    "method": "replace",
+    "selectedItem": Object {
+      "id": 7,
+      "page": 2,
+      "type": "category",
+    },
+    "type": "connection/ROUTE_CHANGE_SUCCEED",
+  },
+}
+`;
+
+exports[`Connection › Router > History dispatchs succeed when 'replace' (same history length) 2`] = `
+Array [
+  Object {
+    "context": null,
+    "method": "replace",
+    "selectedItem": Object {
+      "id": 7,
+      "page": 2,
+      "type": "category",
+    },
+    "type": "connection/ROUTE_CHANGE_SUCCEED",
+  },
+]
+`;
+
+exports[`Connection › Router > History ignores ROUTE_CHANGE_SUCCEED when replacing (history.length + 1) 1`] = `
+Object {
+  "hash": "",
+  "pathname": "/wp-cat/nature/page/2",
+  "search": "",
+  "state": Object {
+    "context": null,
+    "method": "push",
+    "selectedItem": Object {
+      "id": 7,
+      "page": 2,
+      "type": "category",
+    },
+    "type": "connection/ROUTE_CHANGE_SUCCEED",
+  },
+}
+`;
+
+exports[`Connection › Router > History ignores ROUTE_CHANGE_SUCCEED when replacing (history.length + 1) 2`] = `
 Array [
   Object {
     "context": null,

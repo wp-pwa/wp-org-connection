@@ -1,7 +1,8 @@
 /* eslint-disable import/prefer-default-export, global-require, no-eval */
 import { getEnv } from 'mobx-state-tree';
-// import { when } from 'mobx';
+import { when } from 'mobx';
 import { isEqual, isMatch } from 'lodash';
+import url from 'url';
 import { routeChangeSucceed } from '../../actions';
 import * as actionTypes from '../../actionTypes';
 
@@ -18,15 +19,25 @@ export const actions = self => {
     ? require('history/createBrowserHistory').default
     : eval('require("history/createMemoryHistory").default');
 
-
   const history = createHistory();
+
+  // Returns the path from the item specified.
+  const getPath = ({ type, id, page }) => {
+    const entity = self.entity(type, id);
+    const link = page > 1 ? entity.pagedLink(page) : entity.link; // TODO - inform (page > 1)
+    const { path, hash } = url.parse(link);
+    return path + (hash || '');
+  };
 
   // move this to a view?
   self.history = history;
 
   history.listen((location, action) => {
     const { state, key } = location;
-    if (state.context && !isEqual(self.selectedContext.generator, state.context)) {
+    const { selectedItem, selectedContext } = self;
+
+    // If context has changed, stores the key in contextKeys
+    if (state.context && (!selectedContext || !isEqual(selectedContext.generator, state.context))) {
       contextKeys.push(historyKeys[currentKey]);
     }
 
@@ -42,9 +53,23 @@ export const actions = self => {
       currentKey = newIndex;
     }
 
-    // Prevents an event emission when just replacing the URL
-    if (!(isMatch(self.selected, state.selected) && action === 'REPLACE')) {
-      getEnv(self).dispatch(routeChangeSucceed({ ...state }));
+    // Prevents a dispatch when just replacing the URL
+    if (isMatch(selectedItem, state.selectedItem) && action === 'REPLACE') return;
+
+    // Dispatchs a route-change-succeed action
+    getEnv(self).dispatch(routeChangeSucceed({ ...state }));
+
+    // Updates url when the new item is ready
+    const { type, id } = state.selectedItem;
+    const entity = self.entity(type, id);
+    if (!entity.ready) {
+      when(
+        () => entity.ready,
+        () => {
+          const path = getPath(state.selectedItem);
+          history.replace(path, state);
+        },
+      )
     }
   });
 
@@ -55,29 +80,21 @@ export const actions = self => {
     },
     [actionTypes.ROUTE_CHANGE_REQUESTED]: action => {
       const { selectedItem, method } = action;
-      const { type, id, page } = selectedItem;
-      const entity = self.entity(type, id);
-      const path = page ? entity.pagedLink(page) : entity.link;
-
-      // Methods that are not executed directly from history
+      const path = getPath(selectedItem);
       if (['push', 'replace'].includes(method)) history[method](path, action);
-    },
-    replaceUrl: (url, state = history.location.state) => {
-      history.replace(url, state);
     },
     afterCreate: () => {
       const { selectedItem, selectedContext } = self;
 
       if (selectedItem !== null) {
-        const { page } = selectedItem;
-        const path = page ? selectedItem.entity.pagedLink(page) : selectedItem.entity.link;
+        const path = getPath(selectedItem);
         const search = isBrowser ? window.location.search : '';
 
         // First route in history
         history.replace(path + search, {
           selectedItem,
           method: 'push',
-          context: selectedContext.generator,
+          context: selectedContext && selectedContext.generator,
         });
       }
     },
