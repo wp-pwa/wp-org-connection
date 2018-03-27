@@ -32,8 +32,9 @@ export const actions = self => {
 
   const changeSelectedItem = ({ selectedItem }) => {
     const newItem = self.selectedContext.getItem({ item: selectedItem });
-    if (!newItem)
+    if (!newItem) {
       throw new Error("You are trying to select an item in a context where doesn't exist");
+    }
     newItem.parentColumn.selectedItem = newItem;
     self.selectedContext.selectedColumn = newItem.parentColumn;
     self.selectedItem.visited = true;

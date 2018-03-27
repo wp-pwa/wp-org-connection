@@ -1,7 +1,7 @@
 /* eslint-disable global-require */
 import { when } from 'mobx';
 import { isMatch, isEqual } from 'lodash';
-import { takeEvery, put, call } from 'redux-saga/effects';
+import { takeEvery, put, call, all } from 'redux-saga/effects';
 import { eventChannel } from 'redux-saga';
 import createHistory from 'history/createBrowserHistory';
 import { parse } from 'url';
@@ -107,10 +107,10 @@ const replaceHistory = ({ connection, history }) => () => {
   // Sets the appropriate url when available
   disposer = when(
     () =>
-      getUrl(connection.context.selected, connection) !==
+      getUrl(connection.context.selectedItem, connection) !==
       window.location.pathname + window.location.search,
     () => {
-      history.replace(getUrl(connection.context.selected, connection), history.location.state);
+      history.replace(getUrl(connection.context.selectedItem, connection), history.location.state);
     },
   );
 };
@@ -118,7 +118,8 @@ const replaceHistory = ({ connection, history }) => () => {
 export default function* routerSaga(stores, history = createHistory()) {
   const { connection } = stores;
   const { selected } = connection;
-  const { generator } = connection.context;
+  const { generator } = connection.selectedContext;
+
   history.replace(window.location.pathname + window.location.search, {
     selected,
     method: 'push',
@@ -129,10 +130,9 @@ export default function* routerSaga(stores, history = createHistory()) {
   const routeChangedEvents = routeChanged({ connection, history });
 
   // Track router events and dispatch them to redux.
-  yield takeEvery(routeChangedEvents, handleHistoryRouteChanges);
-  yield takeEvery(
-    actionTypes.ROUTE_CHANGE_REQUESTED,
-    requestHandlerCreator({ connection, history }),
-  );
-  yield takeEvery(actionTypes.ROUTE_CHANGE_SUCCEED, replaceHistory({ connection, history }));
+  yield all([
+    takeEvery(routeChangedEvents, handleHistoryRouteChanges),
+    takeEvery(actionTypes.ROUTE_CHANGE_REQUESTED, requestHandlerCreator({ connection, history })),
+    takeEvery(actionTypes.ROUTE_CHANGE_SUCCEED, replaceHistory({ connection, history })),
+  ]);
 }

@@ -15,8 +15,5 @@ function stopProgress() {
 }
 
 export default function* progressSagas() {
-  yield all([
-    fork(initProgress),
-    takeEvery(actionTypes.ROUTE_CHANGE_SUCCEED, stopProgress),
-  ]);
+  yield all([fork(initProgress), takeEvery(actionTypes.ROUTE_CHANGE_SUCCEED, stopProgress)]);
 }
