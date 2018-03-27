@@ -700,8 +700,8 @@ describe('Connection › Router', () => {
     expect(connection.contexts[0].columns.length).toBe(7);
   });
 
-  // Test passes but it throws anyway. Skipping until we figure it out.
-  test.skip('Throw if horizontal extracted is added in a column with more stuff', () => {
+  // Test passes but it throws anyway. Skipping until we figure it out (https://github.com/mobxjs/mobx/issues/1457)
+  test.skip('Throw if horizontal extracted is added in a column with more items', () => {
     const mockCallback = jest.fn();
     onReactionError(mockCallback);
     connection[actionTypes.ROUTE_CHANGE_SUCCEED](
@@ -718,7 +718,7 @@ describe('Connection › Router', () => {
     expect(mockCallback).toBeCalled();
   });
 
-  // Test passes but it throws anyway. Skipping until we figure it out.
+  // Test passes but it throws anyway. Skipping until we figure it out (https://github.com/mobxjs/mobx/issues/1457)
   test.skip('Throw if new extracted list is added to column', () => {
     const mockCallback = jest.fn();
     onReactionError(mockCallback);
