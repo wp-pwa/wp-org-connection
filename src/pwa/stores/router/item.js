@@ -60,7 +60,9 @@ export const List = BaseItem.named('List')
   .actions(self => {
     let stopReplace = null;
     return {
-      beforeDestroy: () => { stopReplace(); },
+      beforeDestroy: () => {
+        stopReplace();
+      },
       afterCreate: () => {
         if (['horizontal', 'vertical'].includes(self.extract)) {
           const { type, id, page, extract } = self;
@@ -75,7 +77,7 @@ export const List = BaseItem.named('List')
     };
   });
 
-export const Single = BaseItem.named('List').props({
+export const Single = BaseItem.named('Single').props({
   fromList: types.optional(types.frozen, { type: 'latest', id: 'post', page: 1 }),
 });
 
