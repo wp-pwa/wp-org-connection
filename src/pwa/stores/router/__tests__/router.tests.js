@@ -1,4 +1,4 @@
-import { autorun, onReactionError } from 'mobx';
+import { autorun, _resetGlobalState, configure } from 'mobx';
 import { getSnapshot } from 'mobx-state-tree';
 import { normalize } from 'normalizr';
 import { entity, list } from '../../../schemas';
@@ -700,11 +700,10 @@ describe('Connection › Router', () => {
     expect(connection.contexts[0].columns.length).toBe(7);
   });
 
-  // Test passes but it throws anyway. Skipping until we figure it out (https://github.com/mobxjs/mobx/issues/1457)
-  test.skip('Throw if horizontal extracted is added in a column with more items', () => {
-    const mockCallback = jest.fn();
-    onReactionError(mockCallback);
-    connection[actionTypes.ROUTE_CHANGE_SUCCEED](
+  test('Throw if horizontal extracted is added in a column with more items', () => {
+    _resetGlobalState();
+    configure({ disableErrorBoundaries: true });
+    expect(() => connection[actionTypes.ROUTE_CHANGE_SUCCEED](
       actions.routeChangeSucceed({
         selectedItem: { type: 'post', id: 60 },
         context: {
@@ -714,14 +713,12 @@ describe('Connection › Router', () => {
           ],
         },
       }),
-    );
-    expect(mockCallback).toBeCalled();
+    )).toThrow();
   });
 
-  // Test passes but it throws anyway. Skipping until we figure it out (https://github.com/mobxjs/mobx/issues/1457)
-  test.skip('Throw if new extracted list is added to column', () => {
-    const mockCallback = jest.fn();
-    onReactionError(mockCallback);
+  test('Throw if new extracted list is added to column', () => {
+    _resetGlobalState();
+    configure({ disableErrorBoundaries: true });
     connection[actionTypes.ROUTE_CHANGE_SUCCEED](
       actions.routeChangeSucceed({
         selectedItem: { type: 'post', id: 62 },
@@ -734,12 +731,11 @@ describe('Connection › Router', () => {
         },
       }),
     );
-    connection[actionTypes.ADD_ITEM_TO_COLUMN](
+    expect(() => connection[actionTypes.ADD_ITEM_TO_COLUMN](
       actions.addItemToColumn({
         item: { type: 'category', id: 7, page: 1, extract: 'horizontal' },
       }),
-    );
-    expect(mockCallback).toBeCalled();
+    )).toThrow();
   });
 
   test('Get next non visited item', () => {
