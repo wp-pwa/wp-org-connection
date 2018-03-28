@@ -38,7 +38,7 @@ const routeChanged = ({ connection, history }) => {
   return eventChannel(emitter => {
     const unlisten = history.listen((location, action) => {
       const { pathname, state, key } = location;
-      if (state.context && !isEqual(connection.context.generator, state.context)) {
+      if (state.context && !isEqual(connection.selectedContext.generator, state.context)) {
         contextKeys.push(historyKeys[currentKey]);
       }
 
@@ -69,35 +69,13 @@ export function* handleHistoryRouteChanges(changed) {
 }
 
 export const requestHandlerCreator = ({ connection, history }) =>
-  function* handleRequest({ selected, method, context }) {
-    if (method === 'previousContext') {
-      const pagesBack = currentKey - historyKeys.indexOf(contextKeys.pop());
-      if (pagesBack <= currentKey) history.go(-pagesBack);
-      return;
-    }
-
-    const { singleType, singleId } = selected;
-
-    const nextSelected = connection.context.getItem({ singleType, singleId });
-
-    // Request the next list when infinite
-    if (connection.context.infinite && nextSelected) {
-      const { columns } = connection.context;
-      const { column, fromList } = nextSelected;
-
-      if (columns.indexOf(column) >= columns.length - 2 && fromList) {
-        const { listType, listId, page } = fromList;
-        const { pages } = connection.list[listType][listId].total;
-
-        if (page < pages && !connection.list[listType][listId].page[page]) {
-          const nextList = { listType, listId, page: page + 1 };
-          yield put(actions.listRequested(nextList));
-        }
-      }
-    }
-
+  function* handleRequest({ selectedItem, method, context }) {
     if (['push', 'replace'].includes(method)) {
-      yield call(history[method], getUrl(selected, connection), { selected, method, context });
+      yield call(history[method], getUrl(selectedItem, connection), {
+        selectedItem,
+        method,
+        context,
+      });
     }
   };
 
@@ -107,10 +85,10 @@ const replaceHistory = ({ connection, history }) => () => {
   // Sets the appropriate url when available
   disposer = when(
     () =>
-      getUrl(connection.context.selectedItem, connection) !==
+      getUrl(connection.selectedItem, connection) !==
       window.location.pathname + window.location.search,
     () => {
-      history.replace(getUrl(connection.context.selectedItem, connection), history.location.state);
+      history.replace(getUrl(connection.selectedItem, connection), history.location.state);
     },
   );
 };

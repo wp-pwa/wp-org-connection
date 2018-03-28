@@ -85,8 +85,8 @@ injectGlobal`
 class Link extends Component {
   static propTypes = {
     item: PropTypes.shape({
-      type: PropTypes.string.isRequired,
-      id: PropTypes.oneOfType([PropTypes.number, PropTypes.string]).isRequired,
+      type: PropTypes.string,
+      id: PropTypes.oneOfType([PropTypes.number, PropTypes.string]),
       page: PropTypes.number,
     }).isRequired,
     context: PropTypes.shape({}),
@@ -135,7 +135,7 @@ const mapDispatchToProps = dispatch => ({
 
 export default compose(
   inject(({ connection }, { item: { type, id, page } }) => ({
-    href: page ? connection.list(type, id).pagedLink(page) : connection.entity(type, id).link,
+    href: page ? connection.entity(type, id).pagedLink(page) : connection.entity(type, id).link,
   })),
   connect(null, mapDispatchToProps),
 )(Link);
