@@ -19,8 +19,6 @@ export const actions = self => {
     ? require('history/createBrowserHistory').default
     : eval('require("history/createMemoryHistory").default');
 
-  const history = createHistory();
-
   // Returns the path from the item specified.
   const getPath = ({ type, id, page }) => {
     const entity = self.entity(type, id);
@@ -29,15 +27,14 @@ export const actions = self => {
     return path;
   };
 
-  // move this to a view?
-  self.history = history;
-
-  history.listen((location, action) => {
+  self.history = createHistory();
+  self.history.listen((location, action) => {
     const { state, key } = location;
     const { selectedItem, selectedContext } = self;
+    const generator = selectedContext ? selectedContext.generator : null;
 
     // If context has changed, stores the key in contextKeys
-    if (state.context && (!selectedContext || !isEqual(selectedContext.generator, state.context))) {
+    if (state.context && (!selectedContext || !isEqual(generator, state.context))) {
       contextKeys.push(historyKeys[currentKey]);
     }
 
@@ -69,7 +66,7 @@ export const actions = self => {
         () => self.entity(type, id).ready,
         () => {
           const path = getPath(state.selectedItem);
-          history.replace(path, state);
+          self.history.replace(path, state);
         },
       );
     }
@@ -78,12 +75,12 @@ export const actions = self => {
   return {
     [actionTypes.PREVIOUS_CONTEXT_REQUESTED]: () => {
       const pagesBack = currentKey - historyKeys.indexOf(contextKeys.pop());
-      if (pagesBack <= currentKey) history.go(-pagesBack);
+      if (pagesBack <= currentKey) self.history.go(-pagesBack);
     },
     [actionTypes.ROUTE_CHANGE_REQUESTED]: action => {
       const { selectedItem, method } = action;
       const path = getPath(selectedItem);
-      if (['push', 'replace'].includes(method)) history[method](path, action);
+      if (['push', 'replace'].includes(method)) self.history[method](path, action);
     },
     afterCreate: () => {
       const { selectedItem, selectedContext } = self;
@@ -93,7 +90,7 @@ export const actions = self => {
         const search = isBrowser ? window.location.search : '';
 
         // First route in history
-        history.replace(path + search, {
+        self.history.replace(path + search, {
           selectedItem,
           method: 'push',
           context: selectedContext && selectedContext.generator,
