@@ -13,6 +13,7 @@ export const CUSTOM_FAILED = 'connection/CUSTOM_FAILED';
 export const ROUTE_CHANGE_REQUESTED = 'connection/ROUTE_CHANGE_REQUESTED';
 export const ROUTE_CHANGE_SUCCEED = 'connection/ROUTE_CHANGE_SUCCEED';
 export const ROUTE_CHANGE_FAILED = 'connection/ROUTE_CHANGE_FAILED';
+export const PREVIOUS_CONTEXT_REQUESTED = 'connection/PREVIOUS_CONTEXT_REQUESTED';
 
 export const SITE_INFO_REQUESTED = 'connection/SITE_INFO_REQUESTED';
 export const SITE_INFO_SUCCEED = 'connection/SITE_INFO_SUCCEED';
