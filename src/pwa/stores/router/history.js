@@ -46,7 +46,7 @@ export const actions = self => {
     } else if (action === 'POP') {
       const newIndex = historyKeys.indexOf(key);
       if (newIndex > currentKey) state.method = 'forward';
-      else state.method = 'back';
+      else state.method = 'backward';
       currentKey = newIndex;
     }
 
@@ -85,11 +85,11 @@ export const actions = self => {
     afterCreate: () => {
       const { selectedItem, selectedContext } = self;
 
+      // First route in history
       if (selectedItem !== null) {
         const path = getPath(selectedItem);
         const search = isBrowser ? window.location.search : '';
 
-        // First route in history
         self.history.replace(path + search, {
           selectedItem,
           method: 'push',
