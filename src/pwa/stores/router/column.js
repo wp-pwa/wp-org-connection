@@ -1,3 +1,4 @@
+import { autorun } from 'mobx';
 import { types, getParent, resolveIdentifier } from 'mobx-state-tree';
 import Item from './item';
 
@@ -28,6 +29,9 @@ const Column = types
       const index = columns.indexOf(self);
       return index < columns.length - 1 ? columns[index + 1] : null;
     },
+    get nextNonVisited() {
+      return self.items.find(item => item.visited === false);
+    },
     get index() {
       const columns = getParent(self);
       return columns ? columns.indexOf(self) : -1;
@@ -40,11 +44,24 @@ const Column = types
       return getParent(self, 2);
     },
   }))
-  .actions(self => ({
-    addItem: ({ item, index }) => {
-      const i = index || self.rawItems.length;
-      self.rawItems.splice(i, 0, self.parentContext.addMstIdToItem({ item }));
-    },
-  }));
+  .actions(self => {
+    self.stopExtractCheck = null;
+    return {
+      addItem: ({ item, index }) => {
+        const i = index || self.rawItems.length;
+        self.rawItems.splice(i, 0, self.parentContext.addMstIdToItem({ item }));
+      },
+      beforeDestroy: () => {
+        self.stopExtractCheck();
+      },
+      afterCreate: () => {
+        self.stopExtractCheck = autorun(() => {
+          if (self.hasExtracted('horizontal') && self.rawItems.length > 1) {
+            throw new Error("Don't add extracted lists with other items in the same column.");
+          }
+        });
+      },
+    };
+  });
 
 export default Column;

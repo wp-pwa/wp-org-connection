@@ -7,7 +7,6 @@ import customShape from './custom-shape';
 import List from './list';
 import Custom from './custom';
 import SiteInfo from './site-info';
-import { extractList } from '../router';
 import * as actionTypes from '../../actionTypes';
 import convert from '../../converters';
 
@@ -126,7 +125,6 @@ export const actions = self => ({
   },
   [actionTypes.LIST_SUCCEED]({ list: { type, id, page }, total, result, entities }) {
     self.addListPage({ type, id, page, total, result, entities });
-    if (self.context) extractList({ type, id, page, result }, self.context);
   },
   [actionTypes.LIST_FAILED]({ list: { type, id, page } }) {
     const item = self.getListPage({ type, id, page });

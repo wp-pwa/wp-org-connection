@@ -45,6 +45,9 @@ const Context = types
       }
       return columns.filter(column => column.items.length > 0);
     },
+    get nextNonVisited() {
+      return self.columns.find(column => column.nextNonVisited).nextNonVisited;
+    },
   }))
   .actions(self => ({
     getNextMstId: () => {
@@ -59,6 +62,9 @@ const Context = types
     addMstIdToItems: ({ items }) => items.map(item => self.addMstIdToItem({ item })),
     setGenerator: ({ generator }) => {
       self.generator = generator;
+    },
+    setOptions: ({ options }) => {
+      self.options = options;
     },
     getItem: ({ item: { type, id, page, extract } }) =>
       resolveIdentifier(Item, self, self.getMstId({ type, id, page, extract })),
@@ -89,8 +95,6 @@ const Context = types
         mstId: self.getNextMstId(),
         rawItems: self.addMstIdToItems({ items: column }),
       });
-      if (self.rawColumns[i].hasExtracted('horizontal') && self.rawColumns[i].rawItems.length > 1)
-        throw new Error("Don't add extracted lists with other items in the same column.");
     },
     addColumns: ({ columns, index }) => {
       let i = index || self.rawColumns.length;

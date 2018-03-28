@@ -367,101 +367,6 @@ Array [
 ]
 `;
 
-exports[`Connection › Router Add new extracted list to column 1`] = `
-Array [
-  Object {
-    "generator": Object {
-      "columns": Array [
-        Array [
-          Object {
-            "id": 63,
-            "type": "post",
-          },
-        ],
-        Array [
-          Object {
-            "id": 62,
-            "type": "post",
-          },
-        ],
-        Array [
-          Object {
-            "id": 60,
-            "type": "post",
-          },
-        ],
-      ],
-    },
-    "index": 0,
-    "infinite": undefined,
-    "mstIdForColumn": 3,
-    "options": undefined,
-    "rawColumns": Array [
-      Object {
-        "mstId": "context_0_column_1",
-        "rawItems": Array [
-          Object {
-            "fromList": Object {
-              "id": "post",
-              "page": 1,
-              "type": "latest",
-            },
-            "id": 63,
-            "mstId": "0_post_63",
-            "type": "post",
-            "visited": false,
-          },
-        ],
-        "selectedItem": "",
-      },
-      Object {
-        "mstId": "context_0_column_2",
-        "rawItems": Array [
-          Object {
-            "fromList": Object {
-              "id": "post",
-              "page": 1,
-              "type": "latest",
-            },
-            "id": 62,
-            "mstId": "0_post_62",
-            "type": "post",
-            "visited": true,
-          },
-          Object {
-            "extract": "horizontal",
-            "id": 7,
-            "mstId": "0_category_7_page_1",
-            "page": 1,
-            "type": "category",
-            "visited": false,
-          },
-        ],
-        "selectedItem": "0_post_62",
-      },
-      Object {
-        "mstId": "context_0_column_3",
-        "rawItems": Array [
-          Object {
-            "fromList": Object {
-              "id": "post",
-              "page": 1,
-              "type": "latest",
-            },
-            "id": 60,
-            "mstId": "0_post_60",
-            "type": "post",
-            "visited": false,
-          },
-        ],
-        "selectedItem": "",
-      },
-    ],
-    "selectedColumn": "context_0_column_2",
-  },
-]
-`;
-
 exports[`Connection › Router Add new item to column 1`] = `
 Array [
   Object {
@@ -1148,6 +1053,180 @@ Array [
 ]
 `;
 
+exports[`Connection › Router Get next non visited item 1`] = `
+Array [
+  Object {
+    "generator": Object {
+      "columns": Array [
+        Array [
+          Object {
+            "id": 61,
+            "type": "post",
+          },
+        ],
+        Array [
+          Object {
+            "id": 62,
+            "type": "post",
+          },
+        ],
+        Array [
+          Object {
+            "id": 63,
+            "type": "post",
+          },
+        ],
+      ],
+    },
+    "index": 0,
+    "infinite": undefined,
+    "mstIdForColumn": 3,
+    "options": undefined,
+    "rawColumns": Array [
+      Object {
+        "mstId": "context_0_column_1",
+        "rawItems": Array [
+          Object {
+            "fromList": Object {
+              "id": "post",
+              "page": 1,
+              "type": "latest",
+            },
+            "id": 61,
+            "mstId": "0_post_61",
+            "type": "post",
+            "visited": false,
+          },
+        ],
+        "selectedItem": "",
+      },
+      Object {
+        "mstId": "context_0_column_2",
+        "rawItems": Array [
+          Object {
+            "fromList": Object {
+              "id": "post",
+              "page": 1,
+              "type": "latest",
+            },
+            "id": 62,
+            "mstId": "0_post_62",
+            "type": "post",
+            "visited": true,
+          },
+        ],
+        "selectedItem": "0_post_62",
+      },
+      Object {
+        "mstId": "context_0_column_3",
+        "rawItems": Array [
+          Object {
+            "fromList": Object {
+              "id": "post",
+              "page": 1,
+              "type": "latest",
+            },
+            "id": 63,
+            "mstId": "0_post_63",
+            "type": "post",
+            "visited": false,
+          },
+        ],
+        "selectedItem": "",
+      },
+    ],
+    "selectedColumn": "context_0_column_2",
+  },
+]
+`;
+
+exports[`Connection › Router Get next non visited item after visiting two 1`] = `
+Array [
+  Object {
+    "generator": Object {
+      "columns": Array [
+        Array [
+          Object {
+            "id": 61,
+            "type": "post",
+          },
+        ],
+        Array [
+          Object {
+            "id": 62,
+            "type": "post",
+          },
+        ],
+        Array [
+          Object {
+            "id": 63,
+            "type": "post",
+          },
+        ],
+      ],
+    },
+    "index": 0,
+    "infinite": undefined,
+    "mstIdForColumn": 3,
+    "options": undefined,
+    "rawColumns": Array [
+      Object {
+        "mstId": "context_0_column_1",
+        "rawItems": Array [
+          Object {
+            "fromList": Object {
+              "id": "post",
+              "page": 1,
+              "type": "latest",
+            },
+            "id": 61,
+            "mstId": "0_post_61",
+            "type": "post",
+            "visited": true,
+          },
+        ],
+        "selectedItem": "0_post_61",
+      },
+      Object {
+        "mstId": "context_0_column_2",
+        "rawItems": Array [
+          Object {
+            "fromList": Object {
+              "id": "post",
+              "page": 1,
+              "type": "latest",
+            },
+            "id": 62,
+            "mstId": "0_post_62",
+            "type": "post",
+            "visited": true,
+          },
+        ],
+        "selectedItem": "0_post_62",
+      },
+      Object {
+        "mstId": "context_0_column_3",
+        "rawItems": Array [
+          Object {
+            "fromList": Object {
+              "id": "post",
+              "page": 1,
+              "type": "latest",
+            },
+            "id": 63,
+            "mstId": "0_post_63",
+            "type": "post",
+            "visited": false,
+          },
+        ],
+        "selectedItem": "",
+      },
+    ],
+    "selectedColumn": "context_0_column_1",
+  },
+]
+`;
+
 exports[`Connection › Router Initializes contexts as empty array 1`] = `Array []`;
 
 exports[`Connection › Router Move selected single 1`] = `
@@ -1179,7 +1258,9 @@ Array [
     "index": 0,
     "infinite": undefined,
     "mstIdForColumn": 2,
-    "options": undefined,
+    "options": Object {
+      "someThemeOption": 123,
+    },
     "rawColumns": Array [
       Object {
         "mstId": "context_0_column_1",
@@ -1204,7 +1285,7 @@ Array [
             "id": 62,
             "mstId": "0_post_62",
             "type": "post",
-            "visited": false,
+            "visited": true,
           },
         ],
         "selectedItem": "0_post_63",
@@ -1263,7 +1344,9 @@ Array [
     "index": 0,
     "infinite": undefined,
     "mstIdForColumn": 3,
-    "options": undefined,
+    "options": Object {
+      "someThemeOption": 123,
+    },
     "rawColumns": Array [
       Object {
         "mstId": "context_0_column_1",
@@ -1305,13 +1388,59 @@ Array [
             "id": 60,
             "mstId": "0_post_60",
             "type": "post",
-            "visited": false,
+            "visited": true,
           },
         ],
         "selectedItem": "0_post_62",
       },
     ],
     "selectedColumn": "context_0_column_2",
+  },
+]
+`;
+
+exports[`Connection › Router Options should be populated 1`] = `
+Array [
+  Object {
+    "generator": Object {
+      "columns": Array [
+        Array [
+          Object {
+            "id": 60,
+            "type": "post",
+          },
+        ],
+      ],
+      "options": Object {
+        "someThemeOption": 123,
+      },
+    },
+    "index": 0,
+    "infinite": undefined,
+    "mstIdForColumn": 1,
+    "options": Object {
+      "someThemeOption": 123,
+    },
+    "rawColumns": Array [
+      Object {
+        "mstId": "context_0_column_1",
+        "rawItems": Array [
+          Object {
+            "fromList": Object {
+              "id": "post",
+              "page": 1,
+              "type": "latest",
+            },
+            "id": 60,
+            "mstId": "0_post_60",
+            "type": "post",
+            "visited": true,
+          },
+        ],
+        "selectedItem": "0_post_60",
+      },
+    ],
+    "selectedColumn": "context_0_column_1",
   },
 ]
 `;
@@ -1663,7 +1792,9 @@ Array [
     "index": 0,
     "infinite": undefined,
     "mstIdForColumn": 3,
-    "options": undefined,
+    "options": Object {
+      "someThemeOption": 123,
+    },
     "rawColumns": Array [
       Object {
         "mstId": "context_0_column_1",
@@ -1747,7 +1878,9 @@ Array [
     "index": 0,
     "infinite": undefined,
     "mstIdForColumn": 4,
-    "options": undefined,
+    "options": Object {
+      "someThemeOption": 123,
+    },
     "rawColumns": Array [
       Object {
         "mstId": "context_0_column_4",
@@ -2015,7 +2148,9 @@ Array [
     "index": 0,
     "infinite": undefined,
     "mstIdForColumn": 2,
-    "options": undefined,
+    "options": Object {
+      "someThemeOption": 123,
+    },
     "rawColumns": Array [
       Object {
         "mstId": "context_0_column_1",
@@ -2097,7 +2232,9 @@ Array [
     "index": 0,
     "infinite": undefined,
     "mstIdForColumn": 3,
-    "options": undefined,
+    "options": Object {
+      "someThemeOption": 123,
+    },
     "rawColumns": Array [
       Object {
         "mstId": "context_0_column_3",
@@ -2233,7 +2370,9 @@ Array [
     "index": 1,
     "infinite": undefined,
     "mstIdForColumn": 2,
-    "options": undefined,
+    "options": Object {
+      "someThemeOption": 123,
+    },
     "rawColumns": Array [
       Object {
         "mstId": "context_1_column_1",
@@ -2315,7 +2454,9 @@ Array [
     "index": 0,
     "infinite": undefined,
     "mstIdForColumn": 2,
-    "options": undefined,
+    "options": Object {
+      "someThemeOption": 123,
+    },
     "rawColumns": Array [
       Object {
         "mstId": "context_0_column_1",

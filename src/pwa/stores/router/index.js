@@ -32,8 +32,9 @@ export const actions = self => {
 
   const changeSelectedItem = ({ selectedItem }) => {
     const newItem = self.selectedContext.getItem({ item: selectedItem });
-    if (!newItem)
+    if (!newItem) {
       throw new Error("You are trying to select an item in a context where doesn't exist");
+    }
     newItem.parentColumn.selectedItem = newItem;
     self.selectedContext.selectedColumn = newItem.parentColumn;
     self.selectedItem.visited = true;
@@ -52,6 +53,7 @@ export const actions = self => {
   const createNewContext = ({ selectedItem, context }) => {
     const contextInstance = addNewContext();
     contextInstance.setGenerator({ generator: context });
+    contextInstance.setOptions({ options: context.options });
     contextInstance.addColumns({ columns: context.columns });
     contextInstance.addItemIfMissing({ item: selectedItem, index: 0 });
     self.selectedContext = contextInstance;
@@ -71,6 +73,7 @@ export const actions = self => {
     if (newItem.parentColumn !== self.selectedContext.parentColumn) {
       self.selectedContext.moveItem({ item });
     }
+    newItem.visited = true;
   };
 
   const addItemToSelectedColumn = ({ item }) => {

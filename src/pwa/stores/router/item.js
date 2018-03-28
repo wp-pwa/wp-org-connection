@@ -38,7 +38,9 @@ const BaseItem = types
         ? self.column.nextColumn && self.column.nextColumn.items[0]
         : items[index + 1];
     },
-    isExtracted() { return false; },
+    isExtracted() {
+      return false;
+    },
   }));
 
 export const List = BaseItem.named('List')
@@ -55,22 +57,27 @@ export const List = BaseItem.named('List')
       return direction.includes(self.extract);
     },
   }))
-  .actions(self => ({
-    afterCreate: () => {
-      if (['horizontal', 'vertical'].includes(self.extract)) {
-        const { type, id, page, extract } = self;
-        const stopReplace = when(
-          () => self.connection.list(type, id).page(page).ready === true,
-          () => {
-            stopReplace();
-            self.parentContext.replaceExtractedList({ type, id, page, extract });
-          },
-        );
-      }
-    },
-  }));
+  .actions(self => {
+    let stopReplace = null;
+    return {
+      beforeDestroy: () => {
+        stopReplace();
+      },
+      afterCreate: () => {
+        if (['horizontal', 'vertical'].includes(self.extract)) {
+          const { type, id, page, extract } = self;
+          stopReplace = when(
+            () => self.connection.list(type, id).page(page).ready === true,
+            () => {
+              self.parentContext.replaceExtractedList({ type, id, page, extract });
+            },
+          );
+        }
+      },
+    };
+  });
 
-export const Single = BaseItem.named('List').props({
+export const Single = BaseItem.named('Single').props({
   fromList: types.optional(types.frozen, { type: 'latest', id: 'post', page: 1 }),
 });
 
