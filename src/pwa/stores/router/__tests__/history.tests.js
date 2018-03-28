@@ -1,13 +1,15 @@
 import { getSnapshot } from 'mobx-state-tree';
-import { autorun } from 'mobx';
 import { normalize } from 'normalizr';
 import Conn from '../../';
 import postsFromCategory7 from '../../../__tests__/posts-from-category-7.json';
 import postsFromCategory7Page2 from '../../../__tests__/posts-from-category-7-page-2.json';
-import { list } from '../../../schemas';
+import post60 from '../../../__tests__/post-60.json';
+import { list, entity } from '../../../schemas';
 import { actions as historyActions } from '../history';
 import * as actions from '../../../actions';
 import * as actionTypes from '../../../actionTypes';
+
+const { entities: entitiesFromPost60 } = normalize(post60, entity);
 
 const { result: resultFromCategory7, entities: entitiesFromCategory } = normalize(
   postsFromCategory7,
@@ -19,145 +21,98 @@ const { result: resultFromCategory7Page2, entities: entitiesFromCategoryPage2 } 
   list,
 );
 
+const post60Succeed = actions.entitySucceed({
+  entity: { type: 'post', id: 60 },
+  entities: entitiesFromPost60,
+});
+
+const category7Page1Succeed = actions.listSucceed({
+  list: { type: 'category', id: 7, page: 1 },
+  result: resultFromCategory7,
+  entities: entitiesFromCategory,
+});
+
+const category7Page2Succeed = actions.listSucceed({
+  list: { type: 'category', id: 7, page: 1 },
+  result: resultFromCategory7Page2,
+  entities: entitiesFromCategoryPage2,
+});
+
+const post60routeChangeRequested = (method = 'push') => actions.routeChangeRequested({
+  selectedItem: { type: 'post', id: 60 },
+  context: { columns: [[{ type: 'post', id: 60 }]] },
+  method,
+});
+
 // Adds history actions to Connection model.
 const Connection = Conn.actions(historyActions);
 
 // Returns a snapshot as the initial state.
 const initialStateMock = () => {
-  const connection = Connection.create({});
-  connection.addListPage({
-    type: 'category',
-    id: 7,
-    page: 1,
-    result: resultFromCategory7,
-    entities: entitiesFromCategory,
-  });
-  connection.addListPage({
-    type: 'category',
-    id: 7,
-    page: 2,
-    result: resultFromCategory7Page2,
-    entities: entitiesFromCategoryPage2,
-  });
-  connection[actionTypes.ROUTE_CHANGE_SUCCEED](
-    actions.routeChangeSucceed({
-      selectedItem: { type: 'category', id: 7, page: 1 },
-      context: {
-        columns: [
-          [{ type: 'category', id: 7, page: 1 }, { type: 'category', id: 7, page: 2 }],
-          [{ type: 'post', id: 57 }],
-          [{ type: 'post', id: 54 }],
-        ],
-      },
-    }),
-  );
-  return getSnapshot(connection);
+  const store = Connection.create({});
+  store[actionTypes.ENTITY_SUCCEED](post60Succeed);
+  store[actionTypes.ROUTE_CHANGE_SUCCEED](post60routeChangeRequested());
+  return getSnapshot(store);
 };
-
-// Stores the initial state
-const initialState = initialStateMock();
 
 // Tests
 describe('Connection › Router > History', () => {
-  test('Initializes blank if not populated', () => {
-    const connection = Connection.create({});
-    const { key, ...rest } = connection.history.location;
+  test('initializes blank if not populated', () => {
+    const store = Connection.create({});
+    const { key, ...rest } = store.history.location;
     expect(rest).toMatchSnapshot();
   });
 
-  test('Initializes url if populated', () => {
-    const connection = Connection.create(initialState);
-    const { key, ...rest } = connection.history.location;
+  test('initializes url if populated', () => {
+    const store = Connection.create(initialStateMock());
+    const { key, ...rest } = store.history.location;
     expect(rest).toMatchSnapshot();
   });
 
   test("dispatchs succeed when 'push' (history length increases)", () => {
     const dispatch = jest.fn();
-    const connection = Connection.create(initialState, { dispatch });
-    connection[actionTypes.ROUTE_CHANGE_REQUESTED](
-      actions.routeChangeSucceed({
-        method: 'push',
-        selectedItem: { type: 'category', id: 7, page: 2 },
-      }),
-    );
-    const { key, ...rest } = connection.history.location;
+    const store = Connection.create({}, { dispatch });
+    store[actionTypes.ENTITY_SUCCEED](post60Succeed);
+    store[actionTypes.ROUTE_CHANGE_REQUESTED](post60routeChangeRequested());
+    const { key, ...rest } = store.history.location;
     expect(rest).toMatchSnapshot();
-    expect(connection.history.length).toBe(2);
+    expect(store.history.length).toBe(2);
     expect(dispatch.mock.calls.length).toBe(1);
     expect(dispatch.mock.calls[0]).toMatchSnapshot();
   });
 
   test("dispatchs succeed when 'replace' (same history length)", () => {
     const dispatch = jest.fn();
-    const connection = Connection.create(initialState, { dispatch });
-    connection[actionTypes.ROUTE_CHANGE_REQUESTED](
-      actions.routeChangeSucceed({
-        method: 'replace',
-        selectedItem: { type: 'category', id: 7, page: 2 },
-      }),
-    );
-    const { key, ...rest } = connection.history.location;
+    const store = Connection.create({}, { dispatch });
+    store[actionTypes.ENTITY_SUCCEED](post60Succeed);
+    store[actionTypes.ROUTE_CHANGE_REQUESTED](post60routeChangeRequested('replace'));
+    const { key, ...rest } = store.history.location;
     expect(rest).toMatchSnapshot();
-    expect(connection.history.length).toBe(1);
+    expect(store.history.length).toBe(1);
     expect(dispatch.mock.calls.length).toBe(1);
     expect(dispatch.mock.calls[0]).toMatchSnapshot();
   });
 
   test('does not dispatch a succeed when just updating the url', () => {
     const dispatch = jest.fn();
-    const connection = Connection.create({}, { dispatch });
-    connection.addListPage({
-      type: 'category',
-      id: 7,
-      page: 1,
-      result: resultFromCategory7,
-      entities: entitiesFromCategory,
-    });
-    connection[actionTypes.ROUTE_CHANGE_REQUESTED](
-      actions.routeChangeRequested({
-        selectedItem: { type: 'post', id: 30 },
-        context: {
-          columns: [
-            [{ type: 'category', id: 7, page: 1 }, { type: 'category', id: 7, page: 2 }],
-            [{ type: 'post', id: 57 }],
-            [{ type: 'post', id: 30 }],
-          ],
-        },
-      }),
-    );
+    const store = Connection.create({}, { dispatch });
 
-    let pathname;
-    let search;
+    store[actionTypes.ROUTE_CHANGE_REQUESTED](post60routeChangeRequested());
+    store[actionTypes.ROUTE_CHANGE_SUCCEED](...dispatch.mock.calls[0]);
 
-    ({ pathname, search } = connection.history.location);
-    expect({ pathname, search }).toMatchSnapshot();
-    // expect(connection.history.length).toBe(2);
+    let { key, ...rest } = store.history.location;
+    expect(rest).toMatchSnapshot();
+    expect(store.history.length).toBe(2);
+    expect(dispatch.mock.calls.length).toBe(1);
 
-    debugger;
+    store[actionTypes.ENTITY_SUCCEED](post60Succeed);
 
-    console.log(connection.selectedItem.ready, connection.selectedItem.link)
-
-    connection[actionTypes.LIST_SUCCEED]({
-      list: {
-        type: 'category',
-        id: 7,
-        page: 2,
-      },
-      total: 4,
-      result: resultFromCategory7Page2,
-      entities: entitiesFromCategoryPage2,
-    });
-
-    console.log(connection.selectedItem.ready, connection.selectedItem.link)
-
-    ({ pathname, search } = connection.history.location);
-    expect({ pathname, search }).toMatchSnapshot();
-
-    // expect(dispatch.mock.calls.length).toBe(1);
-    // expect(dispatch.mock.calls[0]).toMatchSnapshot();
+    ({ key, ...rest } = store.history.location);
+    expect(rest).toMatchSnapshot();
+    expect(store.history.length).toBe(2);
+    expect(dispatch.mock.calls.length).toBe(1);
   });
 
-  test('Url updates when items is ready, and dispatch is not sent again');
   test('backward');
   test('Forward');
   test('go to previous context');

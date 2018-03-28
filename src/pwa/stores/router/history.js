@@ -1,7 +1,7 @@
 /* eslint-disable import/prefer-default-export, global-require, no-eval */
 import { getEnv } from 'mobx-state-tree';
 import { when } from 'mobx';
-import { isEqual, isMatch } from 'lodash';
+import { isEqual, isMatch, omitBy, isNil } from 'lodash';
 import url from 'url';
 import { routeChangeSucceed } from '../../actions';
 import * as actionTypes from '../../actionTypes';
@@ -11,7 +11,7 @@ export const actions = self => {
   const historyKeys = [];
   const contextKeys = [];
   let currentKey = 0;
-  // let disposer = null;
+  let disposer = null;
 
   const isBrowser = typeof window !== 'undefined' && !window.process;
 
@@ -24,9 +24,9 @@ export const actions = self => {
   // Returns the path from the item specified.
   const getPath = ({ type, id, page }) => {
     const entity = self.entity(type, id);
-    const link = page > 1 ? entity.pagedLink(page) : entity.link; // TODO - inform (page > 1)
-    const { path, hash } = url.parse(link);
-    return path + (hash || '');
+    const link = page ? entity.pagedLink(page) : entity.link;
+    const { path } = url.parse(link);
+    return path;
   };
 
   // move this to a view?
@@ -53,23 +53,25 @@ export const actions = self => {
       currentKey = newIndex;
     }
 
+    const stateSelectedWithoutNil = omitBy(state.selectedItem, isNil);
+
     // Prevents a dispatch when just replacing the URL
-    if (isMatch(selectedItem, state.selectedItem) && action === 'REPLACE') return;
+    if ( action === 'REPLACE' && isMatch(selectedItem, stateSelectedWithoutNil)) return;
+    if (disposer) disposer();
 
     // Dispatchs a route-change-succeed action
     getEnv(self).dispatch(routeChangeSucceed({ ...state }));
 
     // Updates url when the new item is ready
     const { type, id } = state.selectedItem;
-    const entity = self.entity(type, id);
-    if (!entity.ready) {
-      when(
-        () => entity.ready,
+    if (!self.entity(type, id).ready) {
+      disposer = when(
+        () => self.entity(type, id).ready,
         () => {
           const path = getPath(state.selectedItem);
           history.replace(path, state);
         },
-      )
+      );
     }
   });
 
@@ -83,7 +85,6 @@ export const actions = self => {
       const path = getPath(selectedItem);
       if (['push', 'replace'].includes(method)) history[method](path, action);
     },
-    replacePath: path => history.replace(path, history.location.state),
     afterCreate: () => {
       const { selectedItem, selectedContext } = self;
 

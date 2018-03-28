@@ -1,75 +1,29 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`Connection › Router > History Initializes blank if not populated 1`] = `
+exports[`Connection › Router > History dispatchs succeed when 'push' (history length increases) 1`] = `
 Object {
   "hash": "",
-  "pathname": "/",
-  "search": "",
-  "state": undefined,
-}
-`;
-
-exports[`Connection › Router > History Initializes url if populated 1`] = `
-Object {
-  "hash": "",
-  "pathname": "/wp-cat/nature/",
+  "pathname": "/the-beauties-of-gullfoss/",
   "search": "",
   "state": Object {
     "context": Object {
       "columns": Array [
         Array [
           Object {
-            "id": 7,
-            "page": 1,
-            "type": "category",
-          },
-          Object {
-            "id": 7,
-            "page": 2,
-            "type": "category",
-          },
-        ],
-        Array [
-          Object {
-            "id": 57,
-            "type": "post",
-          },
-        ],
-        Array [
-          Object {
-            "id": 54,
+            "id": 60,
             "type": "post",
           },
         ],
       ],
     },
+    "event": null,
     "method": "push",
     "selectedItem": Object {
-      "extract": null,
-      "id": 7,
-      "mstId": "0_category_7_page_1",
-      "page": 1,
-      "type": "category",
-      "visited": true,
+      "id": 60,
+      "page": undefined,
+      "type": "post",
     },
-  },
-}
-`;
-
-exports[`Connection › Router > History dispatchs succeed when 'push' (history length increases) 1`] = `
-Object {
-  "hash": "",
-  "pathname": "/wp-cat/nature/page/2",
-  "search": "",
-  "state": Object {
-    "context": null,
-    "method": "push",
-    "selectedItem": Object {
-      "id": 7,
-      "page": 2,
-      "type": "category",
-    },
-    "type": "connection/ROUTE_CHANGE_SUCCEED",
+    "type": "connection/ROUTE_CHANGE_REQUESTED",
   },
 }
 `;
@@ -77,12 +31,21 @@ Object {
 exports[`Connection › Router > History dispatchs succeed when 'push' (history length increases) 2`] = `
 Array [
   Object {
-    "context": null,
+    "context": Object {
+      "columns": Array [
+        Array [
+          Object {
+            "id": 60,
+            "type": "post",
+          },
+        ],
+      ],
+    },
     "method": "push",
     "selectedItem": Object {
-      "id": 7,
-      "page": 2,
-      "type": "category",
+      "id": 60,
+      "page": undefined,
+      "type": "post",
     },
     "type": "connection/ROUTE_CHANGE_SUCCEED",
   },
@@ -92,17 +55,27 @@ Array [
 exports[`Connection › Router > History dispatchs succeed when 'replace' (same history length) 1`] = `
 Object {
   "hash": "",
-  "pathname": "/wp-cat/nature/page/2",
+  "pathname": "/the-beauties-of-gullfoss/",
   "search": "",
   "state": Object {
-    "context": null,
+    "context": Object {
+      "columns": Array [
+        Array [
+          Object {
+            "id": 60,
+            "type": "post",
+          },
+        ],
+      ],
+    },
+    "event": null,
     "method": "replace",
     "selectedItem": Object {
-      "id": 7,
-      "page": 2,
-      "type": "category",
+      "id": 60,
+      "page": undefined,
+      "type": "post",
     },
-    "type": "connection/ROUTE_CHANGE_SUCCEED",
+    "type": "connection/ROUTE_CHANGE_REQUESTED",
   },
 }
 `;
@@ -110,12 +83,21 @@ Object {
 exports[`Connection › Router > History dispatchs succeed when 'replace' (same history length) 2`] = `
 Array [
   Object {
-    "context": null,
+    "context": Object {
+      "columns": Array [
+        Array [
+          Object {
+            "id": 60,
+            "type": "post",
+          },
+        ],
+      ],
+    },
     "method": "replace",
     "selectedItem": Object {
-      "id": 7,
-      "page": 2,
-      "type": "category",
+      "id": 60,
+      "page": undefined,
+      "type": "post",
     },
     "type": "connection/ROUTE_CHANGE_SUCCEED",
   },
@@ -124,14 +106,97 @@ Array [
 
 exports[`Connection › Router > History does not dispatch a succeed when just updating the url 1`] = `
 Object {
+  "hash": "",
   "pathname": "/",
-  "search": "?p=30",
+  "search": "?p=60",
+  "state": Object {
+    "context": Object {
+      "columns": Array [
+        Array [
+          Object {
+            "id": 60,
+            "type": "post",
+          },
+        ],
+      ],
+    },
+    "event": null,
+    "method": "push",
+    "selectedItem": Object {
+      "id": 60,
+      "page": undefined,
+      "type": "post",
+    },
+    "type": "connection/ROUTE_CHANGE_REQUESTED",
+  },
 }
 `;
 
 exports[`Connection › Router > History does not dispatch a succeed when just updating the url 2`] = `
 Object {
+  "hash": "",
+  "pathname": "/the-beauties-of-gullfoss/",
+  "search": "",
+  "state": Object {
+    "context": Object {
+      "columns": Array [
+        Array [
+          Object {
+            "id": 60,
+            "type": "post",
+          },
+        ],
+      ],
+    },
+    "event": null,
+    "method": "push",
+    "selectedItem": Object {
+      "id": 60,
+      "page": undefined,
+      "type": "post",
+    },
+    "type": "connection/ROUTE_CHANGE_REQUESTED",
+  },
+}
+`;
+
+exports[`Connection › Router > History initializes blank if not populated 1`] = `
+Object {
+  "hash": "",
   "pathname": "/",
-  "search": "?p=30",
+  "search": "",
+  "state": undefined,
+}
+`;
+
+exports[`Connection › Router > History initializes url if populated 1`] = `
+Object {
+  "hash": "",
+  "pathname": "/the-beauties-of-gullfoss/",
+  "search": "",
+  "state": Object {
+    "context": Object {
+      "columns": Array [
+        Array [
+          Object {
+            "id": 60,
+            "type": "post",
+          },
+        ],
+      ],
+    },
+    "method": "push",
+    "selectedItem": Object {
+      "fromList": Object {
+        "id": "post",
+        "page": 1,
+        "type": "latest",
+      },
+      "id": 60,
+      "mstId": "0_post_60",
+      "type": "post",
+      "visited": true,
+    },
+  },
 }
 `;
