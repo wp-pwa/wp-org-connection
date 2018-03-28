@@ -44,6 +44,7 @@ describe('Connection › Entity', () => {
     expect(connection.entity('category', 3).ready).toBe(false);
     expect(connection.entity('category', 3).name).toBe('');
     expect(connection.entity('category', 3).link).toBe('/?cat=3');
+    expect(connection.entity('category', 3).pagedLink(1)).toBe('/?cat=3');
     expect(connection.entity('category', 3).pagedLink(3)).toBe('/?cat=3&paged=3');
   });
 
@@ -51,6 +52,7 @@ describe('Connection › Entity', () => {
     expect(connection.entity('tag', 10).ready).toBe(false);
     expect(connection.entity('tag', 10).name).toBe('');
     expect(connection.entity('tag', 10).link).toBe('/?tag_ID=10');
+    expect(connection.entity('tag', 10).pagedLink(1)).toBe('/?tag_ID=10');
     expect(connection.entity('tag', 10).pagedLink(3)).toBe('/?tag_ID=10&paged=3');
   });
 
@@ -59,6 +61,7 @@ describe('Connection › Entity', () => {
     expect(connection.entity('author', 4).name).toBe('');
     expect(connection.entity('author', 4).avatar).toBe('');
     expect(connection.entity('author', 4).link).toBe('/?author=4');
+    expect(connection.entity('author', 4).pagedLink(1)).toBe('/?author=4');
     expect(connection.entity('author', 4).pagedLink(2)).toBe('/?author=4&paged=2');
   });
 
@@ -66,6 +69,7 @@ describe('Connection › Entity', () => {
     expect(connection.entity('latest', 'post').ready).toBe(false);
     expect(connection.entity('latest', 'post').name).toBe('');
     expect(connection.entity('latest', 'post').link).toBe('/');
+    expect(connection.entity('latest', 'post').pagedLink(1)).toBe('/');
     expect(connection.entity('latest', 'post').pagedLink(3)).toBe('/page/3');
   });
 
@@ -73,6 +77,7 @@ describe('Connection › Entity', () => {
     expect(connection.entity('latest', 'movie').ready).toBe(false);
     expect(connection.entity('latest', 'movie').name).toBe('');
     expect(connection.entity('latest', 'movie').link).toBe('/');
+    expect(connection.entity('latest', 'movie').pagedLink(1)).toBe('/');
     expect(connection.entity('latest', 'movie').pagedLink(3)).toBe('/page/3');
   });
 
@@ -109,7 +114,9 @@ describe('Connection › Entity', () => {
     autorun(() => {
       if (
         connection.entity('category', 3).pagedLink(2) ===
-        'https://demo.worona.org/wp-cat/photography/page/2'
+          'https://demo.worona.org/wp-cat/photography/page/2' &&
+        connection.entity('category', 3).pagedLink(1) ===
+          'https://demo.worona.org/wp-cat/photography/'
       )
         done();
     });
