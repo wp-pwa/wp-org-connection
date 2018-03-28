@@ -113,7 +113,7 @@ export const entityRequested = connection =>
       const { entities } = normalize(response, schemas.single);
 
       yield put(
-        actions.singleSucceed({
+        actions.entitySucceed({
           entity: {
             type,
             id,
@@ -124,7 +124,7 @@ export const entityRequested = connection =>
       );
     } catch (error) {
       yield put(
-        actions.singleFailed({
+        actions.entityFailed({
           entity: {
             type,
             id,
