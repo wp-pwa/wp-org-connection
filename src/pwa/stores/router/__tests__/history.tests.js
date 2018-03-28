@@ -1,9 +1,8 @@
 import { getSnapshot } from 'mobx-state-tree';
 import { normalize } from 'normalizr';
-import Conn from '../../';
+import Connection from '../../';
 import post60 from '../../../__tests__/post-60.json';
 import { entity } from '../../../schemas';
-import { actions as historyActions } from '../history';
 import * as actions from '../../../actions';
 import * as actionTypes from '../../../actionTypes';
 
@@ -20,9 +19,6 @@ const routeRequest = (type, id, method, context) => actions.routeChangeRequested
   method,
 });
 
-// Adds history actions to Connection model.
-const Connection = Conn.actions(historyActions);
-
 describe('Connection › Router > History', () => {
   test('initializes blank if not populated', () => {
     const store = Connection.create({});
@@ -30,7 +26,7 @@ describe('Connection › Router > History', () => {
     expect(rest).toMatchSnapshot();
   });
 
-  test('initializes url if populated', () => {
+  test('initializes the url if populated', () => {
     // Returns a snapshot as the initial state.
     const initialStateMock = () => {
       const store = Connection.create({});

@@ -169,7 +169,7 @@ Object {
 }
 `;
 
-exports[`Connection › Router > History initializes url if populated 1`] = `
+exports[`Connection › Router > History initializes the url if populated 1`] = `
 Object {
   "hash": "",
   "pathname": "/the-beauties-of-gullfoss/",
