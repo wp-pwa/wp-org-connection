@@ -73,6 +73,7 @@ export const actions = self => {
     if (newItem.parentColumn !== self.selectedContext.parentColumn) {
       self.selectedContext.moveItem({ item });
     }
+    newItem.visited = true;
   };
 
   const addItemToSelectedColumn = ({ item }) => {

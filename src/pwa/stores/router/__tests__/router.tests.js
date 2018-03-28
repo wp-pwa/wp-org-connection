@@ -278,6 +278,7 @@ describe('Connection › Router', () => {
     expect(connection.selectedItem).toBe(connection.contexts[0].columns[0].items[0]);
     expect(connection.selectedItem.id).toBe(63);
     expect(connection.selectedItem.nextItem.id).toBe(62);
+    expect(connection.selectedItem.nextItem.visited).toBe(true);
     expect(connection.contexts[0].columns[1].items[0].id).toBe(60);
   });
 
@@ -303,6 +304,7 @@ describe('Connection › Router', () => {
     expect(connection.selectedColumn).toBe(connection.contexts[0].columns[1]);
     expect(connection.selectedItem).toBe(connection.contexts[0].columns[1].items[0]);
     expect(connection.selectedItem.nextItem.id).toBe(60);
+    expect(connection.selectedItem.nextItem.visited).toBe(true);
   });
 
   test('Move selected single with previous context without selected', () => {
