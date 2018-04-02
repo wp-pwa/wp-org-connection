@@ -1,8 +1,9 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import Waypoint from 'react-waypoint';
-import { connect } from 'react-redux';
 import { inject } from 'mobx-react';
+import { connect } from 'react-redux';
+import { compose } from 'recompose';
 import { isMatch, noop } from 'lodash';
 import { dep } from 'worona-deps';
 import { routeChangeRequested } from '../../actions';
@@ -13,7 +14,7 @@ class RouteWaypoint extends Component {
     ssr: PropTypes.bool.isRequired,
     active: PropTypes.bool.isRequired,
     changeRoute: PropTypes.func.isRequired,
-    selected: PropTypes.shape({}).isRequired,
+    selectedItem: PropTypes.shape({}).isRequired,
     entity: PropTypes.shape({}).isRequired,
     isNext: PropTypes.bool,
   };
@@ -36,18 +37,18 @@ class RouteWaypoint extends Component {
   }
 
   changeRouteFromBelow({ event, previousPosition }) {
-    const { selected, changeRoute, entity, active, isNext } = this.props;
+    const { selectedItem, changeRoute, entity, active, isNext } = this.props;
     const method = active || isNext ? 'replace' : 'push';
     if (event && previousPosition === Waypoint.below) {
-      changeRoute(selected, entity, method);
+      changeRoute(selectedItem, entity, method);
     }
   }
 
   changeRouteFromAbove({ event, previousPosition }) {
-    const { selected, changeRoute, entity, active, isNext } = this.props;
+    const { selectedItem, changeRoute, entity, active, isNext } = this.props;
     const method = active || isNext ? 'replace' : 'push';
     if (event && previousPosition === Waypoint.above) {
-      changeRoute(selected, entity, method);
+      changeRoute(selectedItem, entity, method);
     }
   }
 
@@ -91,12 +92,12 @@ const mapStateToProps = state => ({
 });
 
 const mapDispatchToProps = (dispatch, { event }) => ({
-  changeRoute(selected, entity, method) {
+  changeRoute(selectedItem, entity, method) {
     setTimeout(() => {
-      if (!isMatch(selected, entity)) {
+      if (!isMatch(selectedItem, entity)) {
         dispatch(
           routeChangeRequested({
-            selected: entity,
+            selectedItem: entity,
             method,
             event,
           }),
@@ -106,9 +107,9 @@ const mapDispatchToProps = (dispatch, { event }) => ({
   },
 });
 
-export default connect(mapStateToProps, mapDispatchToProps)(
-  inject(({ connection }) => {
-    const { selected } = connection;
-    return { selected };
-  })(RouteWaypoint),
-);
+export default compose(
+  connect(mapStateToProps, mapDispatchToProps),
+  inject(({ connection }) => ({
+    selectedItem: connection.selectedItem,
+  })),
+)(RouteWaypoint);
