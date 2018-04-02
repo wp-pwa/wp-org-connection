@@ -9,7 +9,7 @@ const Column = types
     rawItems: types.optional(types.array(types.late(() => Item)), []),
     selectedItem: types.optional(
       types.reference(types.late(() => Item), {
-        get: (mstId, parent) => resolveIdentifier(Item, parent, mstId) || parent.items[0],
+        get: (mstId, parent) => resolveIdentifier(Item, parent, mstId) || parent.items[0] || null,
         set: item => item.mstId || item,
       }),
       '',
@@ -25,7 +25,7 @@ const Column = types
       return items;
     },
     get nextColumn() {
-      const columns = getParent(self);
+      const { columns } = self.parentContext;
       const index = columns.indexOf(self);
       return index < columns.length - 1 ? columns[index + 1] : null;
     },

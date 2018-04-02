@@ -705,17 +705,22 @@ describe('Connection › Router', () => {
   });
 
   test('Throw if horizontal extracted is added in a column with more items', () => {
-    expect(() => connection[actionTypes.ROUTE_CHANGE_SUCCEED](
-      actions.routeChangeSucceed({
-        selectedItem: { type: 'post', id: 60 },
-        context: {
-          columns: [
-            [{ type: 'post', id: 60 }],
-            [{ type: 'post', id: 63 }, { type: 'category', id: 7, page: 1, extract: 'horizontal' }],
-          ],
-        },
-      }),
-    )).toThrow();
+    expect(() =>
+      connection[actionTypes.ROUTE_CHANGE_SUCCEED](
+        actions.routeChangeSucceed({
+          selectedItem: { type: 'post', id: 60 },
+          context: {
+            columns: [
+              [{ type: 'post', id: 60 }],
+              [
+                { type: 'post', id: 63 },
+                { type: 'category', id: 7, page: 1, extract: 'horizontal' },
+              ],
+            ],
+          },
+        }),
+      ),
+    ).toThrow();
     _resetGlobalState();
   });
 
@@ -732,11 +737,13 @@ describe('Connection › Router', () => {
         },
       }),
     );
-    expect(() => connection[actionTypes.ADD_ITEM_TO_COLUMN](
-      actions.addItemToColumn({
-        item: { type: 'category', id: 7, page: 1, extract: 'horizontal' },
-      }),
-    )).toThrow();
+    expect(() =>
+      connection[actionTypes.ADD_ITEM_TO_COLUMN](
+        actions.addItemToColumn({
+          item: { type: 'category', id: 7, page: 1, extract: 'horizontal' },
+        }),
+      ),
+    ).toThrow();
     _resetGlobalState();
   });
 
@@ -777,5 +784,17 @@ describe('Connection › Router', () => {
     );
     expect(connection.contexts).toMatchSnapshot();
     expect(connection.selectedContext.nextNonVisited.id).toBe(63);
+  });
+
+  test('nextColumn of selectedColumn should return null', () => {
+    connection[actionTypes.ROUTE_CHANGE_SUCCEED](
+      actions.routeChangeSucceed({
+        selectedItem: { type: 'post', id: 60 },
+        context: {
+          columns: [[{ type: 'latest', id: 'post', page: 1, extract: 'horizontal' }]],
+        },
+      }),
+    );
+    expect(connection.selectedColumn.nextColumn).toBeNull();
   });
 });
