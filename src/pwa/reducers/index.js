@@ -9,9 +9,9 @@ export default store => {
       firstTime = false;
     }
     switch (type) {
-      case actionTypes.SINGLE_REQUESTED:
-      case actionTypes.SINGLE_FAILED:
-      case actionTypes.SINGLE_SUCCEED:
+      case actionTypes.ENTITY_REQUESTED:
+      case actionTypes.ENTITY_FAILED:
+      case actionTypes.ENTITY_SUCCEED:
       case actionTypes.LIST_REQUESTED:
       case actionTypes.LIST_SUCCEED:
       case actionTypes.LIST_FAILED:
