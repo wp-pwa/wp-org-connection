@@ -29,6 +29,9 @@ const Column = types
       const index = columns.indexOf(self);
       return index < columns.length - 1 ? columns[index + 1] : null;
     },
+    get hasNextColumn() {
+      return !!self.nextColumn;
+    },
     get hasNonVisited() {
       return !!self.items.find(item => item.visited === false);
     },

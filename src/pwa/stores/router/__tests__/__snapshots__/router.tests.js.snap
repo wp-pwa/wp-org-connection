@@ -1053,6 +1053,104 @@ Array [
 ]
 `;
 
+exports[`Connection › Router Get false from hasNextColumn 1`] = `
+Array [
+  Object {
+    "generator": Object {
+      "columns": Array [
+        Array [
+          Object {
+            "extract": "horizontal",
+            "id": "post",
+            "page": 1,
+            "type": "latest",
+          },
+        ],
+      ],
+    },
+    "index": 0,
+    "infinite": undefined,
+    "mstIdForColumn": 2,
+    "options": undefined,
+    "rawColumns": Array [
+      Object {
+        "mstId": "context_0_column_2",
+        "rawItems": Array [
+          Object {
+            "fromList": Object {
+              "id": "post",
+              "page": 1,
+              "type": "latest",
+            },
+            "id": 60,
+            "mstId": "0_post_60",
+            "type": "post",
+            "visited": true,
+          },
+        ],
+        "selectedItem": "0_post_60",
+      },
+      Object {
+        "mstId": "context_0_column_1",
+        "rawItems": Array [
+          Object {
+            "extract": "horizontal",
+            "id": "post",
+            "mstId": "0_latest_post_page_1_horizontal",
+            "page": 1,
+            "type": "latest",
+            "visited": false,
+          },
+        ],
+        "selectedItem": "",
+      },
+    ],
+    "selectedColumn": "context_0_column_2",
+  },
+]
+`;
+
+exports[`Connection › Router Get false from hasNonVisited 1`] = `
+Array [
+  Object {
+    "generator": Object {
+      "columns": Array [
+        Array [
+          Object {
+            "id": 62,
+            "type": "post",
+          },
+        ],
+      ],
+    },
+    "index": 0,
+    "infinite": undefined,
+    "mstIdForColumn": 1,
+    "options": undefined,
+    "rawColumns": Array [
+      Object {
+        "mstId": "context_0_column_1",
+        "rawItems": Array [
+          Object {
+            "fromList": Object {
+              "id": "post",
+              "page": 1,
+              "type": "latest",
+            },
+            "id": 62,
+            "mstId": "0_post_62",
+            "type": "post",
+            "visited": true,
+          },
+        ],
+        "selectedItem": "0_post_62",
+      },
+    ],
+    "selectedColumn": "context_0_column_1",
+  },
+]
+`;
+
 exports[`Connection › Router Get next non visited item 1`] = `
 Array [
   Object {
@@ -1220,6 +1318,243 @@ Array [
           },
         ],
         "selectedItem": "",
+      },
+    ],
+    "selectedColumn": "context_0_column_1",
+  },
+]
+`;
+
+exports[`Connection › Router Get nextColumn 1`] = `
+Array [
+  Object {
+    "generator": Object {
+      "columns": Array [
+        Array [
+          Object {
+            "id": 60,
+            "type": "post",
+          },
+        ],
+        Array [
+          Object {
+            "id": 32,
+            "type": "post",
+          },
+        ],
+      ],
+    },
+    "index": 0,
+    "infinite": undefined,
+    "mstIdForColumn": 2,
+    "options": undefined,
+    "rawColumns": Array [
+      Object {
+        "mstId": "context_0_column_1",
+        "rawItems": Array [
+          Object {
+            "fromList": Object {
+              "id": "post",
+              "page": 1,
+              "type": "latest",
+            },
+            "id": 60,
+            "mstId": "0_post_60",
+            "type": "post",
+            "visited": true,
+          },
+        ],
+        "selectedItem": "0_post_60",
+      },
+      Object {
+        "mstId": "context_0_column_2",
+        "rawItems": Array [
+          Object {
+            "fromList": Object {
+              "id": "post",
+              "page": 1,
+              "type": "latest",
+            },
+            "id": 32,
+            "mstId": "0_post_32",
+            "type": "post",
+            "visited": false,
+          },
+        ],
+        "selectedItem": "",
+      },
+    ],
+    "selectedColumn": "context_0_column_1",
+  },
+]
+`;
+
+exports[`Connection › Router Get null from nextColumn 1`] = `
+Array [
+  Object {
+    "generator": Object {
+      "columns": Array [
+        Array [
+          Object {
+            "extract": "horizontal",
+            "id": "post",
+            "page": 1,
+            "type": "latest",
+          },
+        ],
+      ],
+    },
+    "index": 0,
+    "infinite": undefined,
+    "mstIdForColumn": 2,
+    "options": undefined,
+    "rawColumns": Array [
+      Object {
+        "mstId": "context_0_column_2",
+        "rawItems": Array [
+          Object {
+            "fromList": Object {
+              "id": "post",
+              "page": 1,
+              "type": "latest",
+            },
+            "id": 60,
+            "mstId": "0_post_60",
+            "type": "post",
+            "visited": true,
+          },
+        ],
+        "selectedItem": "0_post_60",
+      },
+      Object {
+        "mstId": "context_0_column_1",
+        "rawItems": Array [
+          Object {
+            "extract": "horizontal",
+            "id": "post",
+            "mstId": "0_latest_post_page_1_horizontal",
+            "page": 1,
+            "type": "latest",
+            "visited": false,
+          },
+        ],
+        "selectedItem": "",
+      },
+    ],
+    "selectedColumn": "context_0_column_2",
+  },
+]
+`;
+
+exports[`Connection › Router Get true from hasNextColumn 1`] = `
+Array [
+  Object {
+    "generator": Object {
+      "columns": Array [
+        Array [
+          Object {
+            "id": "post",
+            "page": 1,
+            "type": "latest",
+          },
+        ],
+        Array [
+          Object {
+            "id": 3,
+            "page": 1,
+            "type": "category",
+          },
+        ],
+      ],
+    },
+    "index": 0,
+    "infinite": undefined,
+    "mstIdForColumn": 2,
+    "options": undefined,
+    "rawColumns": Array [
+      Object {
+        "mstId": "context_0_column_1",
+        "rawItems": Array [
+          Object {
+            "extract": null,
+            "id": "post",
+            "mstId": "0_latest_post_page_1",
+            "page": 1,
+            "type": "latest",
+            "visited": true,
+          },
+        ],
+        "selectedItem": "0_latest_post_page_1",
+      },
+      Object {
+        "mstId": "context_0_column_2",
+        "rawItems": Array [
+          Object {
+            "extract": null,
+            "id": 3,
+            "mstId": "0_category_3_page_1",
+            "page": 1,
+            "type": "category",
+            "visited": false,
+          },
+        ],
+        "selectedItem": "",
+      },
+    ],
+    "selectedColumn": "context_0_column_1",
+  },
+]
+`;
+
+exports[`Connection › Router Get true from hasNonVisited 1`] = `
+Array [
+  Object {
+    "generator": Object {
+      "columns": Array [
+        Array [
+          Object {
+            "id": 61,
+            "type": "post",
+          },
+          Object {
+            "id": 62,
+            "type": "post",
+          },
+        ],
+      ],
+    },
+    "index": 0,
+    "infinite": undefined,
+    "mstIdForColumn": 1,
+    "options": undefined,
+    "rawColumns": Array [
+      Object {
+        "mstId": "context_0_column_1",
+        "rawItems": Array [
+          Object {
+            "fromList": Object {
+              "id": "post",
+              "page": 1,
+              "type": "latest",
+            },
+            "id": 61,
+            "mstId": "0_post_61",
+            "type": "post",
+            "visited": false,
+          },
+          Object {
+            "fromList": Object {
+              "id": "post",
+              "page": 1,
+              "type": "latest",
+            },
+            "id": 62,
+            "mstId": "0_post_62",
+            "type": "post",
+            "visited": true,
+          },
+        ],
+        "selectedItem": "0_post_62",
       },
     ],
     "selectedColumn": "context_0_column_1",

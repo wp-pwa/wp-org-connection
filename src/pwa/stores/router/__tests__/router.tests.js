@@ -786,7 +786,33 @@ describe('Connection › Router', () => {
     expect(connection.selectedContext.nextNonVisited.id).toBe(63);
   });
 
-  test('nextColumn of selectedColumn should return null', () => {
+  test('Get false from hasNonVisited', () => {
+    connection[actionTypes.ROUTE_CHANGE_SUCCEED](
+      actions.routeChangeSucceed({
+        selectedItem: { type: 'post', id: 62 },
+        context: {
+          columns: [[{ type: 'post', id: 62 }]],
+        },
+      }),
+    );
+    expect(connection.contexts).toMatchSnapshot();
+    expect(connection.selectedColumn.hasNonVisited).toBe(false);
+  });
+
+  test('Get true from hasNonVisited', () => {
+    connection[actionTypes.ROUTE_CHANGE_SUCCEED](
+      actions.routeChangeSucceed({
+        selectedItem: { type: 'post', id: 62 },
+        context: {
+          columns: [[{ type: 'post', id: 61 }, { type: 'post', id: 62 }]],
+        },
+      }),
+    );
+    expect(connection.contexts).toMatchSnapshot();
+    expect(connection.selectedColumn.hasNonVisited).toBe(true);
+  });
+
+  test('Get false from hasNextColumn', () => {
     connection[actionTypes.ROUTE_CHANGE_SUCCEED](
       actions.routeChangeSucceed({
         selectedItem: { type: 'post', id: 60 },
@@ -795,6 +821,49 @@ describe('Connection › Router', () => {
         },
       }),
     );
+    expect(connection.contexts).toMatchSnapshot();
+    expect(connection.selectedColumn.hasNextColumn).toBe(false);
+  });
+
+  test('Get true from hasNextColumn', () => {
+    connection[actionTypes.ROUTE_CHANGE_SUCCEED](
+      actions.routeChangeSucceed({
+        selectedItem: { type: 'latest', id: 'post', page: 1 },
+        context: {
+          columns: [
+            [{ type: 'latest', id: 'post', page: 1 }],
+            [{ type: 'category', id: 3, page: 1 }],
+          ],
+        },
+      }),
+    );
+    expect(connection.contexts).toMatchSnapshot();
+    expect(connection.selectedColumn.hasNextColumn).toBe(true);
+  });
+
+  test('Get nextColumn', () => {
+    connection[actionTypes.ROUTE_CHANGE_SUCCEED](
+      actions.routeChangeSucceed({
+        selectedItem: { type: 'post', id: 60 },
+        context: {
+          columns: [[{ type: 'post', id: 60 }], [{ type: 'post', id: 32 }]],
+        },
+      }),
+    );
+    expect(connection.contexts).toMatchSnapshot();
+    expect(connection.selectedColumn.nextColumn.items[0].id).toBe(32);
+  });
+
+  test('Get null from nextColumn', () => {
+    connection[actionTypes.ROUTE_CHANGE_SUCCEED](
+      actions.routeChangeSucceed({
+        selectedItem: { type: 'post', id: 60 },
+        context: {
+          columns: [[{ type: 'latest', id: 'post', page: 1, extract: 'horizontal' }]],
+        },
+      }),
+    );
+    expect(connection.contexts).toMatchSnapshot();
     expect(connection.selectedColumn.nextColumn).toBeNull();
   });
 });
