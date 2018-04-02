@@ -29,27 +29,25 @@ Object {
 `;
 
 exports[`Connection › Router > History dispatchs succeed when 'push' (history length increases) 2`] = `
-Array [
-  Object {
-    "context": Object {
-      "columns": Array [
-        Array [
-          Object {
-            "id": 60,
-            "type": "post",
-          },
-        ],
+Object {
+  "context": Object {
+    "columns": Array [
+      Array [
+        Object {
+          "id": 60,
+          "type": "post",
+        },
       ],
-    },
-    "method": "push",
-    "selectedItem": Object {
-      "id": 60,
-      "page": undefined,
-      "type": "post",
-    },
-    "type": "connection/ROUTE_CHANGE_SUCCEED",
+    ],
   },
-]
+  "method": "push",
+  "selectedItem": Object {
+    "id": 60,
+    "page": undefined,
+    "type": "post",
+  },
+  "type": "connection/ROUTE_CHANGE_SUCCEED",
+}
 `;
 
 exports[`Connection › Router > History dispatchs succeed when 'replace' (same history length) 1`] = `
@@ -81,27 +79,25 @@ Object {
 `;
 
 exports[`Connection › Router > History dispatchs succeed when 'replace' (same history length) 2`] = `
-Array [
-  Object {
-    "context": Object {
-      "columns": Array [
-        Array [
-          Object {
-            "id": 60,
-            "type": "post",
-          },
-        ],
+Object {
+  "context": Object {
+    "columns": Array [
+      Array [
+        Object {
+          "id": 60,
+          "type": "post",
+        },
       ],
-    },
-    "method": "replace",
-    "selectedItem": Object {
-      "id": 60,
-      "page": undefined,
-      "type": "post",
-    },
-    "type": "connection/ROUTE_CHANGE_SUCCEED",
+    ],
   },
-]
+  "method": "replace",
+  "selectedItem": Object {
+    "id": 60,
+    "page": undefined,
+    "type": "post",
+  },
+  "type": "connection/ROUTE_CHANGE_SUCCEED",
+}
 `;
 
 exports[`Connection › Router > History does not dispatch a succeed when just updating the url 1`] = `
@@ -160,16 +156,39 @@ Object {
 }
 `;
 
-exports[`Connection › Router > History initializes blank if not populated 1`] = `
+exports[`Connection › Router > History initializes the url if selectedItem exists in the initial state 1`] = `
 Object {
   "hash": "",
-  "pathname": "/",
+  "pathname": "/the-beauties-of-gullfoss/",
   "search": "",
-  "state": undefined,
+  "state": Object {
+    "context": Object {
+      "columns": Array [
+        Array [
+          Object {
+            "id": 60,
+            "type": "post",
+          },
+        ],
+      ],
+    },
+    "method": "push",
+    "selectedItem": Object {
+      "fromList": Object {
+        "id": "post",
+        "page": 1,
+        "type": "latest",
+      },
+      "id": 60,
+      "mstId": "0_post_60",
+      "type": "post",
+      "visited": true,
+    },
+  },
 }
 `;
 
-exports[`Connection › Router > History initializes the url if populated 1`] = `
+exports[`Connection › Router > History replaces the first blank url if selectedItem is not null anymore 1`] = `
 Object {
   "hash": "",
   "pathname": "/the-beauties-of-gullfoss/",

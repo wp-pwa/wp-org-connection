@@ -28,7 +28,7 @@ export const actions = self => {
   };
 
   self.history = createHistory();
-  self.history.listen((location, action) => {
+  self.history.listen(async (location, action) => {
     const { state, key } = location;
     const { selectedItem, selectedContext } = self;
     const generator = selectedContext ? selectedContext.generator : null;
@@ -53,11 +53,11 @@ export const actions = self => {
     const stateSelectedWithoutNil = omitBy(state.selectedItem, isNil);
 
     // Prevents a dispatch when just replacing the URL
-    if ( action === 'REPLACE' && isMatch(selectedItem, stateSelectedWithoutNil)) return;
+    if (action === 'REPLACE' && isMatch(selectedItem, stateSelectedWithoutNil)) return;
     if (disposer) disposer();
 
     // Dispatchs a route-change-succeed action
-    getEnv(self).dispatch(routeChangeSucceed({ ...state }));
+    await getEnv(self).asyncDispatch(routeChangeSucceed({ ...state }));
 
     // Updates url when the new item is ready
     const { type, id } = state.selectedItem;
@@ -83,19 +83,21 @@ export const actions = self => {
       if (['push', 'replace'].includes(method)) self.history[method](path, action);
     },
     afterCreate: () => {
-      const { selectedItem, selectedContext } = self;
+      disposer = when(
+        () => self.selectedItem !== null,
+        () => {
+          // Set the first route in history
+          const { selectedItem, selectedContext } = self;
+          const path = getPath(selectedItem);
+          const search = isBrowser ? window.location.search : '';
 
-      // First route in history
-      if (selectedItem !== null) {
-        const path = getPath(selectedItem);
-        const search = isBrowser ? window.location.search : '';
-
-        self.history.replace(path + search, {
-          selectedItem,
-          method: 'push',
-          context: selectedContext && selectedContext.generator,
-        });
-      }
+          self.history.replace(path + search, {
+            selectedItem,
+            method: 'push',
+            context: selectedContext && selectedContext.generator,
+          });
+        },
+      );
     },
   };
 };
