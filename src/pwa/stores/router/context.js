@@ -46,7 +46,13 @@ const Context = types
       return columns.filter(column => column.items.length > 0);
     },
     get nextNonVisited() {
-      return self.columns.find(column => column.nextNonVisited).nextNonVisited;
+      const firstColumnWithNonVisited = self.columns.find(column => column.hasNonVisited);
+
+      return (
+        (firstColumnWithNonVisited &&
+          firstColumnWithNonVisited.items.find(item => item.visited === false)) ||
+        null
+      );
     },
   }))
   .actions(self => ({

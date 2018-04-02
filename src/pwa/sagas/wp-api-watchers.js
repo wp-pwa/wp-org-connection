@@ -46,7 +46,7 @@ export const getList = ({ connection, type, id, page }) => {
   return query;
 };
 
-export const getSingle = ({ connection, type, id }) =>
+export const getEntity = ({ connection, type, id }) =>
   connection[typesToEndpoints(type)]()
     .id(id)
     .embed();
@@ -109,8 +109,8 @@ export const listRequested = connection =>
 export const entityRequested = connection =>
   function* entityRequestedSaga({ entity: { type, id } }) {
     try {
-      const response = yield call(getSingle, { connection, type, id });
-      const { entities } = normalize(response, schemas.single);
+      const response = yield call(getEntity, { connection, type, id });
+      const { entities } = normalize(response, schemas.entity);
 
       yield put(
         actions.entitySucceed({
@@ -119,7 +119,7 @@ export const entityRequested = connection =>
             id,
           },
           entities,
-          endpoint: getSingle({ connection, type, id }).toString(),
+          endpoint: getEntity({ connection, type, id }).toString(),
         }),
       );
     } catch (error) {
@@ -130,7 +130,7 @@ export const entityRequested = connection =>
             id,
           },
           error,
-          endpoint: getSingle({ connection, type, id }).toString(),
+          endpoint: getEntity({ connection, type, id }).toString(),
         }),
       );
     }

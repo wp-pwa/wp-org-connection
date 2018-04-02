@@ -29,8 +29,8 @@ const Column = types
       const index = columns.indexOf(self);
       return index < columns.length - 1 ? columns[index + 1] : null;
     },
-    get nextNonVisited() {
-      return self.items.find(item => item.visited === false);
+    get hasNonVisited() {
+      return !!self.items.find(item => item.visited === false);
     },
     get index() {
       const columns = getParent(self);
