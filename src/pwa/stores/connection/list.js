@@ -61,7 +61,7 @@ const List = types
       return mstIds.map(mstId => resolveIdentifier(Entity, self, mstId));
     },
     page(page) {
-      return self.pageMap.get(page) || pageShape;
+      return self.pageMap.get(page) || self.pageMap.get(String(page)) || pageShape;
     },
     get pages() {
       return values(self.pageMap);

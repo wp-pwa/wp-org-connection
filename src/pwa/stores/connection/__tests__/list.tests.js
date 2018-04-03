@@ -1,6 +1,6 @@
 /* eslint-disable dot-notation */
 import { autorun } from 'mobx';
-import { types, unprotect } from 'mobx-state-tree';
+import { types, unprotect, getSnapshot } from 'mobx-state-tree';
 import { normalize } from 'normalizr';
 import * as connect from '../';
 import { list } from '../../../schemas';
@@ -253,4 +253,17 @@ describe('Connection › List', () => {
       total: { entities: 10, pages: 2 },
     });
   });
+
+  test('Rehydrates pageMap from a snapshot', () => {
+    connection.addListPage({
+      type: 'category',
+      id: 7,
+      page: 1,
+      result: resultFromCategory7,
+      entities: entitiesFromCategory,
+      total: { entities: 10, pages: 2 },
+    });
+    const rehydrated = Connection.create(getSnapshot(connection));
+    expect(rehydrated.list('category', 7).page(1)).toMatchSnapshot();
+  })
 });
