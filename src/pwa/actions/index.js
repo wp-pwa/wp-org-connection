@@ -133,42 +133,24 @@ export const customFailed = ({
 });
 
 export const routeChangeRequested = ({
-  selectedItem: { type, id, page },
+  selectedItem,
   method = 'push',
   context = null,
   event = null,
-}) => {
-  const selectedItem = {
-    type,
-    id: parse(id),
-    page,
-  };
-  return {
-    type: actionTypes.ROUTE_CHANGE_REQUESTED,
-    selectedItem,
-    method,
-    context,
-    event,
-  };
-};
+}) => ({
+  type: actionTypes.ROUTE_CHANGE_REQUESTED,
+  selectedItem: { ...selectedItem, id: parse(selectedItem.id) },
+  method,
+  context,
+  event,
+});
 
-export const routeChangeSucceed = ({
-  selectedItem: { type, id, page },
-  method = 'push',
-  context = null,
-}) => {
-  const selectedItem = {
-    type,
-    id: parse(id),
-    page,
-  };
-  return {
-    type: actionTypes.ROUTE_CHANGE_SUCCEED,
-    selectedItem,
-    method,
-    context,
-  };
-};
+export const routeChangeSucceed = ({ selectedItem, method = 'push', context = null }) => ({
+  type: actionTypes.ROUTE_CHANGE_SUCCEED,
+  selectedItem: { ...selectedItem, id: parse(selectedItem.id) },
+  method,
+  context,
+});
 
 export const routeChangeFailed = () => ({
   type: actionTypes.ROUTE_CHANGE_FAILED,

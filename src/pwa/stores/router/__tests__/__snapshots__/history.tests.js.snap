@@ -20,7 +20,6 @@ Object {
     "method": "push",
     "selectedItem": Object {
       "id": 60,
-      "page": undefined,
       "type": "post",
     },
     "type": "connection/ROUTE_CHANGE_REQUESTED",
@@ -43,7 +42,6 @@ Object {
   "method": "push",
   "selectedItem": Object {
     "id": 60,
-    "page": undefined,
     "type": "post",
   },
   "type": "connection/ROUTE_CHANGE_SUCCEED",
@@ -70,7 +68,6 @@ Object {
     "method": "replace",
     "selectedItem": Object {
       "id": 60,
-      "page": undefined,
       "type": "post",
     },
     "type": "connection/ROUTE_CHANGE_REQUESTED",
@@ -93,7 +90,6 @@ Object {
   "method": "replace",
   "selectedItem": Object {
     "id": 60,
-    "page": undefined,
     "type": "post",
   },
   "type": "connection/ROUTE_CHANGE_SUCCEED",
@@ -120,7 +116,6 @@ Object {
     "method": "push",
     "selectedItem": Object {
       "id": 60,
-      "page": undefined,
       "type": "post",
     },
     "type": "connection/ROUTE_CHANGE_REQUESTED",
@@ -148,7 +143,6 @@ Object {
     "method": "push",
     "selectedItem": Object {
       "id": 60,
-      "page": undefined,
       "type": "post",
     },
     "type": "connection/ROUTE_CHANGE_REQUESTED",

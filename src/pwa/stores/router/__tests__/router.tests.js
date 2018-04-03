@@ -334,9 +334,7 @@ describe('Connection › Router', () => {
         selectedItem: { type: 'post', id: 62 },
         context: {
           options: { someThemeOption: 123 },
-          columns: [
-            [{ type: 'post', id: 63 }, { type: 'post', id: 62 }],
-          ],
+          columns: [[{ type: 'post', id: 63 }, { type: 'post', id: 62 }]],
         },
       }),
     );
@@ -692,6 +690,41 @@ describe('Connection › Router', () => {
     expect(connection.selectedContext.columns[0].items[0].fromList).toEqual({
       type: 'latest',
       id: 'post',
+      page: 1,
+    });
+    expect(connection.selectedContext.columns[1].items[0].fromList).toEqual({
+      type: 'category',
+      id: 7,
+      page: 1,
+    });
+  });
+
+  test('Items should have the fromList from selectedItem as their fromList', () => {
+    connection[actionTypes.ROUTE_CHANGE_SUCCEED](
+      actions.routeChangeSucceed({
+        selectedItem: { type: 'post', id: 60, fromList: { type: 'tag', id: 20, page: 1 } },
+        context: {
+          columns: [[{ type: 'category', id: 7, page: 1, extract: 'horizontal' }]],
+        },
+      }),
+    );
+    expect(connection.selectedContext.rawColumns.length).toBe(2);
+    expect(connection.selectedContext.columns.length).toBe(1);
+    connection[actionTypes.LIST_SUCCEED](
+      actions.listSucceed({
+        list: {
+          type: 'category',
+          id: 7,
+          page: 1,
+        },
+        result: resultFromCategory7,
+        entities: entitiesFromCategory,
+      }),
+    );
+    expect(connection.contexts).toMatchSnapshot();
+    expect(connection.selectedContext.columns[0].items[0].fromList).toEqual({
+      type: 'tag',
+      id: 20,
       page: 1,
     });
     expect(connection.selectedContext.columns[1].items[0].fromList).toEqual({
