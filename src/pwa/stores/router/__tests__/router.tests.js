@@ -673,8 +673,6 @@ describe('Connection › Router', () => {
         },
       }),
     );
-    expect(connection.selectedContext.rawColumns.length).toBe(2);
-    expect(connection.selectedContext.columns.length).toBe(2);
     connection[actionTypes.LIST_SUCCEED](
       actions.listSucceed({
         list: {
@@ -695,7 +693,6 @@ describe('Connection › Router', () => {
       }),
     );
     expect(connection.contexts).toMatchSnapshot();
-    expect(resultFromCategory7.length).toBe(5);
     expect(connection.selectedContext.columns[0].items[0].id).toBe(57);
     expect(connection.selectedContext.columns[1].items[0].id).toBe(54);
   });
