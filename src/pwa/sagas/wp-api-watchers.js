@@ -178,7 +178,7 @@ export const routeChangeSucceed = stores =>
 
     if (action.selectedItem.page) {
       const { type, id, page } = action.selectedItem;
-      const listPage = connection.list(type, id).page(page - 1);
+      const listPage = connection.list(type, id).page(page);
 
       if (listPage.ready === false && listPage.fetching === false) {
         yield put(actions.listRequested({ list: { type, id, page } }));
