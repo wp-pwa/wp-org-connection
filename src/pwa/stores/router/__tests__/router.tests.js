@@ -664,7 +664,43 @@ describe('Connection › Router', () => {
     expect(connection.selectedContext.columns.length).toBe(5);
   });
 
-  test('Extrated items should have the list they are extracted from as fromList', () => {
+  test('`selectedItem` should be in its natural position inside the extracted list', () => {
+    connection[actionTypes.ROUTE_CHANGE_SUCCEED](
+      actions.routeChangeSucceed({
+        selectedItem: { type: 'category', id: 7, page: 1 },
+        context: {
+          columns: [[{ type: 'category', id: 7, page: 1 }], [{ type: 'category', id: 7, page: 2 }]],
+        },
+      }),
+    );
+    expect(connection.selectedContext.rawColumns.length).toBe(2);
+    expect(connection.selectedContext.columns.length).toBe(2);
+    connection[actionTypes.LIST_SUCCEED](
+      actions.listSucceed({
+        list: {
+          type: 'category',
+          id: 7,
+          page: 1,
+        },
+        result: resultFromCategory7,
+        entities: entitiesFromCategory,
+      }),
+    );
+    connection[actionTypes.ROUTE_CHANGE_SUCCEED](
+      actions.routeChangeSucceed({
+        selectedItem: { type: 'post', id: 54, fromList: { type: 'category', id: 7, page: 1 } },
+        context: {
+          columns: [[{ type: 'category', id: 7, page: 1, extract: 'horizontal' }]],
+        },
+      }),
+    );
+    expect(connection.contexts).toMatchSnapshot();
+    expect(resultFromCategory7.length).toBe(5);
+    expect(connection.selectedContext.columns[0].items[0].id).toBe(57);
+    expect(connection.selectedContext.columns[1].items[0].id).toBe(54);
+  });
+
+  test('Extrated items should have the list they are extracted from as `fromList`', () => {
     connection[actionTypes.ROUTE_CHANGE_SUCCEED](
       actions.routeChangeSucceed({
         selectedItem: { type: 'post', id: 60 },
@@ -699,7 +735,7 @@ describe('Connection › Router', () => {
     });
   });
 
-  test('Items should have the fromList from selectedItem as their fromList', () => {
+  test('Items should have the `fromList` from `selectedItem` as their `fromList`', () => {
     connection[actionTypes.ROUTE_CHANGE_SUCCEED](
       actions.routeChangeSucceed({
         selectedItem: { type: 'post', id: 60, fromList: { type: 'tag', id: 20, page: 1 } },
