@@ -140,7 +140,10 @@ const Context = types
       const oldIndex = oldItem.parentColumn.index;
       self.deleteItem({ item: oldItem });
       if (oldColumn.rawItems.length === 0) self.deleteColumn({ column: oldColumn });
-      const items = self.connection.list(type, id).page(page).entities;
+      const items = self.connection
+        .list(type, id)
+        .page(page)
+        .entities.map(entity => ({ ...entity, fromList: { type, id, page } }));
       if (items.length > 0) self.addItemsIfMissing({ items, index: oldIndex });
     },
   }));
