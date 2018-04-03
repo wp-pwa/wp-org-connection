@@ -18,6 +18,7 @@ export default store => {
       case actionTypes.CUSTOM_REQUESTED:
       case actionTypes.CUSTOM_SUCCEED:
       case actionTypes.CUSTOM_FAILED:
+      case actionTypes.MOVE_ITEM_TO_COLUMN:
       case actionTypes.ROUTE_CHANGE_REQUESTED:
       case actionTypes.ROUTE_CHANGE_SUCCEED:
       case actionTypes.HEAD_CONTENT_SUCCEED:
