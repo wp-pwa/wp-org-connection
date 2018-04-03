@@ -91,6 +91,15 @@ const Context = types
         self.addItem({ item, index });
       }
     },
+    addItemsIfMissing: ({ items, index }) => {
+      let i = index || self.rawColumns.length;
+      items.forEach(item => {
+        if (!self.hasItem({ item })) {
+          self.addColumn({ column: [item], index: i });
+          i += 1;
+        }
+      });
+    },
     deleteItem: ({ item }) => item.parentColumn.rawItems.remove(item),
     addColumn: ({ column, index }) => {
       if (!Array.isArray(column)) {
@@ -132,7 +141,7 @@ const Context = types
       self.deleteItem({ item: oldItem });
       if (oldColumn.rawItems.length === 0) self.deleteColumn({ column: oldColumn });
       const items = self.connection.list(type, id).page(page).entities;
-      if (items.length > 0) self.addItems({ items, index: oldIndex });
+      if (items.length > 0) self.addItemsIfMissing({ items, index: oldIndex });
     },
   }));
 

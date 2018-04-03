@@ -594,7 +594,9 @@ describe('Connection › Router', () => {
     connection[actionTypes.ROUTE_CHANGE_SUCCEED](
       actions.routeChangeSucceed({
         selectedItem: { type: 'post', id: 60 },
-        context: { columns: [[{ type: 'category', id: 7, page: 1, extract: 'horizontal' }]] },
+        context: {
+          columns: [[{ type: 'category', id: 7, page: 1, extract: 'horizontal' }]],
+        },
       }),
     );
     expect(connection.selectedContext.rawColumns.length).toBe(2);
@@ -614,6 +616,32 @@ describe('Connection › Router', () => {
     expect(resultFromCategory7.length).toBe(5);
     expect(connection.selectedContext.rawColumns.length).toBe(6);
     expect(connection.selectedContext.columns.length).toBe(6);
+  });
+
+  test('Add items from extracted once they are ready avoiding duplications', () => {
+    connection[actionTypes.ROUTE_CHANGE_SUCCEED](
+      actions.routeChangeSucceed({
+        selectedItem: { type: 'post', id: 54 },
+        context: { columns: [[{ type: 'category', id: 7, page: 1, extract: 'horizontal' }]] },
+      }),
+    );
+    expect(connection.selectedContext.rawColumns.length).toBe(2);
+    expect(connection.selectedContext.columns.length).toBe(1);
+    connection[actionTypes.LIST_SUCCEED](
+      actions.listSucceed({
+        list: {
+          type: 'category',
+          id: 7,
+          page: 1,
+        },
+        result: resultFromCategory7,
+        entities: entitiesFromCategory,
+      }),
+    );
+    expect(connection.contexts).toMatchSnapshot();
+    expect(resultFromCategory7.length).toBe(5);
+    expect(connection.selectedContext.rawColumns.length).toBe(5);
+    expect(connection.selectedContext.columns.length).toBe(5);
   });
 
   test("Don't throw if vertical extracted is added in a column with more stuff", () => {
