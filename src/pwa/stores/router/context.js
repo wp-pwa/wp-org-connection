@@ -64,7 +64,7 @@ const Context = types
       page
         ? `${self.index}_${type}_${id}_page_${page}${extract ? `_${extract}` : ''}`
         : `${self.index}_${type}_${id}`,
-    addMstIdToItem: ({ item }) => ({ mstId: self.getMstId({ ...item }), ...item }),
+    addMstIdToItem: ({ item }) => ({ ...item, mstId: self.getMstId({ ...item }) }),
     addMstIdToItems: ({ items }) => items.map(item => self.addMstIdToItem({ item })),
     setGenerator: ({ generator }) => {
       self.generator = generator;
