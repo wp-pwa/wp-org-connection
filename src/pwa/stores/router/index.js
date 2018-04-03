@@ -70,7 +70,7 @@ export const actions = self => {
   const moveItemToSelectedColumn = ({ item }) => {
     const newItem = self.selectedContext.getItem({ item });
     if (!newItem) throw new Error("Can't move if selected doesn't exist in the previous context.");
-    if (newItem.parentColumn !== self.selectedContext.parentColumn) {
+    if (newItem.parentColumn !== self.selectedItem.parentColumn) {
       self.selectedContext.moveItem({ item });
     }
     newItem.visited = true;

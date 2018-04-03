@@ -1164,6 +1164,67 @@ Array [
 ]
 `;
 
+exports[`Connection › Router Don't move item if it's in selected column 1`] = `
+Array [
+  Object {
+    "generator": Object {
+      "columns": Array [
+        Array [
+          Object {
+            "id": 63,
+            "type": "post",
+          },
+          Object {
+            "id": 62,
+            "type": "post",
+          },
+        ],
+      ],
+      "options": Object {
+        "someThemeOption": 123,
+      },
+    },
+    "index": 0,
+    "infinite": undefined,
+    "mstIdForColumn": 1,
+    "options": Object {
+      "someThemeOption": 123,
+    },
+    "rawColumns": Array [
+      Object {
+        "mstId": "context_0_column_1",
+        "rawItems": Array [
+          Object {
+            "fromList": Object {
+              "id": "post",
+              "page": 1,
+              "type": "latest",
+            },
+            "id": 63,
+            "mstId": "0_post_63",
+            "type": "post",
+            "visited": true,
+          },
+          Object {
+            "fromList": Object {
+              "id": "post",
+              "page": 1,
+              "type": "latest",
+            },
+            "id": 62,
+            "mstId": "0_post_62",
+            "type": "post",
+            "visited": true,
+          },
+        ],
+        "selectedItem": "0_post_62",
+      },
+    ],
+    "selectedColumn": "context_0_column_1",
+  },
+]
+`;
+
 exports[`Connection › Router Extrated items should have the list they are extracted from as fromList 1`] = `
 Array [
   Object {

@@ -328,6 +328,28 @@ describe('Connection › Router', () => {
     ).toThrow("Can't move if selected doesn't exist in the previous context.");
   });
 
+  test("Don't move item if it's in selected column", () => {
+    connection[actionTypes.ROUTE_CHANGE_SUCCEED](
+      actions.routeChangeSucceed({
+        selectedItem: { type: 'post', id: 62 },
+        context: {
+          options: { someThemeOption: 123 },
+          columns: [
+            [{ type: 'post', id: 63 }, { type: 'post', id: 62 }],
+          ],
+        },
+      }),
+    );
+    connection[actionTypes.MOVE_ITEM_TO_COLUMN](
+      actions.moveItemToColumn({ item: { type: 'post', id: 63 } }),
+    );
+    expect(connection.contexts).toMatchSnapshot();
+    expect(connection.contexts.length).toBe(1);
+    expect(connection.selectedColumn).toBe(connection.contexts[0].columns[0]);
+    expect(connection.selectedItem).toBe(connection.contexts[0].columns[0].items[1]);
+    expect(connection.selectedItem.id).toBe(62);
+  });
+
   test('Replace context with new one', () => {
     connection[actionTypes.ROUTE_CHANGE_SUCCEED](
       actions.routeChangeSucceed({
