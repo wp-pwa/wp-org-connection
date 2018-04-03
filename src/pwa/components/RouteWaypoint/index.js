@@ -4,69 +4,64 @@ import Waypoint from 'react-waypoint';
 import { inject } from 'mobx-react';
 import { connect } from 'react-redux';
 import { compose } from 'recompose';
-import { isMatch, noop } from 'lodash';
-import { dep } from 'worona-deps';
-import { routeChangeRequested } from '../../actions';
+import { noop } from 'lodash';
+import { routeChangeRequested, moveItemToColumn } from '../../actions';
 
 class RouteWaypoint extends Component {
   static propTypes = {
-    children: PropTypes.node.isRequired,
-    ssr: PropTypes.bool.isRequired,
+    item: PropTypes.shape({}).isRequired,
     active: PropTypes.bool.isRequired,
+    event: PropTypes.shape({}),
+    children: PropTypes.node.isRequired,
+    moveItem: PropTypes.func.isRequired,
     changeRoute: PropTypes.func.isRequired,
-    selectedItem: PropTypes.shape({}).isRequired,
-    entity: PropTypes.shape({}).isRequired,
-    isNext: PropTypes.bool,
+    isSelectedItem: PropTypes.bool.isRequired,
+    isNextNonVisited: PropTypes.bool.isRequired,
   };
 
   static defaultProps = {
-    isNext: false,
+    event: null,
   };
 
   constructor(props) {
     super(props);
-    const { ssr, isNext } = this.props;
-    this.state = { show: ssr || !isNext };
-    this.showChildren = this.showChildren.bind(this);
     this.changeRouteFromBelow = this.changeRouteFromBelow.bind(this);
     this.changeRouteFromAbove = this.changeRouteFromAbove.bind(this);
+    this.changeRouteFrom = this.changeRouteFrom.bind(this);
   }
 
-  showChildren() {
-    this.setState({ show: true });
+  changeRouteFromBelow(payload) {
+    this.changeRouteFrom(Waypoint.below, payload);
   }
 
-  changeRouteFromBelow({ event, previousPosition }) {
-    const { selectedItem, changeRoute, entity, active, isNext } = this.props;
-    const method = active || isNext ? 'replace' : 'push';
-    if (event && previousPosition === Waypoint.below) {
-      changeRoute(selectedItem, entity, method);
-    }
+  changeRouteFromAbove(payload) {
+    this.changeRouteFrom(Waypoint.above, payload);
   }
 
-  changeRouteFromAbove({ event, previousPosition }) {
-    const { selectedItem, changeRoute, entity, active, isNext } = this.props;
-    const method = active || isNext ? 'replace' : 'push';
-    if (event && previousPosition === Waypoint.above) {
-      changeRoute(selectedItem, entity, method);
+  async changeRouteFrom(position, { event: waypointEvent, previousPosition }) {
+    const {
+      moveItem,
+      changeRoute,
+      active,
+      item,
+      event,
+      isSelectedItem,
+      isNextNonVisited,
+    } = this.props;
+
+    if (waypointEvent && previousPosition === position && !isSelectedItem) {
+      if (isNextNonVisited) await moveItem({ item });
+
+      changeRoute({
+        selectedItem: item,
+        method: active ? 'replace' : 'push',
+        event,
+      });
     }
   }
 
   render() {
-    const { children, active, isNext } = this.props;
-    const { show } = this.state;
-
-    if (!show)
-      return [
-        <Waypoint
-          key="showChildren"
-          onEnter={isNext ? this.showChildren : noop}
-          bottomOffset={-300}
-          scrollableAncestor="window"
-          fireOnRapidScroll={false}
-        />,
-      ];
-
+    const { children, active } = this.props;
     return [
       <Waypoint
         key="changeRouteFromBelow"
@@ -87,29 +82,33 @@ class RouteWaypoint extends Component {
   }
 }
 
-const mapStateToProps = state => ({
-  ssr: dep('build', 'selectors', 'getSsr')(state),
-});
-
-const mapDispatchToProps = (dispatch, { event }) => ({
-  changeRoute(selectedItem, entity, method) {
-    setTimeout(() => {
-      if (!isMatch(selectedItem, entity)) {
-        dispatch(
-          routeChangeRequested({
-            selectedItem: entity,
-            method,
-            event,
-          }),
-        );
-      }
+const mapDispatchToProps = dispatch => ({
+  moveItem(payload) {
+    return new Promise(resolve => {
+      setTimeout(() => {
+        dispatch(moveItemToColumn(payload));
+        resolve();
+      });
+    });
+  },
+  changeRoute(payload) {
+    return new Promise(resolve => {
+      setTimeout(() => {
+        dispatch(routeChangeRequested(payload));
+        resolve();
+      });
     });
   },
 });
 
 export default compose(
-  connect(mapStateToProps, mapDispatchToProps),
-  inject(({ connection }) => ({
-    selectedItem: connection.selectedItem,
-  })),
+  connect(null, mapDispatchToProps),
+  inject(({ connection }, { item }) => {
+    const waypointItem = connection.selectedContext.getItem({ item });
+    return {
+      isSelectedItem: connection.selectedItem === waypointItem,
+      isInSelectedColumn: connection.selectedColumn === waypointItem.parentColumn,
+      isNextNonVisited: connection.selectedContext.nextNonVisited === waypointItem,
+    };
+  }),
 )(RouteWaypoint);
