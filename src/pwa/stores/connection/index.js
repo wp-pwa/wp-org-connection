@@ -144,7 +144,7 @@ export const actions = self => ({
     const item = self.getCustomPage({ name, page });
     item.fetching = false;
   },
-  // [actionTypes.HEAD_CONTENT_SUCCEED]({ content }) {
-  //   self.siteInfo.headContent = content;
-  // },
+  [actionTypes.HEAD_CONTENT_SUCCEED]({ content }) {
+    self.siteInfo.headContent = content;
+  },
 });
