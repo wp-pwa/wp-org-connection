@@ -51,8 +51,8 @@ export const getEntity = ({ connection, type, id }) =>
     .id(id)
     .embed();
 
-export const getCustom = ({ connection, singleType, page, params }) => {
-  let query = connection[typesToEndpoints(singleType)]()
+export const getCustom = ({ connection, type, page, params }) => {
+  let query = connection[typesToEndpoints(type)]()
     .page(page)
     .embed();
 
@@ -64,14 +64,15 @@ export const getCustom = ({ connection, singleType, page, params }) => {
 };
 
 export const listRequested = connection =>
-  function* listRequestedSaga({ list: { type, id, page } }) {
-    if (!['latest', 'category', 'tag', 'author'].includes(type)) {
+  function* listRequestedSaga({ list }) {
+    if (!['latest', 'category', 'tag', 'author'].includes(list.type)) {
       throw new Error(
         'Custom taxonomies should retrieve their custom post types first. NOT IMPLEMENTED.',
       );
     }
 
     try {
+      const { type, id, page } = list;
       const response = yield call(getList, { connection, type, id, page });
       const { entities, result } = normalize(response, schemas.list);
       const totalEntities = response._paging ? parseInt(response._paging.total, 10) : 0;
@@ -80,11 +81,7 @@ export const listRequested = connection =>
 
       yield put(
         actions.listSucceed({
-          list: {
-            type,
-            id,
-            page,
-          },
+          list,
           entities,
           result,
           total,
@@ -94,11 +91,7 @@ export const listRequested = connection =>
     } catch (error) {
       yield put(
         actions.listFailed({
-          list: {
-            type,
-            id,
-            page,
-          },
+          list,
           error,
           endpoint: getList({ connection, type, id, page }).toString(),
         }),
@@ -107,17 +100,15 @@ export const listRequested = connection =>
   };
 
 export const entityRequested = connection =>
-  function* entityRequestedSaga({ entity: { type, id } }) {
+  function* entityRequestedSaga({ entity }) {
     try {
+      const { type, id } = entity;
       const response = yield call(getEntity, { connection, type, id });
       const { entities } = normalize(response, schemas.entity);
 
       yield put(
         actions.entitySucceed({
-          entity: {
-            type,
-            id,
-          },
+          entity,
           entities,
           endpoint: getEntity({ connection, type, id }).toString(),
         }),
@@ -125,10 +116,7 @@ export const entityRequested = connection =>
     } catch (error) {
       yield put(
         actions.entityFailed({
-          entity: {
-            type,
-            id,
-          },
+          entity,
           error,
           endpoint: getEntity({ connection, type, id }).toString(),
         }),
@@ -137,58 +125,55 @@ export const entityRequested = connection =>
   };
 
 export const customRequested = connection =>
-  function* customRequestedSaga({ url, name, singleType, page, params }) {
+  function* customRequestedSaga({ url, custom, params }) {
     try {
-      const response = yield call(getCustom, { connection, singleType, page, params });
+      const { type, page } = custom;
+      const response = yield call(getCustom, { connection, type, page, params });
       const { entities, result } = normalize(response, schemas.list);
       const totalEntities = response._paging ? parseInt(response._paging.total, 10) : 0;
       const totalPages = response._paging ? parseInt(response._paging.totalPages, 10) : 0;
       const total = { entities: totalEntities, pages: totalPages };
+
       yield put(
         actions.customSucceed({
+          custom,
           url,
-          name,
-          singleType,
           total,
-          page,
           params,
-          result: result.map(item => item.id),
+          result,
           entities,
-          endpoint: getCustom({ connection, singleType, page, params }).toString(),
+          endpoint: getCustom({ connection, type, page, params }).toString(),
         }),
       );
     } catch (error) {
       yield put(
         actions.customFailed({
+          custom,
           url,
-          name,
-          singleType,
           params,
-          page,
           error,
-          endpoint: getCustom({ connection, singleType, page, params }).toString(),
+          endpoint: getCustom({ connection, type, page, params }).toString(),
         }),
       );
     }
   };
 
 export const routeChangeSucceed = stores =>
-  function* routeChangeSucceedSaga(action) {
+  function* routeChangeSucceedSaga({ selectedItem }) {
     const { connection } = stores;
+    const { type, id, page } = selectedItem;
 
-    if (action.selectedItem.page) {
-      const { type, id, page } = action.selectedItem;
+    if (page) {
       const listPage = connection.list(type, id).page(page);
 
       if (listPage.ready === false && listPage.fetching === false) {
-        yield put(actions.listRequested({ list: { type, id, page } }));
+        yield put(actions.listRequested({ list: selectedItem }));
       }
     } else {
-      const { type, id } = action.selectedItem;
       const entity = connection.entity(type, id);
 
       if (entity.ready === false && entity.fetching === false) {
-        yield put(actions.entityRequested({ entity: { type, id } }));
+        yield put(actions.entityRequested({ entity: selectedItem }));
       }
     }
   };

@@ -28,71 +28,63 @@ export const entityFailed = ({ entity: { type, id }, error, endpoint }) => ({
   endpoint,
 });
 
-export const listRequested = ({ list: { type, id, page } }) => {
-  if (typeof page === 'undefined') {
+export const listRequested = ({ list }) => {
+  if (typeof list.page === 'undefined') {
     throw new Error('The field `page` is mandatory in listRequested.');
   }
 
-  if (type === 'latest' && !id) id = 'post';
   return {
     type: actionTypes.LIST_REQUESTED,
     list: {
-      type,
-      id: parse(id),
-      page: parse(page),
+      ...list,
+      id: parse(list.id),
+      page: parse(list.page),
     },
   };
 };
 export const listSucceed = ({
-  list: { type, id = null, page },
+  list,
   total = { entities: 0, pages: 0 },
   result,
   entities,
   endpoint,
-}) => {
-  if (type === 'latest' && !id) id = 'post';
-  return {
-    type: actionTypes.LIST_SUCCEED,
-    list: {
-      type,
-      id: parse(id),
-      page: parse(page),
-    },
-    total,
-    result,
-    entities,
-    endpoint,
-  };
-};
-export const listFailed = ({ list: { type, id, page }, error, endpoint }) => ({
+}) => ({
+  type: actionTypes.LIST_SUCCEED,
+  list: {
+    ...list,
+    id: parse(list.id),
+    page: parse(list.page),
+  },
+  total,
+  result,
+  entities,
+  endpoint,
+});
+export const listFailed = ({ list, error, endpoint }) => ({
   type: actionTypes.LIST_FAILED,
   list: {
-    type,
-    id: parse(id),
-    page: parse(page),
+    ...list,
+    id: parse(list.id),
+    page: parse(list.page),
   },
   error,
   endpoint,
 });
 
-export const customRequested = ({ custom: { name, type, page }, url = '/', params = {} }) => {
-  if (typeof page === 'undefined') {
+export const customRequested = ({ custom, url = '/', params = {} }) => {
+  if (typeof custom.page === 'undefined') {
     throw new Error('The field `page` is mandatory in customRequested.');
   }
 
   return {
     type: actionTypes.CUSTOM_REQUESTED,
-    custom: {
-      name,
-      type,
-      page: parse(page),
-    },
+    custom: { ...custom, page: parse(custom.page) },
     url,
     params,
   };
 };
 export const customSucceed = ({
-  custom: { name, type, page },
+  custom,
   url = '/',
   params = {},
   total = { entities: 0, pages: 0 },
@@ -101,11 +93,7 @@ export const customSucceed = ({
   endpoint,
 }) => ({
   type: actionTypes.CUSTOM_SUCCEED,
-  custom: {
-    name,
-    type,
-    page: parse(page),
-  },
+  custom: { ...custom, page: parse(custom.page) },
   url,
   params,
   total,
@@ -113,19 +101,9 @@ export const customSucceed = ({
   entities,
   endpoint,
 });
-export const customFailed = ({
-  custom: { name, type, page },
-  url = '/',
-  params = {},
-  error,
-  endpoint,
-}) => ({
+export const customFailed = ({ custom, url = '/', params = {}, error, endpoint }) => ({
   type: actionTypes.CUSTOM_FAILED,
-  custom: {
-    name,
-    type,
-    page: parse(page),
-  },
+  custom: { ...custom, page: parse(custom.page) },
   url,
   params,
   error,
