@@ -65,14 +65,15 @@ export const getCustom = ({ connection, type, page, params }) => {
 
 export const listRequested = connection =>
   function* listRequestedSaga({ list }) {
-    if (!['latest', 'category', 'tag', 'author'].includes(list.type)) {
+    const { type, id, page } = list;
+
+    if (!['latest', 'category', 'tag', 'author'].includes(type)) {
       throw new Error(
         'Custom taxonomies should retrieve their custom post types first. NOT IMPLEMENTED.',
       );
     }
 
     try {
-      const { type, id, page } = list;
       const response = yield call(getList, { connection, type, id, page });
       const { entities, result } = normalize(response, schemas.list);
       const totalEntities = response._paging ? parseInt(response._paging.total, 10) : 0;
@@ -101,11 +102,11 @@ export const listRequested = connection =>
 
 export const entityRequested = connection =>
   function* entityRequestedSaga({ entity }) {
+    const { type, id } = entity;
+
     try {
-      const { type, id } = entity;
       const response = yield call(getEntity, { connection, type, id });
       const { entities } = normalize(response, schemas.entity);
-
       yield put(
         actions.entitySucceed({
           entity,
@@ -126,8 +127,9 @@ export const entityRequested = connection =>
 
 export const customRequested = connection =>
   function* customRequestedSaga({ url, custom, params }) {
+    const { type, page } = custom;
+
     try {
-      const { type, page } = custom;
       const response = yield call(getCustom, { connection, type, page, params });
       const { entities, result } = normalize(response, schemas.list);
       const totalEntities = response._paging ? parseInt(response._paging.total, 10) : 0;
