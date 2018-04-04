@@ -183,6 +183,10 @@ export const addItemToColumn = ({ item: { type, id, page, extract } }) => ({
   },
 });
 
+export const previousContextRequested = () => ({
+  type: actionTypes.PREVIOUS_CONTEXT_REQUESTED,
+});
+
 export const replaceContext = ({ context }) => ({
   type: actionTypes.REPLACE_CONTEXT,
   context,

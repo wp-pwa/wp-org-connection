@@ -22,6 +22,7 @@ export default store => {
       case actionTypes.ROUTE_CHANGE_REQUESTED:
       case actionTypes.ROUTE_CHANGE_SUCCEED:
       case actionTypes.HEAD_CONTENT_SUCCEED:
+      case actionTypes.PREVIOUS_CONTEXT_REQUESTED:
         store[type](action);
         break;
       default:
