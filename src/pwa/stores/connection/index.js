@@ -48,6 +48,7 @@ export const actions = self => ({
     item.fetching = true;
   },
   addEntity({ entity }) {
+    if (!entity.id || !entity.type) return; // Don't add entity if it doesn't have id or type
     const item = self.getEntity({ type: entity.type, id: entity.id });
     item.entity = convert(entity);
     item.fetching = false;

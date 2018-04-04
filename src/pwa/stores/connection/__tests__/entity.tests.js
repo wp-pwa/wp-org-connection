@@ -90,6 +90,12 @@ describe('Connection › Entity', () => {
     expect(connection.entity('media', 62).sizes).toEqual([]);
   });
 
+  test("Don't add an entity if it doesn't have type or id", () => {
+    expect(connection.entity('media', 42).ready).toBe(false);
+    connection.addEntity({ entity: { type: 'media' } });
+    connection.addEntity({ entity: { id: 42 } });
+  });
+
   test('Subscribe to ready before entity is ready', done => {
     expect(connection.entity('post', 60).ready).toBe(false);
     autorun(() => {
