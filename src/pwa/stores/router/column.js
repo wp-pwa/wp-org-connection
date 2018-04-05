@@ -46,6 +46,9 @@ const Column = types
     get parentContext() {
       return getParent(self, 2);
     },
+    get isSelected() {
+      return getParent(self, 2).selectedColumn === self;
+    },
   }))
   .actions(self => {
     self.stopExtractCheck = null;

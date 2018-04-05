@@ -1,4 +1,4 @@
-import { types, getRoot, resolveIdentifier, detach, getSnapshot } from 'mobx-state-tree';
+import { types, getRoot, getParent, resolveIdentifier, detach, getSnapshot } from 'mobx-state-tree';
 import Column from './column';
 import Item from './item';
 
@@ -53,6 +53,9 @@ const Context = types
           firstColumnWithNonVisited.items.find(item => item.visited === false)) ||
         null
       );
+    },
+    get isSelected() {
+      return getParent(self, 2).selectedContext === self;
     },
   }))
   .actions(self => ({

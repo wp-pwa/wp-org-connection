@@ -41,6 +41,9 @@ const BaseItem = types
     isExtracted() {
       return false;
     },
+    isSelected() {
+      return getParent(self, 4).selectedItem === self;
+    },
   }));
 
 export const List = BaseItem.named('List')
