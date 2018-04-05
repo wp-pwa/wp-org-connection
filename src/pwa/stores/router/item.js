@@ -41,7 +41,7 @@ const BaseItem = types
     isExtracted() {
       return false;
     },
-    isSelected() {
+    get isSelected() {
       return getParent(self, 4).selectedItem === self;
     },
   }));

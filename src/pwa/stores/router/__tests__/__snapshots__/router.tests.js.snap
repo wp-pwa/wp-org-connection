@@ -1912,6 +1912,241 @@ Array [
 ]
 `;
 
+exports[`Connection › Router Get the proper values from isSelected in column 1`] = `
+Array [
+  Object {
+    "generator": Object {
+      "columns": Array [
+        Array [
+          Object {
+            "id": "post",
+            "page": 1,
+            "type": "latest",
+          },
+        ],
+        Array [
+          Object {
+            "id": 1,
+            "page": 1,
+            "type": "category",
+          },
+        ],
+        Array [
+          Object {
+            "id": 2,
+            "page": 1,
+            "type": "category",
+          },
+        ],
+      ],
+    },
+    "index": 0,
+    "infinite": undefined,
+    "mstIdForColumn": 3,
+    "options": undefined,
+    "rawColumns": Array [
+      Object {
+        "mstId": "context_0_column_1",
+        "rawItems": Array [
+          Object {
+            "extract": null,
+            "id": "post",
+            "mstId": "0_latest_post_page_1",
+            "page": 1,
+            "type": "latest",
+            "visited": true,
+          },
+        ],
+        "selectedItem": "0_latest_post_page_1",
+      },
+      Object {
+        "mstId": "context_0_column_2",
+        "rawItems": Array [
+          Object {
+            "extract": null,
+            "id": 1,
+            "mstId": "0_category_1_page_1",
+            "page": 1,
+            "type": "category",
+            "visited": false,
+          },
+        ],
+        "selectedItem": "",
+      },
+      Object {
+        "mstId": "context_0_column_3",
+        "rawItems": Array [
+          Object {
+            "extract": null,
+            "id": 2,
+            "mstId": "0_category_2_page_1",
+            "page": 1,
+            "type": "category",
+            "visited": false,
+          },
+        ],
+        "selectedItem": "",
+      },
+    ],
+    "selectedColumn": "context_0_column_1",
+  },
+]
+`;
+
+exports[`Connection › Router Get the proper values from isSelected in context 1`] = `
+Array [
+  Object {
+    "generator": Object {
+      "columns": Array [
+        Array [
+          Object {
+            "id": "post",
+            "page": 1,
+            "type": "latest",
+          },
+        ],
+        Array [
+          Object {
+            "id": 1,
+            "page": 1,
+            "type": "category",
+          },
+        ],
+        Array [
+          Object {
+            "id": 2,
+            "page": 1,
+            "type": "category",
+          },
+        ],
+      ],
+    },
+    "index": 0,
+    "infinite": undefined,
+    "mstIdForColumn": 3,
+    "options": undefined,
+    "rawColumns": Array [
+      Object {
+        "mstId": "context_0_column_1",
+        "rawItems": Array [
+          Object {
+            "extract": null,
+            "id": "post",
+            "mstId": "0_latest_post_page_1",
+            "page": 1,
+            "type": "latest",
+            "visited": true,
+          },
+        ],
+        "selectedItem": "0_latest_post_page_1",
+      },
+      Object {
+        "mstId": "context_0_column_2",
+        "rawItems": Array [
+          Object {
+            "extract": null,
+            "id": 1,
+            "mstId": "0_category_1_page_1",
+            "page": 1,
+            "type": "category",
+            "visited": false,
+          },
+        ],
+        "selectedItem": "",
+      },
+      Object {
+        "mstId": "context_0_column_3",
+        "rawItems": Array [
+          Object {
+            "extract": null,
+            "id": 2,
+            "mstId": "0_category_2_page_1",
+            "page": 1,
+            "type": "category",
+            "visited": false,
+          },
+        ],
+        "selectedItem": "",
+      },
+    ],
+    "selectedColumn": "context_0_column_1",
+  },
+]
+`;
+
+exports[`Connection › Router Get the proper values from isSelected in item 1`] = `
+Array [
+  Object {
+    "generator": Object {
+      "columns": Array [
+        Array [
+          Object {
+            "id": "post",
+            "page": 1,
+            "type": "latest",
+          },
+        ],
+        Array [
+          Object {
+            "id": 1,
+            "page": 1,
+            "type": "category",
+          },
+          Object {
+            "id": 2,
+            "page": 1,
+            "type": "category",
+          },
+        ],
+      ],
+    },
+    "index": 0,
+    "infinite": undefined,
+    "mstIdForColumn": 2,
+    "options": undefined,
+    "rawColumns": Array [
+      Object {
+        "mstId": "context_0_column_1",
+        "rawItems": Array [
+          Object {
+            "extract": null,
+            "id": "post",
+            "mstId": "0_latest_post_page_1",
+            "page": 1,
+            "type": "latest",
+            "visited": true,
+          },
+        ],
+        "selectedItem": "0_latest_post_page_1",
+      },
+      Object {
+        "mstId": "context_0_column_2",
+        "rawItems": Array [
+          Object {
+            "extract": null,
+            "id": 1,
+            "mstId": "0_category_1_page_1",
+            "page": 1,
+            "type": "category",
+            "visited": false,
+          },
+          Object {
+            "extract": null,
+            "id": 2,
+            "mstId": "0_category_2_page_1",
+            "page": 1,
+            "type": "category",
+            "visited": false,
+          },
+        ],
+        "selectedItem": "",
+      },
+    ],
+    "selectedColumn": "context_0_column_1",
+  },
+]
+`;
+
 exports[`Connection › Router Get true from hasNextColumn 1`] = `
 Array [
   Object {

@@ -1017,4 +1017,85 @@ describe('Connection › Router', () => {
     expect(connection.contexts).toMatchSnapshot();
     expect(connection.selectedColumn.nextColumn).toBeNull();
   });
+
+  test('Get the proper values from isSelected in context', () => {
+    connection[actionTypes.ROUTE_CHANGE_SUCCEED](
+      actions.routeChangeSucceed({
+        selectedItem: { type: 'latest', id: 'post', page: 1 },
+        context: {
+          columns: [
+            [{ type: 'latest', id: 'post', page: 1 }],
+            [{ type: 'category', id: 1, page: 1 }],
+            [{ type: 'category', id: 2, page: 1 }],
+          ],
+        },
+      }),
+    );
+    expect(connection.contexts).toMatchSnapshot();
+    expect(connection.contexts[0].isSelected).toBe(true);
+    connection[actionTypes.ROUTE_CHANGE_SUCCEED](
+      actions.routeChangeSucceed({
+        selectedItem: { type: 'tag', id: '1', page: 1 },
+        context: {
+          columns: [
+            [{ type: 'tag', id: 1, page: 1 }],
+            [{ type: 'tag', id: 2, page: 1 }],
+            [{ type: 'tag', id: 3, page: 1 }],
+          ],
+        },
+      }),
+    );
+    expect(connection.contexts[0].isSelected).toBe(false);
+    expect(connection.contexts[1].isSelected).toBe(true);
+  });
+
+  test('Get the proper values from isSelected in column', () => {
+    connection[actionTypes.ROUTE_CHANGE_SUCCEED](
+      actions.routeChangeSucceed({
+        selectedItem: { type: 'latest', id: 'post', page: 1 },
+        context: {
+          columns: [
+            [{ type: 'latest', id: 'post', page: 1 }],
+            [{ type: 'category', id: 1, page: 1 }],
+            [{ type: 'category', id: 2, page: 1 }],
+          ],
+        },
+      }),
+    );
+    expect(connection.contexts).toMatchSnapshot();
+    expect(connection.selectedContext.columns[0].isSelected).toBe(true);
+    connection[actionTypes.ROUTE_CHANGE_SUCCEED](
+      actions.routeChangeSucceed({
+        selectedItem: { type: 'category', id: 1, page: 1 },
+      }),
+    );
+    expect(connection.selectedContext.columns[0].isSelected).toBe(false);
+    expect(connection.selectedContext.columns[1].isSelected).toBe(true);
+  });
+
+  test('Get the proper values from isSelected in item', () => {
+    connection[actionTypes.ROUTE_CHANGE_SUCCEED](
+      actions.routeChangeSucceed({
+        selectedItem: { type: 'latest', id: 'post', page: 1 },
+        context: {
+          columns: [
+            [{ type: 'latest', id: 'post', page: 1 }],
+            [{ type: 'category', id: 1, page: 1 }, { type: 'category', id: 2, page: 1 }],
+          ],
+        },
+      }),
+    );
+    expect(connection.contexts).toMatchSnapshot();
+    expect(connection.selectedColumn.items[0].isSelected).toBe(true);
+    connection[actionTypes.ROUTE_CHANGE_SUCCEED](
+      actions.routeChangeSucceed({
+        selectedItem: { type: 'category', id: 2, page: 1 },
+      }),
+    );
+    expect(connection.selectedContext.columns[0].items[0].isSelected).toBe(false);
+    expect(connection.selectedContext.columns[1].items[0].isSelected).toBe(false);
+    expect(connection.selectedContext.columns[1].items[1].isSelected).toBe(true);
+    expect(connection.selectedColumn.items[0].isSelected).toBe(false);
+    expect(connection.selectedColumn.items[1].isSelected).toBe(true);
+  });
 });
