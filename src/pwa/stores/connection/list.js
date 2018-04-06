@@ -1,4 +1,4 @@
-import { values } from 'mobx';
+import { values, observable } from 'mobx';
 import { types, getParent, resolveIdentifier, getSnapshot } from 'mobx-state-tree';
 import { flatten } from 'lodash';
 import { entityShape } from './entity-shape';
@@ -58,7 +58,7 @@ const List = types
     },
     get entities() {
       const mstIds = flatten(self.pages.map(page => getSnapshot(page.entities)));
-      return mstIds.map(mstId => resolveIdentifier(Entity, self, mstId));
+      return observable(mstIds.map(mstId => resolveIdentifier(Entity, self, mstId)));
     },
     page(page) {
       return self.pageMap.get(page) || self.pageMap.get(String(page)) || pageShape;
