@@ -1,3 +1,4 @@
+import { observable } from 'mobx';
 import { authorShape, taxonomyShape } from './entity-shape';
 
 const entityListShape = (type, id) => ({
@@ -8,7 +9,7 @@ const entityListShape = (type, id) => ({
 export const pageShape = {
   ready: false,
   fetching: false,
-  entities: [],
+  entities: observable([]),
   total: null,
 };
 
@@ -25,9 +26,9 @@ const listShape = (type, id) => ({
       pages: null,
     },
   },
-  pages: [],
+  pages: observable([]),
   page: () => pageShape,
-  entities: [],
+  entities: observable([]),
   entity: entityListShape(type, id),
 });
 

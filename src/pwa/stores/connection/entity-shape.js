@@ -1,3 +1,4 @@
+import { observable } from 'mobx';
 import { join } from './utils';
 
 export const link = (type, id) => {
@@ -74,7 +75,7 @@ export const singleShape = (type, id) => ({
   slug: '',
   content: '',
   excerpt: '',
-  taxonomy: () => [],
+  taxonomy: () => observable([]),
   featured: mediaShape('media'),
   author: authorShape('author'),
   target: '',

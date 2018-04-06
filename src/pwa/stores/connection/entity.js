@@ -1,4 +1,5 @@
 /* eslint-disable no-use-before-define */
+import { observable } from 'mobx';
 import { types, resolveIdentifier } from 'mobx-state-tree';
 import { join, extract } from './utils';
 import entityShape, {
@@ -55,10 +56,12 @@ const single = self => ({
   },
   taxonomy(type) {
     return self.ready && self.entity.taxonomies && self.entity.taxonomies[type]
-      ? self.entity.taxonomies[type].map(
-          id => resolveIdentifier(Entity, self, join(type, id)) || entityShape(type, id),
+      ? observable(
+          self.entity.taxonomies[type].map(
+            id => resolveIdentifier(Entity, self, join(type, id)) || entityShape(type, id),
+          ),
         )
-      : [];
+      : observable([]);
   },
   get featured() {
     return (
