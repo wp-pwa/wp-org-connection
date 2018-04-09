@@ -2,7 +2,7 @@
 import Wpapi from 'wpapi';
 import { normalize } from 'normalizr';
 import { forOwn } from 'lodash';
-import { call, select, put, takeEvery, all, take, fork, join } from 'redux-saga/effects';
+import { call, select, put, takeEvery, all, take } from 'redux-saga/effects';
 import { dep } from 'worona-deps';
 import * as actions from '../actions';
 import * as actionTypes from '../actionTypes';
@@ -20,17 +20,17 @@ export function* isCors() {
   return url.startsWith('http://') && window.location.host === 'https';
 }
 
-export function* initConnection() {
+export function* initConnection(options) {
   const cors = yield call(isCors);
   const getSetting = dep('settings', 'selectorCreators', 'getSetting');
   const url = yield select(getSetting('generalSite', 'url'));
   const autodiscovery = yield select(getSetting('connection', 'autodiscovery'));
   if (!autodiscovery)
-    return new Wpapi({ endpoint: `${cors ? CorsAnywhere : ''}${url}?rest_route=` });
+    options.connection = new Wpapi({ endpoint: `${cors ? CorsAnywhere : ''}${url}?rest_route=` });
   try {
-    return yield call(Wpapi.discover, `${cors ? CorsAnywhere : ''}${url}`);
+    options.connection = yield call(Wpapi.discover, `${cors ? CorsAnywhere : ''}${url}`);
   } catch (error) {
-    return new Wpapi({ endpoint: `${cors ? CorsAnywhere : ''}${url}?rest_route=` });
+    options.connection = new Wpapi({ endpoint: `${cors ? CorsAnywhere : ''}${url}?rest_route=` });
   }
 }
 
@@ -68,9 +68,14 @@ export const getCustom = ({ connection, type, page, params }) => {
   return query;
 };
 
-export const listRequested = connection =>
+export const listRequested = options =>
   function* listRequestedSaga({ list }) {
     const { type, id, page } = list;
+
+    if (!options.connection) {
+      yield take(actionTypes.CONNECTION_INITIALIZED);
+    }
+    const { connection } = options;
 
     if (!['latest', 'category', 'tag', 'author'].includes(type)) {
       throw new Error(
@@ -106,9 +111,14 @@ export const listRequested = connection =>
     }
   };
 
-export const entityRequested = connection =>
+export const entityRequested = options =>
   function* entityRequestedSaga({ entity }) {
     const { type, id } = entity;
+
+    if (!options.connection) {
+      yield take(actionTypes.CONNECTION_INITIALIZED);
+    }
+    const { connection } = options;
 
     try {
       const response = yield call(getEntity, { connection, type, id });
@@ -131,9 +141,14 @@ export const entityRequested = connection =>
     }
   };
 
-export const customRequested = connection =>
+export const customRequested = options =>
   function* customRequestedSaga({ url, custom, params }) {
     const { type, page } = custom;
+
+    if (!options.connection) {
+      yield take(actionTypes.CONNECTION_INITIALIZED);
+    }
+    const { connection } = options;
 
     try {
       const response = yield call(getCustom, { connection, type, page, params });
@@ -186,16 +201,13 @@ export const routeChangeSucceed = stores =>
   };
 
 export default function* wpApiWatchersSaga(stores) {
-  const init = yield fork(function* waitForSagas() {
-    yield take(dep('build', 'actionTypes', 'SERVER_SAGAS_INITIALIZED'));
-  });
-  const connection = yield call(initConnection);
+  const options = { connection: null };
   yield all([
     takeEvery(actionTypes.ROUTE_CHANGE_SUCCEED, routeChangeSucceed(stores)),
-    takeEvery(actionTypes.ENTITY_REQUESTED, entityRequested(connection)),
-    takeEvery(actionTypes.LIST_REQUESTED, listRequested(connection)),
-    takeEvery(actionTypes.CUSTOM_REQUESTED, customRequested(connection)),
+    takeEvery(actionTypes.ENTITY_REQUESTED, entityRequested(options)),
+    takeEvery(actionTypes.LIST_REQUESTED, listRequested(options)),
+    takeEvery(actionTypes.CUSTOM_REQUESTED, customRequested(options)),
   ]);
-  yield join(init);
+  yield call(initConnection, options);
   yield put(actions.connectionInitialized());
 }
