@@ -2,7 +2,7 @@
 import Wpapi from 'wpapi';
 import { normalize } from 'normalizr';
 import { forOwn } from 'lodash';
-import { call, select, put, takeEvery, all, take } from 'redux-saga/effects';
+import { call, select, put, takeEvery, all, take, fork, join } from 'redux-saga/effects';
 import { dep } from 'worona-deps';
 import * as actions from '../actions';
 import * as actionTypes from '../actionTypes';
@@ -24,10 +24,14 @@ export function* initConnection() {
   const cors = yield call(isCors);
   const getSetting = dep('settings', 'selectorCreators', 'getSetting');
   const url = yield select(getSetting('generalSite', 'url'));
-  // const connection = yield call(Wpapi.discover, `${cors ? CorsAnywhere : ''}${url}`);
-  const connection = new Wpapi({ endpoint: `${cors ? CorsAnywhere : ''}${url}?rest_route=` });
-  connection.siteInfo = connection.registerRoute('wp-pwa/v1', '/site-info');
-  return connection;
+  const autodiscovery = yield select(getSetting('connection', 'autodiscovery'));
+  if (!autodiscovery)
+    return new Wpapi({ endpoint: `${cors ? CorsAnywhere : ''}${url}?rest_route=` });
+  try {
+    return yield call(Wpapi.discover, `${cors ? CorsAnywhere : ''}${url}`);
+  } catch (error) {
+    return new Wpapi({ endpoint: `${cors ? CorsAnywhere : ''}${url}?rest_route=` });
+  }
 }
 
 export const getList = ({ connection, type, id, page, perPage }) => {
@@ -182,6 +186,9 @@ export const routeChangeSucceed = stores =>
   };
 
 export default function* wpApiWatchersSaga(stores) {
+  const init = yield fork(function* waitForSagas() {
+    yield take(dep('build', 'actionTypes', 'SERVER_SAGAS_INITIALIZED'));
+  });
   const connection = yield call(initConnection);
   yield all([
     takeEvery(actionTypes.ROUTE_CHANGE_SUCCEED, routeChangeSucceed(stores)),
@@ -189,6 +196,6 @@ export default function* wpApiWatchersSaga(stores) {
     takeEvery(actionTypes.LIST_REQUESTED, listRequested(connection)),
     takeEvery(actionTypes.CUSTOM_REQUESTED, customRequested(connection)),
   ]);
-  yield take(dep('build', 'actionTypes', 'SERVER_SAGAS_INITIALIZED'));
+  yield join(init);
   yield put(actions.connectionInitialized());
 }
