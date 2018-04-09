@@ -48,13 +48,10 @@ export const getList = ({ connection, type, id, page }) => {
   return query;
 };
 
-export const getEntity = ({ connection, type, id }) => {
-  // debugger;
-  return connection[typesToEndpoints(type)]()
-  .id(id)
-  .embed();
-
-}
+export const getEntity = ({ connection, type, id }) =>
+  connection[typesToEndpoints(type)]()
+    .id(id)
+    .embed();
 
 export const getCustom = ({ connection, type, page, params }) => {
   let query = connection[typesToEndpoints(type)]()
