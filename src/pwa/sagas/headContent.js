@@ -86,6 +86,7 @@ export const headContentRequested = () =>
   function* headContentRequestedSaga() {
     try {
       let url = yield select(dep('build', 'selectors', 'getInitialUrl'));
+      if (!url) throw new Error('No initial url found.');
       if (!urlparser(url).host || !urlparser(url).protocol) {
         const siteUrl =  yield select(dep('settings', 'selectorCreators', 'getSetting')('generalSite', 'url'));
         const { protocol, host } = urlparser(siteUrl);
