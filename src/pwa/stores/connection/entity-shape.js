@@ -16,7 +16,7 @@ export const pagedLink = ({ type, id, page = 1, entityLink }) => {
     throw new Error(`Can't add a page to a ${type} entity (${type} ${id})`);
   const initialLink = entityLink || link(type, id);
   if (page === 1) return initialLink;
-  initialLink.replace(/\/$/, '/');
+  initialLink.replace(/\/?$/, '/');
   if (initialLink === '/') return `/page/${page}`;
   return entityLink ? `${initialLink}page/${page}` : `${initialLink}&paged=${page}`;
 };
