@@ -138,9 +138,8 @@ export const siteInfoRequested = () => ({
   type: actionTypes.SITE_INFO_REQUESTED,
 });
 
-export const siteInfoSucceed = ({ home, perPage }) => ({
+export const siteInfoSucceed = ({ perPage }) => ({
   type: actionTypes.SITE_INFO_SUCCEED,
-  home,
   perPage: parseInt(perPage, 10),
 });
 
@@ -190,4 +189,8 @@ export const previousContextRequested = () => ({
 export const replaceContext = ({ context }) => ({
   type: actionTypes.REPLACE_CONTEXT,
   context,
+});
+
+export const connectionInitialized = () => ({
+  type: actionTypes.CONNECTION_INITIALIZED,
 });

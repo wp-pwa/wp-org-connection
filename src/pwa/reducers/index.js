@@ -18,12 +18,13 @@ export default store => {
       case actionTypes.CUSTOM_REQUESTED:
       case actionTypes.CUSTOM_SUCCEED:
       case actionTypes.CUSTOM_FAILED:
-      case actionTypes.MOVE_ITEM_TO_COLUMN:
       case actionTypes.ROUTE_CHANGE_REQUESTED:
       case actionTypes.ROUTE_CHANGE_SUCCEED:
-      case actionTypes.HEAD_CONTENT_SUCCEED:
       case actionTypes.PREVIOUS_CONTEXT_REQUESTED:
+      case actionTypes.MOVE_ITEM_TO_COLUMN:
       case actionTypes.ADD_ITEM_TO_COLUMN:
+      case actionTypes.HEAD_CONTENT_SUCCEED:
+      case actionTypes.SITE_INFO_SUCCEED:
         store[type](action);
         break;
       default:

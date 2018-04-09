@@ -148,4 +148,7 @@ export const actions = self => ({
   [actionTypes.HEAD_CONTENT_SUCCEED]({ content }) {
     self.siteInfo.headContent = content;
   },
+  [actionTypes.SITE_INFO_SUCCEED]({ perPage }) {
+    self.siteInfo.perPage = perPage;
+  },
 });
