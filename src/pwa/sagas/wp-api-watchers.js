@@ -31,9 +31,9 @@ export function* initConnection() {
   return connection;
 }
 
-export const getList = ({ connection, type, id, page }) => {
+export const getList = ({ connection, type, id, page, perPage }) => {
   const endpoint = typesToEndpoints('post');
-  const params = { _embed: true };
+  const params = { _embed: true, per_page: perPage };
 
   if (['category', 'tag', 'author'].includes(type)) {
     params[typesToParams(type)] = id;
@@ -76,7 +76,8 @@ export const listRequested = connection =>
     }
 
     try {
-      const response = yield call(getList, { connection, type, id, page });
+      const perPage = yield select(dep('build', 'selectors', 'getPerPage'));
+      const response = yield call(getList, { connection, type, id, page, perPage });
       const { entities, result } = normalize(response, schemas.list);
       const totalEntities = response._paging ? parseInt(response._paging.total, 10) : 0;
       const totalPages = response._paging ? parseInt(response._paging.totalPages, 10) : 0;
@@ -88,7 +89,7 @@ export const listRequested = connection =>
           entities,
           result,
           total,
-          endpoint: getList({ connection, type, id, page }).toString(),
+          endpoint: getList({ connection, type, id, page, perPage }).toString(),
         }),
       );
     } catch (error) {
@@ -96,7 +97,7 @@ export const listRequested = connection =>
         actions.listFailed({
           list,
           error,
-          endpoint: getList({ connection, type, id, page }).toString(),
+          endpoint: getList({ connection, type, id, page, perPage }).toString(),
         }),
       );
     }
@@ -181,21 +182,6 @@ export const routeChangeSucceed = stores =>
     }
   };
 
-export const siteInfoRequested = connection =>
-  function* siteInfoRequestedSaga() {
-    try {
-      const data = yield call([connection, 'siteInfo']);
-
-      yield put(
-        actions.siteInfoSucceed({
-          perPage: data.perPage,
-        }),
-      );
-    } catch (error) {
-      yield put(actions.siteInfoFailed({ error }));
-    }
-  };
-
 export default function* wpApiWatchersSaga(stores) {
   const connection = yield call(initConnection);
   yield all([
@@ -203,7 +189,6 @@ export default function* wpApiWatchersSaga(stores) {
     takeEvery(actionTypes.ENTITY_REQUESTED, entityRequested(connection)),
     takeEvery(actionTypes.LIST_REQUESTED, listRequested(connection)),
     takeEvery(actionTypes.CUSTOM_REQUESTED, customRequested(connection)),
-    takeEvery(actionTypes.SITE_INFO_REQUESTED, siteInfoRequested(connection)),
     put(actions.connectionInitialized()),
   ]);
 }
