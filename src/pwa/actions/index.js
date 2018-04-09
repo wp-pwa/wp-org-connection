@@ -191,3 +191,7 @@ export const replaceContext = ({ context }) => ({
   type: actionTypes.REPLACE_CONTEXT,
   context,
 });
+
+export const connectionInitialized = () => ({
+  type: actionTypes.CONNECTION_INITIALIZED,
+});

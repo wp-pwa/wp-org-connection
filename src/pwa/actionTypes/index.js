@@ -26,3 +26,5 @@ export const HEAD_CONTENT_FAILED = 'connection/HEAD_CONTENT_FAILED';
 export const MOVE_ITEM_TO_COLUMN = 'connection/MOVE_ITEM_TO_COLUMN';
 export const REPLACE_CONTEXT = 'connection/REPLACE_CONTEXT';
 export const ADD_ITEM_TO_COLUMN = 'connection/ADD_ITEM_TO_COLUMN';
+
+export const CONNECTION_INITIALIZED = 'connection/CONNECTION_INITIALIZED';

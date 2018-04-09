@@ -24,7 +24,9 @@ export function* initConnection() {
   const cors = yield call(isCors);
   const getSetting = dep('settings', 'selectorCreators', 'getSetting');
   const url = yield select(getSetting('generalSite', 'url'));
-  const connection = new Wpapi({ endpoint: `${cors ? CorsAnywhere : ''}${url}?rest_route=` });
+  const connection = yield call(Wpapi.discover, `${cors ? CorsAnywhere : ''}${url}`);
+  // const connection = new Wpapi({ endpoint: `${cors ? CorsAnywhere : ''}${url}?rest_route=` });
+  // debugger;
   connection.siteInfo = connection.registerRoute('wp-pwa/v1', '/site-info');
   return connection;
 }
@@ -46,10 +48,13 @@ export const getList = ({ connection, type, id, page }) => {
   return query;
 };
 
-export const getEntity = ({ connection, type, id }) =>
-  connection[typesToEndpoints(type)]()
-    .id(id)
-    .embed();
+export const getEntity = ({ connection, type, id }) => {
+  // debugger;
+  return connection[typesToEndpoints(type)]()
+  .id(id)
+  .embed();
+
+}
 
 export const getCustom = ({ connection, type, page, params }) => {
   let query = connection[typesToEndpoints(type)]()
@@ -164,7 +169,6 @@ export const routeChangeSucceed = stores =>
   function* routeChangeSucceedSaga({ selectedItem }) {
     const { connection } = stores;
     const { type, id, page } = selectedItem;
-
     if (page) {
       const listPage = connection.list(type, id).page(page);
 
@@ -204,5 +208,6 @@ export default function* wpApiWatchersSaga(stores) {
     takeEvery(actionTypes.LIST_REQUESTED, listRequested(connection)),
     takeEvery(actionTypes.CUSTOM_REQUESTED, customRequested(connection)),
     takeEvery(actionTypes.SITE_INFO_REQUESTED, siteInfoRequested(connection)),
+    put(actions.connectionInitialized()),
   ]);
 }
