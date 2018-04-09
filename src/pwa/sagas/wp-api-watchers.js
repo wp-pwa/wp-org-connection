@@ -188,7 +188,6 @@ export const siteInfoRequested = connection =>
 
       yield put(
         actions.siteInfoSucceed({
-          home: data.home,
           perPage: data.perPage,
         }),
       );
