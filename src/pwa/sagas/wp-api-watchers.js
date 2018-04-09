@@ -25,12 +25,14 @@ export function* initConnection(options) {
   const getSetting = dep('settings', 'selectorCreators', 'getSetting');
   const url = yield select(getSetting('generalSite', 'url'));
   const autodiscovery = yield select(getSetting('connection', 'autodiscovery'));
-  if (!autodiscovery)
+  if (!autodiscovery) {
     options.connection = new Wpapi({ endpoint: `${cors ? CorsAnywhere : ''}${url}?rest_route=` });
-  try {
-    options.connection = yield call(Wpapi.discover, `${cors ? CorsAnywhere : ''}${url}`);
-  } catch (error) {
-    options.connection = new Wpapi({ endpoint: `${cors ? CorsAnywhere : ''}${url}?rest_route=` });
+  } else {
+    try {
+      options.connection = yield call(Wpapi.discover, `${cors ? CorsAnywhere : ''}${url}`);
+    } catch (error) {
+      options.connection = new Wpapi({ endpoint: `${cors ? CorsAnywhere : ''}${url}?rest_route=` });
+    }
   }
 }
 
