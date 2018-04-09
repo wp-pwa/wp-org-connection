@@ -21,6 +21,7 @@ export const props = {
     category: 'taxonomy',
     tag: 'taxonomy',
   }),
+  lastAction: types.frozen,
 };
 
 export const views = self => ({
@@ -38,6 +39,7 @@ export const views = self => ({
 });
 
 export const actions = self => ({
+  setLastAction: ({ action }) => { self.lastAction = action; },
   getEntity({ type, id }) {
     const mstId = join(type, id);
     if (!self.entities.get(mstId)) self.entities.set(mstId, { mstId, type, id });

@@ -11,7 +11,11 @@ function* waitForHeadContent() {
   );
 }
 
-export default function* wpOrgConnectionServerSaga({ stores }) {
+export default function* wpOrgConnectionServerSaga({ stores, store }) {
+  store.subscribe(() => {
+    const action = store.getState().connection.lastAction;
+    if (stores.connection[action.type]) stores.connection[action.type](action);
+  });
   // Spawn the wp api watchers. We do not fork, so this doesn't block the saga.
   yield spawn(wpApiWatchers, stores);
   yield spawn(headContentWatcher);
