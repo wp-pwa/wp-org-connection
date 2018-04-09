@@ -2,7 +2,7 @@
 import Wpapi from 'wpapi';
 import { normalize } from 'normalizr';
 import { forOwn } from 'lodash';
-import { call, select, put, takeEvery, all } from 'redux-saga/effects';
+import { call, select, put, takeEvery, all, take } from 'redux-saga/effects';
 import { dep } from 'worona-deps';
 import * as actions from '../actions';
 import * as actionTypes from '../actionTypes';
@@ -24,9 +24,8 @@ export function* initConnection() {
   const cors = yield call(isCors);
   const getSetting = dep('settings', 'selectorCreators', 'getSetting');
   const url = yield select(getSetting('generalSite', 'url'));
-  const connection = yield call(Wpapi.discover, `${cors ? CorsAnywhere : ''}${url}`);
-  // const connection = new Wpapi({ endpoint: `${cors ? CorsAnywhere : ''}${url}?rest_route=` });
-  // debugger;
+  // const connection = yield call(Wpapi.discover, `${cors ? CorsAnywhere : ''}${url}`);
+  const connection = new Wpapi({ endpoint: `${cors ? CorsAnywhere : ''}${url}?rest_route=` });
   connection.siteInfo = connection.registerRoute('wp-pwa/v1', '/site-info');
   return connection;
 }
@@ -189,6 +188,7 @@ export default function* wpApiWatchersSaga(stores) {
     takeEvery(actionTypes.ENTITY_REQUESTED, entityRequested(connection)),
     takeEvery(actionTypes.LIST_REQUESTED, listRequested(connection)),
     takeEvery(actionTypes.CUSTOM_REQUESTED, customRequested(connection)),
-    put(actions.connectionInitialized()),
   ]);
+  yield take(dep('build', 'actionTypes', 'SERVER_SAGAS_INITIALIZED'));
+  yield put(actions.connectionInitialized());
 }
