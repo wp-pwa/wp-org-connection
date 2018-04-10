@@ -341,5 +341,7 @@ describe('Connection › Entity', () => {
     connection.addEntity({ entity: entities.taxonomy.post });
     expect(connection.entity('latest', 'post').ready).toBe(true);
     expect(connection.entity('latest', 'post').link).toBe('https://demo.worona.org');
+    expect(connection.entity('latest', 'post').pagedLink(1)).toBe('https://demo.worona.org');
+    expect(connection.entity('latest', 'post').pagedLink(2)).toBe('https://demo.worona.org/page/2');
   });
 });
