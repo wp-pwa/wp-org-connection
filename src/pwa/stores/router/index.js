@@ -50,9 +50,9 @@ export const actions = self => {
     changeSelectedItem({ selectedItem });
   };
 
-  const createNewContext = ({ selectedItem, context }) => {
+  const createNewContext = ({ selectedItem, context, generator }) => {
     const contextInstance = addNewContext();
-    contextInstance.setGenerator({ generator: context });
+    contextInstance.setGenerator({ generator });
     contextInstance.setOptions({ options: context.options });
     contextInstance.addColumns({ columns: context.columns });
     contextInstance.addItemIfMissing({ item: selectedItem, index: 0 });
@@ -60,9 +60,9 @@ export const actions = self => {
     changeSelectedItem({ selectedItem });
   };
 
-  const replaceSelectedContext = ({ context }) => {
+  const replaceSelectedContext = ({ context, generator }) => {
     const contextInstance = self.selectedContext;
-    contextInstance.setGenerator({ generator: context });
+    contextInstance.setGenerator({ generator });
     contextInstance.replaceColumns({ columns: context.columns });
     self.selectedContext = contextInstance;
   };
@@ -80,23 +80,51 @@ export const actions = self => {
     self.selectedContext.selectedColumn.addItem({ item });
   };
 
+  const extractItemsInContext = ({ context }) => {
+    const columns = [];
+    context.columns.forEach(column => {
+      if (!Array.isArray(column))
+        throw new Error('Columns should be arrays and not single objects.');
+      const { type, id, page, extract } = column[0];
+      if (extract === 'horizontal' && self.list(type, id).page(page).ready) {
+        const items = self
+          .list(type, id)
+          .page(page)
+          .entities.map(entity => ([{
+            type: entity.type,
+            id: entity.id,
+            fromList: { type, id, page },
+          }]));
+        columns.push(...items);
+      } else {
+        columns.push(column);
+      }
+    });
+    return { ...context, columns };
+  };
+
   return {
     [actionTypes.ROUTE_CHANGE_SUCCEED]: ({ selectedItem, method, context: actionContext }) => {
       if (typeof window !== 'undefined')
         self.siteInfo.headContent = self.siteInfo.headContent.filter(node => node.permanent);
 
-      // Initialize context.
-      let context = actionContext || { columns: [[{ ...selectedItem }]] };
+      // Initialize generator and context.
+      let generator = actionContext || { columns: [[{ ...selectedItem }]] };
+      const context = extractItemsInContext({
+        context: actionContext || { columns: [[{ ...selectedItem }]] },
+      });
 
       if (!self.selectedContext) {
         // If there's not a previous context we create one.
-        createNewContext({ selectedItem, context });
+        createNewContext({ selectedItem, context, generator });
       } else {
         // If there's a previous context...
         // First, get some info:
         const itemInSelectedContext = self.selectedContext.hasItem({ item: selectedItem });
-        if (!actionContext && itemInSelectedContext) context = self.selectedContext.generator;
-        const generatorsAreEqual = isEqual(self.selectedContext.generator, context);
+        if (!actionContext && itemInSelectedContext) {
+          generator = self.selectedContext.generator; // eslint-disable-line
+        }
+        const generatorsAreEqual = isEqual(self.selectedContext.generator, generator);
 
         // Then check conditions:
         // If we are in the same context and we just want to change the selected.
@@ -107,7 +135,7 @@ export const actions = self => {
         else if (method === 'forward') selectItemInNextContext({ selectedItem });
         else
           // If nothing of the previous, we just create a new context
-          createNewContext({ selectedItem, context });
+          createNewContext({ selectedItem, context, generator });
       }
     },
     [actionTypes.MOVE_ITEM_TO_COLUMN]: ({ item }) => {
@@ -117,7 +145,7 @@ export const actions = self => {
       addItemToSelectedColumn({ item });
     },
     [actionTypes.REPLACE_CONTEXT]: ({ context }) => {
-      replaceSelectedContext({ context });
+      replaceSelectedContext({ context: extractItemsInContext({ context }), generator: context });
     },
   };
 };

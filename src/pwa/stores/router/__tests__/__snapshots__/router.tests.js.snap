@@ -1,65 +1,16 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`Connection › Router \`selectedItem\` should be in its natural position inside the extracted list 1`] = `
+exports[`Connection › Router \`selectedItem\` should be in its natural position inside horizontal extracted list 1`] = `
 Array [
   Object {
     "generator": Object {
       "columns": Array [
         Array [
           Object {
-            "id": 7,
-            "page": 1,
-            "type": "category",
+            "id": 1,
+            "type": "post",
           },
         ],
-        Array [
-          Object {
-            "id": 7,
-            "page": 2,
-            "type": "category",
-          },
-        ],
-      ],
-    },
-    "index": 0,
-    "infinite": undefined,
-    "mstIdForColumn": 2,
-    "options": undefined,
-    "rawColumns": Array [
-      Object {
-        "mstId": "context_0_column_1",
-        "rawItems": Array [
-          Object {
-            "extract": null,
-            "id": 7,
-            "mstId": "0_category_7_page_1",
-            "page": 1,
-            "type": "category",
-            "visited": true,
-          },
-        ],
-        "selectedItem": "0_category_7_page_1",
-      },
-      Object {
-        "mstId": "context_0_column_2",
-        "rawItems": Array [
-          Object {
-            "extract": null,
-            "id": 7,
-            "mstId": "0_category_7_page_2",
-            "page": 2,
-            "type": "category",
-            "visited": false,
-          },
-        ],
-        "selectedItem": "",
-      },
-    ],
-    "selectedColumn": "context_0_column_1",
-  },
-  Object {
-    "generator": Object {
-      "columns": Array [
         Array [
           Object {
             "extract": "horizontal",
@@ -68,32 +19,38 @@ Array [
             "type": "category",
           },
         ],
+        Array [
+          Object {
+            "id": 2,
+            "type": "post",
+          },
+        ],
       ],
     },
-    "index": 1,
+    "index": 0,
     "infinite": undefined,
-    "mstIdForColumn": 6,
+    "mstIdForColumn": 7,
     "options": undefined,
     "rawColumns": Array [
       Object {
-        "mstId": "context_1_column_2",
+        "mstId": "context_0_column_1",
         "rawItems": Array [
           Object {
             "fromList": Object {
-              "id": 7,
+              "id": "post",
               "page": 1,
-              "type": "category",
+              "type": "latest",
             },
-            "id": 54,
-            "mstId": "1_post_54",
+            "id": 1,
+            "mstId": "0_post_1",
             "type": "post",
-            "visited": true,
+            "visited": false,
           },
         ],
-        "selectedItem": "1_post_54",
+        "selectedItem": "",
       },
       Object {
-        "mstId": "context_1_column_3",
+        "mstId": "context_0_column_2",
         "rawItems": Array [
           Object {
             "fromList": Object {
@@ -102,7 +59,7 @@ Array [
               "type": "category",
             },
             "id": 57,
-            "mstId": "1_post_57",
+            "mstId": "0_post_57",
             "type": "post",
             "visited": false,
           },
@@ -110,7 +67,24 @@ Array [
         "selectedItem": "",
       },
       Object {
-        "mstId": "context_1_column_4",
+        "mstId": "context_0_column_3",
+        "rawItems": Array [
+          Object {
+            "fromList": Object {
+              "id": 7,
+              "page": 1,
+              "type": "category",
+            },
+            "id": 54,
+            "mstId": "0_post_54",
+            "type": "post",
+            "visited": true,
+          },
+        ],
+        "selectedItem": "0_post_54",
+      },
+      Object {
+        "mstId": "context_0_column_4",
         "rawItems": Array [
           Object {
             "fromList": Object {
@@ -119,7 +93,7 @@ Array [
               "type": "category",
             },
             "id": 42,
-            "mstId": "1_post_42",
+            "mstId": "0_post_42",
             "type": "post",
             "visited": false,
           },
@@ -127,7 +101,7 @@ Array [
         "selectedItem": "",
       },
       Object {
-        "mstId": "context_1_column_5",
+        "mstId": "context_0_column_5",
         "rawItems": Array [
           Object {
             "fromList": Object {
@@ -136,7 +110,7 @@ Array [
               "type": "category",
             },
             "id": 36,
-            "mstId": "1_post_36",
+            "mstId": "0_post_36",
             "type": "post",
             "visited": false,
           },
@@ -144,7 +118,7 @@ Array [
         "selectedItem": "",
       },
       Object {
-        "mstId": "context_1_column_6",
+        "mstId": "context_0_column_6",
         "rawItems": Array [
           Object {
             "fromList": Object {
@@ -153,7 +127,24 @@ Array [
               "type": "category",
             },
             "id": 33,
-            "mstId": "1_post_33",
+            "mstId": "0_post_33",
+            "type": "post",
+            "visited": false,
+          },
+        ],
+        "selectedItem": "",
+      },
+      Object {
+        "mstId": "context_0_column_7",
+        "rawItems": Array [
+          Object {
+            "fromList": Object {
+              "id": "post",
+              "page": 1,
+              "type": "latest",
+            },
+            "id": 2,
+            "mstId": "0_post_2",
             "type": "post",
             "visited": false,
           },
@@ -161,7 +152,7 @@ Array [
         "selectedItem": "",
       },
     ],
-    "selectedColumn": "context_1_column_2",
+    "selectedColumn": "context_0_column_3",
   },
 ]
 `;

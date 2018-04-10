@@ -664,15 +664,7 @@ describe('Connection › Router', () => {
     expect(connection.selectedContext.columns.length).toBe(5);
   });
 
-  test.skip('`selectedItem` should be in its natural position inside the extracted list', () => {
-    connection[actionTypes.ROUTE_CHANGE_SUCCEED](
-      actions.routeChangeSucceed({
-        selectedItem: { type: 'category', id: 7, page: 1 },
-        context: {
-          columns: [[{ type: 'category', id: 7, page: 1 }], [{ type: 'category', id: 7, page: 2 }]],
-        },
-      }),
-    );
+  test('`selectedItem` should be in its natural position inside horizontal extracted list', () => {
     connection[actionTypes.LIST_SUCCEED](
       actions.listSucceed({
         list: {
@@ -686,15 +678,22 @@ describe('Connection › Router', () => {
     );
     connection[actionTypes.ROUTE_CHANGE_SUCCEED](
       actions.routeChangeSucceed({
-        selectedItem: { type: 'post', id: 54, fromList: { type: 'category', id: 7, page: 1 } },
+        selectedItem: { type: 'post', id: 54 },
         context: {
-          columns: [[{ type: 'category', id: 7, page: 1, extract: 'horizontal' }]],
+          columns: [
+            [{ type: 'post', id: 1 }],
+            [{ type: 'category', id: 7, page: 1, extract: 'horizontal' }],
+            [{ type: 'post', id: 2 }],
+          ],
         },
       }),
     );
     expect(connection.contexts).toMatchSnapshot();
-    expect(connection.selectedContext.columns[0].items[0].id).toBe(57);
-    expect(connection.selectedContext.columns[1].items[0].id).toBe(54);
+    expect(connection.selectedContext.columns[0].items[0].id).toBe(1);
+    expect(connection.selectedContext.columns[1].items[0].id).toBe(57);
+    expect(connection.selectedContext.columns[2].items[0].id).toBe(54);
+    expect(connection.selectedContext.columns[2].items[0].fromList.id).toBe(7);
+    expect(connection.selectedContext.columns[6].items[0].id).toBe(2);
   });
 
   test('Extrated items should have the list they are extracted from as `fromList`', () => {
