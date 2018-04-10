@@ -64,7 +64,7 @@ export const mediaShape = (type, id) => ({
   mediaType: '',
   original: originalShape,
   headMeta: headMetaShape,
-  sizes: [],
+  sizes: observable([]),
   ...common(type, id),
 });
 

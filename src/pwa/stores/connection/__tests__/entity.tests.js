@@ -1,5 +1,5 @@
 /* eslint-disable no-restricted-syntax */
-import { autorun } from 'mobx';
+import { autorun, observable } from 'mobx';
 import { types, unprotect } from 'mobx-state-tree';
 import { normalize } from 'normalizr';
 import * as connect from '../';
@@ -34,9 +34,9 @@ describe('Connection › Entity', () => {
     expect(connection.entity('post', 60).title).toBe('');
     expect(connection.entity('post', 60).link).toBe('/?p=60');
     expect(() => connection.entity('post', 60).pagedLink(3)).toThrow();
-    expect(connection.entity('post', 60).taxonomy('category')).toEqual([]);
+    expect(connection.entity('post', 60).taxonomy('category')).toEqual(observable([]));
     expect(connection.entity('post', 60).featured.ready).toBe(false);
-    expect(connection.entity('post', 60).featured.sizes).toEqual([]);
+    expect(connection.entity('post', 60).featured.sizes).toEqual(observable([]));
     expect(connection.entity('post', 60).author.name).toBe('');
   });
 
@@ -87,7 +87,7 @@ describe('Connection › Entity', () => {
     expect(() => connection.entity('media', 62).pagedLink(2)).toThrow();
     expect(connection.entity('media', 62).author.name).toBe('');
     expect(connection.entity('media', 62).original.height).toBe(null);
-    expect(connection.entity('media', 62).sizes).toEqual([]);
+    expect(connection.entity('media', 62).sizes).toEqual(observable([]));
   });
 
   test("Don't add an entity if it doesn't have type or id", () => {
@@ -213,7 +213,7 @@ describe('Connection › Entity', () => {
 
   test('Get featured inside post before entity is ready', () => {
     expect(connection.entity('post', 60).featured.id).toBe(null);
-    expect(connection.entity('post', 60).featured.sizes).toEqual([]);
+    expect(connection.entity('post', 60).featured.sizes).toEqual(observable([]));
     connection.addEntity({ entity: entities.single[60] });
     expect(connection.entity('post', 60).featured.id).toBe(62);
     expect(connection.entity('post', 60).featured.title).toBe('');
@@ -315,9 +315,9 @@ describe('Connection › Entity', () => {
     connection.addEntity({ entity: entities.single[60] });
     expect(connection.entity('post', 60).featured.id).toBe(62);
     expect(connection.entity('media', 62).ready).toBe(false);
-    expect(connection.entity('media', 62).sizes).toEqual([]);
+    expect(connection.entity('media', 62).sizes).toEqual(observable([]));
     expect(connection.entity('post', 60).featured.ready).toBe(false);
-    expect(connection.entity('post', 60).featured.sizes).toEqual([]);
+    expect(connection.entity('post', 60).featured.sizes).toEqual(observable([]));
   });
 
   test('Get parent page', done => {
