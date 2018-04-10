@@ -1,3 +1,4 @@
+import { observable } from 'mobx';
 import { pageShape } from './list-shape';
 
 export default name => ({
@@ -14,7 +15,7 @@ export default name => ({
     },
   },
   params: {},
-  pages: [],
+  pages: observable([]),
   page: () => pageShape,
-  entities: [],
+  entities: observable([]),
 })

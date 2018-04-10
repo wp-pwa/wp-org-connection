@@ -1,5 +1,5 @@
 /* eslint-disable dot-notation */
-import { autorun } from 'mobx';
+import { autorun, observable } from 'mobx';
 import { types, unprotect, getSnapshot } from 'mobx-state-tree';
 import { normalize } from 'normalizr';
 import * as connect from '../';
@@ -38,10 +38,10 @@ describe('Connection › List', () => {
 
   test('Get list shape when entity is not ready', () => {
     expect(connection.list('category', 7).ready).toBe(false);
-    expect(connection.list('category', 7).pages).toEqual([]);
+    expect(connection.list('category', 7).pages).toEqual(observable([]));
     expect(connection.list('category', 7).page(2).ready).toBe(false);
-    expect(connection.list('category', 7).page(2).entities).toEqual([]);
-    expect(connection.list('category', 7).pages).toEqual([]);
+    expect(connection.list('category', 7).page(2).entities).toEqual(observable([]));
+    expect(connection.list('category', 7).pages).toEqual(observable([]));
     expect(connection.list('category', 7).entity.id).toBe(7);
     expect(connection.list('category', 7).entity.link).toBe('/?cat=7');
     expect(connection.list('tag', 10).entity.link).toBe('/?tag_ID=10');
@@ -52,8 +52,8 @@ describe('Connection › List', () => {
   });
 
   test('Get list entity shapes after adding a page', () => {
-    expect(connection.list('category', 7).entities).toEqual([]);
-    expect(connection.list('category', 7).page(1).entities).toEqual([]);
+    expect(connection.list('category', 7).entities).toEqual(observable([]));
+    expect(connection.list('category', 7).page(1).entities).toEqual(observable([]));
     connection.addListPage({
       type: 'category',
       id: 7,

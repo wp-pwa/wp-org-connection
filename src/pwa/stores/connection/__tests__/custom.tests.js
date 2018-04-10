@@ -1,4 +1,4 @@
-import { autorun } from 'mobx';
+import { autorun, observable } from 'mobx';
 import { types, unprotect } from 'mobx-state-tree';
 import { normalize } from 'normalizr';
 import * as connect from '../';
@@ -35,18 +35,18 @@ describe('Connection › Custom', () => {
 
   test('Get custom shape when entity is not ready', () => {
     expect(connection.custom('test').ready).toBe(false);
-    expect(connection.custom('test').pages).toEqual([]);
+    expect(connection.custom('test').pages).toEqual(observable([]));
     expect(connection.custom('test').page(2).ready).toBe(false);
-    expect(connection.custom('test').page(2).entities).toEqual([]);
-    expect(connection.custom('test').pages).toEqual([]);
+    expect(connection.custom('test').page(2).entities).toEqual(observable([]));
+    expect(connection.custom('test').pages).toEqual(observable([]));
     expect(connection.custom('test').name).toBe('test');
     expect(connection.custom('test').url).toBe('/');
     expect(connection.custom('test').params).toEqual({});
   });
 
   test('Get custom entity shapes after adding a page', () => {
-    expect(connection.custom('test').entities).toEqual([]);
-    expect(connection.custom('test').page(1).entities).toEqual([]);
+    expect(connection.custom('test').entities).toEqual(observable([]));
+    expect(connection.custom('test').page(1).entities).toEqual(observable([]));
     connection.addCustomPage({
       name: 'test',
       page: 1,
