@@ -23,17 +23,16 @@ export function* isCors() {
 export function* initConnection(options) {
   const cors = yield call(isCors);
   const getSetting = dep('settings', 'selectorCreators', 'getSetting');
-  const url = yield select(getSetting('generalSite', 'url'));
+  const siteUrl = yield select(getSetting('generalSite', 'url'));
   const autodiscovery = yield select(getSetting('connection', 'autodiscovery'));
-  if (!autodiscovery) {
-    options.connection = new Wpapi({ endpoint: `${cors ? CorsAnywhere : ''}${url}?rest_route=` });
-  } else {
+  if (autodiscovery) {
     try {
-      options.connection = yield call(Wpapi.discover, `${cors ? CorsAnywhere : ''}${url}`);
-    } catch (error) {
-      options.connection = new Wpapi({ endpoint: `${cors ? CorsAnywhere : ''}${url}?rest_route=` });
-    }
+      options.connection = yield call(Wpapi.discover, `${cors ? CorsAnywhere : ''}${siteUrl}`);
+      return;
+    } catch (e) {} // eslint-disable-line
   }
+  const apiUrl = `${siteUrl.replace(/\/$/, '')}/?rest_route=`;
+  options.connection = new Wpapi({ endpoint: `${cors ? CorsAnywhere : ''}${apiUrl}` });
 }
 
 export const getList = ({ connection, type, id, page, perPage }) => {
