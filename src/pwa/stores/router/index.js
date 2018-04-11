@@ -90,11 +90,13 @@ export const actions = self => {
         const items = self
           .list(type, id)
           .page(page)
-          .entities.map(entity => ([{
-            type: entity.type,
-            id: entity.id,
-            fromList: { type, id, page },
-          }]));
+          .entities.map(entity => [
+            {
+              type: entity.type,
+              id: entity.id,
+              fromList: { type, id, page },
+            },
+          ]);
         columns.push(...items);
       } else {
         columns.push(column);
@@ -143,6 +145,9 @@ export const actions = self => {
     },
     [actionTypes.ADD_ITEM_TO_COLUMN]: ({ item }) => {
       addItemToSelectedColumn({ item });
+    },
+    [actionTypes.ADD_COLUMN_TO_CONTEXT]: ({ column }) => {
+      self.selectedContext.addColumn({ column });
     },
     [actionTypes.REPLACE_CONTEXT]: ({ context }) => {
       replaceSelectedContext({ context: extractItemsInContext({ context }), generator: context });

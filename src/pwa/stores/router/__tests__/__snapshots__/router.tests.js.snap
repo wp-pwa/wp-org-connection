@@ -396,6 +396,327 @@ Array [
 ]
 `;
 
+exports[`Connection › Router Add column to context 1`] = `
+Array [
+  Object {
+    "generator": Object {
+      "columns": Array [
+        Array [
+          Object {
+            "extract": "horizontal",
+            "id": 7,
+            "page": 1,
+            "type": "category",
+          },
+        ],
+      ],
+    },
+    "index": 0,
+    "infinite": undefined,
+    "mstIdForColumn": 7,
+    "options": undefined,
+    "rawColumns": Array [
+      Object {
+        "mstId": "context_0_column_2",
+        "rawItems": Array [
+          Object {
+            "fromList": Object {
+              "id": "post",
+              "page": 1,
+              "type": "latest",
+            },
+            "id": 54,
+            "mstId": "0_post_54",
+            "type": "post",
+            "visited": true,
+          },
+        ],
+        "selectedItem": "0_post_54",
+      },
+      Object {
+        "mstId": "context_0_column_3",
+        "rawItems": Array [
+          Object {
+            "fromList": Object {
+              "id": 7,
+              "page": 1,
+              "type": "category",
+            },
+            "id": 57,
+            "mstId": "0_post_57",
+            "type": "post",
+            "visited": false,
+          },
+        ],
+        "selectedItem": "",
+      },
+      Object {
+        "mstId": "context_0_column_4",
+        "rawItems": Array [
+          Object {
+            "fromList": Object {
+              "id": 7,
+              "page": 1,
+              "type": "category",
+            },
+            "id": 42,
+            "mstId": "0_post_42",
+            "type": "post",
+            "visited": false,
+          },
+        ],
+        "selectedItem": "",
+      },
+      Object {
+        "mstId": "context_0_column_5",
+        "rawItems": Array [
+          Object {
+            "fromList": Object {
+              "id": 7,
+              "page": 1,
+              "type": "category",
+            },
+            "id": 36,
+            "mstId": "0_post_36",
+            "type": "post",
+            "visited": false,
+          },
+        ],
+        "selectedItem": "",
+      },
+      Object {
+        "mstId": "context_0_column_6",
+        "rawItems": Array [
+          Object {
+            "fromList": Object {
+              "id": 7,
+              "page": 1,
+              "type": "category",
+            },
+            "id": 33,
+            "mstId": "0_post_33",
+            "type": "post",
+            "visited": false,
+          },
+        ],
+        "selectedItem": "",
+      },
+      Object {
+        "mstId": "context_0_column_7",
+        "rawItems": Array [
+          Object {
+            "extract": "horizontal",
+            "id": 7,
+            "mstId": "0_category_7_page_2_horizontal",
+            "page": 2,
+            "type": "category",
+            "visited": false,
+          },
+        ],
+        "selectedItem": "",
+      },
+    ],
+    "selectedColumn": "context_0_column_2",
+  },
+]
+`;
+
+exports[`Connection › Router Add column to context 2`] = `
+Array [
+  Object {
+    "generator": Object {
+      "columns": Array [
+        Array [
+          Object {
+            "extract": "horizontal",
+            "id": 7,
+            "page": 1,
+            "type": "category",
+          },
+        ],
+      ],
+    },
+    "index": 0,
+    "infinite": undefined,
+    "mstIdForColumn": 12,
+    "options": undefined,
+    "rawColumns": Array [
+      Object {
+        "mstId": "context_0_column_2",
+        "rawItems": Array [
+          Object {
+            "fromList": Object {
+              "id": "post",
+              "page": 1,
+              "type": "latest",
+            },
+            "id": 54,
+            "mstId": "0_post_54",
+            "type": "post",
+            "visited": true,
+          },
+        ],
+        "selectedItem": "0_post_54",
+      },
+      Object {
+        "mstId": "context_0_column_3",
+        "rawItems": Array [
+          Object {
+            "fromList": Object {
+              "id": 7,
+              "page": 1,
+              "type": "category",
+            },
+            "id": 57,
+            "mstId": "0_post_57",
+            "type": "post",
+            "visited": false,
+          },
+        ],
+        "selectedItem": "",
+      },
+      Object {
+        "mstId": "context_0_column_4",
+        "rawItems": Array [
+          Object {
+            "fromList": Object {
+              "id": 7,
+              "page": 1,
+              "type": "category",
+            },
+            "id": 42,
+            "mstId": "0_post_42",
+            "type": "post",
+            "visited": false,
+          },
+        ],
+        "selectedItem": "",
+      },
+      Object {
+        "mstId": "context_0_column_5",
+        "rawItems": Array [
+          Object {
+            "fromList": Object {
+              "id": 7,
+              "page": 1,
+              "type": "category",
+            },
+            "id": 36,
+            "mstId": "0_post_36",
+            "type": "post",
+            "visited": false,
+          },
+        ],
+        "selectedItem": "",
+      },
+      Object {
+        "mstId": "context_0_column_6",
+        "rawItems": Array [
+          Object {
+            "fromList": Object {
+              "id": 7,
+              "page": 1,
+              "type": "category",
+            },
+            "id": 33,
+            "mstId": "0_post_33",
+            "type": "post",
+            "visited": false,
+          },
+        ],
+        "selectedItem": "",
+      },
+      Object {
+        "mstId": "context_0_column_8",
+        "rawItems": Array [
+          Object {
+            "fromList": Object {
+              "id": 7,
+              "page": 2,
+              "type": "category",
+            },
+            "id": 30,
+            "mstId": "0_post_30",
+            "type": "post",
+            "visited": false,
+          },
+        ],
+        "selectedItem": "",
+      },
+      Object {
+        "mstId": "context_0_column_9",
+        "rawItems": Array [
+          Object {
+            "fromList": Object {
+              "id": 7,
+              "page": 2,
+              "type": "category",
+            },
+            "id": 26,
+            "mstId": "0_post_26",
+            "type": "post",
+            "visited": false,
+          },
+        ],
+        "selectedItem": "",
+      },
+      Object {
+        "mstId": "context_0_column_10",
+        "rawItems": Array [
+          Object {
+            "fromList": Object {
+              "id": 7,
+              "page": 2,
+              "type": "category",
+            },
+            "id": 23,
+            "mstId": "0_post_23",
+            "type": "post",
+            "visited": false,
+          },
+        ],
+        "selectedItem": "",
+      },
+      Object {
+        "mstId": "context_0_column_11",
+        "rawItems": Array [
+          Object {
+            "fromList": Object {
+              "id": 7,
+              "page": 2,
+              "type": "category",
+            },
+            "id": 12,
+            "mstId": "0_post_12",
+            "type": "post",
+            "visited": false,
+          },
+        ],
+        "selectedItem": "",
+      },
+      Object {
+        "mstId": "context_0_column_12",
+        "rawItems": Array [
+          Object {
+            "fromList": Object {
+              "id": 7,
+              "page": 2,
+              "type": "category",
+            },
+            "id": 1,
+            "mstId": "0_post_1",
+            "type": "post",
+            "visited": false,
+          },
+        ],
+        "selectedItem": "",
+      },
+    ],
+    "selectedColumn": "context_0_column_2",
+  },
+]
+`;
+
 exports[`Connection › Router Add items from extracted once they are ready 1`] = `
 Array [
   Object {

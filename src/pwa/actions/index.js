@@ -182,6 +182,11 @@ export const addItemToColumn = ({ item: { type, id, page, extract } }) => ({
   },
 });
 
+export const addColumnToContext = ({ column }) => ({
+  type: actionTypes.ADD_COLUMN_TO_CONTEXT,
+  column,
+});
+
 export const previousContextRequested = () => ({
   type: actionTypes.PREVIOUS_CONTEXT_REQUESTED,
 });

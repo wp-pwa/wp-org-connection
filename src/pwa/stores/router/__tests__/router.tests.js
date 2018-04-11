@@ -6,10 +6,16 @@ import Connection from '../../';
 import * as actionTypes from '../../../actionTypes';
 import * as actions from '../../../actions';
 import postsFromCategory7 from '../../../__tests__/posts-from-category-7.json';
+import postsFromCategory7Page2 from '../../../__tests__/posts-from-category-7-page-2.json';
 import post60 from '../../../__tests__/post-60.json';
 
 const { result: resultFromCategory7, entities: entitiesFromCategory } = normalize(
   postsFromCategory7,
+  list,
+);
+
+const { result: resultFromCategory7Page2, entities: entitiesFromCategoryPage2 } = normalize(
+  postsFromCategory7Page2,
   list,
 );
 
@@ -1096,5 +1102,51 @@ describe('Connection › Router', () => {
     expect(connection.selectedContext.columns[1].items[1].isSelected).toBe(true);
     expect(connection.selectedColumn.items[0].isSelected).toBe(false);
     expect(connection.selectedColumn.items[1].isSelected).toBe(true);
+  });
+
+  test('Add column to context', () => {
+    connection[actionTypes.ROUTE_CHANGE_SUCCEED](
+      actions.routeChangeSucceed({
+        selectedItem: { type: 'post', id: 54 },
+        context: {
+          columns: [
+            [{ type: 'category', id: 7, page: 1, extract: 'horizontal' }],
+          ],
+        },
+      }),
+    );
+    expect(connection.selectedContext.columns.length).toBe(1);
+    connection[actionTypes.LIST_SUCCEED](
+      actions.listSucceed({
+        list: {
+          type: 'category',
+          id: 7,
+          page: 1,
+        },
+        result: resultFromCategory7,
+        entities: entitiesFromCategory,
+      }),
+    );
+    expect(connection.selectedContext.columns.length).toBe(5);
+    connection[actionTypes.ADD_COLUMN_TO_CONTEXT](
+      actions.addColumnToContext({
+        column: [{ type: 'category', id: 7, page: 2, extract: 'horizontal' }],
+      }),
+    );
+    expect(connection.selectedContext.columns.length).toBe(5);
+    expect(connection.contexts).toMatchSnapshot();
+    connection[actionTypes.LIST_SUCCEED](
+      actions.listSucceed({
+        list: {
+          type: 'category',
+          id: 7,
+          page: 2,
+        },
+        result: resultFromCategory7Page2,
+        entities: entitiesFromCategoryPage2,
+      }),
+    );
+    expect(connection.contexts).toMatchSnapshot();
+    expect(connection.selectedContext.columns.length).toBe(10);
   });
 });
