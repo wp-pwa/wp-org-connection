@@ -917,7 +917,7 @@ describe('Connection › Router', () => {
       }),
     );
     expect(connection.contexts).toMatchSnapshot();
-    expect(connection.selectedContext.nextNonVisited.id).toBe(61);
+    expect(connection.selectedContext.nextNonVisited.id).toBe(63);
   });
 
   test('Get next non visited item after visiting two', () => {
