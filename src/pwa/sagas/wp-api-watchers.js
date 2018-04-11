@@ -84,8 +84,8 @@ export const listRequested = options =>
       );
     }
 
+    const perPage = yield select(dep('build', 'selectors', 'getPerPage'));
     try {
-      const perPage = yield select(dep('build', 'selectors', 'getPerPage'));
       const response = yield call(getList, { connection, type, id, page, perPage });
       const { entities, result } = normalize(response, schemas.list);
       const totalEntities = response._paging ? parseInt(response._paging.total, 10) : 0;
