@@ -1,5 +1,5 @@
 import { when } from 'mobx';
-import { types, getParent, getRoot } from 'mobx-state-tree';
+import { types, getParent } from 'mobx-state-tree';
 
 const BaseItem = types
   .model('BaseItem')
@@ -11,7 +11,7 @@ const BaseItem = types
   })
   .views(self => ({
     get connection() {
-      return getRoot(self);
+      return getParent(self, 6);
     },
     get entity() {
       return self.connection.entity(self.type, self.id);

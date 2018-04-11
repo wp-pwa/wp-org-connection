@@ -1,4 +1,4 @@
-import { types, getRoot, getParent, resolveIdentifier, detach, getSnapshot } from 'mobx-state-tree';
+import { types, getParent, resolveIdentifier, detach, getSnapshot } from 'mobx-state-tree';
 import Column from './column';
 import Item from './item';
 
@@ -21,7 +21,7 @@ const Context = types
   })
   .views(self => ({
     get connection() {
-      return getRoot(self);
+      return getParent(self, 2);
     },
     get selectedItem() {
       return self.selectedColumn.selectedItem;
