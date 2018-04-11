@@ -7,7 +7,7 @@ export default store => {
       applySnapshot(store, state);
       firstTime = false;
     }
-    store.setLastAction({ action });
+    store.connection.setLastAction({ action });
     return getSnapshot(store);
   };
 };
