@@ -50,7 +50,7 @@ export const actions = self => ({
   addEntity({ entity }) {
     if (!entity.id || !entity.type) return; // Don't add entity if it doesn't have id or type
     const item = self.getEntity({ type: entity.type, id: entity.id });
-    item.entity = convert(entity);
+    if (!item.entity) item.entity = convert(entity);
     item.fetching = false;
   },
   addEntities({ entities }) {
@@ -145,7 +145,8 @@ export const actions = self => ({
     const item = self.getCustomPage({ name, page });
     item.fetching = false;
   },
-  [actionTypes.HEAD_CONTENT_SUCCEED]({ content }) {
+  [actionTypes.HEAD_CONTENT_SUCCEED]({ title, content }) {
+    self.siteInfo.headTitle = title;
     self.siteInfo.headContent = content;
   },
   [actionTypes.SITE_INFO_SUCCEED]({ perPage }) {

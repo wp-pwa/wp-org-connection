@@ -115,6 +115,17 @@ describe('Connection › Entity', () => {
     connection.addEntity({ entity: entities.single[60] });
   });
 
+  test("Don't invalidate headMeta when item is added twice", () => {
+    let itemChanged = 1;
+    connection.addEntity({ entity: entities.single[60] });
+    autorun(() => {
+      connection.entity('post', 60).headMeta.title; // eslint-disable-line
+      itemChanged += 1;
+    });
+    connection.addEntity({ entity: entities.single[60] });
+    expect(itemChanged).toBe(2);
+  });
+
   test('Subscribe to paged link before entity is ready', done => {
     expect(connection.entity('category', 3).pagedLink(2)).toBe('/?cat=3&paged=2');
     autorun(() => {

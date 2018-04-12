@@ -152,8 +152,9 @@ export const headContentRequested = () => ({
   type: actionTypes.HEAD_CONTENT_REQUESTED,
 });
 
-export const headContentSucceed = ({ content }) => ({
+export const headContentSucceed = ({ title, content }) => ({
   type: actionTypes.HEAD_CONTENT_SUCCEED,
+  title,
   content,
 });
 

@@ -1,5 +1,6 @@
 import { types } from 'mobx-state-tree';
 
 export default types.model('SiteInfo').props({
-  headContent: types.optional(types.array(types.frozen), []),
+  headTitle: types.optional(types.string, ''),
+  headContent: types.optional(types.frozen, []),
 });
