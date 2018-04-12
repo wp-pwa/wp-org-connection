@@ -20,10 +20,11 @@ const routeRequest = (type, id, method, context) =>
     method,
   });
 
-// Promised dispatch.
-const asyncDispatcher = fn => action => {
-  fn(new Promise(resolve => setTimeout(() => resolve(action))));
-};
+let redux;
+
+beforeEach(() => {
+  redux = { dispatch: jest.fn(), subscribe: jest.fn(), getState: jest.fn() };
+})
 
 describe('Connection › Router > History', () => {
   test('initializes the url if selectedItem exists in the initial state', () => {
@@ -50,70 +51,66 @@ describe('Connection › Router > History', () => {
   });
 
   test("dispatchs succeed when 'push' (history length increases)", async () => {
-    const dispatch = jest.fn();
-    const asyncDispatch = asyncDispatcher(dispatch);
-    const store = Connection.create({}, { asyncDispatch });
+    const store = Connection.create({}, { store: redux });
     store[actionTypes.ENTITY_SUCCEED](post60Succeed);
     store[actionTypes.ROUTE_CHANGE_SUCCEED](routeRequest('post', 63, 'push'));
     store[actionTypes.ROUTE_CHANGE_REQUESTED](routeRequest('post', 60, 'push'));
     const { key, ...rest } = store.history.location;
     expect(rest).toMatchSnapshot();
     expect(store.history.length).toBe(2);
-    expect(dispatch.mock.calls.length).toBe(1);
+    expect(redux.dispatch.mock.calls.length).toBe(1);
 
-    const action = await dispatch.mock.calls[0][0];
+    const action = redux.dispatch.mock.calls[0][0];
     expect(action).toMatchSnapshot();
   });
 
   test("dispatchs succeed when 'replace' (same history length)", async () => {
-    const dispatch = jest.fn();
-    const asyncDispatch = asyncDispatcher(dispatch);
-    const store = Connection.create({}, { asyncDispatch });
+    const store = Connection.create({}, { store: redux });
     store[actionTypes.ENTITY_SUCCEED](post60Succeed);
     store[actionTypes.ROUTE_CHANGE_REQUESTED](routeRequest('post', 60, 'replace'));
     const { key, ...rest } = store.history.location;
     expect(rest).toMatchSnapshot();
     expect(store.history.length).toBe(1);
-    expect(dispatch.mock.calls.length).toBe(1);
+    expect(redux.dispatch.mock.calls.length).toBe(1);
 
-    const action = await dispatch.mock.calls[0][0];
+    const action = redux.dispatch.mock.calls[0][0];
     expect(action).toMatchSnapshot();
   });
 
   test('does not dispatch a succeed when just updating the url', async () => {
-    const dispatch = jest.fn();
-    const asyncDispatch = asyncDispatcher(dispatch);
-    const store = Connection.create({}, { asyncDispatch });
+    const store = Connection.create({}, { store: redux });
 
     store[actionTypes.ROUTE_CHANGE_REQUESTED](routeRequest('post', 60, 'push'));
 
-    const action = await dispatch.mock.calls[0][0];
+    const action = redux.dispatch.mock.calls[0][0];
     store[actionTypes.ROUTE_CHANGE_SUCCEED](action);
 
     let { key, ...rest } = store.history.location;
     expect(rest).toMatchSnapshot();
     expect(store.history.length).toBe(2);
-    expect(dispatch.mock.calls.length).toBe(1);
+    expect(redux.dispatch.mock.calls.length).toBe(1);
+
+    debugger;
 
     store[actionTypes.ENTITY_SUCCEED](post60Succeed);
+
+
 
     ({ key, ...rest } = store.history.location);
     expect(rest).toMatchSnapshot();
     expect(store.history.length).toBe(2);
-    expect(dispatch.mock.calls.length).toBe(1);
+    expect(redux.dispatch.mock.calls.length).toBe(1);
   });
 
   test('goes backward', async () => {
-    const dispatch = jest.fn();
-    const asyncDispatch = asyncDispatcher(dispatch);
-    const store = Connection.create({}, { asyncDispatch });
+    const store = Connection.create({}, { store: redux });
 
     store[actionTypes.ROUTE_CHANGE_REQUESTED](routeRequest('post', 60, 'push'));
-    const succeedPost60 = await dispatch.mock.calls[0][0];
+    const succeedPost60 = redux.dispatch.mock.calls[0][0];
     store[actionTypes.ROUTE_CHANGE_SUCCEED](succeedPost60);
 
     store[actionTypes.ROUTE_CHANGE_REQUESTED](routeRequest('post', 63, 'push'));
-    const succeedPost63 = await dispatch.mock.calls[1][0];
+    const succeedPost63 = redux.dispatch.mock.calls[1][0];
     store[actionTypes.ROUTE_CHANGE_SUCCEED](succeedPost63);
 
     expect(store.history.length).toBe(3);
@@ -124,21 +121,19 @@ describe('Connection › Router > History', () => {
     expect(pathname + search).toBe('/?p=60');
     expect(store.history.length).toBe(3);
 
-    const actionBackward = await dispatch.mock.calls[2][0];
+    const actionBackward = redux.dispatch.mock.calls[2][0];
     expect(actionBackward.method).toBe('backward');
   });
 
   test('goes forward', async () => {
-    const dispatch = jest.fn();
-    const asyncDispatch = asyncDispatcher(dispatch);
-    const store = Connection.create({}, { asyncDispatch });
+    const store = Connection.create({}, { store: redux });
 
     store[actionTypes.ROUTE_CHANGE_REQUESTED](routeRequest('post', 60, 'push'));
-    const succeedPost60 = await dispatch.mock.calls[0][0];
+    const succeedPost60 = redux.dispatch.mock.calls[0][0];
     store[actionTypes.ROUTE_CHANGE_SUCCEED](succeedPost60);
 
     store[actionTypes.ROUTE_CHANGE_REQUESTED](routeRequest('post', 63, 'push'));
-    const succeedPost63 = await dispatch.mock.calls[1][0];
+    const succeedPost63 = redux.dispatch.mock.calls[1][0];
     store[actionTypes.ROUTE_CHANGE_SUCCEED](succeedPost63);
 
     expect(store.history.length).toBe(3);
@@ -150,29 +145,27 @@ describe('Connection › Router > History', () => {
     expect(pathname + search).toBe('/?p=63');
     expect(store.history.length).toBe(3);
 
-    const actionForward = await dispatch.mock.calls[3][0];
+    const actionForward = redux.dispatch.mock.calls[3][0];
     expect(actionForward.method).toBe('forward');
   });
 
   test('goes to previous context', async () => {
-    const dispatch = jest.fn();
-    const asyncDispatch = asyncDispatcher(dispatch);
-    const store = Connection.create({}, { asyncDispatch });
+    const store = Connection.create({}, { store: redux });
 
     const galleryContext = {
       columns: [[{ type: 'media', id: 193 }], [{ type: 'media', id: 190 }]],
     };
 
     store[actionTypes.ROUTE_CHANGE_REQUESTED](routeRequest('post', 63, 'push'));
-    const succeedPost60 = await dispatch.mock.calls[0][0];
+    const succeedPost60 = redux.dispatch.mock.calls[0][0];
     store[actionTypes.ROUTE_CHANGE_SUCCEED](succeedPost60);
 
     store[actionTypes.ROUTE_CHANGE_REQUESTED](routeRequest('media', 193, 'push', galleryContext));
-    const succeedMedia193 = await dispatch.mock.calls[1][0];
+    const succeedMedia193 = redux.dispatch.mock.calls[1][0];
     store[actionTypes.ROUTE_CHANGE_SUCCEED](succeedMedia193);
 
     store[actionTypes.ROUTE_CHANGE_REQUESTED](routeRequest('media', 190, 'push', galleryContext));
-    const succeedMedia190 = await dispatch.mock.calls[2][0];
+    const succeedMedia190 = redux.dispatch.mock.calls[2][0];
     store[actionTypes.ROUTE_CHANGE_SUCCEED](succeedMedia190);
 
     expect(store.history.length).toBe(4);
@@ -182,7 +175,7 @@ describe('Connection › Router > History', () => {
     expect(pathname + search).toBe('/?p=63');
     expect(store.history.length).toBe(4);
 
-    const actionPreviousContext = await dispatch.mock.calls[3][0];
+    const actionPreviousContext = redux.dispatch.mock.calls[3][0];
     expect(actionPreviousContext.method).toBe('backward');
   });
 });

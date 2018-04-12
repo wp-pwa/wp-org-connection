@@ -57,7 +57,7 @@ export const actions = self => {
     if (disposer) disposer();
 
     // Dispatchs a route-change-succeed action
-    await getEnv(self).asyncDispatch(routeChangeSucceed({ ...state }));
+    getEnv(self).store.dispatch(routeChangeSucceed({ ...state }));
 
     // Updates url when the new item is ready
     const { type, id } = state.selectedItem;
