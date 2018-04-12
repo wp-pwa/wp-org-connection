@@ -22,8 +22,8 @@ const listShape = (type, id) => ({
     entities: null,
     pages: null,
     fetched: {
-      entities: null,
-      pages: null,
+      entities: 0,
+      pages: 0,
     },
   },
   pages: observable([]),

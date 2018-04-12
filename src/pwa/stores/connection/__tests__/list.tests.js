@@ -210,8 +210,8 @@ describe('Connection › List', () => {
   test('Total shapes before and after initialization', () => {
     expect(connection.list('category', 7).total.entities).toBe(null);
     expect(connection.list('category', 7).total.pages).toBe(null);
-    expect(connection.list('category', 7).total.fetched.entities).toBe(null);
-    expect(connection.list('category', 7).total.fetched.pages).toBe(null);
+    expect(connection.list('category', 7).total.fetched.entities).toBe(0);
+    expect(connection.list('category', 7).total.fetched.pages).toBe(0);
     expect(connection.list('category', 7).page(1).total).toBe(null);
     connection.addListPage({
       type: 'category',
@@ -231,9 +231,10 @@ describe('Connection › List', () => {
   test('Subscribe to totals', done => {
     expect(connection.list('category', 7).total.entities).toBe(null);
     expect(connection.list('category', 7).total.pages).toBe(null);
-    expect(connection.list('category', 7).total.fetched.entities).toBe(null);
-    expect(connection.list('category', 7).total.fetched.pages).toBe(null);
+    expect(connection.list('category', 7).total.fetched.entities).toBe(0);
+    expect(connection.list('category', 7).total.fetched.pages).toBe(0);
     expect(connection.list('category', 7).page(1).total).toBe(null);
+
     autorun(() => {
       if (
         connection.list('category', 7).total.entities === 10 &&

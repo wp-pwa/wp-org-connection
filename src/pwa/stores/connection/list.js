@@ -14,8 +14,8 @@ export const Total = types
   .views(self => ({
     get fetched() {
       return {
-        entities: getParent(self).entities.length || null,
-        pages: getParent(self).pages.length || null,
+        entities: getParent(self).entities.length || 0,
+        pages: getParent(self).pages.length || 0,
       };
     },
   }));

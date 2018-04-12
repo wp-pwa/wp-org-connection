@@ -28,8 +28,8 @@ Object {
   "total": Object {
     "entities": null,
     "fetched": Object {
-      "entities": null,
-      "pages": null,
+      "entities": 0,
+      "pages": 0,
     },
     "pages": null,
   },
