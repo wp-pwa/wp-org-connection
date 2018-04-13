@@ -59,8 +59,6 @@ const Context = types
     get isSelected() {
       return getParent(self, 2).selectedContext === self;
     },
-  }))
-  .actions(self => ({
     getNextMstId: () => {
       self.mstIdForColumn += 1;
       return `context_${self.index}_column_${self.mstIdForColumn}`;
@@ -69,6 +67,11 @@ const Context = types
       page
         ? `${self.index}_${type}_${id}_page_${page}${extract ? `_${extract}` : ''}`
         : `${self.index}_${type}_${id}`,
+    getItem: ({ item: { type, id, page, extract } }) =>
+      resolveIdentifier(Item, self, self.getMstId({ type, id, page, extract })),
+    hasItem: ({ item }) => !!self.getItem({ item }),
+  }))
+  .actions(self => ({
     addMstIdToItem: ({ item }) => ({ ...item, mstId: self.getMstId({ ...item }) }),
     addMstIdToItems: ({ items }) => items.map(item => self.addMstIdToItem({ item })),
     setGenerator: ({ generator }) => {
@@ -77,9 +80,6 @@ const Context = types
     setOptions: ({ options }) => {
       self.options = options;
     },
-    getItem: ({ item: { type, id, page, extract } }) =>
-      resolveIdentifier(Item, self, self.getMstId({ type, id, page, extract })),
-    hasItem: ({ item }) => !!self.getItem({ item }),
     addItem: ({ item, index }) => {
       self.addColumn({ column: [item], index });
       return self.getItem({ item });
