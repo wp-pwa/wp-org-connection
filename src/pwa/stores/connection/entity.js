@@ -110,7 +110,7 @@ const media = self => ({
     return self.ready ? self.entity.original : originalShape;
   },
   get sizes() {
-    return self.ready ? self.entity.sizes : [];
+    return self.ready && self.entity.sizes ? self.entity.sizes : observable([]);
   },
 });
 

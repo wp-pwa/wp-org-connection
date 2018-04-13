@@ -25,7 +25,7 @@ export const Page = types
   .props({
     page: types.identifier(types.number),
     fetching: false,
-    entities: types.optional(types.array(types.reference(Entity)), []),
+    entities: types.optional(types.array(types.reference(Entity)), observable([])),
   })
   .views(self => ({
     get ready() {
