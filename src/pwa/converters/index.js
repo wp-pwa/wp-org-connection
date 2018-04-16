@@ -5,8 +5,8 @@ export const single = entity => ({
   mst: 'single',
   id: entity.id,
   type: entity.type,
-  creationDate: new Date(`${entity.date_gmt}+0000`).getTime(),
-  modificationDate: new Date(`${entity.modified_gmt}+0000`).getTime(),
+  creationDate: new Date(entity.date_gmt).getTime(),
+  modificationDate: new Date(entity.modified_gmt).getTime(),
   title: entity.title.rendered,
   slug: entity.slug,
   link: entity.link,
@@ -18,9 +18,7 @@ export const single = entity => ({
   parent: entity.parent,
   target: entity['post-target'],
   headMeta: {
-    title: decode(
-      (entity.yoast_meta && entity.yoast_meta.title) || entity.title.rendered,
-    ),
+    title: decode((entity.yoast_meta && entity.yoast_meta.title) || entity.title.rendered),
   },
 });
 
@@ -63,9 +61,7 @@ export const media = entity => ({
   caption: entity.caption && entity.caption.rendered,
   author: entity.author,
   headMeta: {
-    title: decode(
-      (entity.yoast_meta && entity.yoast_meta.title) || entity.title.rendered,
-    ),
+    title: decode((entity.yoast_meta && entity.yoast_meta.title) || entity.title.rendered),
   },
   original: {
     height: entity.media_details.height,
