@@ -48,8 +48,8 @@ export const actions = self => ({
     item.fetching = true;
   },
   addEntity({ entity }) {
-    // Don't add entity if it doesn't have id or type or it is protected
-    if (!entity.id || !entity.type || (entity.content && entity.content.protected)) return;
+    // Don't add entity if it doesn't have id or type
+    if (!entity.id || !entity.type) return;
     const item = self.getEntity({ type: entity.type, id: entity.id });
     if (!item.entity) item.entity = convert(entity);
     item.fetching = false;
