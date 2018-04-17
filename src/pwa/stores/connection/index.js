@@ -48,7 +48,8 @@ export const actions = self => ({
     item.fetching = true;
   },
   addEntity({ entity }) {
-    if (!entity.id || !entity.type) return; // Don't add entity if it doesn't have id or type
+    // Don't add entity if it doesn't have id or type or it is protected
+    if (!entity.id || !entity.type || (entity.content && entity.content.protected)) return;
     const item = self.getEntity({ type: entity.type, id: entity.id });
     if (!item.entity) item.entity = convert(entity);
     item.fetching = false;
@@ -78,7 +79,7 @@ export const actions = self => ({
     self.addEntities({ entities });
     const mstResults = result.map(res => `${entities[res.schema][res.id].type}_${res.id}`);
     const item = self.getListPage({ type, id, page });
-    item.entities = mstResults;
+    item.results = mstResults;
     item.fetching = false;
     if (total) {
       const list = self.getList({ type, id });
@@ -103,7 +104,7 @@ export const actions = self => ({
     self.addEntities({ entities });
     const mstResults = result.map(res => `${entities[res.schema][res.id].type}_${res.id}`);
     const item = self.getCustomPage({ name, page });
-    item.entities = mstResults;
+    item.results = mstResults;
     item.fetching = false;
     if (total) {
       const list = self.getCustom({ name });

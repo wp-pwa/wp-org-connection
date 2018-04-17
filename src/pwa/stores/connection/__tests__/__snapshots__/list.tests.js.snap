@@ -39,14 +39,14 @@ Object {
 
 exports[`Connection › List Rehydrates pageMap from a snapshot 1`] = `
 Object {
-  "entities": Array [
+  "fetching": false,
+  "page": 1,
+  "results": Array [
     "post_57",
     "post_54",
     "post_42",
     "post_36",
     "post_33",
   ],
-  "fetching": false,
-  "page": 1,
 }
 `;

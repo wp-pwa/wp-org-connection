@@ -1,9 +1,10 @@
 import { values, observable } from 'mobx';
-import { types, getParent, resolveIdentifier, getSnapshot } from 'mobx-state-tree';
+import { types, getParent, resolveIdentifier, getRoot } from 'mobx-state-tree';
 import { flatten } from 'lodash';
 import { entityShape } from './entity-shape';
 import { pageShape } from './list-shape';
 import Entity from './entity';
+import { extract } from './utils';
 
 export const Total = types
   .model('Total')
@@ -25,14 +26,23 @@ export const Page = types
   .props({
     page: types.identifier(types.number),
     fetching: false,
-    entities: types.optional(types.array(types.reference(Entity)), observable([])),
+    results: types.optional(types.array(types.string), observable([])),
   })
   .views(self => ({
+    get connection() {
+      return getRoot(self).connection || getRoot(self);
+    },
+    get entities() {
+      return observable(self.results.map(mstId => {
+        const { type, id } = extract(mstId);
+        return self.connection.entity(type, id);
+      }));
+    },
     get ready() {
-      return self.entities.length > 0;
+      return self.results.length > 0;
     },
     get total() {
-      return self.entities.length || null;
+      return self.results.length || null;
     },
   }));
 
@@ -57,8 +67,11 @@ const List = types
         .reduce((acc, cur) => acc || cur, false);
     },
     get entities() {
-      const mstIds = flatten(self.pages.map(page => getSnapshot(page.entities)));
-      return observable(mstIds.map(mstId => resolveIdentifier(Entity, self, mstId)));
+      const results = flatten(self.pages.map(page => page.results.peek()));
+      return observable(results.map(mstId => {
+        const { type, id } = extract(mstId);
+        return getParent(self, 2).entity(type, id);
+      }));
     },
     page(page) {
       return self.pageMap.get(page) || self.pageMap.get(String(page)) || pageShape;

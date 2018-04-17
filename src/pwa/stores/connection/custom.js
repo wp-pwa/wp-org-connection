@@ -1,9 +1,9 @@
 import { values, observable } from 'mobx';
-import { types, resolveIdentifier, getSnapshot } from 'mobx-state-tree';
+import { types, getParent } from 'mobx-state-tree';
 import { flatten } from 'lodash';
-import Entity from './entity';
 import { Total, Page } from './list';
 import { pageShape } from './list-shape';
+import { extract } from './utils';
 
 const Custom = types
   .model('Custom')
@@ -26,8 +26,11 @@ const Custom = types
         .reduce((acc, cur) => acc || cur, false);
     },
     get entities() {
-      const mstIds = flatten(self.pages.map(page => getSnapshot(page.entities)));
-      return observable(mstIds.map(mstId => resolveIdentifier(Entity, self, mstId)));
+      const results = flatten(self.pages.map(page => page.results.peek()));
+      return observable(results.map(mstId => {
+        const { type, id } = extract(mstId);
+        return getParent(self, 2).entity(type, id);
+      }));
     },
     page(page) {
       return self.pageMap.get(page) || pageShape;
