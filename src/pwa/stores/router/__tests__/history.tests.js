@@ -90,8 +90,6 @@ describe('Connection › Router > History', () => {
     expect(store.history.length).toBe(2);
     expect(redux.dispatch.mock.calls.length).toBe(1);
 
-    debugger;
-
     store[actionTypes.ENTITY_SUCCEED](post60Succeed);
 
 
