@@ -107,9 +107,6 @@ export const actions = self => {
 
   return {
     [actionTypes.ROUTE_CHANGE_SUCCEED]: ({ selectedItem, method, context: actionContext }) => {
-      if (typeof window !== 'undefined')
-        self.siteInfo.headContent = self.siteInfo.headContent.filter(node => node.permanent);
-
       // Initialize generator and context.
       let generator = actionContext || { columns: [[{ ...selectedItem }]] };
       const context = extractItemsInContext({
@@ -131,13 +128,11 @@ export const actions = self => {
         // Then check conditions:
         // If we are in the same context and we just want to change the selected.
         if (generatorsAreEqual && itemInSelectedContext) changeSelectedItem({ selectedItem });
-        else if (method === 'backward')
-          // If we are going backward or forward in the history
-          selectItemInPreviousContext({ selectedItem });
+        // If we are going backward or forward in the history
+        else if (method === 'backward') selectItemInPreviousContext({ selectedItem });
         else if (method === 'forward') selectItemInNextContext({ selectedItem });
-        else
-          // If nothing of the previous, we just create a new context
-          createNewContext({ selectedItem, context, generator });
+        // If nothing of the previous, we just create a new context
+        else createNewContext({ selectedItem, context, generator });
       }
     },
     [actionTypes.MOVE_ITEM_TO_COLUMN]: ({ item }) => {
