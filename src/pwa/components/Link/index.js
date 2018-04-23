@@ -84,27 +84,29 @@ injectGlobal`
 
 class Link extends Component {
   static propTypes = {
-    item: PropTypes.shape({
-      type: PropTypes.string,
-      id: PropTypes.oneOfType([PropTypes.number, PropTypes.string]),
-      page: PropTypes.number,
-    }).isRequired,
+    type: PropTypes.string.isRequired,
+    id: PropTypes.oneOfType([PropTypes.number, PropTypes.string]).isRequired,
+    page: PropTypes.number,
     context: PropTypes.shape({}),
     method: PropTypes.string,
-    event: PropTypes.shape({}),
+    eventCategory: PropTypes.string,
+    eventAction: PropTypes.string,
     children: PropTypes.node.isRequired,
     href: PropTypes.string.isRequired,
     routeChangeRequested: PropTypes.func.isRequired,
   };
 
   static defaultProps = {
+    page: null,
     method: 'push',
     context: null,
-    event: null,
+    eventCategory: null,
+    eventAction: null,
   };
 
-  constructor(props, ...rest) {
-    super(props, ...rest);
+  constructor() {
+    super();
+
     this.linkClicked = this.linkClicked.bind(this);
   }
 
@@ -118,8 +120,26 @@ class Link extends Component {
     e.preventDefault();
     NProgress.start();
 
-    const { routeChangeRequested, item, context, method, event } = this.props;
-    setTimeout(() => routeChangeRequested({ selectedItem: item, context, method, event }), 100);
+    const {
+      routeChangeRequested,
+      type,
+      id,
+      page,
+      context,
+      method,
+      eventCategory,
+      eventAction,
+    } = this.props;
+    setTimeout(
+      () =>
+        routeChangeRequested({
+          selectedItem: { type, id, page },
+          context,
+          method,
+          event: { category: eventCategory, action: eventAction },
+        }),
+      100,
+    );
   }
 
   render() {
@@ -134,7 +154,7 @@ const mapDispatchToProps = dispatch => ({
 });
 
 export default compose(
-  inject(({ connection }, { item: { type, id, page } }) => ({
+  inject(({ connection }, { type, id, page }) => ({
     href: page ? connection.entity(type, id).pagedLink(page) : connection.entity(type, id).link,
   })),
   connect(null, mapDispatchToProps),
