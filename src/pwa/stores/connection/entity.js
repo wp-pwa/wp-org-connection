@@ -72,6 +72,9 @@ const single = self => ({
       content: (self.ready ? self.entity.media.content : observable([])),
     };
   },
+  get hasFeaturedMedia() {
+    return self.ready && self.entity.media.featured !== null;
+  },
   get author() {
     return (
       (self.ready &&

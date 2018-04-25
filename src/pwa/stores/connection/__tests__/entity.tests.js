@@ -35,6 +35,7 @@ describe('Connection › Entity', () => {
     expect(connection.entity('post', 60).link).toBe('/?p=60');
     expect(() => connection.entity('post', 60).pagedLink(3)).toThrow();
     expect(connection.entity('post', 60).taxonomy('category')).toEqual(observable([]));
+    expect(connection.entity('post', 60).hasFeaturedMedia).toBe(false);
     expect(connection.entity('post', 60).media.featured.ready).toBe(false);
     expect(connection.entity('post', 60).media.featured.sizes).toEqual(observable([]));
     expect(connection.entity('post', 60).author.name).toBe('');
@@ -228,6 +229,15 @@ describe('Connection › Entity', () => {
     connection.addEntity({ entity: entities.single[60] });
     expect(connection.entity('post', 60).media.featured.id).toBe(62);
     expect(connection.entity('post', 60).media.featured.title).toBe('');
+    expect(connection.entity('post', 60).hasFeaturedMedia).toBe(true);
+  });
+
+  test('Subscribe to hasFeaturedMedia field before entity is ready', done => {
+    expect(connection.entity('post', 60).hasFeaturedMedia).toBe(false);
+    autorun(() => {
+      if (connection.entity('post', 60).hasFeaturedMedia === true) done();
+    });
+    connection.addEntity({ entity: entities.single[60] });
   });
 
   test('Subscribe to featured fields before entity is ready', done => {

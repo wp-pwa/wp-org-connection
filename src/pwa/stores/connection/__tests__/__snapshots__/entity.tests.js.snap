@@ -23,6 +23,7 @@ Object {
   "description": "",
   "excerpt": "",
   "fetching": false,
+  "hasFeaturedMedia": false,
   "headMeta": Object {
     "title": "",
   },

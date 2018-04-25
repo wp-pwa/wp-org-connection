@@ -81,6 +81,7 @@ export const singleShape = (type, id) => ({
     featured: mediaShape('media'),
     content: observable([]),
   },
+  hasFeaturedMedia: false,
   author: authorShape('author'),
   target: '',
   headMeta: headMetaShape,
