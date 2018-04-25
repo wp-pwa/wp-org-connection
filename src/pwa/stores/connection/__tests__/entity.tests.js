@@ -38,6 +38,7 @@ describe('Connection › Entity', () => {
     expect(connection.entity('post', 60).hasFeaturedMedia).toBe(false);
     expect(connection.entity('post', 60).media.featured.ready).toBe(false);
     expect(connection.entity('post', 60).media.featured.sizes).toEqual(observable([]));
+    expect(connection.entity('post', 60).media.content).toEqual(observable([]));
     expect(connection.entity('post', 60).author.name).toBe('');
   });
 
@@ -310,6 +311,14 @@ describe('Connection › Entity', () => {
       if (connection.entity('media', 62).sizes.length === 6) done();
     });
     connection.addEntity({ entity: entities.media[62] });
+  });
+
+  test('Subscribe to media content on post before entity is ready', done => {
+    expect(connection.entity('post', 60).media.content.length).toBe(0);
+    autorun(() => {
+      if (connection.entity('post', 60).media.content.length === 6) done();
+    });
+    connection.addEntity({ entity: entities.single[60] });
   });
 
   test('Subscribe to taxonomy fields before entity is ready', done => {
