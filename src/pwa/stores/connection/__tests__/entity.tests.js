@@ -35,8 +35,8 @@ describe('Connection › Entity', () => {
     expect(connection.entity('post', 60).link).toBe('/?p=60');
     expect(() => connection.entity('post', 60).pagedLink(3)).toThrow();
     expect(connection.entity('post', 60).taxonomy('category')).toEqual(observable([]));
-    expect(connection.entity('post', 60).featured.ready).toBe(false);
-    expect(connection.entity('post', 60).featured.sizes).toEqual(observable([]));
+    expect(connection.entity('post', 60).media.featured.ready).toBe(false);
+    expect(connection.entity('post', 60).media.featured.sizes).toEqual(observable([]));
     expect(connection.entity('post', 60).author.name).toBe('');
   });
 
@@ -179,9 +179,9 @@ describe('Connection › Entity', () => {
     connection.fetchingEntity({ type: 'post', id: 60 });
     const authorId2 = connection.entity('post', 60).author.id;
     expect(authorId1).toEqual(authorId2);
-    const featuredOriginal1 = connection.entity('post', 60).featured.original.url;
+    const featuredOriginal1 = connection.entity('post', 60).media.featured.original.url;
     connection.fetchingEntity({ type: 'post', id: 60 });
-    const featuredOriginal2 = connection.entity('post', 60).featured.original.url;
+    const featuredOriginal2 = connection.entity('post', 60).media.featured.original.url;
     expect(featuredOriginal1).toEqual(featuredOriginal2);
     const link1 = connection.entity('post', 60).link;
     connection.fetchingEntity({ type: 'post', id: 60 });
@@ -223,17 +223,17 @@ describe('Connection › Entity', () => {
   });
 
   test('Get featured inside post before entity is ready', () => {
-    expect(connection.entity('post', 60).featured.id).toBe(null);
-    expect(connection.entity('post', 60).featured.sizes).toEqual(observable([]));
+    expect(connection.entity('post', 60).media.featured.id).toBe(null);
+    expect(connection.entity('post', 60).media.featured.sizes).toEqual(observable([]));
     connection.addEntity({ entity: entities.single[60] });
-    expect(connection.entity('post', 60).featured.id).toBe(62);
-    expect(connection.entity('post', 60).featured.title).toBe('');
+    expect(connection.entity('post', 60).media.featured.id).toBe(62);
+    expect(connection.entity('post', 60).media.featured.title).toBe('');
   });
 
   test('Subscribe to featured fields before entity is ready', done => {
-    expect(connection.entity('post', 60).featured.original.width).toBe(null);
+    expect(connection.entity('post', 60).media.featured.original.width).toBe(null);
     autorun(() => {
-      if (connection.entity('post', 60).featured.original.width === 5000) done();
+      if (connection.entity('post', 60).media.featured.original.width === 5000) done();
     });
     connection.addEntity({ entity: entities.single[60] });
     connection.addEntity({ entity: entities.media[62] });
@@ -324,11 +324,11 @@ describe('Connection › Entity', () => {
 
   test('Get missing media (featured) inside ready post', () => {
     connection.addEntity({ entity: entities.single[60] });
-    expect(connection.entity('post', 60).featured.id).toBe(62);
+    expect(connection.entity('post', 60).media.featured.id).toBe(62);
     expect(connection.entity('media', 62).ready).toBe(false);
     expect(connection.entity('media', 62).sizes).toEqual(observable([]));
-    expect(connection.entity('post', 60).featured.ready).toBe(false);
-    expect(connection.entity('post', 60).featured.sizes).toEqual(observable([]));
+    expect(connection.entity('post', 60).media.featured.ready).toBe(false);
+    expect(connection.entity('post', 60).media.featured.sizes).toEqual(observable([]));
   });
 
   test('Get parent page', done => {
