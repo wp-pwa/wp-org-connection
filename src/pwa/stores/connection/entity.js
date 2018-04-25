@@ -63,13 +63,17 @@ const single = self => ({
         )
       : observable([]);
   },
-  get featured() {
-    return (
-      (self.ready &&
-        self.entity.featured &&
-        resolveIdentifier(Entity, self, join('media', self.entity.featured))) ||
-      mediaShape('media', self.ready && self.entity.featured)
-    );
+  get media() {
+    return {
+      featured: (self.ready &&
+        self.entity.media.featured &&
+        resolveIdentifier(Entity, self, join('media', self.entity.media.featured))) ||
+      mediaShape('media', self.ready && self.entity.media.featured),
+      content: (self.ready ? self.entity.media.content : observable([])),
+    };
+  },
+  get hasFeaturedMedia() {
+    return self.ready && self.entity.media.featured !== null;
   },
   get author() {
     return (

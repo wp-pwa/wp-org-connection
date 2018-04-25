@@ -13,7 +13,10 @@ export const single = entity => ({
   content: entity.content.rendered,
   excerpt: entity.excerpt && entity.excerpt.rendered,
   author: entity.author,
-  featured: entity.featured_media || null,
+  media: {
+    featured: entity.featured_media || null,
+    content: entity.content_media || [],
+  },
   taxonomies: entity.taxonomiesMap,
   parent: entity.parent,
   target: entity['post-target'],

@@ -36,6 +36,7 @@ single.define({
   _embedded: {
     author: [author],
     'wp:featuredmedia': [media],
+    'wp:contentmedia': [[media]],
     'wp:term': taxonomies,
   },
 });

@@ -70,6 +70,7 @@ const Context = types
     getItem: ({ item: { type, id, page, extract } }) =>
       resolveIdentifier(Item, self, self.getMstId({ type, id, page, extract })),
     hasItem: ({ item }) => !!self.getItem({ item }),
+    getColumn: mstId => resolveIdentifier(Column, self, mstId),
   }))
   .actions(self => ({
     addMstIdToItem: ({ item }) => ({ ...item, mstId: self.getMstId({ ...item }) }),
