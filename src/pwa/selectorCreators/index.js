@@ -8,7 +8,7 @@ const getParams = type => state => state.connection.params[type];
 
 const getById = flow(
   mapValues(value => id => state => state.connection.entities[value][id]),
-  mapKeys(key => `get${capitalize(key)}ById`)
+  mapKeys(key => `get${capitalize(key)}ById`),
 )(wpTypesSingularToPlural);
 
 const getWpTypeById = (wpType, id) => state =>
@@ -80,7 +80,7 @@ const isListLoading = name => state => {
 
 const isThisReady = flow(
   mapValuesWithKey(value => id => state => !!state.connection.entities[value][id]),
-  mapKeys(key => `is${capitalize(key)}Ready`)
+  mapKeys(key => `is${capitalize(key)}Ready`),
 )(wpTypesSingularToPlural);
 
 const isWpTypeReady = (wpType, id) => state => !!state.connection.entities[wpType][id];

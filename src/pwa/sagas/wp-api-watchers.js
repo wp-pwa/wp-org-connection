@@ -61,7 +61,8 @@ export function* initConnection(options) {
 
 export const getList = ({ connection, type, id, page, perPage, typesToEndpoints }) => {
   const endpoint = type === 'latest' ? typesToEndpoints(id) : typesToEndpoints('post');
-  const params = { _embed: true, per_page: perPage };
+  const params = { _embed: true };
+  if (perPage !== 10) params.per_page = perPage;
 
   if (['category', 'tag', 'author'].includes(type)) {
     params[typesToParams(type)] = id;
