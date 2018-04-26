@@ -8,10 +8,7 @@
     "slug": "agra",
     "taxonomy": "post_tag",
     "meta": {},
-    "yoast_meta": {
-      "yoast_wpseo_title": "Agra Archives - Demo Worona",
-      "yoast_wpseo_metadesc": ""
-    },
+    "yoast_meta": { "title": "Agra Archives - Demo Worona" },
     "_links": {
       "self": [{ "href": "https://demo.worona.org/wp-json/wp/v2/tags/46" }],
       "collection": [{ "href": "https://demo.worona.org/wp-json/wp/v2/tags" }],
@@ -29,10 +26,7 @@
     "slug": "al-hajar-mountains",
     "taxonomy": "post_tag",
     "meta": {},
-    "yoast_meta": {
-      "yoast_wpseo_title": "Al Hajar Mountains Archives - Demo Worona",
-      "yoast_wpseo_metadesc": ""
-    },
+    "yoast_meta": { "title": "Al Hajar Mountains Archives - Demo Worona" },
     "_links": {
       "self": [{ "href": "https://demo.worona.org/wp-json/wp/v2/tags/34" }],
       "collection": [{ "href": "https://demo.worona.org/wp-json/wp/v2/tags" }],
@@ -50,10 +44,7 @@
     "slug": "alps",
     "taxonomy": "post_tag",
     "meta": {},
-    "yoast_meta": {
-      "yoast_wpseo_title": "Alps Archives - Demo Worona",
-      "yoast_wpseo_metadesc": ""
-    },
+    "yoast_meta": { "title": "Alps Archives - Demo Worona" },
     "_links": {
       "self": [{ "href": "https://demo.worona.org/wp-json/wp/v2/tags/41" }],
       "collection": [{ "href": "https://demo.worona.org/wp-json/wp/v2/tags" }],
@@ -71,10 +62,7 @@
     "slug": "america",
     "taxonomy": "post_tag",
     "meta": {},
-    "yoast_meta": {
-      "yoast_wpseo_title": "America Archives - Demo Worona",
-      "yoast_wpseo_metadesc": ""
-    },
+    "yoast_meta": { "title": "America Archives - Demo Worona" },
     "_links": {
       "self": [{ "href": "https://demo.worona.org/wp-json/wp/v2/tags/21" }],
       "collection": [{ "href": "https://demo.worona.org/wp-json/wp/v2/tags" }],
@@ -92,10 +80,7 @@
     "slug": "animals",
     "taxonomy": "post_tag",
     "meta": {},
-    "yoast_meta": {
-      "yoast_wpseo_title": "Animals Archives - Demo Worona",
-      "yoast_wpseo_metadesc": ""
-    },
+    "yoast_meta": { "title": "Animals Archives - Demo Worona" },
     "_links": {
       "self": [{ "href": "https://demo.worona.org/wp-json/wp/v2/tags/40" }],
       "collection": [{ "href": "https://demo.worona.org/wp-json/wp/v2/tags" }],
@@ -113,10 +98,7 @@
     "slug": "antelope-canyon",
     "taxonomy": "post_tag",
     "meta": {},
-    "yoast_meta": {
-      "yoast_wpseo_title": "Antelope Canyon Archives - Demo Worona",
-      "yoast_wpseo_metadesc": ""
-    },
+    "yoast_meta": { "title": "Antelope Canyon Archives - Demo Worona" },
     "_links": {
       "self": [{ "href": "https://demo.worona.org/wp-json/wp/v2/tags/18" }],
       "collection": [{ "href": "https://demo.worona.org/wp-json/wp/v2/tags" }],
@@ -134,10 +116,7 @@
     "slug": "arizona",
     "taxonomy": "post_tag",
     "meta": {},
-    "yoast_meta": {
-      "yoast_wpseo_title": "Arizona Archives - Demo Worona",
-      "yoast_wpseo_metadesc": ""
-    },
+    "yoast_meta": { "title": "Arizona Archives - Demo Worona" },
     "_links": {
       "self": [{ "href": "https://demo.worona.org/wp-json/wp/v2/tags/19" }],
       "collection": [{ "href": "https://demo.worona.org/wp-json/wp/v2/tags" }],
@@ -155,10 +134,7 @@
     "slug": "canada",
     "taxonomy": "post_tag",
     "meta": {},
-    "yoast_meta": {
-      "yoast_wpseo_title": "Canada Archives - Demo Worona",
-      "yoast_wpseo_metadesc": ""
-    },
+    "yoast_meta": { "title": "Canada Archives - Demo Worona" },
     "_links": {
       "self": [{ "href": "https://demo.worona.org/wp-json/wp/v2/tags/32" }],
       "collection": [{ "href": "https://demo.worona.org/wp-json/wp/v2/tags" }],
@@ -176,10 +152,7 @@
     "slug": "cities",
     "taxonomy": "post_tag",
     "meta": {},
-    "yoast_meta": {
-      "yoast_wpseo_title": "Cities Archives - Demo Worona",
-      "yoast_wpseo_metadesc": ""
-    },
+    "yoast_meta": { "title": "Cities Archives - Demo Worona" },
     "_links": {
       "self": [{ "href": "https://demo.worona.org/wp-json/wp/v2/tags/52" }],
       "collection": [{ "href": "https://demo.worona.org/wp-json/wp/v2/tags" }],
@@ -197,10 +170,7 @@
     "slug": "culture",
     "taxonomy": "post_tag",
     "meta": {},
-    "yoast_meta": {
-      "yoast_wpseo_title": "Culture Archives - Demo Worona",
-      "yoast_wpseo_metadesc": ""
-    },
+    "yoast_meta": { "title": "Culture Archives - Demo Worona" },
     "_links": {
       "self": [{ "href": "https://demo.worona.org/wp-json/wp/v2/tags/30" }],
       "collection": [{ "href": "https://demo.worona.org/wp-json/wp/v2/tags" }],

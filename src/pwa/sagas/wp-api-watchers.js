@@ -2,14 +2,34 @@
 import Wpapi from 'wpapi';
 import { normalize } from 'normalizr';
 import { forOwn } from 'lodash';
-import { call, select, put, takeEvery, all } from 'redux-saga/effects';
+import { call, select, put, takeEvery, all, take } from 'redux-saga/effects';
 import { dep } from 'worona-deps';
 import * as actions from '../actions';
 import * as actionTypes from '../actionTypes';
 import * as schemas from '../schemas';
-import { typesToEndpoints, typesToParams } from '../constants';
+import { typesToParams } from '../constants';
 
 const CorsAnywhere = 'https://cors.worona.io/';
+
+function* typesToEndpointsSaga() {
+  const getSetting = dep('settings', 'selectorCreators', 'getSetting');
+  const cptEndpoints = yield select(getSetting('connection', 'cptEndpoints')) || {};
+  const endpoints = {
+    post: 'posts',
+    page: 'pages',
+    category: 'categories',
+    tag: 'tags',
+    author: 'users',
+    media: 'media',
+    comment: 'comments',
+    taxonomy: 'taxonomies',
+    postType: 'types',
+    postStatus: 'statuses',
+    ...cptEndpoints,
+  };
+
+  return type => endpoints[type] || type;
+}
 
 export function* isCors() {
   // If this is the server, isCors is not needed.
@@ -20,179 +40,207 @@ export function* isCors() {
   return url.startsWith('http://') && window.location.host === 'https';
 }
 
-export function* initConnection() {
+export function* initConnection(options) {
   const cors = yield call(isCors);
   const getSetting = dep('settings', 'selectorCreators', 'getSetting');
-  const url = yield select(getSetting('generalSite', 'url'));
-  const connection = new Wpapi({ endpoint: `${cors ? CorsAnywhere : ''}${url}?rest_route=` });
-  connection.siteInfo = connection.registerRoute('wp-pwa/v1', '/site-info');
-  return connection;
+  const siteUrl = yield select(getSetting('generalSite', 'url'));
+  const autodiscovery = yield select(getSetting('connection', 'autodiscovery'));
+  if (autodiscovery) {
+    try {
+      options.connection = yield call(Wpapi.discover, `${cors ? CorsAnywhere : ''}${siteUrl}`);
+    } catch (e) {
+      const apiUrl = `${siteUrl.replace(/\/$/, '')}/?rest_route=`;
+      options.connection = new Wpapi({ endpoint: `${cors ? CorsAnywhere : ''}${apiUrl}` });
+    }
+  } else {
+    const apiUrl = `${siteUrl.replace(/\/$/, '')}/?rest_route=`;
+    options.connection = new Wpapi({ endpoint: `${cors ? CorsAnywhere : ''}${apiUrl}` });
+  }
+  options.typesToEndpoints = yield call(typesToEndpointsSaga);
 }
 
-export const getList = ({ connection, listType, listId, singleType, page }) => {
-  const endpoint = typesToEndpoints(singleType);
+export const getList = ({ connection, type, id, page, perPage, typesToEndpoints }) => {
+  const endpoint = type === 'latest' ? typesToEndpoints(id) : typesToEndpoints('post');
   const params = { _embed: true };
-  if (['category', 'tag', 'author'].includes(listType)) params[typesToParams(listType)] = listId;
+  if (perPage !== 10) params.per_page = perPage;
+
+  if (['category', 'tag', 'author'].includes(type)) {
+    params[typesToParams(type)] = id;
+  }
+
   let query = connection[endpoint]().page(page);
+
   forOwn(params, (value, key) => {
     query = query.param(key, value);
   });
+
   return query;
 };
 
-export const getSingle = ({ connection, singleType, singleId }) =>
-  connection[typesToEndpoints(singleType)]()
-    .id(singleId)
+export const getEntity = ({ connection, type, id, typesToEndpoints }) =>
+  connection[typesToEndpoints(type)]()
+    .id(id)
     .embed();
 
-export const getCustom = ({ connection, singleType, page, params }) => {
-  let query = connection[typesToEndpoints(singleType)]()
+export const getCustom = ({ connection, type, page, params, typesToEndpoints }) => {
+  let query = connection[typesToEndpoints(type)]()
     .page(page)
     .embed();
+
   forOwn(params, (value, key) => {
     query = query.param(key, value);
   });
+
   return query;
 };
 
-export const listRequested = connection =>
-  function* listRequestedSaga({ listType, listId = null, page = 1 }) {
-    const singleType = 'post';
-    if (!['latest', 'category', 'tag', 'author'].includes(listType))
+export const listRequested = options =>
+  function* listRequestedSaga({ list }) {
+    const { type, id, page } = list;
+
+    if (!options.connection) {
+      yield take(actionTypes.CONNECTION_INITIALIZED);
+    }
+    const { connection, typesToEndpoints } = options;
+
+    if (!['latest', 'category', 'tag', 'author'].includes(type)) {
       throw new Error(
         'Custom taxonomies should retrieve their custom post types first. NOT IMPLEMENTED.',
       );
+    }
+
+    const perPage = yield select(dep('build', 'selectors', 'getPerPage'));
     try {
-      const response = yield call(getList, { connection, listType, listId, singleType, page });
+      const response = yield call(getList, {
+        connection,
+        type,
+        id,
+        page,
+        perPage,
+        typesToEndpoints,
+      });
       const { entities, result } = normalize(response, schemas.list);
       const totalEntities = response._paging ? parseInt(response._paging.total, 10) : 0;
       const totalPages = response._paging ? parseInt(response._paging.totalPages, 10) : 0;
       const total = { entities: totalEntities, pages: totalPages };
+
       yield put(
         actions.listSucceed({
+          list,
           entities,
-          result: result.map(item => item.id),
-          listType,
-          listId,
-          page,
+          result,
           total,
-          endpoint: getList({ connection, listType, listId, singleType, page }).toString(),
+          endpoint: getList({ connection, type, id, page, perPage, typesToEndpoints }).toString(),
         }),
       );
     } catch (error) {
       yield put(
         actions.listFailed({
-          listType,
-          listId,
-          page,
+          list,
           error,
-          endpoint: getList({ connection, listType, listId, singleType, page }).toString(),
+          endpoint: getList({ connection, type, id, page, perPage, typesToEndpoints }).toString(),
         }),
       );
     }
   };
 
-export const singleRequested = connection =>
-  function* singleRequestedSaga({ singleType, singleId }) {
+export const entityRequested = options =>
+  function* entityRequestedSaga({ entity }) {
+    const { type, id } = entity;
+
+    if (!options.connection) {
+      yield take(actionTypes.CONNECTION_INITIALIZED);
+    }
+    const { connection, typesToEndpoints } = options;
+
     try {
-      const response = yield call(getSingle, { connection, singleType, singleId });
-      const { entities } = normalize(response, schemas.single);
+      const response = yield call(getEntity, { connection, type, id, typesToEndpoints });
+      const { entities } = normalize(response, schemas.entity);
       yield put(
-        actions.singleSucceed({
-          singleType,
-          singleId,
+        actions.entitySucceed({
+          entity,
           entities,
-          endpoint: getSingle({ connection, singleType, singleId }).toString(),
+          endpoint: getEntity({ connection, type, id, typesToEndpoints }).toString(),
         }),
       );
     } catch (error) {
       yield put(
-        actions.singleFailed({
-          singleType,
-          singleId,
+        actions.entityFailed({
+          entity,
           error,
-          endpoint: getSingle({ connection, singleType, singleId }).toString(),
+          endpoint: getEntity({ connection, type, id, typesToEndpoints }).toString(),
         }),
       );
     }
   };
 
-export const customRequested = connection =>
-  function* customRequestedSaga({ url, name, singleType, page, params }) {
+export const customRequested = options =>
+  function* customRequestedSaga({ url, custom, params }) {
+    const { type, page } = custom;
+
+    if (!options.connection) {
+      yield take(actionTypes.CONNECTION_INITIALIZED);
+    }
+    const { connection, typesToEndpoints } = options;
+
     try {
-      const response = yield call(getCustom, { connection, singleType, page, params });
+      const response = yield call(getCustom, { connection, type, page, params, typesToEndpoints });
       const { entities, result } = normalize(response, schemas.list);
       const totalEntities = response._paging ? parseInt(response._paging.total, 10) : 0;
       const totalPages = response._paging ? parseInt(response._paging.totalPages, 10) : 0;
       const total = { entities: totalEntities, pages: totalPages };
+
       yield put(
         actions.customSucceed({
+          custom,
           url,
-          name,
-          singleType,
           total,
-          page,
           params,
-          result: result.map(item => item.id),
+          result,
           entities,
-          endpoint: getCustom({ connection, singleType, page, params }).toString(),
+          endpoint: getCustom({ connection, type, page, params, typesToEndpoints }).toString(),
         }),
       );
     } catch (error) {
       yield put(
         actions.customFailed({
+          custom,
           url,
-          name,
-          singleType,
           params,
-          page,
           error,
-          endpoint: getCustom({ connection, singleType, page, params }).toString(),
+          endpoint: getCustom({ connection, type, page, params, typesToEndpoints }).toString(),
         }),
       );
     }
   };
 
 export const routeChangeSucceed = stores =>
-  function* routeChangeSucceedSaga(action) {
-    if (action.selected.listType) {
-      const { selected: { listType, listId, page } } = action;
-      const listPage = stores.connection.list[listType][listId].page[page - 1];
+  function* routeChangeSucceedSaga({ selectedItem }) {
+    const { connection } = stores;
+    const { type, id, page } = selectedItem;
+    if (page) {
+      const listPage = connection.list(type, id).page(page);
+
       if (listPage.ready === false && listPage.fetching === false) {
-        yield put(actions.listRequested({ listType, listId, page }));
+        yield put(actions.listRequested({ list: selectedItem }));
       }
-    } else if (action.selected.singleId) {
-      const { selected: { singleType, singleId } } = action;
-      const entity = stores.connection.single[singleType][singleId];
+    } else {
+      const entity = connection.entity(type, id);
+
       if (entity.ready === false && entity.fetching === false) {
-        yield put(actions.singleRequested({ singleType, singleId }));
+        yield put(actions.entityRequested({ entity: selectedItem }));
       }
-    }
-  };
-
-export const siteInfoRequested = connection =>
-  function* siteInfoRequestedSaga() {
-    try {
-      const data = yield call([connection, 'siteInfo']);
-
-      yield put(
-        actions.siteInfoSucceed({
-          home: data.home,
-          perPage: data.perPage,
-        }),
-      );
-    } catch (error) {
-      yield put(actions.siteInfoFailed({ error }));
     }
   };
 
 export default function* wpApiWatchersSaga(stores) {
-  const connection = yield call(initConnection);
+  const options = { connection: null };
   yield all([
     takeEvery(actionTypes.ROUTE_CHANGE_SUCCEED, routeChangeSucceed(stores)),
-    takeEvery(actionTypes.SINGLE_REQUESTED, singleRequested(connection)),
-    takeEvery(actionTypes.LIST_REQUESTED, listRequested(connection)),
-    takeEvery(actionTypes.CUSTOM_REQUESTED, customRequested(connection)),
-    takeEvery(actionTypes.SITE_INFO_REQUESTED, siteInfoRequested(connection)),
+    takeEvery(actionTypes.ENTITY_REQUESTED, entityRequested(options)),
+    takeEvery(actionTypes.LIST_REQUESTED, listRequested(options)),
+    takeEvery(actionTypes.CUSTOM_REQUESTED, customRequested(options)),
   ]);
+  yield call(initConnection, options);
+  yield put(actions.connectionInitialized());
 }

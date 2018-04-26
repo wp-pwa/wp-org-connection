@@ -25,6 +25,7 @@ export const getHeadContent = headString => {
       r[c.key] = c.value;
       return r;
     }, {}),
+    children: node.tagName === 'title' ? node.children : null,
   }));
 
   // Reduces parsed content to an object with an array of <meta> elements
@@ -71,6 +72,8 @@ export const getHeadContent = headString => {
     if (passesWhitelist) {
       // Initializes tag array.
       if (!result[node.tagName]) result[node.tagName] = [];
+
+      // Checks if node should be unique and if already exists in result.
       if (node.unique && getIndex(node, result) >= 0) return result;
 
       // Pushes node into tag array.
@@ -79,24 +82,36 @@ export const getHeadContent = headString => {
 
     return result;
   }, {});
-  return Object.keys(content).reduce((result, key) => result.concat(content[key]), []);
+
+  return {
+    title: content.title && content.title[0].children && content.title[0].children[0].content,
+    content: Object.keys(content).reduce((result, key) => {
+      if (key !== 'title') return result.concat(content[key]);
+      return result;
+    }, []),
+  };
 };
 
 export const headContentRequested = () =>
   function* headContentRequestedSaga() {
     try {
       let url = yield select(dep('build', 'selectors', 'getInitialUrl'));
+      if (!url) throw new Error('No initial url found.');
       if (!urlparser(url).host || !urlparser(url).protocol) {
-        const siteUrl =  yield select(dep('settings', 'selectorCreators', 'getSetting')('generalSite', 'url'));
+        const siteUrl = yield select(
+          dep('settings', 'selectorCreators', 'getSetting')('generalSite', 'url'),
+        );
         const { protocol, host } = urlparser(siteUrl);
         url = format({ protocol, host, pathname: url });
       }
       const site = yield request(url);
       const headString = site.text.match(/<\s*?head[^>]*>([\w\W]+)<\s*?\/\s*?head\s*?>/)[1];
-      const headContent = getHeadContent(headString);
+      const { title, content } = getHeadContent(headString);
+
       yield put(
         actions.headContentSucceed({
-          content: headContent,
+          title,
+          content,
         }),
       );
     } catch (error) {

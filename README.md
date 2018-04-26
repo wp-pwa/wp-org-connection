@@ -8,6 +8,41 @@ Finally, use `npm run start:pwa` to start the development environment.
 
 ## Changelog
 
+#### 1.5.7
+
+- Start using wp:contentmedia
+- Add patch until AA updates their purge
+
+#### 1.5.6
+
+- Fix head content being rendered each time
+
+#### 1.5.5
+
+- Last fixes for connection
+
+
+#### 1.5.4
+
+- iOS bug fixes of new connection
+
+#### 1.5.3
+
+- More refactoring and bug fixes of new connection
+
+#### 1.5.2
+
+- Refactor MST implementation
+- Some bug fixes
+
+#### 1.5.1
+
+- Several bug fixes to new connection
+
+#### 1.5.0
+
+- New connection
+
 #### 1.4.1
 
 - Go back to initialUrl and check if it's complete

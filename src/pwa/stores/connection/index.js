@@ -1,165 +1,156 @@
-import { types } from 'mobx-state-tree';
-import { Any } from './single';
-import { List } from './list';
-import { Custom } from './custom';
+import { types, resolveIdentifier } from 'mobx-state-tree';
+import { join } from './utils';
+import Entity from './entity';
+import entityShape from './entity-shape';
+import listShape from './list-shape';
+import customShape from './custom-shape';
+import List from './list';
+import Custom from './custom';
 import SiteInfo from './site-info';
-import { extractList } from '../router';
 import * as actionTypes from '../../actionTypes';
 import convert from '../../converters';
 
 export const props = {
-  singleMap: types.optional(types.map(types.map(Any)), {}),
-  listMap: types.optional(types.map(types.map(List)), {}),
-  customMap: types.optional(types.map(Custom), {}),
+  entities: types.optional(types.map(Entity), {}),
+  lists: types.optional(types.map(List), {}),
+  customs: types.optional(types.map(Custom), {}),
   siteInfo: types.optional(SiteInfo, {}),
+  typeRelations: types.optional(types.map(types.string), {
+    post: 'single',
+    page: 'single',
+    category: 'taxonomy',
+    tag: 'taxonomy',
+  }),
 };
 
-export const views = self => {
-  const single = {};
-  const list = {};
-  const custom = {};
-  return {
-    get single() {
-      self.singleMap.keys().forEach(type => {
-        single[type] = single[type] || [];
-        self.singleMap
-          .get(type)
-          .keys()
-          .forEach(index => {
-            if (!single[type][index]) single[type][index] = self.singleMap.get(type).get(index);
-          });
-      });
-      return single;
-    },
-    get list() {
-      self.listMap.keys().forEach(type => {
-        list[type] = list[type] || {};
-        self.listMap
-          .get(type)
-          .keys()
-          .forEach(index => {
-            if (!list[type][index]) list[type][index] = self.listMap.get(type).get(index);
-          });
-      });
-      return list;
-    },
-    get custom() {
-      self.customMap.keys().forEach(name => {
-        if (!custom[name]) custom[name] = self.customMap.get(name);
-      });
-      return custom;
-    },
-  };
-};
-
-const addEntity = ({ self, type, id, entity, ready = false, fetching = false }) => {
-  const singleType =
-    type === 'post' ? (entity && entity.type) || type : (entity && entity.taxonomy) || type;
-  // Init the first map (type) if it's not initializated yet.
-  if (!self.singleMap.get(singleType)) self.singleMap.set(singleType, {});
-  // Create entity if it's not set and convert it if it's set.
-  let newEntity;
-  if (entity) {
-    if (entity.error) ready = false;
-    newEntity = entity.error ? { id, type: singleType, error: entity.error } : convert(entity);
-  } else {
-    newEntity =
-      !entity && (type === 'post' || type === 'page' || type === 'media')
-        ? { id, type: singleType }
-        : { id, taxonomy: singleType };
-  }
-  // Populate the state with the entity value and set both fetching and ready.
-  const node = self.singleMap.get(singleType).get(id) || {};
-  self.singleMap.get(singleType).set(id, Object.assign(node, { ...newEntity, fetching, ready }));
-};
-
-const addEntities = ({ self, entities, ready = true, fetching = false }) => {
-  // Update the entities.
-  Object.entries(entities).map(([type, single]) => {
-    Object.entries(single).map(([id, entity]) => {
-      addEntity({ self, type, id: parseInt(id, 10), entity, ready, fetching });
-    });
-  });
-};
-
-export const init = ({ self, listType, listId, page, singleType, singleId, fetching }) => {
-  if (listType) {
-    // Init the first map (type) if it's not initializated yet.
-    if (!self.listMap.get(listType)) self.listMap.set(listType, {});
-    const list = self.listMap.get(listType);
-    if (!list.get(listId)) list.set(listId, {});
-    list.get(listId).fetching = fetching;
-    if (!list.get(listId).pageMap.get(page - 1)) list.get(listId).pageMap.set(page - 1, {});
-    list.get(listId).pageMap.get(page - 1).fetching = fetching;
-    if (listType !== 'latest') addEntity({ self, type: listType, id: listId, fetching });
-  } else {
-    addEntity({ self, type: singleType, id: singleId, fetching });
-  }
-};
+export const views = self => ({
+  entity(type, id) {
+    const mstId = join(type, id);
+    return resolveIdentifier(Entity, self, mstId) || entityShape(type, id);
+  },
+  list(type, id) {
+    const mstId = join(type, id);
+    return resolveIdentifier(List, self, mstId) || listShape(type, id);
+  },
+  custom(name) {
+    return resolveIdentifier(Custom, self, name) || customShape(name);
+  },
+});
 
 export const actions = self => ({
-  [actionTypes.SINGLE_REQUESTED]({ singleType, singleId }) {
-    init({ self, singleType, singleId, fetching: true });
+  getEntity({ type, id }) {
+    const mstId = join(type, id);
+    if (!self.entities.get(mstId)) self.entities.set(mstId, { mstId, type, id });
+    return self.entities.get(mstId);
   },
-  [actionTypes.SINGLE_FAILED]({ singleType, singleId }) {
-    // Populate the state with the entity value and set both fetching and ready.
-    self.single[singleType][singleId].fetching = false;
+  fetchingEntity({ type, id }) {
+    const item = self.getEntity({ type, id });
+    item.fetching = true;
   },
-  [actionTypes.SINGLE_SUCCEED]({ entities }) {
-    addEntities({ self, entities, ready: true, fetching: false });
+  addEntity({ entity }) {
+    // Don't add entity if it doesn't have id or type
+    if (!entity.id || !entity.type) return;
+    const item = self.getEntity({ type: entity.type, id: entity.id });
+    if (!item.entity) item.entity = convert(entity);
+    item.fetching = false;
   },
-  [actionTypes.LIST_REQUESTED]({ listType, listId, page }) {
-    init({ self, listType, listId, page, fetching: true });
+  addEntities({ entities }) {
+    Object.entries(entities).map(([, single]) => {
+      Object.entries(single).map(([, entity]) => {
+        self.addEntity({ entity });
+      });
+    });
   },
-  [actionTypes.LIST_SUCCEED]({ listType, listId, page, total, result, entities }) {
-    // Update the list.
-    const list = self.listMap.get(listType).get(listId);
-    list.fetching = false;
-    list.ready = true;
-    list.pageMap.get(page - 1).fetching = false;
-    list.pageMap.get(page - 1).ready = true;
-    list.pageMap.get(page - 1).entities = result;
-    if (total) list.total = total;
-    addEntities({ self, entities, ready: true, fetching: false });
-    if (self.context) extractList({ listType, listId, page, result }, self.context);
+  getList({ type, id }) {
+    const mstId = join(type, id);
+    if (!self.lists.get(mstId)) self.lists.set(mstId, { mstId, type, id });
+    return self.lists.get(mstId);
   },
-  [actionTypes.LIST_FAILED]({ listType, listId, page }) {
-    // Populate the state with the entity value and set both fetching and ready.
-    self.listMap.get(listType).get(listId).fetching = false;
-    self.listMap
-      .get(listType)
-      .get(listId)
-      .pageMap.get(page - 1).fetching = false;
+  getListPage({ type, id, page }) {
+    const list = self.getList({ type, id });
+    if (!list.pageMap.get(page)) list.pageMap.set(page, { page });
+    return list.pageMap.get(page);
   },
-  [actionTypes.CUSTOM_REQUESTED]({ url, params, name, page }) {
-    if (!self.customMap.get(name)) self.customMap.set(name, {});
-    const custom = self.customMap.get(name);
-    custom.fetching = true;
-    custom.url = url;
+  fetchingListPage({ type, id, page }) {
+    const item = self.getListPage({ type, id, page });
+    item.fetching = true;
+  },
+  addListPage({ type, id, page, result, entities, total }) {
+    self.addEntities({ entities });
+    const mstResults = result.map(res => `${entities[res.schema][res.id].type}_${res.id}`);
+    const item = self.getListPage({ type, id, page });
+    item.results = mstResults;
+    item.fetching = false;
+    if (total) {
+      const list = self.getList({ type, id });
+      if (total.entities) list.total.entities = total.entities;
+      if (total.pages) list.total.pages = total.pages;
+    }
+  },
+  getCustom({ name }) {
+    if (!self.customs.get(name)) self.customs.set(name, { name });
+    return self.customs.get(name);
+  },
+  getCustomPage({ name, page = 1 }) {
+    const custom = self.getCustom({ name });
+    if (!custom.pageMap.get(page)) custom.pageMap.set(page, { page });
+    return custom.pageMap.get(page);
+  },
+  fetchingCustomPage({ name, page = 1 }) {
+    const item = self.getCustomPage({ name, page });
+    item.fetching = true;
+  },
+  addCustomPage({ name, page = 1, result, entities, total }) {
+    self.addEntities({ entities });
+    const mstResults = result.map(res => `${entities[res.schema][res.id].type}_${res.id}`);
+    const item = self.getCustomPage({ name, page });
+    item.results = mstResults;
+    item.fetching = false;
+    if (total) {
+      const list = self.getCustom({ name });
+      if (total.entities) list.total.entities = total.entities;
+      if (total.pages) list.total.pages = total.pages;
+    }
+  },
+  [actionTypes.ENTITY_REQUESTED]({ entity: { type, id } }) {
+    self.fetchingEntity({ type, id });
+  },
+  [actionTypes.ENTITY_SUCCEED]({ entities }) {
+    self.addEntities({ entities });
+  },
+  [actionTypes.ENTITY_FAILED]({ entity: { type, id } }) {
+    const item = self.getEntity({ type, id });
+    item.fetching = false;
+  },
+  [actionTypes.LIST_REQUESTED]({ list: { type, id, page } }) {
+    self.fetchingListPage({ type, id, page });
+  },
+  [actionTypes.LIST_SUCCEED]({ list: { type, id, page }, total, result, entities }) {
+    self.addListPage({ type, id, page, total, result, entities });
+  },
+  [actionTypes.LIST_FAILED]({ list: { type, id, page } }) {
+    const item = self.getListPage({ type, id, page });
+    item.fetching = false;
+  },
+  [actionTypes.CUSTOM_REQUESTED]({ custom: { name, page }, params, url }) {
+    const custom = self.getCustom({ name });
     custom.params = params;
-    if (!custom.pageMap.get(page - 1)) custom.pageMap.set(page - 1, {});
-    custom.pageMap.get(page - 1).fetching = true;
+    custom.url = url;
+    const item = self.getCustomPage({ name, page });
+    item.fetching = true;
   },
-  [actionTypes.CUSTOM_SUCCEED]({ name, page, total, result, entities }) {
-    const custom = self.customMap.get(name);
-    custom.fetching = false;
-    custom.ready = true;
-    custom.pageMap.get(page - 1).fetching = false;
-    custom.pageMap.get(page - 1).ready = true;
-    custom.pageMap.get(page - 1).entities = result;
-    custom.total = total;
-    addEntities({ self, entities, ready: true, fetching: false });
+  [actionTypes.CUSTOM_SUCCEED]({ custom: { name, page }, total, result, entities }) {
+    self.addCustomPage({ name, page, total, result, entities });
   },
-  [actionTypes.CUSTOM_FAILED]({ name, page }) {
-    const custom = self.customMap.get(name);
-    custom.fetching = false;
-    custom.pageMap.get(page - 1).fetching = false;
+  [actionTypes.CUSTOM_FAILED]({ custom: { name, page } }) {
+    const item = self.getCustomPage({ name, page });
+    item.fetching = false;
   },
-  [actionTypes.SITE_INFO_SUCCEED]({ home, perPage }) {
-    self.siteInfo.home = { ...home, url: home.url || '/' };
-    self.siteInfo.perPage = perPage;
-  },
-  [actionTypes.HEAD_CONTENT_SUCCEED]({ content }) {
+  [actionTypes.HEAD_CONTENT_SUCCEED]({ title, content }) {
+    self.siteInfo.headTitle = title;
     self.siteInfo.headContent = content;
+  },
+  [actionTypes.SITE_INFO_SUCCEED]({ perPage }) {
+    self.siteInfo.perPage = perPage;
   },
 });

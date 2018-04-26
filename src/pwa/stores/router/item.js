@@ -1,115 +1,89 @@
-import { types, getParent, getRoot, getType } from 'mobx-state-tree';
+import { when } from 'mobx';
+import { types, getParent } from 'mobx-state-tree';
 
-import Id from './id';
-import Connection from '../';
-
-const getConnection = node => {
-  const root = getRoot(node);
-  return getType(root) === Connection ? root : null;
-};
-
-export const List = types
-  .model('List')
+const BaseItem = types
+  .model('BaseItem')
   .props({
-    _id: Id,
-    route: 'list',
-    listType: types.optional(types.string, 'latest'),
-    listId: types.optional(types.union(types.string, types.number), 'post'),
-    page: types.optional(types.number, 1),
+    mstId: types.identifier(types.string),
+    type: types.string,
+    id: types.union(types.string, types.number),
     visited: false,
   })
   .views(self => ({
-    get ready() {
-      return !!self.list && self.list.ready;
+    get connection() {
+      return getParent(self, 6);
     },
+    get entity() {
+      return self.connection.entity(self.type, self.id);
+    },
+    get ready() {
+      return self.entity.ready;
+    },
+    get isSingle() {
+      return !self.page;
+    },
+    get isList() {
+      return !!self.page;
+    },
+    get parentColumn() {
+      return getParent(self, 2);
+    },
+    get parentContext() {
+      return getParent(self, 4);
+    },
+    get nextItem() {
+      const items = getParent(self);
+      const index = items.indexOf(self);
+      return index === items.length - 1
+        ? self.column.nextColumn && self.column.nextColumn.items[0]
+        : items[index + 1];
+    },
+    isExtracted() {
+      return false;
+    },
+    get isSelected() {
+      return getParent(self, 4).selectedItem === self;
+    },
+  }));
+
+export const List = BaseItem.named('List')
+  .props({
+    page: types.number,
+    extract: types.maybe(types.enumeration('Extract', ['horizontal', 'vertical'])),
+  })
+  .views(self => ({
     get list() {
-      const { type, id, page } = self;
-      const connection = getConnection(self);
-      const listType = connection && connection.list[type]
-      const list = listType && listType[id];
-      return (list && list.page[page - 1]) || null;
+      return self.connection.list(self.type, self.id);
     },
-    get single() {
-      const { type, id } = self;
-      if (type === 'latest') return null;
-      const connection = getConnection(self);
-      const singleType = connection && connection.single[type]
-      return singleType && singleType[id] || null;
+    isExtracted(direction) {
+      direction = direction ? [direction] : ['horizontal', 'vertical'];
+      return direction.includes(self.extract);
     },
-    get type() {
-      return self.listType;
-    },
-    get id() {
-      return self.listId;
-    },
-    get column() {
-      try {
-        return getParent(self, 2);
-      } catch (e) {
-        return null;
-      }
-    },
-    get next() {
-      let items;
-      try {
-        items = getParent(self);
-      } catch (e) {
-        return null;
-      }
-      const index = items.indexOf(self);
+  }))
+  .actions(self => {
+    let stopReplace = null;
+    return {
+      beforeDestroy: () => {
+        stopReplace();
+      },
+      afterCreate: () => {
+        if (['horizontal', 'vertical'].includes(self.extract)) {
+          const { type, id, page, extract } = self;
+          stopReplace = when(
+            () => self.connection.list(type, id).page(page).ready === true,
+            () => {
+              self.parentContext.replaceExtractedList({ type, id, page, extract });
+            },
+          );
+        }
+      },
+    };
+  });
 
-      return index === items.length - 1
-        ? self.column.next && self.column.next.items[0]
-        : items[index + 1];
-    },
-  }));
+export const Single = BaseItem.named('Single').props({
+  fromList: types.optional(types.frozen, { type: 'latest', id: 'post', page: 1 }),
+});
 
-export const Single = types
-  .model('Single')
-  .props({
-    _id: Id,
-    route: 'single',
-    singleType: types.string,
-    singleId: types.maybe(types.number),
-    fromList: types.optional(List, { listType: 'latest', listId: 'post' }),
-    visited: false,
-  })
-  .views(self => ({
-    get ready() {
-      return !!self.single && self.single.ready;
-    },
-    get single() {
-      const { type, id } = self;
-      const connection = getConnection(self);
-      const singleType = connection && connection.single[type]
-      return singleType && singleType[id] || null;
-    },
-    get type() {
-      return self.singleType;
-    },
-    get id() {
-      return self.singleId;
-    },
-    get column() {
-      try {
-        return getParent(self, 2);
-      } catch (e) {
-        return null;
-      }
-    },
-    get next() {
-      let items;
-      try {
-        items = getParent(self);
-      } catch (e) {
-        return null;
-      }
-      const index = items.indexOf(self);
+const Item = types.union(({ page }) => (page ? List : Single), List, Single);
 
-      return index === items.length - 1
-        ? self.column.next && self.column.next.items[0]
-        : items[index + 1];
-    },
-  }));
-
-export const Item = types.union(({ listType }) => (listType ? List : Single), List, Single);
+export default Item;

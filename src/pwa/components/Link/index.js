@@ -84,29 +84,29 @@ injectGlobal`
 
 class Link extends Component {
   static propTypes = {
-    selected: PropTypes.shape({
-      singleType: PropTypes.string,
-      singleId: PropTypes.oneOfType([PropTypes.number, PropTypes.string]),
-      listType: PropTypes.string,
-      listId: PropTypes.oneOfType([PropTypes.number, PropTypes.string]),
-      page: PropTypes.number,
-    }).isRequired,
+    type: PropTypes.string.isRequired,
+    id: PropTypes.oneOfType([PropTypes.number, PropTypes.string]).isRequired,
+    page: PropTypes.number,
     context: PropTypes.shape({}),
     method: PropTypes.string,
-    event: PropTypes.shape({}),
+    eventCategory: PropTypes.string,
+    eventAction: PropTypes.string,
     children: PropTypes.node.isRequired,
     href: PropTypes.string.isRequired,
     routeChangeRequested: PropTypes.func.isRequired,
   };
 
   static defaultProps = {
+    page: null,
     method: 'push',
     context: null,
-    event: null,
+    eventCategory: null,
+    eventAction: null,
   };
 
-  constructor(props, ...rest) {
-    super(props, ...rest);
+  constructor() {
+    super();
+
     this.linkClicked = this.linkClicked.bind(this);
   }
 
@@ -120,8 +120,26 @@ class Link extends Component {
     e.preventDefault();
     NProgress.start();
 
-    const { routeChangeRequested, selected, context, method, event } = this.props;
-    setTimeout(() => routeChangeRequested({ selected, context, method, event }), 100);
+    const {
+      routeChangeRequested,
+      type,
+      id,
+      page,
+      context,
+      method,
+      eventCategory,
+      eventAction,
+    } = this.props;
+    setTimeout(
+      () =>
+        routeChangeRequested({
+          selectedItem: { type, id, page },
+          context,
+          method,
+          event: { category: eventCategory, action: eventAction },
+        }),
+      100,
+    );
   }
 
   render() {
@@ -136,17 +154,8 @@ const mapDispatchToProps = dispatch => ({
 });
 
 export default compose(
-  inject(({ connection }, { selected }) => {
-    const { singleType, singleId, listType, listId, page } = selected;
-    const type = listType || singleType;
-    const id = listType ? listId : singleId;
-    let href = connection.siteInfo.home.url;
-    if (type === 'latest') href = page > 1 ? `${href}/page/${page}` : href;
-    else if (connection.single[type] && connection.single[type][id]) {
-      const { link } = connection.single[type][id];
-      href = page > 1 ? link.paged(1) : link.url;
-    }
-    return { href };
-  }),
+  inject(({ connection }, { type, id, page }) => ({
+    href: page ? connection.entity(type, id).pagedLink(page) : connection.entity(type, id).link,
+  })),
   connect(null, mapDispatchToProps),
 )(Link);
