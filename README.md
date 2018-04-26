@@ -8,6 +8,11 @@ Finally, use `npm run start:pwa` to start the development environment.
 
 ## Changelog
 
+#### 1.5.7
+
+- Start using wp:contentmedia
+- Add patch until AA updates their purge
+
 #### 1.5.6
 
 - Fix head content being rendered each time
