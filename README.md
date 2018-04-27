@@ -8,6 +8,10 @@ Finally, use `npm run start:pwa` to start the development environment.
 
 ## Changelog
 
+#### 1.5.9
+
+- Revert AA patch
+
 #### 1.5.8
 
 - Add parameter to override perPage
