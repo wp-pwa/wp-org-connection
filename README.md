@@ -8,6 +8,10 @@ Finally, use `npm run start:pwa` to start the development environment.
 
 ## Changelog
 
+#### 1.5.10
+
+- Populate endpoints without autodiscover
+
 #### 1.5.9
 
 - Revert AA patch
