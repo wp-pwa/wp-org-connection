@@ -96,6 +96,7 @@ export const getCustom = ({ connection, type, page, params, typesToEndpoints }) 
 
 export const listRequested = options =>
   function* listRequestedSaga({ list }) {
+    const getSetting = dep('settings', 'selectorCreators', 'getSetting');
     const { type, id, page } = list;
 
     if (!options.connection) {
@@ -108,8 +109,9 @@ export const listRequested = options =>
         'Custom taxonomies should retrieve their custom post types first. NOT IMPLEMENTED.',
       );
     }
-
-    const perPage = yield select(dep('build', 'selectors', 'getPerPage'));
+    const perPage =
+      (yield select(getSetting('connection', 'perPage'))) ||
+      (yield select(dep('build', 'selectors', 'getPerPage')));
     try {
       const response = yield call(getList, {
         connection,
