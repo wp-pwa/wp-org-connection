@@ -8,6 +8,11 @@ Finally, use `npm run start:pwa` to start the development environment.
 
 ## Changelog
 
+#### 1.5.8
+
+- Add parameter to override perPage
+- Add headMeta to authors
+
 #### 1.5.7
 
 - Start using wp:contentmedia
