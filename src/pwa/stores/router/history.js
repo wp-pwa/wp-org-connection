@@ -12,6 +12,7 @@ export const actions = self => {
   const contextKeys = [];
   let currentKey = 0;
   let disposer = null;
+  let goingToPreviousContext = false;
 
   const isBrowser = typeof window !== 'undefined' && !window.process;
 
@@ -34,7 +35,11 @@ export const actions = self => {
     const generator = selectedContext ? selectedContext.generator : null;
 
     // If context has changed, stores the key in contextKeys
-    if (state.context && (!selectedContext || !isEqual(generator, state.context))) {
+    if (
+      !goingToPreviousContext &&
+      state.context &&
+      (!selectedContext || !isEqual(generator, state.context))
+    ) {
       contextKeys.push(historyKeys[currentKey]);
     }
 
@@ -74,8 +79,17 @@ export const actions = self => {
 
   return {
     [actionTypes.PREVIOUS_CONTEXT_REQUESTED]: () => {
-      const pagesBack = currentKey - historyKeys.indexOf(contextKeys.pop());
-      if (pagesBack <= currentKey) self.history.go(-pagesBack);
+      if (contextKeys.length < 1) return;
+
+      const [previousContextKey] = contextKeys.slice(-1);
+
+      const pagesBack = currentKey - historyKeys.indexOf(previousContextKey);
+      if (pagesBack <= currentKey) {
+        goingToPreviousContext = true;
+        contextKeys.pop();
+        self.history.go(-pagesBack);
+        goingToPreviousContext = false;
+      }
     },
     [actionTypes.ROUTE_CHANGE_REQUESTED]: action => {
       const { selectedItem, method } = action;
