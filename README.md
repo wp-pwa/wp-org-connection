@@ -8,6 +8,10 @@ Finally, use `npm run start:pwa` to start the development environment.
 
 ## Changelog
 
+#### 1.5.11
+
+- Fix bug with goToPreviousContext
+
 #### 1.5.10
 
 - Populate endpoints without autodiscover
