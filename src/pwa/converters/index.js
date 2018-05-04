@@ -47,6 +47,9 @@ export const author = entity => ({
   description: entity.description,
   link: entity.link,
   avatar: entity.avatar_urls && Object.values(entity.avatar_urls)[0].replace(/\?.*$/, ''),
+  headMeta: {
+    title: (entity.yoast_meta && entity.yoast_meta.title) || entity.name,
+  },
 });
 
 export const media = entity => ({

@@ -4,6 +4,9 @@ exports[`Convert author 1`] = `
 Object {
   "avatar": "https://secure.gravatar.com/avatar/eebc7d67bdc645559fd6634e0335a42b",
   "description": "Alan is a WordPress enthusiast who enjoys travelling, music and pizza.",
+  "headMeta": Object {
+    "title": "Alan Martin",
+  },
   "id": 4,
   "link": "https://demo.worona.org/author/alan/",
   "mst": "author",

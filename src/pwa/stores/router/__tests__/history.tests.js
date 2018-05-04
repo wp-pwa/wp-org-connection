@@ -176,4 +176,42 @@ describe('Connection › Router > History', () => {
     const actionPreviousContext = redux.dispatch.mock.calls[3][0];
     expect(actionPreviousContext.method).toBe('backward');
   });
+
+  test('goes to previous context twice', async () => {
+    const store = Connection.create({}, { store: redux });
+
+    const galleryContext = {
+      columns: [[{ type: 'media', id: 193 }]],
+    };
+
+    store[actionTypes.ROUTE_CHANGE_REQUESTED](routeRequest('post', 63, 'push'));
+    const succeedPost63 = redux.dispatch.mock.calls[0][0];
+    store[actionTypes.ROUTE_CHANGE_SUCCEED](succeedPost63);
+
+    store[actionTypes.ROUTE_CHANGE_REQUESTED](routeRequest('post', 60, 'push'));
+    const succeedPost60 = redux.dispatch.mock.calls[1][0];
+    store[actionTypes.ROUTE_CHANGE_SUCCEED](succeedPost60);
+
+    store[actionTypes.ROUTE_CHANGE_REQUESTED](routeRequest('media', 193, 'push', galleryContext));
+    const succeedMedia193 = redux.dispatch.mock.calls[2][0];
+    store[actionTypes.ROUTE_CHANGE_SUCCEED](succeedMedia193);
+
+    expect(store.history.length).toBe(4);
+
+    store[actionTypes.PREVIOUS_CONTEXT_REQUESTED]({});
+    const { pathname: pathname60, search: search60 } = store.history.location;
+    expect(pathname60 + search60).toBe('/?p=60');
+    expect(store.history.length).toBe(4);
+
+    const actionContextPost60 = redux.dispatch.mock.calls[3][0];
+    expect(actionContextPost60.method).toBe('backward');
+
+    store[actionTypes.PREVIOUS_CONTEXT_REQUESTED]({});
+    const { pathname: pathname63, search: search63 } = store.history.location;
+    expect(pathname63 + search63).toBe('/?p=63');
+    expect(store.history.length).toBe(4);
+
+    const actionContextPost63 = redux.dispatch.mock.calls[4][0];
+    expect(actionContextPost63.method).toBe('backward');
+  });
 });

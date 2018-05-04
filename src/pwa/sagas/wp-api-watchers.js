@@ -11,9 +11,7 @@ import { typesToParams } from '../constants';
 
 const CorsAnywhere = 'https://cors.worona.io/';
 
-function* typesToEndpointsSaga() {
-  const getSetting = dep('settings', 'selectorCreators', 'getSetting');
-  const cptEndpoints = yield select(getSetting('connection', 'cptEndpoints')) || {};
+const typesToEndpoints = type => {
   const endpoints = {
     post: 'posts',
     page: 'pages',
@@ -25,10 +23,8 @@ function* typesToEndpointsSaga() {
     taxonomy: 'taxonomies',
     postType: 'types',
     postStatus: 'statuses',
-    ...cptEndpoints,
   };
-
-  return type => endpoints[type] || type;
+  return endpoints[type] || type;
 }
 
 export function* isCors() {
@@ -43,6 +39,7 @@ export function* isCors() {
 export function* initConnection(options) {
   const cors = yield call(isCors);
   const getSetting = dep('settings', 'selectorCreators', 'getSetting');
+  const cptEndpoints = (yield select(getSetting('connection', 'cptEndpoints'))) || {};
   const siteUrl = yield select(getSetting('generalSite', 'url'));
   const autodiscovery = yield select(getSetting('connection', 'autodiscovery'));
   if (autodiscovery) {
@@ -55,14 +52,18 @@ export function* initConnection(options) {
   } else {
     const apiUrl = `${siteUrl.replace(/\/$/, '')}/?rest_route=`;
     options.connection = new Wpapi({ endpoint: `${cors ? CorsAnywhere : ''}${apiUrl}` });
+    Object.entries(cptEndpoints).forEach(([type, endpoint]) => {
+      options.connection[type] = options.connection.registerRoute(
+        'wp/v2',
+        `/${endpoint}/(?P<id>\\d+)`,
+      );
+    });
   }
-  options.typesToEndpoints = yield call(typesToEndpointsSaga);
 }
 
-export const getList = ({ connection, type, id, page, perPage, typesToEndpoints }) => {
+export const getList = ({ connection, type, id, page, perPage }) => {
   const endpoint = type === 'latest' ? typesToEndpoints(id) : typesToEndpoints('post');
-  const params = { _embed: true };
-  if (perPage !== 10) params.per_page = perPage;
+  const params = { _embed: true, per_page: perPage };
 
   if (['category', 'tag', 'author'].includes(type)) {
     params[typesToParams(type)] = id;
@@ -77,12 +78,12 @@ export const getList = ({ connection, type, id, page, perPage, typesToEndpoints 
   return query;
 };
 
-export const getEntity = ({ connection, type, id, typesToEndpoints }) =>
+export const getEntity = ({ connection, type, id }) =>
   connection[typesToEndpoints(type)]()
     .id(id)
     .embed();
 
-export const getCustom = ({ connection, type, page, params, typesToEndpoints }) => {
+export const getCustom = ({ connection, type, page, params }) => {
   let query = connection[typesToEndpoints(type)]()
     .page(page)
     .embed();
@@ -96,20 +97,22 @@ export const getCustom = ({ connection, type, page, params, typesToEndpoints }) 
 
 export const listRequested = options =>
   function* listRequestedSaga({ list }) {
+    const getSetting = dep('settings', 'selectorCreators', 'getSetting');
     const { type, id, page } = list;
 
     if (!options.connection) {
       yield take(actionTypes.CONNECTION_INITIALIZED);
     }
-    const { connection, typesToEndpoints } = options;
+    const { connection } = options;
 
     if (!['latest', 'category', 'tag', 'author'].includes(type)) {
       throw new Error(
         'Custom taxonomies should retrieve their custom post types first. NOT IMPLEMENTED.',
       );
     }
-
-    const perPage = yield select(dep('build', 'selectors', 'getPerPage'));
+    const perPage =
+      (yield select(getSetting('connection', 'perPage'))) ||
+      (yield select(dep('build', 'selectors', 'getPerPage')));
     try {
       const response = yield call(getList, {
         connection,
@@ -117,7 +120,6 @@ export const listRequested = options =>
         id,
         page,
         perPage,
-        typesToEndpoints,
       });
       const { entities, result } = normalize(response, schemas.list);
       const totalEntities = response._paging ? parseInt(response._paging.total, 10) : 0;
@@ -130,7 +132,7 @@ export const listRequested = options =>
           entities,
           result,
           total,
-          endpoint: getList({ connection, type, id, page, perPage, typesToEndpoints }).toString(),
+          endpoint: getList({ connection, type, id, page, perPage }).toString(),
         }),
       );
     } catch (error) {
@@ -138,7 +140,7 @@ export const listRequested = options =>
         actions.listFailed({
           list,
           error,
-          endpoint: getList({ connection, type, id, page, perPage, typesToEndpoints }).toString(),
+          endpoint: getList({ connection, type, id, page, perPage }).toString(),
         }),
       );
     }
@@ -151,16 +153,16 @@ export const entityRequested = options =>
     if (!options.connection) {
       yield take(actionTypes.CONNECTION_INITIALIZED);
     }
-    const { connection, typesToEndpoints } = options;
+    const { connection } = options;
 
     try {
-      const response = yield call(getEntity, { connection, type, id, typesToEndpoints });
+      const response = yield call(getEntity, { connection, type, id });
       const { entities } = normalize(response, schemas.entity);
       yield put(
         actions.entitySucceed({
           entity,
           entities,
-          endpoint: getEntity({ connection, type, id, typesToEndpoints }).toString(),
+          endpoint: getEntity({ connection, type, id }).toString(),
         }),
       );
     } catch (error) {
@@ -168,7 +170,7 @@ export const entityRequested = options =>
         actions.entityFailed({
           entity,
           error,
-          endpoint: getEntity({ connection, type, id, typesToEndpoints }).toString(),
+          endpoint: getEntity({ connection, type, id }).toString(),
         }),
       );
     }
@@ -181,10 +183,10 @@ export const customRequested = options =>
     if (!options.connection) {
       yield take(actionTypes.CONNECTION_INITIALIZED);
     }
-    const { connection, typesToEndpoints } = options;
+    const { connection } = options;
 
     try {
-      const response = yield call(getCustom, { connection, type, page, params, typesToEndpoints });
+      const response = yield call(getCustom, { connection, type, page, params });
       const { entities, result } = normalize(response, schemas.list);
       const totalEntities = response._paging ? parseInt(response._paging.total, 10) : 0;
       const totalPages = response._paging ? parseInt(response._paging.totalPages, 10) : 0;
@@ -198,7 +200,7 @@ export const customRequested = options =>
           params,
           result,
           entities,
-          endpoint: getCustom({ connection, type, page, params, typesToEndpoints }).toString(),
+          endpoint: getCustom({ connection, type, page, params }).toString(),
         }),
       );
     } catch (error) {
@@ -208,7 +210,7 @@ export const customRequested = options =>
           url,
           params,
           error,
-          endpoint: getCustom({ connection, type, page, params, typesToEndpoints }).toString(),
+          endpoint: getCustom({ connection, type, page, params }).toString(),
         }),
       );
     }
