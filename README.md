@@ -8,6 +8,10 @@ Finally, use `npm run start:pwa` to start the development environment.
 
 ## Changelog
 
+#### 1.5.12
+
+- Add version to JS
+
 #### 1.5.11
 
 - Fix bug with goToPreviousContext
