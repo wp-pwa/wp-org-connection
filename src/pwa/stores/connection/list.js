@@ -25,7 +25,7 @@ export const Page = types
   .model('Page')
   .props({
     page: types.identifier(types.number),
-    fetching: false,
+    isFetching: false,
     results: types.optional(types.array(types.string), observable([])),
   })
   .views(self => ({
@@ -38,7 +38,7 @@ export const Page = types
         return self.connection.entity(type, id);
       }));
     },
-    get ready() {
+    get isReady() {
       return self.results.length > 0;
     },
     get total() {
@@ -56,14 +56,14 @@ const List = types
     total: types.optional(Total, {}),
   })
   .views(self => ({
-    get ready() {
+    get isReady() {
       return values(self.pageMap)
-        .map(page => page.ready)
+        .map(page => page.isReady)
         .reduce((acc, cur) => acc || cur, false);
     },
-    get fetching() {
+    get isFetching() {
       return values(self.pageMap)
-        .map(page => page.fetching)
+        .map(page => page.isFetching)
         .reduce((acc, cur) => acc || cur, false);
     },
     get entities() {

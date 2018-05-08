@@ -12,7 +12,7 @@ import entityShape, {
 } from './entity-shape';
 
 const common = self => ({
-  get ready() {
+  get isReady() {
     return !!self.entity;
   },
   get link() {
@@ -28,34 +28,34 @@ const common = self => ({
 
 const single = self => ({
   get title() {
-    return self.ready ? self.entity.title : '';
+    return self.isReady ? self.entity.title : '';
   },
   get creationDate() {
-    return self.ready ? self.entity.creationDate : null;
+    return self.isReady ? self.entity.creationDate : null;
   },
   get modificationDate() {
-    return self.ready ? self.entity.modificationDate : null;
+    return self.isReady ? self.entity.modificationDate : null;
   },
   get slug() {
-    return self.ready ? self.entity.slug : '';
+    return self.isReady ? self.entity.slug : '';
   },
   get content() {
-    return self.ready ? self.entity.content : '';
+    return self.isReady ? self.entity.content : '';
   },
   get excerpt() {
-    return self.ready ? self.entity.excerpt : '';
+    return self.isReady ? self.entity.excerpt : '';
   },
   get target() {
-    return self.ready ? self.entity.target : '';
+    return self.isReady ? self.entity.target : '';
   },
   get parent() {
-    return self.ready && self.entity.parent
+    return self.isReady && self.entity.parent
       ? resolveIdentifier(Entity, self, join(self.type, self.entity.parent)) ||
           entityShape(self.type, self.entity.parent)
       : null;
   },
   taxonomy(type) {
-    return self.ready && self.entity.taxonomies && self.entity.taxonomies[type]
+    return self.isReady && self.entity.taxonomies && self.entity.taxonomies[type]
       ? observable(
           self.entity.taxonomies[type].map(
             id => resolveIdentifier(Entity, self, join(type, id)) || entityShape(type, id),
@@ -65,71 +65,71 @@ const single = self => ({
   },
   get media() {
     return {
-      featured: (self.ready &&
+      featured: (self.isReady &&
         self.entity.media.featured &&
         resolveIdentifier(Entity, self, join('media', self.entity.media.featured))) ||
-      mediaShape('media', self.ready && self.entity.media.featured),
-      content: (self.ready ? self.entity.media.content : observable([])),
+      mediaShape('media', self.isReady && self.entity.media.featured),
+      content: (self.isReady ? self.entity.media.content : observable([])),
     };
   },
   get hasFeaturedMedia() {
-    return self.ready && self.entity.media.featured !== null;
+    return self.isReady && self.entity.media.featured !== null;
   },
   get author() {
     return (
-      (self.ready &&
+      (self.isReady &&
         self.entity.author &&
         resolveIdentifier(Entity, self, join('author', self.entity.author))) ||
-      authorShape('author', self.ready && self.entity.author)
+      authorShape('author', self.isReady && self.entity.author)
     );
   },
   get headMeta() {
-    return (self.ready && self.entity.headMeta) || headMetaShape;
+    return (self.isReady && self.entity.headMeta) || headMetaShape;
   },
 });
 
 const taxonomy = self => ({
   get name() {
-    return self.ready ? self.entity.name : '';
+    return self.isReady ? self.entity.name : '';
   },
 });
 
 const media = self => ({
   get caption() {
-    return self.ready ? self.entity.caption : '';
+    return self.isReady ? self.entity.caption : '';
   },
   get description() {
-    return self.ready ? self.entity.description : '';
+    return self.isReady ? self.entity.description : '';
   },
   get alt() {
-    return self.ready ? self.entity.alt : '';
+    return self.isReady ? self.entity.alt : '';
   },
   get mimeType() {
-    return self.ready ? self.entity.mimeType : '';
+    return self.isReady ? self.entity.mimeType : '';
   },
   get mediaType() {
-    return self.ready ? self.entity.mediaType : '';
+    return self.isReady ? self.entity.mediaType : '';
   },
   get original() {
-    return self.ready ? self.entity.original : originalShape;
+    return self.isReady ? self.entity.original : originalShape;
   },
   get sizes() {
-    return self.ready && self.entity.sizes ? self.entity.sizes : observable([]);
+    return self.isReady && self.entity.sizes ? self.entity.sizes : observable([]);
   },
 });
 
 const author = self => ({
   get name() {
-    return self.ready ? self.entity.name : '';
+    return self.isReady ? self.entity.name : '';
   },
   get slug() {
-    return self.ready ? self.entity.slug : '';
+    return self.isReady ? self.entity.slug : '';
   },
   get description() {
-    return self.ready ? self.entity.description : '';
+    return self.isReady ? self.entity.description : '';
   },
   get avatar() {
-    return self.ready ? self.entity.avatar : '';
+    return self.isReady ? self.entity.avatar : '';
   },
 });
 
@@ -139,7 +139,7 @@ const Entity = types
     mstId: types.identifier(types.string), // post_60, category_7, movie_34, author_3, media_35
     type: types.string,
     id: types.union(types.number, types.string),
-    fetching: false,
+    isFetching: false,
     entity: types.frozen,
   })
   .views(common)

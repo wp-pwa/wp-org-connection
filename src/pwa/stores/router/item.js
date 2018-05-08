@@ -7,7 +7,7 @@ const BaseItem = types
     mstId: types.identifier(types.string),
     type: types.string,
     id: types.union(types.string, types.number),
-    visited: false,
+    hasBeenVisited: false,
   })
   .views(self => ({
     get connection() {
@@ -16,8 +16,8 @@ const BaseItem = types
     get entity() {
       return self.connection.entity(self.type, self.id);
     },
-    get ready() {
-      return self.entity.ready;
+    get isReady() {
+      return self.entity.isReady;
     },
     get isSingle() {
       return !self.page;
@@ -70,7 +70,7 @@ export const List = BaseItem.named('List')
         if (['horizontal', 'vertical'].includes(self.extract)) {
           const { type, id, page, extract } = self;
           stopReplace = when(
-            () => self.connection.list(type, id).page(page).ready === true,
+            () => self.connection.list(type, id).page(page).isReady === true,
             () => {
               self.parentContext.replaceExtractedList({ type, id, page, extract });
             },

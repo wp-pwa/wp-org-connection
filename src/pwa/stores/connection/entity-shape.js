@@ -26,8 +26,8 @@ const common = (type, id) => ({
   mstId: join(type, id),
   id: id || null,
   type: type || null,
-  ready: false,
-  fetching: false,
+  isReady: false,
+  isFetching: false,
   get link() {
     return link(type, id);
   },

@@ -33,8 +33,8 @@ beforeEach(() => {
 
 describe('Connection › Actions', () => {
   test('Entity: Action Succeed', () => {
-    expect(connection.entity('post', 60).ready).toBe(false);
-    expect(connection.entity('post', 60).fetching).toBe(false);
+    expect(connection.entity('post', 60).isReady).toBe(false);
+    expect(connection.entity('post', 60).isFetching).toBe(false);
     connection[actionTypes.ENTITY_REQUESTED](
       actions.entityRequested({
         entity: {
@@ -43,8 +43,8 @@ describe('Connection › Actions', () => {
         },
       }),
     );
-    expect(connection.entity('post', 60).ready).toBe(false);
-    expect(connection.entity('post', 60).fetching).toBe(true);
+    expect(connection.entity('post', 60).isReady).toBe(false);
+    expect(connection.entity('post', 60).isFetching).toBe(true);
     connection[actionTypes.ENTITY_SUCCEED](
       actions.entitySucceed({
         entity: {
@@ -54,7 +54,7 @@ describe('Connection › Actions', () => {
         entities: entitiesFromPost60,
       }),
     );
-    expect(connection.entity('post', 60).ready).toBe(true);
+    expect(connection.entity('post', 60).isReady).toBe(true);
     expect(connection.entity('post', 60).title).toBe('The Beauties of Gullfoss');
     expect(connection.entity('media', 62).title).toBe('iceland');
     expect(connection.entity('author', 4).name).toBe('Alan Martin');
@@ -77,15 +77,15 @@ describe('Connection › Actions', () => {
         },
       }),
     );
-    expect(connection.entity('post', 60).ready).toBe(false);
-    expect(connection.entity('post', 60).fetching).toBe(false);
+    expect(connection.entity('post', 60).isReady).toBe(false);
+    expect(connection.entity('post', 60).isFetching).toBe(false);
   });
 
   test('List: Action Succeed', () => {
-    expect(connection.list('category', 7).ready).toBe(false);
-    expect(connection.list('category', 7).fetching).toBe(false);
-    expect(connection.list('category', 7).page(1).ready).toBe(false);
-    expect(connection.list('category', 7).page(1).fetching).toBe(false);
+    expect(connection.list('category', 7).isReady).toBe(false);
+    expect(connection.list('category', 7).isFetching).toBe(false);
+    expect(connection.list('category', 7).page(1).isReady).toBe(false);
+    expect(connection.list('category', 7).page(1).isFetching).toBe(false);
     connection[actionTypes.LIST_REQUESTED](
       actions.listRequested({
         list: {
@@ -95,10 +95,10 @@ describe('Connection › Actions', () => {
         },
       }),
     );
-    expect(connection.list('category', 7).ready).toBe(false);
-    expect(connection.list('category', 7).fetching).toBe(true);
-    expect(connection.list('category', 7).page(1).ready).toBe(false);
-    expect(connection.list('category', 7).page(1).fetching).toBe(true);
+    expect(connection.list('category', 7).isReady).toBe(false);
+    expect(connection.list('category', 7).isFetching).toBe(true);
+    expect(connection.list('category', 7).page(1).isReady).toBe(false);
+    expect(connection.list('category', 7).page(1).isFetching).toBe(true);
     connection[actionTypes.LIST_SUCCEED](
       actions.listSucceed({
         list: {
@@ -110,19 +110,19 @@ describe('Connection › Actions', () => {
         entities: entitiesFromCategory,
       }),
     );
-    expect(connection.list('category', 7).ready).toBe(true);
-    expect(connection.list('category', 7).fetching).toBe(false);
-    expect(connection.list('category', 7).page(1).ready).toBe(true);
-    expect(connection.list('category', 7).page(1).fetching).toBe(false);
+    expect(connection.list('category', 7).isReady).toBe(true);
+    expect(connection.list('category', 7).isFetching).toBe(false);
+    expect(connection.list('category', 7).page(1).isReady).toBe(true);
+    expect(connection.list('category', 7).page(1).isFetching).toBe(false);
   });
 
   test('List: Action Succeed with 2 pages (reverse order)', () => {
-    expect(connection.list('category', 7).ready).toBe(false);
-    expect(connection.list('category', 7).fetching).toBe(false);
-    expect(connection.list('category', 7).page(1).ready).toBe(false);
-    expect(connection.list('category', 7).page(1).fetching).toBe(false);
-    expect(connection.list('category', 7).page(2).ready).toBe(false);
-    expect(connection.list('category', 7).page(2).fetching).toBe(false);
+    expect(connection.list('category', 7).isReady).toBe(false);
+    expect(connection.list('category', 7).isFetching).toBe(false);
+    expect(connection.list('category', 7).page(1).isReady).toBe(false);
+    expect(connection.list('category', 7).page(1).isFetching).toBe(false);
+    expect(connection.list('category', 7).page(2).isReady).toBe(false);
+    expect(connection.list('category', 7).page(2).isFetching).toBe(false);
     connection[actionTypes.LIST_REQUESTED](
       actions.listRequested({
         list: {
@@ -132,12 +132,12 @@ describe('Connection › Actions', () => {
         },
       }),
     );
-    expect(connection.list('category', 7).ready).toBe(false);
-    expect(connection.list('category', 7).fetching).toBe(true);
-    expect(connection.list('category', 7).page(1).ready).toBe(false);
-    expect(connection.list('category', 7).page(1).fetching).toBe(false);
-    expect(connection.list('category', 7).page(2).ready).toBe(false);
-    expect(connection.list('category', 7).page(2).fetching).toBe(true);
+    expect(connection.list('category', 7).isReady).toBe(false);
+    expect(connection.list('category', 7).isFetching).toBe(true);
+    expect(connection.list('category', 7).page(1).isReady).toBe(false);
+    expect(connection.list('category', 7).page(1).isFetching).toBe(false);
+    expect(connection.list('category', 7).page(2).isReady).toBe(false);
+    expect(connection.list('category', 7).page(2).isFetching).toBe(true);
     connection[actionTypes.LIST_SUCCEED](
       actions.listSucceed({
         list: {
@@ -149,12 +149,12 @@ describe('Connection › Actions', () => {
         entities: entitiesFromCategoryPage2,
       }),
     );
-    expect(connection.list('category', 7).ready).toBe(true);
-    expect(connection.list('category', 7).fetching).toBe(false);
-    expect(connection.list('category', 7).page(1).ready).toBe(false);
-    expect(connection.list('category', 7).page(1).fetching).toBe(false);
-    expect(connection.list('category', 7).page(2).ready).toBe(true);
-    expect(connection.list('category', 7).page(2).fetching).toBe(false);
+    expect(connection.list('category', 7).isReady).toBe(true);
+    expect(connection.list('category', 7).isFetching).toBe(false);
+    expect(connection.list('category', 7).page(1).isReady).toBe(false);
+    expect(connection.list('category', 7).page(1).isFetching).toBe(false);
+    expect(connection.list('category', 7).page(2).isReady).toBe(true);
+    expect(connection.list('category', 7).page(2).isFetching).toBe(false);
     connection[actionTypes.LIST_REQUESTED](
       actions.listRequested({
         list: {
@@ -164,12 +164,12 @@ describe('Connection › Actions', () => {
         },
       }),
     );
-    expect(connection.list('category', 7).ready).toBe(true);
-    expect(connection.list('category', 7).fetching).toBe(true);
-    expect(connection.list('category', 7).page(1).ready).toBe(false);
-    expect(connection.list('category', 7).page(1).fetching).toBe(true);
-    expect(connection.list('category', 7).page(2).ready).toBe(true);
-    expect(connection.list('category', 7).page(2).fetching).toBe(false);
+    expect(connection.list('category', 7).isReady).toBe(true);
+    expect(connection.list('category', 7).isFetching).toBe(true);
+    expect(connection.list('category', 7).page(1).isReady).toBe(false);
+    expect(connection.list('category', 7).page(1).isFetching).toBe(true);
+    expect(connection.list('category', 7).page(2).isReady).toBe(true);
+    expect(connection.list('category', 7).page(2).isFetching).toBe(false);
     connection[actionTypes.LIST_SUCCEED](
       actions.listSucceed({
         list: {
@@ -181,12 +181,12 @@ describe('Connection › Actions', () => {
         entities: entitiesFromCategory,
       }),
     );
-    expect(connection.list('category', 7).ready).toBe(true);
-    expect(connection.list('category', 7).fetching).toBe(false);
-    expect(connection.list('category', 7).page(1).ready).toBe(true);
-    expect(connection.list('category', 7).page(1).fetching).toBe(false);
-    expect(connection.list('category', 7).page(2).ready).toBe(true);
-    expect(connection.list('category', 7).page(2).fetching).toBe(false);
+    expect(connection.list('category', 7).isReady).toBe(true);
+    expect(connection.list('category', 7).isFetching).toBe(false);
+    expect(connection.list('category', 7).page(1).isReady).toBe(true);
+    expect(connection.list('category', 7).page(1).isFetching).toBe(false);
+    expect(connection.list('category', 7).page(2).isReady).toBe(true);
+    expect(connection.list('category', 7).page(2).isFetching).toBe(false);
   });
 
   test('List: Action Failed', () => {
@@ -208,10 +208,10 @@ describe('Connection › Actions', () => {
         },
       }),
     );
-    expect(connection.list('category', 7).ready).toBe(false);
-    expect(connection.list('category', 7).fetching).toBe(false);
-    expect(connection.list('category', 7).page(1).ready).toBe(false);
-    expect(connection.list('category', 7).page(1).fetching).toBe(false);
+    expect(connection.list('category', 7).isReady).toBe(false);
+    expect(connection.list('category', 7).isFetching).toBe(false);
+    expect(connection.list('category', 7).page(1).isReady).toBe(false);
+    expect(connection.list('category', 7).page(1).isFetching).toBe(false);
   });
 
   test('List: Throw an error if page is not provided', () => {
@@ -228,10 +228,10 @@ describe('Connection › Actions', () => {
   });
 
   test('Custom: Action Succeed', () => {
-    expect(connection.custom('test').ready).toBe(false);
-    expect(connection.custom('test').fetching).toBe(false);
-    expect(connection.custom('test').page(1).ready).toBe(false);
-    expect(connection.custom('test').page(1).fetching).toBe(false);
+    expect(connection.custom('test').isReady).toBe(false);
+    expect(connection.custom('test').isFetching).toBe(false);
+    expect(connection.custom('test').page(1).isReady).toBe(false);
+    expect(connection.custom('test').page(1).isFetching).toBe(false);
     const params = { a: 'b' };
     connection[actionTypes.CUSTOM_REQUESTED](
       actions.customRequested({
@@ -243,12 +243,12 @@ describe('Connection › Actions', () => {
         url: '/#test',
       }),
     );
-    expect(connection.custom('test').ready).toBe(false);
-    expect(connection.custom('test').fetching).toBe(true);
+    expect(connection.custom('test').isReady).toBe(false);
+    expect(connection.custom('test').isFetching).toBe(true);
     expect(connection.custom('test').params).toEqual(params);
     expect(connection.custom('test').url).toBe('/#test');
-    expect(connection.custom('test').page(1).ready).toBe(false);
-    expect(connection.custom('test').page(1).fetching).toBe(true);
+    expect(connection.custom('test').page(1).isReady).toBe(false);
+    expect(connection.custom('test').page(1).isFetching).toBe(true);
     connection[actionTypes.CUSTOM_SUCCEED](
       actions.customSucceed({
         custom: {
@@ -258,10 +258,10 @@ describe('Connection › Actions', () => {
         entities: entitiesFromCategory,
       }),
     );
-    expect(connection.custom('test').ready).toBe(true);
-    expect(connection.custom('test').fetching).toBe(false);
-    expect(connection.custom('test').page(1).ready).toBe(true);
-    expect(connection.custom('test').page(1).fetching).toBe(false);
+    expect(connection.custom('test').isReady).toBe(true);
+    expect(connection.custom('test').isFetching).toBe(false);
+    expect(connection.custom('test').page(1).isReady).toBe(true);
+    expect(connection.custom('test').page(1).isFetching).toBe(false);
   });
 
   test('Custom: Action Failed', () => {
@@ -275,10 +275,10 @@ describe('Connection › Actions', () => {
       }),
     );
     connection[actionTypes.CUSTOM_FAILED](actions.customFailed({ custom: { name: 'test' } }));
-    expect(connection.custom('test').ready).toBe(false);
-    expect(connection.custom('test').fetching).toBe(false);
-    expect(connection.custom('test').page(1).ready).toBe(false);
-    expect(connection.custom('test').page(1).fetching).toBe(false);
+    expect(connection.custom('test').isReady).toBe(false);
+    expect(connection.custom('test').isFetching).toBe(false);
+    expect(connection.custom('test').page(1).isReady).toBe(false);
+    expect(connection.custom('test').page(1).isFetching).toBe(false);
   });
 
   test('Custom: Throw an error if page is not provided', () => {

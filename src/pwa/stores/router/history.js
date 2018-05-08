@@ -66,9 +66,9 @@ export const actions = self => {
 
     // Updates url when the new item is ready
     const { type, id } = state.selectedItem;
-    if (!self.entity(type, id).ready) {
+    if (!self.entity(type, id).isReady) {
       disposer = when(
-        () => self.entity(type, id).ready,
+        () => self.entity(type, id).isReady,
         () => {
           const path = getPath(state.selectedItem);
           self.history.replace(path, state);

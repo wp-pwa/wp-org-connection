@@ -33,7 +33,7 @@ const Column = types
       return !!self.nextColumn;
     },
     get hasNonVisited() {
-      return !!self.items.find(item => item.visited === false);
+      return !!self.items.find(item => item.hasBeenVisited === false);
     },
     get index() {
       const columns = getParent(self);
