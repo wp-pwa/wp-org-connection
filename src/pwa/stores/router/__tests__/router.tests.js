@@ -232,7 +232,7 @@ describe('Connection › Router', () => {
     connection[actionTypes.ROUTE_CHANGE_SUCCEED](
       actions.routeChangeSucceed({ selectedItem: { type: 'category', id: 7, page: 1 } }),
     );
-    expect(connection.selectedItem.visited).toBe(true);
+    expect(connection.selectedItem.hasBeenVisited).toBe(true);
   });
 
   test('Current selected item and previous ones should be visited', () => {
@@ -251,13 +251,13 @@ describe('Connection › Router', () => {
     connection[actionTypes.ROUTE_CHANGE_SUCCEED](
       actions.routeChangeSucceed({ selectedItem: { type: 'post', id: 63 } }),
     );
-    expect(connection.selectedContext.getItem({ item: { type: 'post', id: 60 } }).visited).toBe(
+    expect(connection.selectedContext.getItem({ item: { type: 'post', id: 60 } }).hasBeenVisited).toBe(
       true,
     );
-    expect(connection.selectedContext.getItem({ item: { type: 'post', id: 63 } }).visited).toBe(
+    expect(connection.selectedContext.getItem({ item: { type: 'post', id: 63 } }).hasBeenVisited).toBe(
       true,
     );
-    expect(connection.selectedContext.getItem({ item: { type: 'post', id: 62 } }).visited).toBe(
+    expect(connection.selectedContext.getItem({ item: { type: 'post', id: 62 } }).hasBeenVisited).toBe(
       false,
     );
   });
@@ -284,7 +284,7 @@ describe('Connection › Router', () => {
     expect(connection.selectedItem).toBe(connection.contexts[0].columns[0].items[0]);
     expect(connection.selectedItem.id).toBe(63);
     expect(connection.selectedItem.nextItem.id).toBe(62);
-    expect(connection.selectedItem.nextItem.visited).toBe(true);
+    expect(connection.selectedItem.nextItem.hasBeenVisited).toBe(true);
     expect(connection.contexts[0].columns[1].items[0].id).toBe(60);
   });
 
@@ -310,7 +310,7 @@ describe('Connection › Router', () => {
     expect(connection.selectedColumn).toBe(connection.contexts[0].columns[1]);
     expect(connection.selectedItem).toBe(connection.contexts[0].columns[1].items[0]);
     expect(connection.selectedItem.nextItem.id).toBe(60);
-    expect(connection.selectedItem.nextItem.visited).toBe(true);
+    expect(connection.selectedItem.nextItem.hasBeenVisited).toBe(true);
   });
 
   test('Move selected single with previous context without selected', () => {
@@ -397,7 +397,7 @@ describe('Connection › Router', () => {
       }),
     );
     autorun(() => {
-      if (connection.selectedItem.ready) done();
+      if (connection.selectedItem.isReady) done();
     });
     connection[actionTypes.REPLACE_CONTEXT](
       actions.replaceContext({ context: { columns: [[{ type: 'post', id: 60 }]] } }),

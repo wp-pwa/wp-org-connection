@@ -45,14 +45,14 @@ export const actions = self => ({
   },
   fetchingEntity({ type, id }) {
     const item = self.getEntity({ type, id });
-    item.fetching = true;
+    item.isFetching = true;
   },
   addEntity({ entity }) {
     // Don't add entity if it doesn't have id or type
     if (!entity.id || !entity.type) return;
     const item = self.getEntity({ type: entity.type, id: entity.id });
     if (!item.entity) item.entity = convert(entity);
-    item.fetching = false;
+    item.isFetching = false;
   },
   addEntities({ entities }) {
     Object.entries(entities).map(([, single]) => {
@@ -73,14 +73,14 @@ export const actions = self => ({
   },
   fetchingListPage({ type, id, page }) {
     const item = self.getListPage({ type, id, page });
-    item.fetching = true;
+    item.isFetching = true;
   },
   addListPage({ type, id, page, result, entities, total }) {
     self.addEntities({ entities });
     const mstResults = result.map(res => `${entities[res.schema][res.id].type}_${res.id}`);
     const item = self.getListPage({ type, id, page });
     item.results = mstResults;
-    item.fetching = false;
+    item.isFetching = false;
     if (total) {
       const list = self.getList({ type, id });
       if (total.entities) list.total.entities = total.entities;
@@ -98,14 +98,14 @@ export const actions = self => ({
   },
   fetchingCustomPage({ name, page = 1 }) {
     const item = self.getCustomPage({ name, page });
-    item.fetching = true;
+    item.isFetching = true;
   },
   addCustomPage({ name, page = 1, result, entities, total }) {
     self.addEntities({ entities });
     const mstResults = result.map(res => `${entities[res.schema][res.id].type}_${res.id}`);
     const item = self.getCustomPage({ name, page });
     item.results = mstResults;
-    item.fetching = false;
+    item.isFetching = false;
     if (total) {
       const list = self.getCustom({ name });
       if (total.entities) list.total.entities = total.entities;
@@ -120,7 +120,7 @@ export const actions = self => ({
   },
   [actionTypes.ENTITY_FAILED]({ entity: { type, id } }) {
     const item = self.getEntity({ type, id });
-    item.fetching = false;
+    item.isFetching = false;
   },
   [actionTypes.LIST_REQUESTED]({ list: { type, id, page } }) {
     self.fetchingListPage({ type, id, page });
@@ -130,21 +130,21 @@ export const actions = self => ({
   },
   [actionTypes.LIST_FAILED]({ list: { type, id, page } }) {
     const item = self.getListPage({ type, id, page });
-    item.fetching = false;
+    item.isFetching = false;
   },
   [actionTypes.CUSTOM_REQUESTED]({ custom: { name, page }, params, url }) {
     const custom = self.getCustom({ name });
     custom.params = params;
     custom.url = url;
     const item = self.getCustomPage({ name, page });
-    item.fetching = true;
+    item.isFetching = true;
   },
   [actionTypes.CUSTOM_SUCCEED]({ custom: { name, page }, total, result, entities }) {
     self.addCustomPage({ name, page, total, result, entities });
   },
   [actionTypes.CUSTOM_FAILED]({ custom: { name, page } }) {
     const item = self.getCustomPage({ name, page });
-    item.fetching = false;
+    item.isFetching = false;
   },
   [actionTypes.HEAD_CONTENT_SUCCEED]({ title, content }) {
     self.siteInfo.headTitle = title;

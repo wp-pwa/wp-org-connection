@@ -173,10 +173,10 @@ Object {
         "page": 1,
         "type": "latest",
       },
+      "hasBeenVisited": true,
       "id": 60,
       "mstId": "0_post_60",
       "type": "post",
-      "visited": true,
     },
   },
 }
@@ -205,10 +205,10 @@ Object {
         "page": 1,
         "type": "latest",
       },
+      "hasBeenVisited": true,
       "id": 60,
       "mstId": "0_post_60",
       "type": "post",
-      "visited": true,
     },
   },
 }

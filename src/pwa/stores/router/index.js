@@ -37,7 +37,7 @@ export const actions = self => {
     }
     newItem.parentColumn.selectedItem = newItem;
     self.selectedContext.selectedColumn = newItem.parentColumn;
-    self.selectedItem.visited = true;
+    self.selectedItem.hasBeenVisited = true;
   };
 
   const selectItemInPreviousContext = ({ selectedItem }) => {
@@ -73,7 +73,7 @@ export const actions = self => {
     if (newItem.parentColumn !== self.selectedItem.parentColumn) {
       self.selectedContext.moveItem({ item });
     }
-    newItem.visited = true;
+    newItem.hasBeenVisited = true;
   };
 
   const addItemToSelectedColumn = ({ item }) => {
@@ -86,7 +86,7 @@ export const actions = self => {
       if (!Array.isArray(column))
         throw new Error('Columns should be arrays and not single objects.');
       const { type, id, page, extract } = column[0];
-      if (extract === 'horizontal' && self.list(type, id).page(page).ready) {
+      if (extract === 'horizontal' && self.list(type, id).page(page).isReady) {
         const items = self
           .list(type, id)
           .page(page)

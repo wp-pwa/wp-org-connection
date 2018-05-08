@@ -6,25 +6,25 @@ Object {
   "entity": Object {
     "avatar": "",
     "description": "",
-    "fetching": false,
     "headMeta": Object {
       "title": "",
     },
     "id": 7,
+    "isFetching": false,
+    "isReady": false,
     "link": "/?cat=7",
     "mstId": "category_7",
     "name": "",
     "pagedLink": [Function],
-    "ready": false,
     "slug": "",
     "target": "",
     "type": "category",
   },
-  "fetching": false,
   "id": 7,
+  "isFetching": false,
+  "isReady": false,
   "page": [Function],
   "pages": Array [],
-  "ready": false,
   "total": Object {
     "entities": null,
     "fetched": Object {
@@ -39,7 +39,7 @@ Object {
 
 exports[`Connection › List Rehydrates pageMap from a snapshot 1`] = `
 Object {
-  "fetching": false,
+  "isFetching": false,
   "page": 1,
   "results": Array [
     "post_57",

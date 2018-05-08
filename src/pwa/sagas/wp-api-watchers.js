@@ -223,13 +223,13 @@ export const routeChangeSucceed = stores =>
     if (page) {
       const listPage = connection.list(type, id).page(page);
 
-      if (listPage.ready === false && listPage.fetching === false) {
+      if (listPage.isReady === false && listPage.isFetching === false) {
         yield put(actions.listRequested({ list: selectedItem }));
       }
     } else {
       const entity = connection.entity(type, id);
 
-      if (entity.ready === false && entity.fetching === false) {
+      if (entity.isReady === false && entity.isFetching === false) {
         yield put(actions.entityRequested({ entity: selectedItem }));
       }
     }
