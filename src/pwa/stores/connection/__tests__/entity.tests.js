@@ -6,10 +6,12 @@ import * as connect from '../';
 import post60 from '../../../__tests__/post-60.json';
 import page184 from '../../../__tests__/page-with-subpage.json';
 import page211 from '../../../__tests__/page-211.json';
+import media581 from '../../../__tests__/media-581.json';
 import { entity } from '../../../schemas';
 import convert from '../../../converters';
 
 const { entities } = normalize(post60, entity);
+const { entities: entitiesFromMedia581 } = normalize(media581, entity);
 
 const Connection = types
   .model()
@@ -83,13 +85,29 @@ describe('Connection › Entity', () => {
     expect(connection.entity('latest', 'movie').pagedLink(3)).toBe('/page/3');
   });
 
-  test('Get media shape when entity is not ready', () => {
+  test("Get media shape when entity is not ready and entity hasn't been created", () => {
     expect(connection.entity('media', 62).ready).toBe(false);
     expect(connection.entity('media', 62).link).toBe('/?attachement_id=62');
     expect(() => connection.entity('media', 62).pagedLink(2)).toThrow();
     expect(connection.entity('media', 62).author.name).toBe('');
     expect(connection.entity('media', 62).original.height).toBe(null);
     expect(connection.entity('media', 62).sizes).toEqual(observable([]));
+  });
+
+  test.only('Get media shape when entity is not ready and entity has been created', () => {
+    connection.getEntity({ type: 'media', id: 62 });
+    expect(connection.entity('media', 62).ready).toBe(false);
+    expect(connection.entity('media', 62).link).toBe('/?attachement_id=62');
+    expect(() => connection.entity('media', 62).pagedLink(2)).toThrow();
+    expect(connection.entity('media', 62).author.name).toBe('');
+    expect(connection.entity('media', 62).original.height).toBe(null);
+    expect(connection.entity('media', 62).sizes).toEqual(observable([]));
+  });
+
+  test.only('Media original should be biggest size if any parameter is not present', () => {
+    connection.addEntity({ entity: entitiesFromMedia581.media[581] });
+    expect(connection.entity('media', 581).ready).toBe(true);
+    expect(connection.entity('media', 581).original.width).toBe(290);
   });
 
   test("Don't add an entity if it doesn't have type or id", () => {
