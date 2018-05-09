@@ -65,11 +65,12 @@ const single = self => ({
   },
   get media() {
     return {
-      featured: (self.isReady &&
-        self.entity.media.featured &&
-        resolveIdentifier(Entity, self, join('media', self.entity.media.featured))) ||
-      mediaShape('media', self.isReady && self.entity.media.featured),
-      content: (self.isReady ? self.entity.media.content : observable([])),
+      featured:
+        (self.ready &&
+          self.entity.media.featured &&
+          resolveIdentifier(Entity, self, join('media', self.entity.media.featured))) ||
+        mediaShape('media', self.ready && self.entity.media.featured),
+      content: self.ready ? self.entity.media.content : observable([]),
     };
   },
   get hasFeaturedMedia() {
@@ -111,7 +112,19 @@ const media = self => ({
     return self.isReady ? self.entity.mediaType : '';
   },
   get original() {
-    return self.isReady ? self.entity.original : originalShape;
+    if (self.ready) {
+      const { width, height, filename, url } = self.entity.original;
+
+      if (width && height && filename && url) return self.entity.original;
+
+      if (self.entity.sizes)
+        return self.entity.sizes.reduce((current, final) => {
+          if (current.width > final.width) return current;
+          return final;
+        });
+    }
+
+    return originalShape;
   },
   get sizes() {
     return self.isReady && self.entity.sizes ? self.entity.sizes : observable([]);
