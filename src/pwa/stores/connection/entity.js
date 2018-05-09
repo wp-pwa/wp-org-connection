@@ -115,12 +115,13 @@ const media = self => ({
     if (self.ready) {
       const { width, height, filename, url } = self.entity.original;
 
-      return width && height && filename && url
-        ? self.entity.original
-        : self.entity.sizes.reduce((current, final) => {
-            if (current.width > final.width) return current;
-            return final;
-          });
+      if (width && height && filename && url) return self.entity.original;
+
+      if (self.entity.sizes)
+        return self.entity.sizes.reduce((current, final) => {
+          if (current.width > final.width) return current;
+          return final;
+        });
     }
 
     return originalShape;
