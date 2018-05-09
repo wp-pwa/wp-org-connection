@@ -86,7 +86,7 @@ describe('Connection › Entity', () => {
   });
 
   test("Get media shape when entity is not ready and entity hasn't been created", () => {
-    expect(connection.entity('media', 62).ready).toBe(false);
+    expect(connection.entity('media', 62).isReady).toBe(false);
     expect(connection.entity('media', 62).link).toBe('/?attachement_id=62');
     expect(() => connection.entity('media', 62).pagedLink(2)).toThrow();
     expect(connection.entity('media', 62).author.name).toBe('');
@@ -96,7 +96,7 @@ describe('Connection › Entity', () => {
 
   test('Get media shape when entity is not ready and entity has been created', () => {
     connection.getEntity({ type: 'media', id: 62 });
-    expect(connection.entity('media', 62).ready).toBe(false);
+    expect(connection.entity('media', 62).isReady).toBe(false);
     expect(connection.entity('media', 62).link).toBe('/?attachement_id=62');
     expect(() => connection.entity('media', 62).pagedLink(2)).toThrow();
     expect(connection.entity('media', 62).author.name).toBe('');
@@ -106,7 +106,7 @@ describe('Connection › Entity', () => {
 
   test('Media original should be biggest size if any parameter is not present', () => {
     connection.addEntity({ entity: entitiesFromMedia581.media[581] });
-    expect(connection.entity('media', 581).ready).toBe(true);
+    expect(connection.entity('media', 581).isReady).toBe(true);
     expect(connection.entity('media', 581).original.width).toBe(290);
   });
 
