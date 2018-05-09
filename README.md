@@ -8,6 +8,14 @@ Finally, use `npm run start:pwa` to start the development environment.
 
 ## Changelog
 
+#### 1.5.14
+
+- Fixes error when media has no sizes
+
+#### 1.5.13
+
+- Populate original in media when none is present
+
 #### 1.5.12
 
 - Add version to JS
