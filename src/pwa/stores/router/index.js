@@ -106,7 +106,7 @@ export const actions = self => {
   };
 
   return {
-    [actionTypes.ROUTE_CHANGE_SUCCEED]: ({ selectedItem, method, context: actionContext }) => {
+    routeChangeSucceed: ({ selectedItem, method, context: actionContext }) => {
       // Initialize generator and context.
       let generator = actionContext || { columns: [[{ ...selectedItem }]] };
       const context = extractItemsInContext({
@@ -135,16 +135,16 @@ export const actions = self => {
         else createNewContext({ selectedItem, context, generator });
       }
     },
-    [actionTypes.MOVE_ITEM_TO_COLUMN]: ({ item }) => {
+    moveItemToColumn: ({ item }) => {
       moveItemToSelectedColumn({ item });
     },
-    [actionTypes.ADD_ITEM_TO_COLUMN]: ({ item }) => {
+    addItemToColumn: ({ item }) => {
       addItemToSelectedColumn({ item });
     },
-    [actionTypes.ADD_COLUMN_TO_CONTEXT]: ({ column }) => {
+    addColumnToContext: ({ column }) => {
       self.selectedContext.addColumn({ column });
     },
-    [actionTypes.REPLACE_CONTEXT]: ({ context }) => {
+    replaceContext: ({ context }) => {
       replaceSelectedContext({ context: extractItemsInContext({ context }), generator: context });
     },
   };
