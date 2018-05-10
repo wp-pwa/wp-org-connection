@@ -155,6 +155,7 @@ export const actions = self => ({
     const mstResults = result.map(res => `${entities[res.schema][res.id].type}_${res.id}`);
     const listPage = self.getListPage({ type, id, page });
     listPage.results = mstResults;
+    listPage.isFetching = false;
     if (total) {
       const list = self.getList({ type, id });
       if (total.entities) list.total.entities = total.entities;
