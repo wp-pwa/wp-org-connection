@@ -19,17 +19,9 @@ const Connection = types
   .views(connect.views)
   .actions(connect.actions);
 
-const Stores = types
-  .model()
-  .props({
-    connection: types.optional(Connection, {}),
-    settings: types.optional(types.frozen, {
-      connection: {},
-      generalSite: {
-        url: 'https://example.com',
-      },
-    }),
-  });
+const Stores = types.model().props({
+  connection: types.optional(Connection, {}),
+});
 
 let stores = null;
 let connection = null;
