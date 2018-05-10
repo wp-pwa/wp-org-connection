@@ -9,5 +9,4 @@ export default self => flow(function* ServerConnection() {
   });
   const awesome = yield asciifyPromise('Frontity!');
   console.log(awesome);
-  yield delay(3000);
 })
