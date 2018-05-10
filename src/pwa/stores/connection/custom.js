@@ -25,6 +25,11 @@ const Custom = types
         .map(page => page.isFetching)
         .reduce((acc, cur) => acc || cur, false);
     },
+    get hasFailed() {
+      return values(self.pageMap)
+        .map(page => page.hasFailed)
+        .reduce((acc, cur) => acc || cur, false);
+    },
     get entities() {
       const results = flatten(self.pages.map(page => page.results.peek()));
       return observable(

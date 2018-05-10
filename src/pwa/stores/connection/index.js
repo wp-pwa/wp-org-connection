@@ -1,5 +1,5 @@
-import Wpapi from 'wpapi';
-import { types, resolveIdentifier, flow, getParent } from 'mobx-state-tree';
+/* eslint-disable no-underscore-dangle */
+import { types, resolveIdentifier, flow, getParent, getEnv } from 'mobx-state-tree';
 import { normalize } from 'normalizr';
 import { join } from './utils';
 import Entity from './entity';
@@ -40,178 +40,171 @@ export const views = self => ({
   },
   get root() {
     return getParent(self);
-  }
+  },
 });
 
-export function* initConnection(options) {
-  const cors = yield call(isCors);
-  const getSetting = dep('settings', 'selectorCreators', 'getSetting');
-  const cptEndpoints = (yield select(getSetting('connection', 'cptEndpoints'))) || {};
-  const siteUrl = yield select(getSetting('generalSite', 'url'));
-  const autodiscovery = yield select(getSetting('connection', 'autodiscovery'));
-  if (autodiscovery) {
+export const actions = self => ({
+  fetchEntity: flow(function* fetch({ type, id }) {
+    // Don't fetch if entity is already fetching or ready.
+    if (self.entity(type, id).isReady || self.entity(type, id).isFetching) return;
+
+    const entity = self.getEntity({ type, id });
+    entity.isFetching = true;
+    entity.hasFailed = false;
     try {
-      options.connection = yield call(Wpapi.discover, `${cors ? CorsAnywhere : ''}${siteUrl}`);
-    } catch (e) {
-      const apiUrl = `${siteUrl.replace(/\/$/, '')}/?rest_route=`;
-      options.connection = new Wpapi({ endpoint: `${cors ? CorsAnywhere : ''}${apiUrl}` });
+      const { getEntity } = getEnv(self).connection;
+      const response = yield getEntity({ type, id });
+      const { entities } = normalize(response, schemas.entity);
+      self.addEntities({ entities });
+      entity.isFetching = false;
+    } catch (error) {
+      entity.isFetching = false;
+      entity.hasFailed = true;
     }
-  } else {
-    const apiUrl = `${siteUrl.replace(/\/$/, '')}/?rest_route=`;
-    options.connection = new Wpapi({ endpoint: `${cors ? CorsAnywhere : ''}${apiUrl}` });
-    Object.entries(cptEndpoints).forEach(([type, endpoint]) => {
-      options.connection[type] = options.connection.registerRoute(
-        'wp/v2',
-        `/${endpoint}/(?P<id>\\d+)`,
+  }),
+  fetchListPage: flow(function* fetch({ type, id, page }) {
+    if (!['latest', 'category', 'tag', 'author'].includes(type)) {
+      throw new Error(
+        'Custom taxonomies should retrieve their custom post types first. NOT IMPLEMENTED.',
       );
-    });
-  }
-}
+    }
+    // Don't fetch if list is already fetching or ready.
+    if (self.list(type, id).page(page).isReady || self.list(type, id).page(page).isFetching) return;
 
-export const actions = self => {
-  let api = null;
-
-  return {
-    initApi: () => {
-      const { cptEndpoints = {} } = self.root.settings.connection;
-      const siteUrl = self.root.settings.generalSite.url;
-      const apiUrl = `${siteUrl.replace(/\/$/, '')}/?rest_route=`;
-      api = new Wpapi({ endpoint: apiUrl });
-      Object.entries(cptEndpoints).forEach(([type, endpoint]) => {
-        api[type] = api.registerRoute(
-          'wp/v2',
-          `/${endpoint}/(?P<id>\\d+)`,
-        );
-      });
-    },
-    fetchEntity: flow(function* fetch({ type, id }) {
-      // Don't fetch if entity is already fetching or ready.
-      if (self.entity(type, id).isReady || self.entity(type, id)) return;
-      // Mark entity as fetching.
-      self.fetchingEntity({ type, id });
-      try {
-        const response = yield getEntity({ type, id });
-        const { entities } = normalize(response, schemas.entity);
-        self.addEntities({ entities });
-      } catch (error) {
-        const item = self.getEntity({ type, id });
-        item.isFetching = false;
-        item.hasFailedFetching = true;
-      }
-    }),
-    getEntity({ type, id }) {
-      const mstId = join(type, id);
-      if (!self.entities.get(mstId)) self.entities.set(mstId, { mstId, type, id });
-      return self.entities.get(mstId);
-    },
-    fetchingEntity({ type, id }) {
-      const item = self.getEntity({ type, id });
-      item.isFetching = true;
-    },
-    addEntity({ entity }) {
-      // Don't add entity if it doesn't have id or type
-      if (!entity.id || !entity.type) return;
-      const item = self.getEntity({ type: entity.type, id: entity.id });
-      if (!item.entity) item.entity = convert(entity);
-      item.isFetching = false;
-    },
-    addEntities({ entities }) {
-      Object.entries(entities).map(([, single]) => {
-        Object.entries(single).map(([, entity]) => {
-          self.addEntity({ entity });
-        });
-      });
-    },
-    getList({ type, id }) {
-      const mstId = join(type, id);
-      if (!self.lists.get(mstId)) self.lists.set(mstId, { mstId, type, id });
-      return self.lists.get(mstId);
-    },
-    getListPage({ type, id, page }) {
-      const list = self.getList({ type, id });
-      if (!list.pageMap.get(page)) list.pageMap.set(page, { page });
-      return list.pageMap.get(page);
-    },
-    fetchingListPage({ type, id, page }) {
-      const item = self.getListPage({ type, id, page });
-      item.isFetching = true;
-    },
-    addListPage({ type, id, page, result, entities, total }) {
-      self.addEntities({ entities });
-      const mstResults = result.map(res => `${entities[res.schema][res.id].type}_${res.id}`);
-      const item = self.getListPage({ type, id, page });
-      item.results = mstResults;
-      item.isFetching = false;
-      if (total) {
-        const list = self.getList({ type, id });
-        if (total.entities) list.total.entities = total.entities;
-        if (total.pages) list.total.pages = total.pages;
-      }
-    },
-    getCustom({ name }) {
-      if (!self.customs.get(name)) self.customs.set(name, { name });
-      return self.customs.get(name);
-    },
-    getCustomPage({ name, page = 1 }) {
-      const custom = self.getCustom({ name });
-      if (!custom.pageMap.get(page)) custom.pageMap.set(page, { page });
-      return custom.pageMap.get(page);
-    },
-    fetchingCustomPage({ name, page = 1 }) {
-      const item = self.getCustomPage({ name, page });
-      item.isFetching = true;
-    },
-    addCustomPage({ name, page = 1, result, entities, total }) {
-      self.addEntities({ entities });
-      const mstResults = result.map(res => `${entities[res.schema][res.id].type}_${res.id}`);
-      const item = self.getCustomPage({ name, page });
-      item.results = mstResults;
-      item.isFetching = false;
-      if (total) {
-        const list = self.getCustom({ name });
-        if (total.entities) list.total.entities = total.entities;
-        if (total.pages) list.total.pages = total.pages;
-      }
-    },
-    [actionTypes.ENTITY_REQUESTED]({ entity: { type, id } }) {
-      self.fetchingEntity({ type, id });
-    },
-    [actionTypes.ENTITY_SUCCEED]({ entities }) {
-
-    },
-    [actionTypes.ENTITY_FAILED]({ entity: { type, id } }) {
-
-    },
-    [actionTypes.LIST_REQUESTED]({ list: { type, id, page } }) {
-      self.fetchingListPage({ type, id, page });
-    },
-    [actionTypes.LIST_SUCCEED]({ list: { type, id, page }, total, result, entities }) {
+    const listPage = self.getListPage({ type, id, page });
+    listPage.isFetching = true;
+    listPage.hasFailed = false;
+    try {
+      const perPage = self.root.settings.connection.perPage || self.root.settings.build.perPage;
+      const { getListPage } = getEnv(self).connection;
+      const response = yield getListPage({ type, id, page, perPage });
+      const { entities, result } = normalize(response, schemas.list);
+      const totalEntities = response._paging ? parseInt(response._paging.total, 10) : 0;
+      const totalPages = response._paging ? parseInt(response._paging.totalPages, 10) : 0;
+      const total = { entities: totalEntities, pages: totalPages };
       self.addListPage({ type, id, page, total, result, entities });
-    },
-    [actionTypes.LIST_FAILED]({ list: { type, id, page } }) {
-      const item = self.getListPage({ type, id, page });
-      item.isFetching = false;
-    },
-    [actionTypes.CUSTOM_REQUESTED]({ custom: { name, page }, params, url }) {
-      const custom = self.getCustom({ name });
-      custom.params = params;
-      custom.url = url;
-      const item = self.getCustomPage({ name, page });
-      item.isFetching = true;
-    },
-    [actionTypes.CUSTOM_SUCCEED]({ custom: { name, page }, total, result, entities }) {
-      self.addCustomPage({ name, page, total, result, entities });
-    },
-    [actionTypes.CUSTOM_FAILED]({ custom: { name, page } }) {
-      const item = self.getCustomPage({ name, page });
-      item.isFetching = false;
-    },
-    [actionTypes.HEAD_CONTENT_SUCCEED]({ title, content }) {
-      self.siteInfo.headTitle = title;
-      self.siteInfo.headContent = content;
-    },
-    [actionTypes.SITE_INFO_SUCCEED]({ perPage }) {
-      self.siteInfo.perPage = perPage;
-    },
-  };
-};
+      listPage.isFetching = false;
+    } catch (error) {
+      listPage.isFetching = false;
+      listPage.hasFailed = true;
+    }
+  }),
+  fetchCustomPage: flow(function* fetch({ name, type, page, params, url }) {
+    // Don't fetch if list is already fetching or ready.
+    if (self.custom(name).page(page).isReady || self.custom(name).page(page).isFetching) return;
+
+    const custom = self.getCustom({ name });
+    custom.params = params;
+    custom.url = url;
+    const customPage = self.getCustomPage({ name, page });
+    customPage.isFetching = true;
+    customPage.hasFailed = false;
+    try {
+      const { getCustomPage } = getEnv(self).connection;
+      const response = yield getCustomPage({ type, page, params });
+      const { entities, result } = normalize(response, schemas.list);
+      const totalEntities = response._paging ? parseInt(response._paging.total, 10) : 0;
+      const totalPages = response._paging ? parseInt(response._paging.totalPages, 10) : 0;
+      const total = { entities: totalEntities, pages: totalPages };
+      self.addCustomPage({ name, page, result, entities, total });
+      customPage.isFetching = false;
+    } catch (error) {
+      customPage.isFetching = false;
+      customPage.hasFailed = true;
+    }
+  }),
+  getEntity({ type, id }) {
+    const mstId = join(type, id);
+    if (!self.entities.get(mstId)) self.entities.set(mstId, { mstId, type, id });
+    return self.entities.get(mstId);
+  },
+  fetchingEntity({ type, id }) {
+    const item = self.getEntity({ type, id });
+    item.isFetching = true;
+  },
+  addEntity({ entity }) {
+    // Don't add entity if it doesn't have id or type
+    if (!entity.id || !entity.type) return;
+    const item = self.getEntity({ type: entity.type, id: entity.id });
+    if (!item.entity) item.entity = convert(entity);
+    item.isFetching = false;
+  },
+  addEntities({ entities }) {
+    Object.entries(entities).map(([, single]) => {
+      Object.entries(single).map(([, entity]) => {
+        self.addEntity({ entity });
+      });
+    });
+  },
+  getList({ type, id }) {
+    const mstId = join(type, id);
+    if (!self.lists.get(mstId)) self.lists.set(mstId, { mstId, type, id });
+    return self.lists.get(mstId);
+  },
+  getListPage({ type, id, page }) {
+    const list = self.getList({ type, id });
+    if (!list.pageMap.get(page)) list.pageMap.set(page, { page });
+    return list.pageMap.get(page);
+  },
+  fetchingListPage({ type, id, page }) {
+    const item = self.getListPage({ type, id, page });
+    item.isFetching = true;
+  },
+  addListPage({ type, id, page, result, entities, total }) {
+    self.addEntities({ entities });
+    const mstResults = result.map(res => `${entities[res.schema][res.id].type}_${res.id}`);
+    const listPage = self.getListPage({ type, id, page });
+    listPage.results = mstResults;
+    if (total) {
+      const list = self.getList({ type, id });
+      if (total.entities) list.total.entities = total.entities;
+      if (total.pages) list.total.pages = total.pages;
+    }
+  },
+  getCustom({ name }) {
+    if (!self.customs.get(name)) self.customs.set(name, { name });
+    return self.customs.get(name);
+  },
+  getCustomPage({ name, page = 1 }) {
+    const custom = self.getCustom({ name });
+    if (!custom.pageMap.get(page)) custom.pageMap.set(page, { page });
+    return custom.pageMap.get(page);
+  },
+  fetchingCustomPage({ name, page = 1 }) {
+    const item = self.getCustomPage({ name, page });
+    item.isFetching = true;
+  },
+  addCustomPage({ name, page = 1, result, entities, total }) {
+    self.addEntities({ entities });
+    const mstResults = result.map(res => `${entities[res.schema][res.id].type}_${res.id}`);
+    const item = self.getCustomPage({ name, page });
+    item.results = mstResults;
+    item.isFetching = false;
+    if (total) {
+      const list = self.getCustom({ name });
+      if (total.entities) list.total.entities = total.entities;
+      if (total.pages) list.total.pages = total.pages;
+    }
+  },
+  [actionTypes.CUSTOM_REQUESTED]({ custom: { name, page }, params, url }) {
+    const custom = self.getCustom({ name });
+    custom.params = params;
+    custom.url = url;
+    const item = self.getCustomPage({ name, page });
+    item.isFetching = true;
+  },
+  [actionTypes.CUSTOM_SUCCEED]({ custom: { name, page }, total, result, entities }) {
+    self.addCustomPage({ name, page, total, result, entities });
+  },
+  [actionTypes.CUSTOM_FAILED]({ custom: { name, page } }) {
+    const item = self.getCustomPage({ name, page });
+    item.isFetching = false;
+  },
+  [actionTypes.HEAD_CONTENT_SUCCEED]({ title, content }) {
+    self.siteInfo.headTitle = title;
+    self.siteInfo.headContent = content;
+  },
+  [actionTypes.SITE_INFO_SUCCEED]({ perPage }) {
+    self.siteInfo.perPage = perPage;
+  },
+});

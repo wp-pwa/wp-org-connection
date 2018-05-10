@@ -148,7 +148,7 @@ const author = self => ({
 
 const actions = self => ({
   fetch: flow(function* fetch() {
-    
+
   }),
 });
 
@@ -159,6 +159,7 @@ const Entity = types
     type: types.string,
     id: types.union(types.number, types.string),
     isFetching: false,
+    hasFailed: false,
     entity: types.frozen,
   })
   .views(common)

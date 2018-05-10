@@ -26,6 +26,7 @@ export const Page = types
   .props({
     page: types.identifier(types.number),
     isFetching: false,
+    hasFailed: false,
     results: types.optional(types.array(types.string), observable([])),
   })
   .views(self => ({
@@ -64,6 +65,11 @@ const List = types
     get isFetching() {
       return values(self.pageMap)
         .map(page => page.isFetching)
+        .reduce((acc, cur) => acc || cur, false);
+    },
+    get hasFailed() {
+      return values(self.pageMap)
+        .map(page => page.hasFailed)
         .reduce((acc, cur) => acc || cur, false);
     },
     get entities() {
