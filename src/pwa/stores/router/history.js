@@ -37,14 +37,18 @@ export const actions = self => {
     // If context has changed, stores the key in contextKeys
     if (
       !goingToPreviousContext &&
+      historyKeys.length &&
       state.context &&
       (!selectedContext || !isEqual(generator, state.context))
     ) {
       contextKeys.push(historyKeys[currentKey]);
     }
 
+    // Sets the 'goingToPreviousContext' flag to false after checking it.
+    goingToPreviousContext = false;
+
     if (action === 'PUSH') {
-      currentKey += 1;
+      if (historyKeys.length) currentKey += 1;
       historyKeys[currentKey] = key;
     } else if (action === 'REPLACE') {
       historyKeys[currentKey] = key;
@@ -87,8 +91,8 @@ export const actions = self => {
       if (pagesBack <= currentKey) {
         goingToPreviousContext = true;
         contextKeys.pop();
+        // WARNING - the next call is synchronous in the server BUT not in the client!
         self.history.go(-pagesBack);
-        goingToPreviousContext = false;
       }
     },
     [actionTypes.ROUTE_CHANGE_REQUESTED]: action => {

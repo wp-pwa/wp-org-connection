@@ -155,8 +155,8 @@ describe('Connection › Router > History', () => {
     };
 
     store[actionTypes.ROUTE_CHANGE_REQUESTED](routeRequest('post', 63, 'push'));
-    const succeedPost60 = redux.dispatch.mock.calls[0][0];
-    store[actionTypes.ROUTE_CHANGE_SUCCEED](succeedPost60);
+    const succeedPost63 = redux.dispatch.mock.calls[0][0];
+    store[actionTypes.ROUTE_CHANGE_SUCCEED](succeedPost63);
 
     store[actionTypes.ROUTE_CHANGE_REQUESTED](routeRequest('media', 193, 'push', galleryContext));
     const succeedMedia193 = redux.dispatch.mock.calls[1][0];
@@ -174,6 +174,40 @@ describe('Connection › Router > History', () => {
     expect(store.history.length).toBe(4);
 
     const actionPreviousContext = redux.dispatch.mock.calls[3][0];
+    expect(actionPreviousContext.method).toBe('backward');
+  });
+
+  test('goes to previous context after replace', async () => {
+    const store = Connection.create({}, { store: redux });
+
+    const galleryContext = {
+      columns: [[{ type: 'media', id: 193 }], [{ type: 'media', id: 190 }]],
+    };
+
+    store[actionTypes.ROUTE_CHANGE_REQUESTED](routeRequest('post', 63, 'push'));
+    const succeedPost63 = redux.dispatch.mock.calls[0][0];
+    store[actionTypes.ROUTE_CHANGE_SUCCEED](succeedPost63);
+
+    store[actionTypes.ROUTE_CHANGE_REQUESTED](routeRequest('post', 60, 'replace'));
+    const succeedPost60 = redux.dispatch.mock.calls[1][0];
+    store[actionTypes.ROUTE_CHANGE_SUCCEED](succeedPost60);
+
+    store[actionTypes.ROUTE_CHANGE_REQUESTED](routeRequest('media', 193, 'push', galleryContext));
+    const succeedMedia193 = redux.dispatch.mock.calls[2][0];
+    store[actionTypes.ROUTE_CHANGE_SUCCEED](succeedMedia193);
+
+    store[actionTypes.ROUTE_CHANGE_REQUESTED](routeRequest('media', 190, 'push', galleryContext));
+    const succeedMedia190 = redux.dispatch.mock.calls[3][0];
+    store[actionTypes.ROUTE_CHANGE_SUCCEED](succeedMedia190);
+
+    expect(store.history.length).toBe(4);
+
+    store[actionTypes.PREVIOUS_CONTEXT_REQUESTED]({});
+    const { pathname, search } = store.history.location;
+    expect(pathname + search).toBe('/?p=60');
+    expect(store.history.length).toBe(4);
+
+    const actionPreviousContext = redux.dispatch.mock.calls[4][0];
     expect(actionPreviousContext.method).toBe('backward');
   });
 
@@ -213,5 +247,51 @@ describe('Connection › Router > History', () => {
 
     const actionContextPost63 = redux.dispatch.mock.calls[4][0];
     expect(actionContextPost63.method).toBe('backward');
+  });
+
+  test('goes to previous context twice after a route change', async () => {
+    const store = Connection.create({}, { store: redux });
+
+    const listContext = {
+      columns: [[{ type: 'latest', id: 'posts', page: 1 }], [{ type: 'category', id: 18, page: 1 }]],
+    }
+
+    const galleryContext = {
+      columns: [[{ type: 'media', id: 193 }]],
+    };
+
+    store[actionTypes.ROUTE_CHANGE_REQUESTED](routeRequest('latest', 'posts', 'push', listContext));
+    const succeedLatestPosts = redux.dispatch.mock.calls[0][0];
+    store[actionTypes.ROUTE_CHANGE_SUCCEED](succeedLatestPosts);
+
+    store[actionTypes.ROUTE_CHANGE_REQUESTED](routeRequest('category', 18, 'push', null));
+    const succeedCategory18 = redux.dispatch.mock.calls[1][0];
+    store[actionTypes.ROUTE_CHANGE_SUCCEED](succeedCategory18);
+
+    store[actionTypes.ROUTE_CHANGE_REQUESTED](routeRequest('post', 63, 'push'));
+    const succeedPost63 = redux.dispatch.mock.calls[2][0];
+    store[actionTypes.ROUTE_CHANGE_SUCCEED](succeedPost63);
+
+    store[actionTypes.ROUTE_CHANGE_REQUESTED](routeRequest('media', 193, 'push', galleryContext));
+    const succeedMedia193 = redux.dispatch.mock.calls[3][0];
+    store[actionTypes.ROUTE_CHANGE_SUCCEED](succeedMedia193);
+
+    expect(store.history.length).toBe(5);
+
+    store[actionTypes.PREVIOUS_CONTEXT_REQUESTED]({});
+    const { pathname: pathnamePost63, search: searchPost63 } = store.history.location;
+    expect(pathnamePost63 + searchPost63).toBe('/?p=63');
+    expect(store.history.length).toBe(5);
+
+    const actionContextPost63 = redux.dispatch.mock.calls[4][0];
+    expect(actionContextPost63.method).toBe('backward');
+
+    store[actionTypes.PREVIOUS_CONTEXT_REQUESTED]({});
+    const { pathname: pathnameCat18, search: searchCat18 } = store.history.location;
+    expect(pathnameCat18 + searchCat18).toBe('/?cat=18');
+    expect(store.history.length).toBe(5);
+
+    const actionContextCat18 = redux.dispatch.mock.calls[5][0];
+    expect(actionContextCat18.method).toBe('backward');
   });
 });
