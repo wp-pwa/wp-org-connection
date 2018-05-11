@@ -16,13 +16,10 @@ Object {
         ],
       ],
     },
-    "event": null,
-    "method": "push",
     "selectedItem": Object {
       "id": 60,
       "type": "post",
     },
-    "type": "connection/ROUTE_CHANGE_REQUESTED",
   },
 }
 `;
@@ -39,12 +36,10 @@ Object {
       ],
     ],
   },
-  "method": "push",
   "selectedItem": Object {
     "id": 60,
     "type": "post",
   },
-  "type": "connection/ROUTE_CHANGE_SUCCEED",
 }
 `;
 
@@ -64,13 +59,11 @@ Object {
         ],
       ],
     },
-    "event": null,
     "method": "replace",
     "selectedItem": Object {
       "id": 60,
       "type": "post",
     },
-    "type": "connection/ROUTE_CHANGE_REQUESTED",
   },
 }
 `;
@@ -92,7 +85,6 @@ Object {
     "id": 60,
     "type": "post",
   },
-  "type": "connection/ROUTE_CHANGE_SUCCEED",
 }
 `;
 
@@ -112,13 +104,10 @@ Object {
         ],
       ],
     },
-    "event": null,
-    "method": "push",
     "selectedItem": Object {
       "id": 60,
       "type": "post",
     },
-    "type": "connection/ROUTE_CHANGE_REQUESTED",
   },
 }
 `;
@@ -139,13 +128,10 @@ Object {
         ],
       ],
     },
-    "event": null,
-    "method": "push",
     "selectedItem": Object {
       "id": 60,
       "type": "post",
     },
-    "type": "connection/ROUTE_CHANGE_REQUESTED",
   },
 }
 `;
