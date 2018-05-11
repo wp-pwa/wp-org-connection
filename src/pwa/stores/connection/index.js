@@ -187,20 +187,6 @@ export const actions = self => ({
       if (total.pages) list.total.pages = total.pages;
     }
   },
-  [actionTypes.CUSTOM_REQUESTED]({ custom: { name, page }, params, url }) {
-    const custom = self.getCustom({ name });
-    custom.params = params;
-    custom.url = url;
-    const item = self.getCustomPage({ name, page });
-    item.isFetching = true;
-  },
-  [actionTypes.CUSTOM_SUCCEED]({ custom: { name, page }, total, result, entities }) {
-    self.addCustomPage({ name, page, total, result, entities });
-  },
-  [actionTypes.CUSTOM_FAILED]({ custom: { name, page } }) {
-    const item = self.getCustomPage({ name, page });
-    item.isFetching = false;
-  },
   [actionTypes.HEAD_CONTENT_SUCCEED]({ title, content }) {
     self.siteInfo.headTitle = title;
     self.siteInfo.headContent = content;
