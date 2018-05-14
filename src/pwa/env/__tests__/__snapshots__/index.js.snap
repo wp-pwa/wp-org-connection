@@ -1,0 +1,29 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Connection › WpApi should build correct urls for getCustom 1`] = `"https://example.com/?rest_route=/wp/v2/posts&_embed=true&page=1"`;
+
+exports[`Connection › WpApi should build correct urls for getCustom 2`] = `"https://example.com/?rest_route=/wp/v2/categories&_embed=true&includes=7&page=2"`;
+
+exports[`Connection › WpApi should build correct urls for getCustom 3`] = `"https://example.com/?rest_route=/wp/v2/pages&_embed=true&includes=3%2C4&page=1"`;
+
+exports[`Connection › WpApi should build correct urls for getEntity 1`] = `"https://example.com/?rest_route=/wp/v2/posts/60&_embed=true"`;
+
+exports[`Connection › WpApi should build correct urls for getEntity 2`] = `"https://example.com/?rest_route=/wp/v2/media/62&_embed=true"`;
+
+exports[`Connection › WpApi should build correct urls for getEntity 3`] = `"https://example.com/?rest_route=/wp/v2/categories/7&_embed=true"`;
+
+exports[`Connection › WpApi should build correct urls for getEntity 4`] = `"https://example.com/?rest_route=/wp/v2/tags/10&_embed=true"`;
+
+exports[`Connection › WpApi should build correct urls for getEntity 5`] = `"https://example.com/?rest_route=/wp/v2/pages/3&_embed=true"`;
+
+exports[`Connection › WpApi should build correct urls for getEntity using custom post types 1`] = `"https://example.com/?rest_route=/wp/v2/sessions/60&_embed=true"`;
+
+exports[`Connection › WpApi should build correct urls for getEntity using custom post types 2`] = `"https://example.com/?rest_route=/wp/v2/speakers/62&_embed=true"`;
+
+exports[`Connection › WpApi should build correct urls for getListPage 1`] = `"https://example.com/?rest_route=/wp/v2/posts&_embed=true&page=1&per_page=10"`;
+
+exports[`Connection › WpApi should build correct urls for getListPage 2`] = `"https://example.com/?rest_route=/wp/v2/posts&_embed=true&page=2&per_page=10"`;
+
+exports[`Connection › WpApi should build correct urls for getListPage 3`] = `"https://example.com/?rest_route=/wp/v2/posts&_embed=true&categories=7&page=3&per_page=5"`;
+
+exports[`Connection › WpApi should build correct urls for getListPage 4`] = `"https://example.com/?rest_route=/wp/v2/posts&_embed=true&page=10&per_page=3&tags=10"`;
