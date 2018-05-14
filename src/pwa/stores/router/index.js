@@ -1,7 +1,6 @@
 import { types } from 'mobx-state-tree';
 import { isEqual } from 'lodash';
 import Context from './context';
-import * as actionTypes from '../../actionTypes';
 
 const lateContext = types.late(() => Context);
 

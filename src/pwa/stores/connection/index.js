@@ -186,11 +186,11 @@ export const actions = self => ({
       if (total.pages) list.total.pages = total.pages;
     }
   },
-  [actionTypes.HEAD_CONTENT_SUCCEED]({ title, content }) {
-    self.siteInfo.headTitle = title;
-    self.siteInfo.headContent = content;
-  },
-  [actionTypes.SITE_INFO_SUCCEED]({ perPage }) {
-    self.siteInfo.perPage = perPage;
-  },
+  // [actionTypes.HEAD_CONTENT_SUCCEED]({ title, content }) {
+  //   self.siteInfo.headTitle = title;
+  //   self.siteInfo.headContent = content;
+  // },
+  // [actionTypes.SITE_INFO_SUCCEED]({ perPage }) {
+  //   self.siteInfo.perPage = perPage;
+  // },
 });
