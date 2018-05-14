@@ -17,6 +17,7 @@ export const single = entity => ({
     featured: entity.featured_media || null,
     content: entity.content_media || [],
   },
+  meta: entity.meta,
   taxonomies: entity.taxonomiesMap,
   parent: entity.parent,
   target: entity['post-target'],
