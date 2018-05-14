@@ -9,7 +9,6 @@ import customShape from './custom-shape';
 import List from './list';
 import Custom from './custom';
 import SiteInfo from './site-info';
-import * as actionTypes from '../../actionTypes';
 import convert from '../../converters';
 import * as schemas from '../../schemas';
 
