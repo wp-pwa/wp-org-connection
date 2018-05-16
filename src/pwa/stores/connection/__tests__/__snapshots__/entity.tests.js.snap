@@ -74,6 +74,7 @@ Object {
     },
   },
   "mediaType": "",
+  "meta": Object {},
   "mimeType": "",
   "modificationDate": null,
   "mstId": "someType_someId",

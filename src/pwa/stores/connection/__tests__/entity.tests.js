@@ -399,3 +399,11 @@ describe('Connection › Entity', () => {
     expect(connection.entity('latest', 'post').pagedLink(2)).toBe('https://demo.worona.org/page/2');
   });
 });
+
+test('Subscribe to meta object before entity is ready', done => {
+  expect(connection.entity('post', 60).meta).toEqual({});
+  autorun(() => {
+    if (connection.entity('post', 60).meta.custom_field === "test value") done();
+  });
+  connection.addEntity({ entity: entities.single[60] });
+});

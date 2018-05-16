@@ -761,6 +761,61 @@ describe('Connection › Router', () => {
     expect(connection.selectedColumn.hasNonVisited).toBe(true);
   });
 
+  test('Get false from hasPreviousColumn', () => {
+    connection[actionTypes.ROUTE_CHANGE_SUCCEED](
+      actions.routeChangeSucceed({
+        selectedItem: { type: 'post', id: 60 },
+        context: {
+          columns: [[{ type: 'latest', id: 'post', page: 1, extract: 'horizontal' }]],
+        },
+      }),
+    );
+    expect(connection.contexts).toMatchSnapshot();
+    expect(connection.selectedColumn.hasPreviousColumn).toBe(false);
+  });
+
+  test('Get true from hasPreviousColumn', () => {
+    connection[actionTypes.ROUTE_CHANGE_SUCCEED](
+      actions.routeChangeSucceed({
+        selectedItem: { type: 'category', id: 3, page: 1 },
+        context: {
+          columns: [
+            [{ type: 'latest', id: 'post', page: 1 }],
+            [{ type: 'category', id: 3, page: 1 }],
+          ],
+        },
+      }),
+    );
+    expect(connection.contexts).toMatchSnapshot();
+    expect(connection.selectedColumn.hasPreviousColumn).toBe(true);
+  });
+
+  test('Get previousColumn', () => {
+    connection[actionTypes.ROUTE_CHANGE_SUCCEED](
+      actions.routeChangeSucceed({
+        selectedItem: { type: 'post', id: 32 },
+        context: {
+          columns: [[{ type: 'post', id: 60 }], [{ type: 'post', id: 32 }]],
+        },
+      }),
+    );
+    expect(connection.contexts).toMatchSnapshot();
+    expect(connection.selectedColumn.previousColumn.items[0].id).toBe(60);
+  });
+
+  test('Get null from previousColumn', () => {
+    connection[actionTypes.ROUTE_CHANGE_SUCCEED](
+      actions.routeChangeSucceed({
+        selectedItem: { type: 'post', id: 60 },
+        context: {
+          columns: [[{ type: 'latest', id: 'post', page: 1, extract: 'horizontal' }]],
+        },
+      }),
+    );
+    expect(connection.contexts).toMatchSnapshot();
+    expect(connection.selectedColumn.previousColumn).toBeNull();
+  });
+
   test('Get false from hasNextColumn', () => {
     connection.routeChangeSucceed({
       selectedItem: { type: 'post', id: 60 },

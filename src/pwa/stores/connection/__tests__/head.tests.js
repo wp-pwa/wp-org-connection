@@ -32,7 +32,7 @@ describe('Connection › Head', () => {
     expect(stores.connection.head.hasFailed).toBe(false);
     expect(stores.connection.head.title).toBe('Hi!');
   });
-  test.only('should populate content', async () => {
+  test('should populate content', async () => {
     const html = { text: readFileSync(path.resolve(__dirname, 'html-for-head.html'), 'utf8') };
     const stores = Stores.create({}, { request: jest.fn().mockReturnValue(Promise.resolve(html)) });
     await stores.connection.fetchHeadContent();

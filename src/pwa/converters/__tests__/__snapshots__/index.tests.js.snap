@@ -179,6 +179,7 @@ Object {
     "content": Array [],
     "featured": null,
   },
+  "meta": Object {},
   "modificationDate": 1521815751000,
   "mst": "single",
   "parent": 211,
@@ -216,6 +217,9 @@ Object {
       118,
     ],
     "featured": 62,
+  },
+  "meta": Object {
+    "custom_field": "test value",
   },
   "modificationDate": 1521734995000,
   "mst": "single",

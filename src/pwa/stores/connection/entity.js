@@ -73,6 +73,9 @@ const single = self => ({
       content: self.isReady ? self.entity.media.content : observable([]),
     };
   },
+  get meta() {
+    return self.isReady ? self.entity.meta : '';
+  },
   get hasFeaturedMedia() {
     return self.isReady && self.entity.media.featured !== null;
   },

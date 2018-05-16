@@ -84,6 +84,7 @@ export const singleShape = (type, id) => ({
   hasFeaturedMedia: false,
   author: authorShape('author'),
   target: '',
+  meta: {},
   headMeta: headMetaShape,
   parent: null,
   ...common(type, id),
