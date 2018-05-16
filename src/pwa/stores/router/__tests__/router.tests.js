@@ -762,56 +762,48 @@ describe('Connection › Router', () => {
   });
 
   test('Get false from hasPreviousColumn', () => {
-    connection[actionTypes.ROUTE_CHANGE_SUCCEED](
-      actions.routeChangeSucceed({
-        selectedItem: { type: 'post', id: 60 },
-        context: {
-          columns: [[{ type: 'latest', id: 'post', page: 1, extract: 'horizontal' }]],
-        },
-      }),
-    );
+    connection.routeChangeSucceed({
+      selectedItem: { type: 'post', id: 60 },
+      context: {
+        columns: [[{ type: 'latest', id: 'post', page: 1, extract: 'horizontal' }]],
+      },
+    });
     expect(connection.contexts).toMatchSnapshot();
     expect(connection.selectedColumn.hasPreviousColumn).toBe(false);
   });
 
   test('Get true from hasPreviousColumn', () => {
-    connection[actionTypes.ROUTE_CHANGE_SUCCEED](
-      actions.routeChangeSucceed({
-        selectedItem: { type: 'category', id: 3, page: 1 },
-        context: {
-          columns: [
-            [{ type: 'latest', id: 'post', page: 1 }],
-            [{ type: 'category', id: 3, page: 1 }],
-          ],
-        },
-      }),
-    );
+    connection.routeChangeSucceed({
+      selectedItem: { type: 'category', id: 3, page: 1 },
+      context: {
+        columns: [
+          [{ type: 'latest', id: 'post', page: 1 }],
+          [{ type: 'category', id: 3, page: 1 }],
+        ],
+      },
+    });
     expect(connection.contexts).toMatchSnapshot();
     expect(connection.selectedColumn.hasPreviousColumn).toBe(true);
   });
 
   test('Get previousColumn', () => {
-    connection[actionTypes.ROUTE_CHANGE_SUCCEED](
-      actions.routeChangeSucceed({
-        selectedItem: { type: 'post', id: 32 },
-        context: {
-          columns: [[{ type: 'post', id: 60 }], [{ type: 'post', id: 32 }]],
-        },
-      }),
-    );
+    connection.routeChangeSucceed({
+      selectedItem: { type: 'post', id: 32 },
+      context: {
+        columns: [[{ type: 'post', id: 60 }], [{ type: 'post', id: 32 }]],
+      },
+    });
     expect(connection.contexts).toMatchSnapshot();
     expect(connection.selectedColumn.previousColumn.items[0].id).toBe(60);
   });
 
   test('Get null from previousColumn', () => {
-    connection[actionTypes.ROUTE_CHANGE_SUCCEED](
-      actions.routeChangeSucceed({
-        selectedItem: { type: 'post', id: 60 },
-        context: {
-          columns: [[{ type: 'latest', id: 'post', page: 1, extract: 'horizontal' }]],
-        },
-      }),
-    );
+    connection.routeChangeSucceed({
+      selectedItem: { type: 'post', id: 60 },
+      context: {
+        columns: [[{ type: 'latest', id: 'post', page: 1, extract: 'horizontal' }]],
+      },
+    });
     expect(connection.contexts).toMatchSnapshot();
     expect(connection.selectedColumn.previousColumn).toBeNull();
   });
@@ -933,7 +925,8 @@ describe('Connection › Router', () => {
   });
 
   test('Add column to context', async () => {
-    const getListPage = jest.fn()
+    const getListPage = jest
+      .fn()
       .mockReturnValueOnce(Promise.resolve(postsFromCategory7))
       .mockReturnValueOnce(Promise.resolve(postsFromCategory7Page2));
     connection = Stores.create({}, { connection: { getListPage } }).connection; // eslint-disable-line
@@ -947,8 +940,8 @@ describe('Connection › Router', () => {
     await connection.fetchListPage({ type: 'category', id: 7, page: 1 });
     expect(connection.selectedContext.columns.length).toBe(5);
     connection.addColumnToContext({
-        column: [{ type: 'category', id: 7, page: 2, extract: 'horizontal' }],
-      });
+      column: [{ type: 'category', id: 7, page: 2, extract: 'horizontal' }],
+    });
     expect(connection.selectedContext.columns.length).toBe(5);
     expect(connection.contexts).toMatchSnapshot();
     await connection.fetchListPage({ type: 'category', id: 7, page: 2 });
