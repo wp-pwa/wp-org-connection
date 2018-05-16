@@ -1,6 +1,7 @@
 /* eslint-disable no-underscore-dangle */
 import { types, resolveIdentifier, flow, getParent, getEnv } from 'mobx-state-tree';
 import { normalize } from 'normalizr';
+import getHeadContent from './head/getHeadContent';
 import { join } from './utils';
 import Entity from './entity';
 import entityShape from './entity-shape';
@@ -8,7 +9,7 @@ import listShape from './list-shape';
 import customShape from './custom-shape';
 import List from './list';
 import Custom from './custom';
-import SiteInfo from './site-info';
+import Head from './head';
 import convert from '../../converters';
 import * as schemas from '../../schemas';
 
@@ -16,7 +17,7 @@ export const props = {
   entities: types.optional(types.map(Entity), {}),
   lists: types.optional(types.map(List), {}),
   customs: types.optional(types.map(Custom), {}),
-  siteInfo: types.optional(SiteInfo, {}),
+  head: types.optional(Head, {}),
   typeRelations: types.optional(types.map(types.string), {
     post: 'single',
     page: 'single',
@@ -186,6 +187,24 @@ export const actions = self => ({
       if (total.pages) list.total.pages = total.pages;
     }
   },
+  fetchHeadContent: flow(function* fetchHeadContent() {
+    try {
+      self.head.hasFailed = false;
+      const url = self.root.build.initialUrl;
+
+      if (!url) throw new Error('No initial url found.');
+
+      const { text: html } = yield getEnv(self).request(url);
+      const headHtml = html.match(/<\s*?head[^>]*>([\w\W]+)<\s*?\/\s*?head\s*?>/)[1];
+
+      const { title, content } = getHeadContent(headHtml);
+
+      self.head.title = title;
+      self.head.content = content;
+    } catch (error) {
+      self.head.hasFailed = true;
+    };
+  }),
   // [actionTypes.HEAD_CONTENT_SUCCEED]({ title, content }) {
   //   self.siteInfo.headTitle = title;
   //   self.siteInfo.headContent = content;

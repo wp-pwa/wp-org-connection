@@ -1,0 +1,466 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Connection › Head should populate content 1`] = `
+Array [
+  Object {
+    "attributes": Object {
+      "content": "Android Ayuda : Conoce las mejores apps para tu smartphone, trucos, manuales de ayuda, optimización y trucos para Android",
+      "name": "description",
+    },
+    "children": null,
+    "tagName": "meta",
+    "unique": true,
+  },
+  Object {
+    "attributes": Object {
+      "content": "HTML,CSS,XML,JavaScript",
+      "name": "keywords",
+    },
+    "children": null,
+    "tagName": "meta",
+    "unique": true,
+  },
+  Object {
+    "attributes": Object {
+      "content": "HTML,CSS,XML,JavaScript",
+      "name": "news_keywords",
+    },
+    "children": null,
+    "tagName": "meta",
+    "unique": true,
+  },
+  Object {
+    "attributes": Object {
+      "content": "noodp",
+      "name": "robots",
+    },
+    "children": null,
+    "tagName": "meta",
+    "unique": true,
+  },
+  Object {
+    "attributes": Object {
+      "content": "es_ES",
+      "property": "og:locale",
+    },
+    "children": null,
+    "tagName": "meta",
+    "unique": true,
+  },
+  Object {
+    "attributes": Object {
+      "content": "fr_FR",
+      "property": "og:locale:alternate",
+    },
+    "children": null,
+    "tagName": "meta",
+    "unique": true,
+  },
+  Object {
+    "attributes": Object {
+      "content": "website",
+      "property": "og:type",
+    },
+    "children": null,
+    "tagName": "meta",
+    "unique": true,
+  },
+  Object {
+    "attributes": Object {
+      "content": "Android Ayuda : Apps - Trucos - Noticias y móviles Android",
+      "property": "og:title",
+    },
+    "children": null,
+    "tagName": "meta",
+    "unique": true,
+  },
+  Object {
+    "attributes": Object {
+      "content": "Android Ayuda : Conoce las mejores apps para tu smartphone, trucos, manuales de ayuda, optimización y trucos para Android",
+      "property": "og:description",
+    },
+    "children": null,
+    "tagName": "meta",
+    "unique": true,
+  },
+  Object {
+    "attributes": Object {
+      "content": "https://androidayuda.com/",
+      "property": "og:url",
+    },
+    "children": null,
+    "tagName": "meta",
+    "unique": true,
+  },
+  Object {
+    "attributes": Object {
+      "content": "AndroidAyuda",
+      "property": "og:site_name",
+    },
+    "children": null,
+    "tagName": "meta",
+    "unique": true,
+  },
+  Object {
+    "attributes": Object {
+      "content": "the",
+      "property": "og:determiner",
+    },
+    "children": null,
+    "tagName": "meta",
+    "unique": true,
+  },
+  Object {
+    "attributes": Object {
+      "content": "http://example.com/ogp.jpg",
+      "property": "og:image",
+    },
+    "children": null,
+    "tagName": "meta",
+  },
+  Object {
+    "attributes": Object {
+      "content": "http://example.com/ogp.jpg",
+      "property": "og:image:url",
+    },
+    "children": null,
+    "tagName": "meta",
+  },
+  Object {
+    "attributes": Object {
+      "content": "https://secure.example.com/ogp.jpg",
+      "property": "og:image:secure_url",
+    },
+    "children": null,
+    "tagName": "meta",
+  },
+  Object {
+    "attributes": Object {
+      "content": "image/jpeg",
+      "property": "og:image:type",
+    },
+    "children": null,
+    "tagName": "meta",
+  },
+  Object {
+    "attributes": Object {
+      "content": "400",
+      "property": "og:image:width",
+    },
+    "children": null,
+    "tagName": "meta",
+  },
+  Object {
+    "attributes": Object {
+      "content": "300",
+      "property": "og:image:height",
+    },
+    "children": null,
+    "tagName": "meta",
+  },
+  Object {
+    "attributes": Object {
+      "content": "A shiny red apple with a bite taken out",
+      "property": "og:image:alt",
+    },
+    "children": null,
+    "tagName": "meta",
+  },
+  Object {
+    "attributes": Object {
+      "content": "http://example.com/movie.swf",
+      "property": "og:video",
+    },
+    "children": null,
+    "tagName": "meta",
+  },
+  Object {
+    "attributes": Object {
+      "content": "http://example.com/movie.swf",
+      "property": "og:video:url",
+    },
+    "children": null,
+    "tagName": "meta",
+  },
+  Object {
+    "attributes": Object {
+      "content": "https://secure.example.com/movie.swf",
+      "property": "og:video:secure_url",
+    },
+    "children": null,
+    "tagName": "meta",
+  },
+  Object {
+    "attributes": Object {
+      "content": "application/x-shockwave-flash",
+      "property": "og:video:type",
+    },
+    "children": null,
+    "tagName": "meta",
+  },
+  Object {
+    "attributes": Object {
+      "content": "400",
+      "property": "og:video:width",
+    },
+    "children": null,
+    "tagName": "meta",
+  },
+  Object {
+    "attributes": Object {
+      "content": "300",
+      "property": "og:video:height",
+    },
+    "children": null,
+    "tagName": "meta",
+  },
+  Object {
+    "attributes": Object {
+      "content": "A shiny red apple with a bite taken out",
+      "property": "og:video:alt",
+    },
+    "children": null,
+    "tagName": "meta",
+  },
+  Object {
+    "attributes": Object {
+      "content": "http://example.com/sound.mp3",
+      "property": "og:audio",
+    },
+    "children": null,
+    "tagName": "meta",
+  },
+  Object {
+    "attributes": Object {
+      "content": "https://secure.example.com/sound.mp3",
+      "property": "og:audio:secure_url",
+    },
+    "children": null,
+    "tagName": "meta",
+  },
+  Object {
+    "attributes": Object {
+      "content": "audio/mpeg",
+      "property": "og:audio:type",
+    },
+    "children": null,
+    "tagName": "meta",
+  },
+  Object {
+    "attributes": Object {
+      "content": "http://open.spotify.com/artist/1dfeR4HaWDbWqFHLkxsg1d",
+      "property": "music:musician",
+    },
+    "children": null,
+    "tagName": "meta",
+  },
+  Object {
+    "attributes": Object {
+      "content": "http://open.spotify.com/artist/1dfeR4HaWDbWqFHLkxsg1d",
+      "property": "music:creator",
+    },
+    "children": null,
+    "tagName": "meta",
+  },
+  Object {
+    "attributes": Object {
+      "content": "http://open.spotify.com/album/7rq68qYz66mNdPfidhIEFa",
+      "property": "music:album",
+    },
+    "children": null,
+    "tagName": "meta",
+  },
+  Object {
+    "attributes": Object {
+      "content": "http://open.spotify.com/album/7rq68qYz66mNdPfidhIEFa",
+      "property": "music:album:disc",
+    },
+    "children": null,
+    "tagName": "meta",
+  },
+  Object {
+    "attributes": Object {
+      "content": "2",
+      "property": "music:album:track",
+    },
+    "children": null,
+    "tagName": "meta",
+  },
+  Object {
+    "attributes": Object {
+      "content": "236",
+      "property": "music:duration",
+    },
+    "children": null,
+    "tagName": "meta",
+  },
+  Object {
+    "attributes": Object {
+      "content": "http://open.spotify.com/track/0pfHfdUNVwlXA0WDXznm2C",
+      "property": "music:song",
+    },
+    "children": null,
+    "tagName": "meta",
+  },
+  Object {
+    "attributes": Object {
+      "content": "1",
+      "property": "music:song:disc",
+    },
+    "children": null,
+    "tagName": "meta",
+  },
+  Object {
+    "attributes": Object {
+      "content": "1",
+      "property": "music:song:track",
+    },
+    "children": null,
+    "tagName": "meta",
+  },
+  Object {
+    "attributes": Object {
+      "content": "625074150916710",
+      "property": "fb:app_id",
+    },
+    "children": null,
+    "permanent": true,
+    "tagName": "meta",
+    "unique": true,
+  },
+  Object {
+    "attributes": Object {
+      "content": "172223576213197",
+      "property": "fb:pages",
+    },
+    "children": null,
+    "permanent": true,
+    "tagName": "meta",
+    "unique": true,
+  },
+  Object {
+    "attributes": Object {
+      "content": "summary",
+      "name": "twitter:card",
+    },
+    "children": null,
+    "tagName": "meta",
+    "unique": true,
+  },
+  Object {
+    "attributes": Object {
+      "content": "Android Ayuda : Conoce las mejores apps para tu smartphone, trucos, manuales de ayuda, optimización y trucos para Android",
+      "name": "twitter:description",
+    },
+    "children": null,
+    "tagName": "meta",
+    "unique": true,
+  },
+  Object {
+    "attributes": Object {
+      "content": "Android Ayuda : Apps - Trucos - Noticias y móviles Android",
+      "name": "twitter:title",
+    },
+    "children": null,
+    "tagName": "meta",
+    "unique": true,
+  },
+  Object {
+    "attributes": Object {
+      "content": "@androidayuda",
+      "name": "twitter:site",
+    },
+    "children": null,
+    "tagName": "meta",
+    "unique": true,
+  },
+  Object {
+    "attributes": Object {
+      "href": "https://androidayuda.com/",
+      "rel": "canonical",
+    },
+    "children": null,
+    "tagName": "link",
+    "unique": true,
+  },
+  Object {
+    "attributes": Object {
+      "href": "https://androidayuda.com/page/2/",
+      "rel": "next",
+    },
+    "children": null,
+    "tagName": "link",
+    "unique": true,
+  },
+  Object {
+    "attributes": Object {
+      "href": "https://androidayuda.com/?p=174582",
+      "rel": "shortlink",
+    },
+    "children": null,
+    "tagName": "link",
+    "unique": true,
+  },
+  Object {
+    "attributes": Object {
+      "href": "http://plus.google.com/+androidayuda",
+      "rel": "publisher",
+    },
+    "children": null,
+    "permanent": true,
+    "tagName": "link",
+    "unique": true,
+  },
+  Object {
+    "attributes": Object {
+      "href": "https://herencia.net/xmlrpc.php",
+      "rel": "pingback",
+    },
+    "children": null,
+    "permanent": true,
+    "tagName": "link",
+    "unique": true,
+  },
+  Object {
+    "attributes": Object {
+      "href": "https://herencia.net/wp-content/uploads/2016/08/favicon-herencia-net.png",
+      "rel": "icon",
+      "type": "image/png",
+    },
+    "children": null,
+    "permanent": true,
+    "tagName": "link",
+    "unique": true,
+  },
+  Object {
+    "attributes": Object {
+      "href": "https://androidayuda.com/app/themes/mykonos-child/assets/img/favicon.ico",
+      "rel": "shortcut icon",
+      "type": "image/x-icon",
+    },
+    "children": null,
+    "permanent": true,
+    "tagName": "link",
+    "unique": true,
+  },
+  Object {
+    "attributes": Object {
+      "href": "https://androidayuda.com/app/themes/mykonos-child/assets/img/app_webclips.png",
+      "rel": "apple-touch-icon",
+    },
+    "children": null,
+    "permanent": true,
+    "tagName": "link",
+    "unique": true,
+  },
+  Object {
+    "attributes": Object {
+      "href": " https://amp.androidayuda.com/2018/05/15/crea-rmejores-stories-instagram-unfold/",
+      "rel": "amphtml",
+    },
+    "children": null,
+    "tagName": "link",
+    "unique": true,
+  },
+]
+`;
