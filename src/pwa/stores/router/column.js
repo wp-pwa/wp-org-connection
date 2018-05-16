@@ -24,6 +24,14 @@ const Column = types
       }
       return items;
     },
+    get previousColumn() {
+      const { columns } = self.parentContext;
+      const index = columns.indexOf(self);
+      return index > 0 ? columns[index - 1] : null;
+    },
+    get hasPreviousColumn() {
+      return !!self.previousColumn;
+    },
     get nextColumn() {
       const { columns } = self.parentContext;
       const index = columns.indexOf(self);
