@@ -52,7 +52,7 @@ export const actions = self => ({
     entity.isFetching = true;
     entity.hasFailed = false;
     try {
-      const { getEntity } = getEnv(self).connection;
+      const { getEntity } = getEnv(self).connection.wpapi;
       const response = yield getEntity({ type, id });
       const { entities } = normalize(response, schemas.entity);
       self.addEntities({ entities });
@@ -75,8 +75,8 @@ export const actions = self => ({
     listPage.isFetching = true;
     listPage.hasFailed = false;
     try {
-      const perPage = self.root.settings.connection.perPage || self.root.settings.build.perPage;
-      const { getListPage } = getEnv(self).connection;
+      const perPage = self.root.settings.connection.perPage || self.root.build.perPage;
+      const { getListPage } = getEnv(self).connection.wpapi;
       const response = yield getListPage({ type, id, page, perPage });
       const { entities, result } = normalize(response, schemas.list);
       const totalEntities = response._paging ? parseInt(response._paging.total, 10) : 0;

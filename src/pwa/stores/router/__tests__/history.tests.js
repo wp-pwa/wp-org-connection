@@ -2,23 +2,12 @@ import { getSnapshot } from 'mobx-state-tree';
 import Connection from '../../';
 import post60 from '../../../__tests__/post-60.json';
 
-// const post60Succeed = actions.entitySucceed({
-//   entity: { type: 'post', id: 60 },
-//   entities: entitiesFromPost60,
-// });
-
-const routeRequest = (type, id, method, context) => ({
-  selectedItem: { type, id },
-  context: context || { columns: [[{ type, id }]] },
-  method,
-});
-
 describe('Connection › Router > History', () => {
   test('initializes the url if selectedItem exists in the initial state', async () => {
     // Returns a snapshot as the initial state.
     const initialStateMock = async () => {
       const getEntity = jest.fn().mockReturnValueOnce(Promise.resolve(post60));
-      const connection = Connection.create({}, { connection: { getEntity } });
+      const connection = Connection.create({}, { connection: { wpapi: { getEntity } } });
       await connection.fetchEntity({ type: 'post', id: 60 });
       connection.routeChangeRequested({ selectedItem: { type: 'post', id: 60 } });
       return getSnapshot(connection);
@@ -31,7 +20,7 @@ describe('Connection › Router > History', () => {
 
   test('replaces the first blank url if selectedItem is not null anymore', async () => {
     const getEntity = jest.fn().mockReturnValueOnce(Promise.resolve(post60));
-    const connection = Connection.create({}, { connection: { getEntity } });
+    const connection = Connection.create({}, { connection: { wpapi: { getEntity } } });
     await connection.fetchEntity({ type: 'post', id: 60 });
     connection.routeChangeSucceed({ selectedItem: { type: 'post', id: 60 } });
     const { key, ...rest } = connection.history.location;
@@ -41,7 +30,7 @@ describe('Connection › Router > History', () => {
 
   test("dispatchs succeed when 'push' (history length increases)", async () => {
     const getEntity = jest.fn().mockReturnValueOnce(Promise.resolve(post60));
-    const connection = Connection.create({}, { connection: { getEntity } });
+    const connection = Connection.create({}, { connection: { wpapi: { getEntity } } });
     await connection.fetchEntity({ type: 'post', id: 60 });
     connection.routeChangeSucceed({ selectedItem: { type: 'post', id: 63 } });
     connection.routeChangeSucceed = jest.fn();
@@ -57,7 +46,7 @@ describe('Connection › Router > History', () => {
 
   test("dispatchs succeed when 'replace' (same history length)", async () => {
     const getEntity = jest.fn().mockReturnValueOnce(Promise.resolve(post60));
-    const connection = Connection.create({}, { connection: { getEntity } });
+    const connection = Connection.create({}, { connection: { wpapi: { getEntity } } });
     await connection.fetchEntity({ type: 'post', id: 60 });
 
     connection.routeChangeSucceed = jest.fn();
@@ -74,7 +63,7 @@ describe('Connection › Router > History', () => {
 
   test('does not dispatch a succeed when just updating the url', async () => {
     const getEntity = jest.fn().mockReturnValueOnce(Promise.resolve(post60));
-    const connection = Connection.create({}, { connection: { getEntity } });
+    const connection = Connection.create({}, { connection: { wpapi: { getEntity } } });
 
     connection.routeChangeRequested({ selectedItem: { type: 'post', id: 60 } });
 

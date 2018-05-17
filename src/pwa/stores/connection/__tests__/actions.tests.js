@@ -16,16 +16,14 @@ const Connection = types
 
 const Stores = types.model().props({
   connection: types.optional(Connection, {}),
-  settings: types.optional(types.frozen, {
-    connection: {},
-    build: { perPage: 10 },
-  }),
+  settings: types.optional(types.frozen, { connection: {} }),
+  build: types.optional(types.frozen, { perPage: 10 }),
 });
 
 describe('Connection › Actions', () => {
   test('Entity: Fetching Succeed', async () => {
     const getEntity = jest.fn().mockReturnValueOnce(Promise.resolve(post60));
-    const connection = Connection.create({}, { connection: { getEntity } });
+    const connection = Connection.create({}, { connection: { wpapi: { getEntity } } });
     expect(connection.entity('post', 60).isReady).toBe(false);
     expect(connection.entity('post', 60).isFetching).toBe(false);
     const fetchPromise = connection.fetchEntity({ type: 'post', id: 60 });
@@ -41,7 +39,7 @@ describe('Connection › Actions', () => {
 
   test('Entity: Fetching Failed', async () => {
     const getEntity = jest.fn().mockReturnValueOnce(Promise.reject());
-    const connection = Connection.create({}, { connection: { getEntity } });
+    const connection = Connection.create({}, { connection: { wpapi: { getEntity } } });
     await connection.fetchEntity({ type: 'post', id: 60 });
     expect(connection.entity('post', 60).isReady).toBe(false);
     expect(connection.entity('post', 60).isFetching).toBe(false);
@@ -50,7 +48,7 @@ describe('Connection › Actions', () => {
 
   test('Entity: Not refetching if ready', async () => {
     const getEntity = jest.fn().mockReturnValue(Promise.resolve(post60));
-    const connection = Connection.create({}, { connection: { getEntity } });
+    const connection = Connection.create({}, { connection: { wpapi: { getEntity } } });
     await connection.fetchEntity({ type: 'post', id: 60 });
     expect(connection.entity('post', 60).isReady).toBe(true);
     await connection.fetchEntity({ type: 'post', id: 60 });
@@ -59,7 +57,7 @@ describe('Connection › Actions', () => {
 
   test('List: Fetching Succeed', async () => {
     const getListPage = jest.fn().mockReturnValueOnce(Promise.resolve(postsFromCategory7));
-    const { connection } = Stores.create({}, { connection: { getListPage } });
+    const { connection } = Stores.create({}, { connection: { wpapi: { getListPage } } });
     expect(connection.list('category', 7).isReady).toBe(false);
     expect(connection.list('category', 7).isFetching).toBe(false);
     expect(connection.list('category', 7).page(1).isReady).toBe(false);
@@ -86,7 +84,7 @@ describe('Connection › Actions', () => {
       .fn()
       .mockReturnValueOnce(Promise.resolve(postsFromCategory7Page2))
       .mockReturnValueOnce(Promise.resolve(postsFromCategory7));
-    const { connection } = Stores.create({}, { connection: { getListPage } });
+    const { connection } = Stores.create({}, { connection: { wpapi: { getListPage } } });
     expect(connection.list('category', 7).isReady).toBe(false);
     expect(connection.list('category', 7).isFetching).toBe(false);
     expect(connection.list('category', 7).page(1).isReady).toBe(false);
@@ -125,7 +123,7 @@ describe('Connection › Actions', () => {
 
   test('List: Action Failed', async () => {
     const getListPage = jest.fn().mockReturnValueOnce(Promise.reject());
-    const { connection } = Stores.create({}, { connection: { getListPage } });
+    const { connection } = Stores.create({}, { connection: { wpapi: { getListPage } } });
     await connection.fetchListPage({ type: 'category', id: 7, page: 1 });
     expect(connection.list('category', 7).isReady).toBe(false);
     expect(connection.list('category', 7).isFetching).toBe(false);
@@ -135,7 +133,7 @@ describe('Connection › Actions', () => {
 
   test('List: Not refetching if ready', async () => {
     const getListPage = jest.fn().mockReturnValue(Promise.resolve(postsFromCategory7));
-    const { connection } = Stores.create({}, { connection: { getListPage } });
+    const { connection } = Stores.create({}, { connection: { wpapi: { getListPage } } });
     await connection.fetchListPage({ type: 'category', id: 7, page: 1 });
     expect(connection.list('category', 7).page(1).isReady).toBe(true);
     await connection.fetchListPage({ type: 'category', id: 7, page: 1 });
