@@ -12,9 +12,14 @@ beforeEach(() => {
   connection = Connection.create({});
 });
 
+const init = () => {};
+
 const Stores = types.model().props({
   connection: types.optional(Connection, {}),
-  settings: types.optional(types.frozen, { connection: {} }),
+  settings: types.optional(types.frozen, {
+    connection: {},
+    generalSite: { url: 'https://example.com' },
+  }),
   build: types.optional(types.frozen, { perPage: 10 }),
 });
 
@@ -303,16 +308,16 @@ describe('Connection › Router', () => {
 
   test('Subscribe to selectedItem when context is replaced', done => {
     const getEntity = jest.fn().mockReturnValueOnce(Promise.resolve(post60));
-    connection = Connection.create({}, { connection: { wpapi: { getEntity } } });
-    connection.routeChangeSucceed({
+    const conn = Stores.create({}, { connection: { wpapi: { init, getEntity } } }).connection;
+    conn.routeChangeSucceed({
       selectedItem: { type: 'post', id: 60 },
       context: { columns: [[{ type: 'post', id: 60 }]] },
     });
     autorun(() => {
-      if (connection.selectedItem.isReady) done();
+      if (conn.selectedItem.isReady) done();
     });
-    connection.replaceContext({ context: { columns: [[{ type: 'post', id: 60 }]] } });
-    connection.fetchEntity({ type: 'post', id: 60 });
+    conn.replaceContext({ context: { columns: [[{ type: 'post', id: 60 }]] } });
+    conn.fetchEntity({ type: 'post', id: 60 });
   });
 
   test('Select in previous context', () => {
@@ -484,7 +489,7 @@ describe('Connection › Router', () => {
 
   test('Add items from extracted once they are ready', async () => {
     const getListPage = jest.fn().mockReturnValueOnce(Promise.resolve(postsFromCategory7));
-    connection = Stores.create({}, { connection: { wpapi: { getListPage } } }).connection; // eslint-disable-line
+    connection = Stores.create({}, { connection: { wpapi: { init, getListPage } } }).connection; // eslint-disable-line
     connection.routeChangeSucceed({
       selectedItem: { type: 'post', id: 60 },
       context: {
@@ -501,7 +506,7 @@ describe('Connection › Router', () => {
 
   test('Add items from extracted once they are ready, which include an item in the context', async () => {
     const getListPage = jest.fn().mockReturnValueOnce(Promise.resolve(postsFromCategory7));
-    connection = Stores.create({}, { connection: { wpapi: { getListPage } } }).connection; // eslint-disable-line
+    connection = Stores.create({}, { connection: { wpapi: { init, getListPage } } }).connection; // eslint-disable-line
     connection.routeChangeSucceed({
       selectedItem: { type: 'post', id: 54 },
       context: {
@@ -518,7 +523,7 @@ describe('Connection › Router', () => {
 
   test('Add items from extracted once they are ready avoiding duplications', async () => {
     const getListPage = jest.fn().mockReturnValueOnce(Promise.resolve(postsFromCategory7));
-    connection = Stores.create({}, { connection: { wpapi: { getListPage } } }).connection; // eslint-disable-line
+    connection = Stores.create({}, { connection: { wpapi: { init, getListPage } } }).connection; // eslint-disable-line
     connection.routeChangeSucceed({
       selectedItem: { type: 'post', id: 54 },
       context: { columns: [[{ type: 'category', id: 7, page: 1, extract: 'horizontal' }]] },
@@ -533,7 +538,7 @@ describe('Connection › Router', () => {
 
   test('`selectedItem` should be in its natural position inside horizontal extracted list', async () => {
     const getListPage = jest.fn().mockReturnValueOnce(Promise.resolve(postsFromCategory7));
-    connection = Stores.create({}, { connection: { wpapi: { getListPage } } }).connection; // eslint-disable-line
+    connection = Stores.create({}, { connection: { wpapi: { init, getListPage } } }).connection; // eslint-disable-line
     await connection.fetchListPage({ type: 'category', id: 7, page: 1 });
     connection.routeChangeSucceed({
       selectedItem: { type: 'post', id: 54 },
@@ -555,7 +560,7 @@ describe('Connection › Router', () => {
 
   test('Extrated items should have the list they are extracted from as `fromList`', async () => {
     const getListPage = jest.fn().mockReturnValueOnce(Promise.resolve(postsFromCategory7));
-    connection = Stores.create({}, { connection: { wpapi: { getListPage } } }).connection; // eslint-disable-line
+    connection = Stores.create({}, { connection: { wpapi: { init, getListPage } } }).connection; // eslint-disable-line
     connection.routeChangeSucceed({
       selectedItem: { type: 'post', id: 60 },
       context: {
@@ -580,7 +585,7 @@ describe('Connection › Router', () => {
 
   test('Items should have the `fromList` from `selectedItem` as their `fromList`', async () => {
     const getListPage = jest.fn().mockReturnValueOnce(Promise.resolve(postsFromCategory7));
-    connection = Stores.create({}, { connection: { wpapi: { getListPage } } }).connection; // eslint-disable-line
+    connection = Stores.create({}, { connection: { wpapi: { init, getListPage } } }).connection; // eslint-disable-line
     connection.routeChangeSucceed({
       selectedItem: { type: 'post', id: 60, fromList: { type: 'tag', id: 20, page: 1 } },
       context: {
@@ -652,7 +657,7 @@ describe('Connection › Router', () => {
 
   test('Add both extracted list and normal list to context', async () => {
     const getListPage = jest.fn().mockReturnValueOnce(Promise.resolve(postsFromCategory7));
-    connection = Stores.create({}, { connection: { wpapi: { getListPage } } }).connection; // eslint-disable-line
+    connection = Stores.create({}, { connection: { wpapi: { init, getListPage } } }).connection; // eslint-disable-line
     connection.routeChangeSucceed({
       selectedItem: { type: 'post', id: 60 },
       context: {
@@ -927,7 +932,7 @@ describe('Connection › Router', () => {
       .fn()
       .mockReturnValueOnce(Promise.resolve(postsFromCategory7))
       .mockReturnValueOnce(Promise.resolve(postsFromCategory7Page2));
-    connection = Stores.create({}, { connection: { wpapi: { getListPage } } }).connection; // eslint-disable-line
+    connection = Stores.create({}, { connection: { wpapi: { init, getListPage } } }).connection; // eslint-disable-line
     connection.routeChangeSucceed({
       selectedItem: { type: 'post', id: 54 },
       context: {

@@ -1,5 +1,9 @@
 import wpapi from '../wpapi';
 
+beforeEach(() => {
+  wpapi.reset();
+});
+
 describe('Connection › WpApi', () => {
   test('should init without throwing', async () => {
     expect(() => wpapi.init({ siteUrl: 'https://example.com' })).not.toThrow();

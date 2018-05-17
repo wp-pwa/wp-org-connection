@@ -1,13 +1,24 @@
-import { getSnapshot } from 'mobx-state-tree';
+import { types, getSnapshot } from 'mobx-state-tree';
 import Connection from '../../';
 import post60 from '../../../__tests__/post-60.json';
+
+const Stores = types.model().props({
+  connection: types.optional(Connection, {}),
+  settings: types.optional(types.frozen, {
+    connection: {},
+    generalSite: { url: 'https://example.com' },
+  }),
+  build: types.optional(types.frozen, { perPage: 10 }),
+});
+
+const init = () => {};
 
 describe('Connection › Router > History', () => {
   test('initializes the url if selectedItem exists in the initial state', async () => {
     // Returns a snapshot as the initial state.
     const initialStateMock = async () => {
       const getEntity = jest.fn().mockReturnValueOnce(Promise.resolve(post60));
-      const connection = Connection.create({}, { connection: { wpapi: { getEntity } } });
+      const { connection } = Stores.create({}, { connection: { wpapi: { init, getEntity } } });
       await connection.fetchEntity({ type: 'post', id: 60 });
       connection.routeChangeRequested({ selectedItem: { type: 'post', id: 60 } });
       return getSnapshot(connection);
@@ -20,7 +31,7 @@ describe('Connection › Router > History', () => {
 
   test('replaces the first blank url if selectedItem is not null anymore', async () => {
     const getEntity = jest.fn().mockReturnValueOnce(Promise.resolve(post60));
-    const connection = Connection.create({}, { connection: { wpapi: { getEntity } } });
+    const { connection } = Stores.create({}, { connection: { wpapi: { init, getEntity } } });
     await connection.fetchEntity({ type: 'post', id: 60 });
     connection.routeChangeSucceed({ selectedItem: { type: 'post', id: 60 } });
     const { key, ...rest } = connection.history.location;
@@ -30,7 +41,7 @@ describe('Connection › Router > History', () => {
 
   test("dispatchs succeed when 'push' (history length increases)", async () => {
     const getEntity = jest.fn().mockReturnValueOnce(Promise.resolve(post60));
-    const connection = Connection.create({}, { connection: { wpapi: { getEntity } } });
+    const { connection } = Stores.create({}, { connection: { wpapi: { init, getEntity } } });
     await connection.fetchEntity({ type: 'post', id: 60 });
     connection.routeChangeSucceed({ selectedItem: { type: 'post', id: 63 } });
     connection.routeChangeSucceed = jest.fn();
@@ -46,7 +57,7 @@ describe('Connection › Router > History', () => {
 
   test("dispatchs succeed when 'replace' (same history length)", async () => {
     const getEntity = jest.fn().mockReturnValueOnce(Promise.resolve(post60));
-    const connection = Connection.create({}, { connection: { wpapi: { getEntity } } });
+    const { connection } = Stores.create({}, { connection: { wpapi: { init, getEntity } } });
     await connection.fetchEntity({ type: 'post', id: 60 });
 
     connection.routeChangeSucceed = jest.fn();
@@ -63,7 +74,7 @@ describe('Connection › Router > History', () => {
 
   test('does not dispatch a succeed when just updating the url', async () => {
     const getEntity = jest.fn().mockReturnValueOnce(Promise.resolve(post60));
-    const connection = Connection.create({}, { connection: { wpapi: { getEntity } } });
+    const { connection } = Stores.create({}, { connection: { wpapi: { init, getEntity } } });
 
     connection.routeChangeRequested({ selectedItem: { type: 'post', id: 60 } });
 
@@ -215,10 +226,16 @@ describe('Connection › Router > History', () => {
       columns: [[{ type: 'media', id: 193 }]],
     };
 
-    connection.routeChangeRequested({ selectedItem: { type: 'latest', id: 'post', page: 1 }, context: listContext });
+    connection.routeChangeRequested({
+      selectedItem: { type: 'latest', id: 'post', page: 1 },
+      context: listContext,
+    });
     connection.routeChangeRequested({ selectedItem: { type: 'category', id: 18, page: 1 } });
     connection.routeChangeRequested({ selectedItem: { type: 'post', id: 63 } });
-    connection.routeChangeRequested({ selectedItem: { type: 'media', id: 193 }, context: galleryContext });
+    connection.routeChangeRequested({
+      selectedItem: { type: 'media', id: 193 },
+      context: galleryContext,
+    });
 
     expect(connection.history.length).toBe(5);
 

@@ -62,4 +62,5 @@ export default {
     });
     return query;
   },
+  reset: () => { api = null; },
 };
