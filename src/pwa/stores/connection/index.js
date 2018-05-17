@@ -44,7 +44,14 @@ export const views = self => ({
 });
 
 export const actions = self => ({
+  initApi: () => {
+    const { init } = getEnv(self).connection.wpapi;
+    const cptEndpoints = self.root.settings.connection.cptEndpoints || {};
+    const siteUrl = self.root.settings.generalSite.url || {};
+    init({ cptEndpoints, siteUrl });
+  },
   fetchEntity: flow(function* fetch({ type, id }) {
+    self.initApi();
     // Don't fetch if entity is already fetching or ready.
     if (self.entity(type, id).isReady || self.entity(type, id).isFetching) return;
 
@@ -64,6 +71,7 @@ export const actions = self => ({
     }
   }),
   fetchListPage: flow(function* fetch({ type, id, page }) {
+    self.initApi();
     if (!['latest', 'category', 'tag', 'author'].includes(type)) {
       throw new Error(
         'Custom taxonomies should retrieve their custom post types first. NOT IMPLEMENTED.',
@@ -92,6 +100,7 @@ export const actions = self => ({
     }
   }),
   fetchCustomPage: flow(function* fetch({ name, type, page, params, url }) {
+    self.initApi();
     // Don't fetch if list is already fetching or ready.
     if (self.custom(name).page(page).isReady || self.custom(name).page(page).isFetching) return;
 
@@ -208,11 +217,4 @@ export const actions = self => ({
       self.head.hasFailed = true;
     };
   }),
-  // [actionTypes.HEAD_CONTENT_SUCCEED]({ title, content }) {
-  //   self.siteInfo.headTitle = title;
-  //   self.siteInfo.headContent = content;
-  // },
-  // [actionTypes.SITE_INFO_SUCCEED]({ perPage }) {
-  //   self.siteInfo.perPage = perPage;
-  // },
 });

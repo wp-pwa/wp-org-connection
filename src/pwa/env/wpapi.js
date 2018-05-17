@@ -30,6 +30,7 @@ const typesToParams = type => {
 
 export default {
   init: ({ cptEndpoints = {}, siteUrl }) => {
+    if (api) return;
     const apiUrl = `${siteUrl.replace(/\/$/, '')}/?rest_route=`;
     api = new Wpapi({ endpoint: apiUrl });
     Object.entries(cptEndpoints).forEach(([type, endpoint]) => {
