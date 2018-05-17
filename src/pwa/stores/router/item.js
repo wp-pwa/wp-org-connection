@@ -64,7 +64,7 @@ export const List = BaseItem.named('List')
     let stopReplace = null;
     return {
       beforeDestroy: () => {
-        stopReplace();
+        if (stopReplace) stopReplace();
       },
       afterCreate: () => {
         if (['horizontal', 'vertical'].includes(self.extract)) {
