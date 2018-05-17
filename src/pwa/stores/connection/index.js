@@ -1,4 +1,4 @@
-/* eslint-disable no-underscore-dangle */
+/* eslint-disable no-underscore-dangle, no-console */
 import { types, resolveIdentifier, flow, getParent, getEnv } from 'mobx-state-tree';
 import { normalize } from 'normalizr';
 import getHeadContent from './head/getHeadContent';
@@ -58,6 +58,7 @@ export const actions = self => ({
       self.addEntities({ entities });
       entity.isFetching = false;
     } catch (error) {
+      console.warn(`Warning: fetchEntity failed: { type: ${type}, id: ${id} }`);
       entity.isFetching = false;
       entity.hasFailed = true;
     }
@@ -85,6 +86,7 @@ export const actions = self => ({
       self.addListPage({ type, id, page, total, result, entities });
       listPage.isFetching = false;
     } catch (error) {
+      console.warn(`Warning: fetchListPage failed: { type: ${type}, id: ${id}, page: ${page} }`);
       listPage.isFetching = false;
       listPage.hasFailed = true;
     }
@@ -109,6 +111,7 @@ export const actions = self => ({
       self.addCustomPage({ name, page, result, entities, total });
       customPage.isFetching = false;
     } catch (error) {
+      console.warn(`Warning: fetchCustomPage failed: { name: ${name} }`);
       customPage.isFetching = false;
       customPage.hasFailed = true;
     }
