@@ -25,6 +25,7 @@ describe('Connection › Router > History', () => {
     };
 
     const store = Connection.create(await initialStateMock());
+    store.replaceFirstUrl();
     const { key, ...rest } = store.history.location;
     expect(rest).toMatchSnapshot();
   });
@@ -32,6 +33,7 @@ describe('Connection › Router > History', () => {
   test('replaces the first blank url if selectedItem is not null anymore', async () => {
     const getEntity = jest.fn().mockReturnValueOnce(Promise.resolve(post60));
     const { connection } = Stores.create({}, { connection: { wpapi: { init, getEntity } } });
+    connection.replaceFirstUrl();
     await connection.fetchEntity({ type: 'post', id: 60 });
     connection.routeChangeSucceed({ selectedItem: { type: 'post', id: 60 } });
     const { key, ...rest } = connection.history.location;

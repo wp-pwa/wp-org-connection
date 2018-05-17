@@ -80,6 +80,8 @@ export const actions = self => {
     }
   });
 
+  let replaceFirstUrl = null;
+
   return {
     previousContextRequested: () => {
       if (contextKeys.length < 1) return;
@@ -104,10 +106,14 @@ export const actions = self => {
       if (['push', 'replace'].includes(method))
         self.history[method](path, { selectedItem, method, context });
     },
-    afterCreate: () => {
-      disposer = when(
+    beforeDestroy() {
+      if (replaceFirstUrl) replaceFirstUrl();
+    },
+    replaceFirstUrl: () => {
+      replaceFirstUrl = when(
         () => self.selectedItem !== null,
         () => {
+          debugger;
           // Set the first route in history
           const { selectedItem, selectedContext } = self;
           const path = getPath(selectedItem);
