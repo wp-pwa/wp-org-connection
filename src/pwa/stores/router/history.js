@@ -94,11 +94,15 @@ export const actions = self => {
         self.history.go(-pagesBack);
       }
     },
-    routeChangeRequested: action => {
-      const { selectedItem, method = 'push' } = action;
-      if (!action.context) action.context = { columns: [[{ ...selectedItem }]] };
+    routeChangeRequested: ({ selectedItem, method = 'push', context: actionContext }) => {
+      const context =
+        actionContext ||
+        (self.selectedContext && self.selectedContext.hasItem({ item: selectedItem })
+          ? self.selectedContext.generator
+          : { columns: [[{ ...selectedItem }]] });
       const path = getPath(selectedItem);
-      if (['push', 'replace'].includes(method)) self.history[method](path, action);
+      if (['push', 'replace'].includes(method))
+        self.history[method](path, { selectedItem, method, context });
     },
     afterCreate: () => {
       disposer = when(

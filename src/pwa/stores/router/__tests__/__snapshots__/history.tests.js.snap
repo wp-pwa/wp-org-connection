@@ -16,6 +16,7 @@ Object {
         ],
       ],
     },
+    "method": "push",
     "selectedItem": Object {
       "id": 60,
       "type": "post",
@@ -36,6 +37,7 @@ Object {
       ],
     ],
   },
+  "method": "push",
   "selectedItem": Object {
     "id": 60,
     "type": "post",
@@ -104,6 +106,7 @@ Object {
         ],
       ],
     },
+    "method": "push",
     "selectedItem": Object {
       "id": 60,
       "type": "post",
@@ -128,6 +131,7 @@ Object {
         ],
       ],
     },
+    "method": "push",
     "selectedItem": Object {
       "id": 60,
       "type": "post",
