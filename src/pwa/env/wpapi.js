@@ -52,7 +52,7 @@ export default {
     });
     return query;
   },
-  getCustom: ({ type, page = 1, params = {} }) => {
+  getCustomPage: ({ type, page = 1, params = {} }) => {
     let query = api[typesToEndpoints(type)]()
       .page(page)
       .embed();

@@ -48,13 +48,13 @@ describe('Connection › WpApi', () => {
   test('should build correct urls for getCustom', async () => {
     wpapi.init({ siteUrl: 'https://example.com' });
     expect(
-      wpapi.getCustom({ type: 'post' }).toString(),
+      wpapi.getCustomPage({ type: 'post' }).toString(),
     ).toMatchSnapshot();
     expect(
-      wpapi.getCustom({ type: 'category', params: { includes: 7 }, page: 2 }).toString(),
+      wpapi.getCustomPage({ type: 'category', params: { includes: 7 }, page: 2 }).toString(),
     ).toMatchSnapshot();
     expect(
-      wpapi.getCustom({ type: 'page', params: { includes: '3,4' }, page: 1 }).toString(),
+      wpapi.getCustomPage({ type: 'page', params: { includes: '3,4' }, page: 1 }).toString(),
     ).toMatchSnapshot();
   });
 });

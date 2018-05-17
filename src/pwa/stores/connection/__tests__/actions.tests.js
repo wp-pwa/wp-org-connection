@@ -142,7 +142,7 @@ describe('Connection › Actions', () => {
 
   test('Custom: Fetching Succeed', async () => {
     const getCustomPage = jest.fn().mockReturnValue(Promise.resolve(postsFromCategory7));
-    const { connection } = Stores.create({}, { connection: { getCustomPage } });
+    const { connection } = Stores.create({}, { connection: { wpapi: { getCustomPage } } });
     expect(connection.custom('test').isReady).toBe(false);
     expect(connection.custom('test').isFetching).toBe(false);
     expect(connection.custom('test').page(1).isReady).toBe(false);
@@ -170,7 +170,7 @@ describe('Connection › Actions', () => {
 
   test('Custom: Fetching Failed', async () => {
     const getCustomPage = jest.fn().mockReturnValue(Promise.reject());
-    const { connection } = Stores.create({}, { connection: { getCustomPage } });
+    const { connection } = Stores.create({}, { connection: { wpapi: { getCustomPage } } });
     const params = { a: 'b' };
     await connection.fetchCustomPage({
       name: 'test',

@@ -100,7 +100,7 @@ export const actions = self => ({
     customPage.isFetching = true;
     customPage.hasFailed = false;
     try {
-      const { getCustomPage } = getEnv(self).connection;
+      const { getCustomPage } = getEnv(self).connection.wpapi;
       const response = yield getCustomPage({ type, page, params });
       const { entities, result } = normalize(response, schemas.list);
       const totalEntities = response._paging ? parseInt(response._paging.total, 10) : 0;
