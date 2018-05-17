@@ -19,10 +19,16 @@ const Connection = types
   .views(connect.views)
   .actions(connect.actions);
 
+const Stores = types.model().props({
+  connection: types.optional(Connection, {}),
+});
+
+let stores = null;
 let connection = null;
 beforeEach(() => {
-  connection = Connection.create({});
-  unprotect(connection);
+  stores = Stores.create({});
+  connection = stores.connection; // eslint-disable-line
+  unprotect(stores);
 });
 
 describe('Connection › Entity', () => {

@@ -1,15 +1,9 @@
-import { takeEvery, put, select } from 'redux-saga/effects';
-import request from 'superagent';
 import { parse } from 'himalaya';
-import { format, parse as urlparser } from 'url';
-import { dep } from 'worona-deps';
-import * as actions from '../actions';
-import * as actionTypes from '../actionTypes';
 import whitelist from './whitelist';
 
 const allowedTags = new Set(whitelist.map(item => item.tagName));
 
-export const getHeadContent = headString => {
+export default headString => {
   // Parses <head> content string to an array with 'himalaya'.
   const parsedHead = parse(headString);
 
@@ -91,34 +85,3 @@ export const getHeadContent = headString => {
     }, []),
   };
 };
-
-export const headContentRequested = () =>
-  function* headContentRequestedSaga() {
-    try {
-      let url = yield select(dep('build', 'selectors', 'getInitialUrl'));
-      if (!url) throw new Error('No initial url found.');
-      if (!urlparser(url).host || !urlparser(url).protocol) {
-        const siteUrl = yield select(
-          dep('settings', 'selectorCreators', 'getSetting')('generalSite', 'url'),
-        );
-        const { protocol, host } = urlparser(siteUrl);
-        url = format({ protocol, host, pathname: url });
-      }
-      const site = yield request(url);
-      const headString = site.text.match(/<\s*?head[^>]*>([\w\W]+)<\s*?\/\s*?head\s*?>/)[1];
-      const { title, content } = getHeadContent(headString);
-
-      yield put(
-        actions.headContentSucceed({
-          title,
-          content,
-        }),
-      );
-    } catch (error) {
-      yield put(actions.headContentFailed({ error }));
-    }
-  };
-
-export default function* headContentWatcher() {
-  yield takeEvery(actionTypes.HEAD_CONTENT_REQUESTED, headContentRequested());
-}

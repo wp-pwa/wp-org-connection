@@ -1,6 +1,6 @@
 /* eslint-disable no-use-before-define */
 import { observable } from 'mobx';
-import { types, resolveIdentifier } from 'mobx-state-tree';
+import { types, resolveIdentifier, flow } from 'mobx-state-tree';
 import { join, extract } from './utils';
 import entityShape, {
   link,
@@ -149,6 +149,12 @@ const author = self => ({
   },
 });
 
+const actions = self => ({
+  fetch: flow(function* fetch() {
+
+  }),
+});
+
 const Entity = types
   .model('Entity')
   .props({
@@ -156,12 +162,15 @@ const Entity = types
     type: types.string,
     id: types.union(types.number, types.string),
     isFetching: false,
+    hasFailed: false,
     entity: types.frozen,
   })
   .views(common)
   .views(single)
   .views(taxonomy)
   .views(media)
-  .views(author);
+  .views(author)
+  .actions(actions);
+
 
 export default Entity;
