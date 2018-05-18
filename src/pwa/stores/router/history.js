@@ -113,7 +113,6 @@ export const actions = self => {
       replaceFirstUrl = when(
         () => self.selectedItem !== null,
         () => {
-          debugger;
           // Set the first route in history
           const { selectedItem, selectedContext } = self;
           const path = getPath(selectedItem);
