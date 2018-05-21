@@ -50,10 +50,10 @@ export const actions = self => ({
     const siteUrl = self.root.settings.generalSite.url || {};
     init({ cptEndpoints, siteUrl });
   },
-  fetchEntity: flow(function* fetch({ type, id }) {
+  fetchEntity: flow(function* fetch({ type, id, force = false }) {
     self.initApi();
     // Don't fetch if entity is already fetching or ready.
-    if (self.entity(type, id).isReady || self.entity(type, id).isFetching) return;
+    if (!force && (self.entity(type, id).isReady || self.entity(type, id).isFetching)) return;
 
     const entity = self.getEntity({ type, id });
     entity.isFetching = true;
@@ -70,15 +70,19 @@ export const actions = self => ({
       entity.hasFailed = true;
     }
   }),
-  fetchListPage: flow(function* fetch({ type, id, page }) {
+  fetchListPage: flow(function* fetch({ type, id, page, force = false }) {
     self.initApi();
     if (!['latest', 'category', 'tag', 'author'].includes(type)) {
       throw new Error(
         'Custom taxonomies should retrieve their custom post types first. NOT IMPLEMENTED.',
       );
     }
-    // Don't fetch if list is already fetching or ready.
-    if (self.list(type, id).page(page).isReady || self.list(type, id).page(page).isFetching) return;
+    // Don't fetch if list is already fetching or ready
+    if (
+      !force &&
+      (self.list(type, id).page(page).isReady || self.list(type, id).page(page).isFetching)
+    )
+      return;
 
     const listPage = self.getListPage({ type, id, page });
     listPage.isFetching = true;
@@ -215,6 +219,6 @@ export const actions = self => ({
       self.head.content = content;
     } catch (error) {
       self.head.hasFailed = true;
-    };
+    }
   }),
 });
