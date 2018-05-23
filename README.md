@@ -8,6 +8,10 @@ Finally, use `npm run start:pwa` to start the development environment.
 
 ## Changelog
 
+#### 1.6.0
+
+- Remove redux
+
 #### 1.5.14
 
 - Fixes error when media has no sizes
