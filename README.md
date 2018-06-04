@@ -8,6 +8,11 @@ Finally, use `npm run start:pwa` to start the development environment.
 
 ## Changelog
 
+#### 1.5.15
+
+- Fixes goToPreviousContext bug
+- Add license
+
 #### 1.5.14
 
 - Fixes error when media has no sizes
