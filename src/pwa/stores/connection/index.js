@@ -158,9 +158,12 @@ export const actions = self => ({
     return self.lists.get(mstId);
   },
   getListPage({ type, id, page }) {
+    const strPage = page.toString();
     const list = self.getList({ type, id });
-    if (!list.pageMap.get(page)) list.pageMap.set(page, { page });
-    return list.pageMap.get(page);
+    if (!list.pageMap.get(strPage)) {
+      list.pageMap.set(strPage, { page: strPage });
+    }
+    return list.pageMap.get(strPage);
   },
   fetchingListPage({ type, id, page }) {
     const item = self.getListPage({ type, id, page });
@@ -183,9 +186,10 @@ export const actions = self => ({
     return self.customs.get(name);
   },
   getCustomPage({ name, page = 1 }) {
+    const strPage = page.toString();
     const custom = self.getCustom({ name });
-    if (!custom.pageMap.get(page)) custom.pageMap.set(page, { page });
-    return custom.pageMap.get(page);
+    if (!custom.pageMap.get(strPage)) custom.pageMap.set(strPage, { page: strPage });
+    return custom.pageMap.get(strPage);
   },
   fetchingCustomPage({ name, page = 1 }) {
     const item = self.getCustomPage({ name, page });

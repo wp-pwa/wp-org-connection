@@ -24,7 +24,7 @@ export const Total = types
 export const Page = types
   .model('Page')
   .props({
-    page: types.identifier(types.number),
+    page: types.identifier(types.string),
     isFetching: false,
     hasFailed: false,
     results: types.optional(types.array(types.string), observable([])),
@@ -34,10 +34,12 @@ export const Page = types
       return getRoot(self).connection || getRoot(self);
     },
     get entities() {
-      return observable(self.results.map(mstId => {
-        const { type, id } = extract(mstId);
-        return self.connection.entity(type, id);
-      }));
+      return observable(
+        self.results.map(mstId => {
+          const { type, id } = extract(mstId);
+          return self.connection.entity(type, id);
+        }),
+      );
     },
     get isReady() {
       return self.results.length > 0;
@@ -74,10 +76,12 @@ const List = types
     },
     get entities() {
       const results = flatten(self.pages.map(page => page.results.peek()));
-      return observable(results.map(mstId => {
-        const { type, id } = extract(mstId);
-        return getParent(self, 2).entity(type, id);
-      }));
+      return observable(
+        results.map(mstId => {
+          const { type, id } = extract(mstId);
+          return getParent(self, 2).entity(type, id);
+        }),
+      );
     },
     page(page) {
       return self.pageMap.get(page) || self.pageMap.get(String(page)) || pageShape;
