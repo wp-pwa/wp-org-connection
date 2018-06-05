@@ -166,13 +166,15 @@ export const actions = self => ({
     return list.pageMap.get(strPage);
   },
   fetchingListPage({ type, id, page }) {
-    const item = self.getListPage({ type, id, page });
+    const strPage = page.toString();
+    const item = self.getListPage({ type, id, page: strPage });
     item.isFetching = true;
   },
   addListPage({ type, id, page, result, entities, total }) {
+    const strPage = page.toString();
     self.addEntities({ entities });
     const mstResults = result.map(res => `${entities[res.schema][res.id].type}_${res.id}`);
-    const listPage = self.getListPage({ type, id, page });
+    const listPage = self.getListPage({ type, id, page: strPage });
     listPage.results = mstResults;
     listPage.isFetching = false;
     if (total) {
@@ -192,13 +194,15 @@ export const actions = self => ({
     return custom.pageMap.get(strPage);
   },
   fetchingCustomPage({ name, page = 1 }) {
-    const item = self.getCustomPage({ name, page });
+    const strPage = page.toString();
+    const item = self.getCustomPage({ name, page: strPage });
     item.isFetching = true;
   },
   addCustomPage({ name, page = 1, result, entities, total }) {
+    const strPage = page.toString();
     self.addEntities({ entities });
     const mstResults = result.map(res => `${entities[res.schema][res.id].type}_${res.id}`);
-    const item = self.getCustomPage({ name, page });
+    const item = self.getCustomPage({ name, page: strPage });
     item.results = mstResults;
     item.isFetching = false;
     if (total) {

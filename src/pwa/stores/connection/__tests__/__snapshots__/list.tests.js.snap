@@ -41,7 +41,7 @@ exports[`Connection › List Rehydrates pageMap from a snapshot 1`] = `
 Object {
   "hasFailed": false,
   "isFetching": false,
-  "page": 1,
+  "page": "1",
   "results": Array [
     "post_57",
     "post_54",

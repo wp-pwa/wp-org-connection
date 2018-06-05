@@ -40,7 +40,8 @@ const Custom = types
       );
     },
     page(page) {
-      return self.pageMap.get(page) || pageShape;
+      const strPage = page.toString();
+      return self.pageMap.get(strPage) || pageShape;
     },
     get pages() {
       return values(self.pageMap);
