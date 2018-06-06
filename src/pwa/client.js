@@ -1,8 +1,9 @@
-import WpOrgConnection, * as components from './components';
 import Store from './stores';
 import flow from './flows/client';
 import env from './env';
 import { version } from '../../package.json';
 
+const WpOrgConnection = () => null;
+
 export default WpOrgConnection;
-export { components, Store, flow, env, version };
+export { Store, flow, env, version };
