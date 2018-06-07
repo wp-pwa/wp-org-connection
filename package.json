@@ -24,7 +24,6 @@
     "he": "^1.1.1",
     "himalaya": "^1.0.1",
     "query-parse": "^2.0.0",
-    "url": "^0.11.0",
     "wpapi": "^1.1.2"
   },
   "devDependencies": {},
