@@ -1,18 +1,14 @@
-import wpapi from '../wpapi';
-
-beforeEach(() => {
-  wpapi.reset();
-});
+import WpApi from '../wpapi';
 
 describe('Connection › WpApi', () => {
   test('should init without throwing', async () => {
-    expect(() => wpapi.init({ siteUrl: 'https://example.com' })).not.toThrow();
+    expect(() => new WpApi({ siteUrl: 'https://example.com' })).not.toThrow();
   });
   test('should throw if no url is present', async () => {
-    expect(() => wpapi.init()).toThrow();
+    expect(() => new WpApi()).toThrow();
   });
   test('should build correct urls for getEntity', async () => {
-    wpapi.init({ siteUrl: 'https://example.com' });
+    const wpapi = new WpApi({ siteUrl: 'https://example.com' });
     expect(wpapi.getEntity({ type: 'post', id: 60 }).toString()).toMatchSnapshot();
     expect(wpapi.getEntity({ type: 'media', id: 62 }).toString()).toMatchSnapshot();
     expect(wpapi.getEntity({ type: 'category', id: 7 }).toString()).toMatchSnapshot();
@@ -20,7 +16,7 @@ describe('Connection › WpApi', () => {
     expect(wpapi.getEntity({ type: 'page', id: 3 }).toString()).toMatchSnapshot();
   });
   test('should build correct urls for getEntity using custom post types', async () => {
-    wpapi.init({
+    const wpapi = new WpApi({
       siteUrl: 'https://example.com',
       cptEndpoints: {
         session: 'sessions',
@@ -31,11 +27,11 @@ describe('Connection › WpApi', () => {
     expect(wpapi.getEntity({ type: 'speaker', id: 62 }).toString()).toMatchSnapshot();
   });
   test('should throw if custom post type is not registered', async () => {
-    wpapi.init({ siteUrl: 'https://example.com' });
+    const wpapi = new WpApi({ siteUrl: 'https://example.com' });
     expect(() => wpapi.getEntity({ type: 'session', id: 60 }).toString()).toThrow();
   });
   test('should build correct urls for getListPage', async () => {
-    wpapi.init({ siteUrl: 'https://example.com' });
+    const wpapi = new WpApi({ siteUrl: 'https://example.com' });
     expect(
       wpapi.getListPage({ type: 'latest', id: 'post' }).toString(),
     ).toMatchSnapshot();
@@ -50,7 +46,7 @@ describe('Connection › WpApi', () => {
     ).toMatchSnapshot();
   });
   test('should build correct urls for getCustom', async () => {
-    wpapi.init({ siteUrl: 'https://example.com' });
+    const wpapi = new WpApi({ siteUrl: 'https://example.com' });
     expect(
       wpapi.getCustomPage({ type: 'post' }).toString(),
     ).toMatchSnapshot();

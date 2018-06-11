@@ -28,39 +28,45 @@ const typesToParams = type => {
   return params[type] || type;
 };
 
-export default {
-  init: ({ cptEndpoints = {}, siteUrl }) => {
-    if (api) return;
+class WpApi {
+  api = null
+
+  constructor({ cptEndpoints = {}, siteUrl }) {
     const apiUrl = `${siteUrl.replace(/\/$/, '')}/?rest_route=`;
-    api = new Wpapi({ endpoint: apiUrl });
+    this.api = new Wpapi({ endpoint: apiUrl });
     Object.entries(cptEndpoints).forEach(([type, endpoint]) => {
-      api[type] = api.registerRoute('wp/v2', `/${endpoint}/(?P<id>\\d+)`);
+      this.api[type] = this.api.registerRoute('wp/v2', `/${endpoint}/(?P<id>\\d+)`);
     });
-  },
-  getEntity: ({ type, id }) =>
-    api[typesToEndpoints(type)]()
-      .id(id)
-      .embed(),
-  getListPage: ({ type, id, page = 1, perPage = 10 }) => {
+  }
+
+  getEntity({ type, id }){
+    return this.api[typesToEndpoints(type)]()
+    .id(id)
+    .embed()
+  }
+
+  getListPage({ type, id, page = 1, perPage = 10 }) {
     const endpoint = type === 'latest' ? typesToEndpoints(id) : typesToEndpoints('post');
     const params = { _embed: true, per_page: perPage };
     if (['category', 'tag', 'author'].includes(type)) {
       params[typesToParams(type)] = id;
     }
-    let query = api[endpoint]().page(page);
+    let query = this.api[endpoint]().page(page);
     forOwn(params, (value, key) => {
       query = query.param(key, value);
     });
     return query;
-  },
-  getCustomPage: ({ type, page = 1, params = {} }) => {
-    let query = api[typesToEndpoints(type)]()
+  }
+
+  getCustomPage({ type, page = 1, params = {} }) {
+    let query = this.api[typesToEndpoints(type)]()
       .page(page)
       .embed();
     forOwn(params, (value, key) => {
       query = query.param(key, value);
     });
     return query;
-  },
-  reset: () => { api = null; },
-};
+  }
+}
+
+export default WpApi;

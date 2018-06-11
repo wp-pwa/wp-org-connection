@@ -1,5 +1,5 @@
-import wpapi from './wpapi';
+import WpApi from './wpapi';
 
 export default {
-  wpapi,
+  WpApi,
 };
