@@ -1,9 +1,12 @@
 /* eslint-disable no-restricted-syntax, no-underscore-dangle */
 import { types } from 'mobx-state-tree';
 import * as connect from '../';
+import WpApi from '../../../env/wpapi';
 import post60 from '../../../__tests__/post-60.json';
 import postsFromCategory7 from '../../../__tests__/posts-from-category-7.json';
 import postsFromCategory7Page2 from '../../../__tests__/posts-from-category-7-page-2.json';
+
+jest.mock('../../../env/wpapi');
 
 postsFromCategory7._paging = { total: 15, totalPages: 3 };
 postsFromCategory7Page2._paging = { total: 15, totalPages: 3 };
@@ -23,12 +26,21 @@ const Stores = types.model().props({
   build: types.optional(types.frozen, { perPage: 10 }),
 });
 
-const init = () => {};
+let connection = null;
+let getEntity = null;
+let getListPage = null;
+let getCustomPage = null;
+
+beforeEach(() => {
+  WpApi.mockClear();
+  connection = Stores.create({}, { connection: { WpApi } }).connection; // eslint-disable-line
+  connection.initApi();
+  ({ getEntity, getListPage, getCustomPage } = WpApi.mock.instances[0]);  // eslint-disable-line
+});
 
 describe('Connection › Actions', () => {
   test('Entity: Fetching Succeed', async () => {
-    const getEntity = jest.fn().mockReturnValueOnce(Promise.resolve(post60));
-    const { connection } = Stores.create({}, { connection: { wpapi: { init, getEntity } } });
+    getEntity.mockReturnValueOnce(Promise.resolve(post60));
     expect(connection.entity('post', 60).isReady).toBe(false);
     expect(connection.entity('post', 60).isFetching).toBe(false);
     const fetchPromise = connection.fetchEntity({ type: 'post', id: 60 });
@@ -43,8 +55,7 @@ describe('Connection › Actions', () => {
   });
 
   test('Entity: Fetching Failed', async () => {
-    const getEntity = jest.fn().mockReturnValueOnce(Promise.reject());
-    const { connection } = Stores.create({}, { connection: { wpapi: { init, getEntity } } });
+    getEntity.mockReturnValueOnce(Promise.reject());
     await connection.fetchEntity({ type: 'post', id: 60 });
     expect(connection.entity('post', 60).isReady).toBe(false);
     expect(connection.entity('post', 60).isFetching).toBe(false);
@@ -52,8 +63,7 @@ describe('Connection › Actions', () => {
   });
 
   test('Entity: Not refetching if ready', async () => {
-    const getEntity = jest.fn().mockReturnValue(Promise.resolve(post60));
-    const { connection } = Stores.create({}, { connection: { wpapi: { init, getEntity } } });
+    getEntity.mockReturnValueOnce(Promise.resolve(post60));
     await connection.fetchEntity({ type: 'post', id: 60 });
     expect(connection.entity('post', 60).isReady).toBe(true);
     await connection.fetchEntity({ type: 'post', id: 60 });
@@ -61,8 +71,7 @@ describe('Connection › Actions', () => {
   });
 
   test('Entity: Refetching if force is true', async () => {
-    const getEntity = jest.fn().mockReturnValue(Promise.resolve(post60));
-    const { connection } = Stores.create({}, { connection: { wpapi: { init, getEntity } } });
+    getEntity.mockReturnValue(Promise.resolve(post60));
     await connection.fetchEntity({ type: 'post', id: 60 });
     expect(connection.entity('post', 60).isReady).toBe(true);
     await connection.fetchEntity({ type: 'post', id: 60, force: true });
@@ -70,8 +79,7 @@ describe('Connection › Actions', () => {
   });
 
   test('List: Fetching Succeed', async () => {
-    const getListPage = jest.fn().mockReturnValueOnce(Promise.resolve(postsFromCategory7));
-    const { connection } = Stores.create({}, { connection: { wpapi: { init, getListPage } } });
+    getListPage.mockReturnValueOnce(Promise.resolve(postsFromCategory7));
     expect(connection.list('category', 7).isReady).toBe(false);
     expect(connection.list('category', 7).isFetching).toBe(false);
     expect(connection.list('category', 7).page(1).isReady).toBe(false);
@@ -94,11 +102,9 @@ describe('Connection › Actions', () => {
   });
 
   test('List: Fetching Succeed with 2 pages (reverse order)', async () => {
-    const getListPage = jest
-      .fn()
+    getListPage
       .mockReturnValueOnce(Promise.resolve(postsFromCategory7Page2))
       .mockReturnValueOnce(Promise.resolve(postsFromCategory7));
-    const { connection } = Stores.create({}, { connection: { wpapi: { init, getListPage } } });
     expect(connection.list('category', 7).isReady).toBe(false);
     expect(connection.list('category', 7).isFetching).toBe(false);
     expect(connection.list('category', 7).page(1).isReady).toBe(false);
@@ -136,8 +142,7 @@ describe('Connection › Actions', () => {
   });
 
   test('List: Action Failed', async () => {
-    const getListPage = jest.fn().mockReturnValueOnce(Promise.reject());
-    const { connection } = Stores.create({}, { connection: { wpapi: { init, getListPage } } });
+    getListPage.mockReturnValueOnce(Promise.reject());
     await connection.fetchListPage({ type: 'category', id: 7, page: 1 });
     expect(connection.list('category', 7).isReady).toBe(false);
     expect(connection.list('category', 7).isFetching).toBe(false);
@@ -146,8 +151,7 @@ describe('Connection › Actions', () => {
   });
 
   test('List: Not refetching if ready', async () => {
-    const getListPage = jest.fn().mockReturnValue(Promise.resolve(postsFromCategory7));
-    const { connection } = Stores.create({}, { connection: { wpapi: { init, getListPage } } });
+    getListPage.mockReturnValueOnce(Promise.resolve(postsFromCategory7));
     await connection.fetchListPage({ type: 'category', id: 7, page: 1 });
     expect(connection.list('category', 7).page(1).isReady).toBe(true);
     await connection.fetchListPage({ type: 'category', id: 7, page: 1 });
@@ -155,8 +159,7 @@ describe('Connection › Actions', () => {
   });
 
   test('List: Refetching if force is true', async () => {
-    const getListPage = jest.fn().mockReturnValue(Promise.resolve(postsFromCategory7));
-    const { connection } = Stores.create({}, { connection: { wpapi: { init, getListPage } } });
+    getListPage.mockReturnValue(Promise.resolve(postsFromCategory7));
     await connection.fetchListPage({ type: 'category', id: 7, page: 1 });
     expect(connection.list('category', 7).page(1).isReady).toBe(true);
     await connection.fetchListPage({ type: 'category', id: 7, page: 1, force: true });
@@ -164,8 +167,7 @@ describe('Connection › Actions', () => {
   });
 
   test('Custom: Fetching Succeed', async () => {
-    const getCustomPage = jest.fn().mockReturnValue(Promise.resolve(postsFromCategory7));
-    const { connection } = Stores.create({}, { connection: { wpapi: { init, getCustomPage } } });
+    getCustomPage.mockReturnValue(Promise.resolve(postsFromCategory7));
     expect(connection.custom('test').isReady).toBe(false);
     expect(connection.custom('test').isFetching).toBe(false);
     expect(connection.custom('test').page(1).isReady).toBe(false);
@@ -192,8 +194,7 @@ describe('Connection › Actions', () => {
   });
 
   test('Custom: Fetching Failed', async () => {
-    const getCustomPage = jest.fn().mockReturnValue(Promise.reject());
-    const { connection } = Stores.create({}, { connection: { wpapi: { init, getCustomPage } } });
+    getCustomPage.mockReturnValue(Promise.reject());
     const params = { a: 'b' };
     await connection.fetchCustomPage({
       name: 'test',
