@@ -1,18 +1,14 @@
 import { autorun, _resetGlobalState, configure } from 'mobx';
 import { types, getSnapshot } from 'mobx-state-tree';
 import Connection from '../../';
+import WpApi from '../../../env/wpapi';
 import postsFromCategory7 from '../../../__tests__/posts-from-category-7.json';
 import postsFromCategory7Page2 from '../../../__tests__/posts-from-category-7-page-2.json';
 import post60 from '../../../__tests__/post-60.json';
 
+jest.mock('../../../env/wpapi');
+
 configure({ disableErrorBoundaries: true });
-
-let connection;
-beforeEach(() => {
-  connection = Connection.create({});
-});
-
-const init = () => {};
 
 const Stores = types.model().props({
   connection: types.optional(Connection, {}),
@@ -21,6 +17,17 @@ const Stores = types.model().props({
     generalSite: { url: 'https://example.com' },
   }),
   build: types.optional(types.frozen, { perPage: 10 }),
+});
+
+let connection = null;
+let getEntity = null;
+let getListPage = null;
+
+beforeEach(() => {
+  WpApi.mockClear();
+  connection = Stores.create({}, { connection: { WpApi } }).connection; // eslint-disable-line
+  connection.initApi();
+  ({ getEntity, getListPage } = WpApi.mock.instances[0]);  // eslint-disable-line
 });
 
 describe('Connection › Router', () => {
@@ -307,17 +314,16 @@ describe('Connection › Router', () => {
   });
 
   test('Subscribe to selectedItem when context is replaced', done => {
-    const getEntity = jest.fn().mockReturnValueOnce(Promise.resolve(post60));
-    const conn = Stores.create({}, { connection: { wpapi: { init, getEntity } } }).connection;
-    conn.routeChangeSucceed({
+    getEntity.mockReturnValueOnce(Promise.resolve(post60));
+    connection.routeChangeSucceed({
       selectedItem: { type: 'post', id: 60 },
       context: { columns: [[{ type: 'post', id: 60 }]] },
     });
     autorun(() => {
-      if (conn.selectedItem.isReady) done();
+      if (connection.selectedItem.isReady) done();
     });
-    conn.replaceContext({ context: { columns: [[{ type: 'post', id: 60 }]] } });
-    conn.fetchEntity({ type: 'post', id: 60 });
+    connection.replaceContext({ context: { columns: [[{ type: 'post', id: 60 }]] } });
+    connection.fetchEntity({ type: 'post', id: 60 });
   });
 
   test('Select in previous context', () => {
@@ -488,8 +494,7 @@ describe('Connection › Router', () => {
   });
 
   test('Add items from extracted once they are ready', async () => {
-    const getListPage = jest.fn().mockReturnValueOnce(Promise.resolve(postsFromCategory7));
-    connection = Stores.create({}, { connection: { wpapi: { init, getListPage } } }).connection; // eslint-disable-line
+    getListPage.mockReturnValueOnce(Promise.resolve(postsFromCategory7));
     connection.routeChangeSucceed({
       selectedItem: { type: 'post', id: 60 },
       context: {
@@ -505,8 +510,7 @@ describe('Connection › Router', () => {
   });
 
   test('Add items from extracted once they are ready, which include an item in the context', async () => {
-    const getListPage = jest.fn().mockReturnValueOnce(Promise.resolve(postsFromCategory7));
-    connection = Stores.create({}, { connection: { wpapi: { init, getListPage } } }).connection; // eslint-disable-line
+    getListPage.mockReturnValueOnce(Promise.resolve(postsFromCategory7));
     connection.routeChangeSucceed({
       selectedItem: { type: 'post', id: 54 },
       context: {
@@ -522,8 +526,7 @@ describe('Connection › Router', () => {
   });
 
   test('Add items from extracted once they are ready avoiding duplications', async () => {
-    const getListPage = jest.fn().mockReturnValueOnce(Promise.resolve(postsFromCategory7));
-    connection = Stores.create({}, { connection: { wpapi: { init, getListPage } } }).connection; // eslint-disable-line
+    getListPage.mockReturnValueOnce(Promise.resolve(postsFromCategory7));
     connection.routeChangeSucceed({
       selectedItem: { type: 'post', id: 54 },
       context: { columns: [[{ type: 'category', id: 7, page: 1, extract: 'horizontal' }]] },
@@ -537,8 +540,7 @@ describe('Connection › Router', () => {
   });
 
   test('`selectedItem` should be in its natural position inside horizontal extracted list', async () => {
-    const getListPage = jest.fn().mockReturnValueOnce(Promise.resolve(postsFromCategory7));
-    connection = Stores.create({}, { connection: { wpapi: { init, getListPage } } }).connection; // eslint-disable-line
+    getListPage.mockReturnValueOnce(Promise.resolve(postsFromCategory7));
     await connection.fetchListPage({ type: 'category', id: 7, page: 1 });
     connection.routeChangeSucceed({
       selectedItem: { type: 'post', id: 54 },
@@ -559,8 +561,7 @@ describe('Connection › Router', () => {
   });
 
   test('Extrated items should have the list they are extracted from as `fromList`', async () => {
-    const getListPage = jest.fn().mockReturnValueOnce(Promise.resolve(postsFromCategory7));
-    connection = Stores.create({}, { connection: { wpapi: { init, getListPage } } }).connection; // eslint-disable-line
+    getListPage.mockReturnValueOnce(Promise.resolve(postsFromCategory7));
     connection.routeChangeSucceed({
       selectedItem: { type: 'post', id: 60 },
       context: {
@@ -584,8 +585,7 @@ describe('Connection › Router', () => {
   });
 
   test('Items should have the `fromList` from `selectedItem` as their `fromList`', async () => {
-    const getListPage = jest.fn().mockReturnValueOnce(Promise.resolve(postsFromCategory7));
-    connection = Stores.create({}, { connection: { wpapi: { init, getListPage } } }).connection; // eslint-disable-line
+    getListPage.mockReturnValueOnce(Promise.resolve(postsFromCategory7));
     connection.routeChangeSucceed({
       selectedItem: { type: 'post', id: 60, fromList: { type: 'tag', id: 20, page: 1 } },
       context: {
@@ -656,8 +656,7 @@ describe('Connection › Router', () => {
   });
 
   test('Add both extracted list and normal list to context', async () => {
-    const getListPage = jest.fn().mockReturnValueOnce(Promise.resolve(postsFromCategory7));
-    connection = Stores.create({}, { connection: { wpapi: { init, getListPage } } }).connection; // eslint-disable-line
+    getListPage.mockReturnValueOnce(Promise.resolve(postsFromCategory7));
     connection.routeChangeSucceed({
       selectedItem: { type: 'post', id: 60 },
       context: {
@@ -928,11 +927,9 @@ describe('Connection › Router', () => {
   });
 
   test('Add column to context', async () => {
-    const getListPage = jest
-      .fn()
+    getListPage
       .mockReturnValueOnce(Promise.resolve(postsFromCategory7))
       .mockReturnValueOnce(Promise.resolve(postsFromCategory7Page2));
-    connection = Stores.create({}, { connection: { wpapi: { init, getListPage } } }).connection; // eslint-disable-line
     connection.routeChangeSucceed({
       selectedItem: { type: 'post', id: 54 },
       context: {

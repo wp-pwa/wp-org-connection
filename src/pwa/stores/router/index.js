@@ -137,7 +137,7 @@ export const actions = self => {
     moveItemToColumn: ({ item }) => {
       moveItemToSelectedColumn({ item });
     },
-    addItemToColumn: item => {
+    addItemToColumn: ({ item }) => {
       addItemToSelectedColumn({ item });
     },
     addColumnToContext: ({ column }) => {
