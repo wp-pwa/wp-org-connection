@@ -8,6 +8,10 @@ Finally, use `npm run start:pwa` to start the development environment.
 
 ## Changelog
 
+#### 1.6.2
+
+- Fix GTM time
+
 #### 1.6.1
 
 - Fix for duplicate entities
