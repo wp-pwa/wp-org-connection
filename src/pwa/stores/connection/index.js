@@ -13,6 +13,8 @@ import Head from './head';
 import convert from '../../converters';
 import * as schemas from '../../schemas';
 
+const dev = process.env.NODE_ENV !== 'production';
+
 export const props = {
   entities: types.optional(types.map(Entity), {}),
   lists: types.optional(types.map(List), {}),
@@ -65,7 +67,7 @@ export const actions = self => ({
       self.addEntities({ entities });
       entity.isFetching = false;
     } catch (error) {
-      console.warn(`Warning: fetchEntity failed: { type: ${type}, id: ${id} }`);
+      if (dev) console.warn(`fetchEntity failed: { type: ${type}, id: ${id} }`, error);
       entity.isFetching = false;
       entity.hasFailed = true;
     }
@@ -98,7 +100,8 @@ export const actions = self => ({
       self.addListPage({ type, id, page, total, result, entities });
       listPage.isFetching = false;
     } catch (error) {
-      console.warn(`Warning: fetchListPage failed: { type: ${type}, id: ${id}, page: ${page} }`);
+      if (dev)
+        console.warn(`fetchListPage failed: { type: ${type}, id: ${id}, page: ${page} }`, error);
       listPage.isFetching = false;
       listPage.hasFailed = true;
     }
@@ -114,8 +117,8 @@ export const actions = self => ({
     const customPage = self.getCustomPage({ name, page });
     customPage.isFetching = true;
     customPage.hasFailed = false;
+    const { getCustomPage } = getEnv(self).connection.wpapi;
     try {
-      const { getCustomPage } = getEnv(self).connection.wpapi;
       const response = yield getCustomPage({ type, page, params });
       const { entities, result } = normalize(response, schemas.list);
       const totalEntities = response._paging ? parseInt(response._paging.total, 10) : 0;
@@ -124,7 +127,7 @@ export const actions = self => ({
       self.addCustomPage({ name, page, result, entities, total });
       customPage.isFetching = false;
     } catch (error) {
-      console.warn(`Warning: fetchCustomPage failed: { name: ${name} }`);
+      if (dev) console.warn(`fetchCustomPage failed: { name: ${name} }`, error);
       customPage.isFetching = false;
       customPage.hasFailed = true;
     }
