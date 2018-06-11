@@ -1,6 +1,9 @@
 import { types, getSnapshot } from 'mobx-state-tree';
 import Connection from '../../';
+import WpApi from '../../../env/wpapi';
 import post60 from '../../../__tests__/post-60.json';
+
+jest.mock('../../../env/wpapi');
 
 const Stores = types.model().props({
   connection: types.optional(Connection, {}),
@@ -11,14 +14,21 @@ const Stores = types.model().props({
   build: types.optional(types.frozen, { perPage: 10 }),
 });
 
-const init = () => {};
+let connection = null;
+let getEntity = null;
+
+beforeEach(() => {
+  WpApi.mockClear();
+  connection = Stores.create({}, { connection: { WpApi } }).connection; // eslint-disable-line
+  connection.initApi();
+  getEntity = WpApi.mock.instances[0].getEntity;  // eslint-disable-line
+});
 
 describe('Connection › Router > History', () => {
   test('initializes the url if selectedItem exists in the initial state', async () => {
     // Returns a snapshot as the initial state.
     const initialStateMock = async () => {
-      const getEntity = jest.fn().mockReturnValueOnce(Promise.resolve(post60));
-      const { connection } = Stores.create({}, { connection: { wpapi: { init, getEntity } } });
+      getEntity.mockReturnValueOnce(Promise.resolve(post60));
       await connection.fetchEntity({ type: 'post', id: 60 });
       connection.routeChangeRequested({ selectedItem: { type: 'post', id: 60 } });
       return getSnapshot(connection);
@@ -31,8 +41,7 @@ describe('Connection › Router > History', () => {
   });
 
   test('replaces the first blank url if selectedItem is not null anymore', async () => {
-    const getEntity = jest.fn().mockReturnValueOnce(Promise.resolve(post60));
-    const { connection } = Stores.create({}, { connection: { wpapi: { init, getEntity } } });
+    getEntity.mockReturnValueOnce(Promise.resolve(post60));
     connection.replaceFirstUrl();
     await connection.fetchEntity({ type: 'post', id: 60 });
     connection.routeChangeSucceed({ selectedItem: { type: 'post', id: 60 } });
@@ -42,8 +51,7 @@ describe('Connection › Router > History', () => {
   });
 
   test("dispatchs succeed when 'push' (history length increases)", async () => {
-    const getEntity = jest.fn().mockReturnValueOnce(Promise.resolve(post60));
-    const { connection } = Stores.create({}, { connection: { wpapi: { init, getEntity } } });
+    getEntity.mockReturnValueOnce(Promise.resolve(post60));
     await connection.fetchEntity({ type: 'post', id: 60 });
     connection.routeChangeSucceed({ selectedItem: { type: 'post', id: 63 } });
     connection.routeChangeSucceed = jest.fn();
@@ -58,8 +66,7 @@ describe('Connection › Router > History', () => {
   });
 
   test("dispatchs succeed when 'replace' (same history length)", async () => {
-    const getEntity = jest.fn().mockReturnValueOnce(Promise.resolve(post60));
-    const { connection } = Stores.create({}, { connection: { wpapi: { init, getEntity } } });
+    getEntity.mockReturnValueOnce(Promise.resolve(post60));
     await connection.fetchEntity({ type: 'post', id: 60 });
 
     connection.routeChangeSucceed = jest.fn();
@@ -75,8 +82,7 @@ describe('Connection › Router > History', () => {
   });
 
   test('does not dispatch a succeed when just updating the url', async () => {
-    const getEntity = jest.fn().mockReturnValueOnce(Promise.resolve(post60));
-    const { connection } = Stores.create({}, { connection: { wpapi: { init, getEntity } } });
+    getEntity.mockReturnValueOnce(Promise.resolve(post60));
 
     connection.routeChangeRequested({ selectedItem: { type: 'post', id: 60 } });
 
