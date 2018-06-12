@@ -27,7 +27,7 @@ beforeEach(() => {
   WpApi.mockClear();
   connection = Stores.create({}, { connection: { WpApi } }).connection; // eslint-disable-line
   connection.initApi();
-  ({ getEntity, getListPage } = WpApi.mock.instances[0]); // eslint-disable-line
+  ({ getEntity, getListPage } = WpApi.mock.instances[0]);  // eslint-disable-line
 });
 
 describe('Connection › Router', () => {
@@ -647,7 +647,7 @@ describe('Connection › Router', () => {
         ],
       },
     });
-    connection.addItemToColumn({ type: 'post', id: 64 });
+    connection.addItemToColumn({ item: { type: 'post', id: 64 } });
     expect(connection.contexts).toMatchSnapshot();
     expect(connection.contexts[0].columns.length).toBe(3);
     expect(connection.selectedColumn).toBe(connection.contexts[0].columns[1]);
