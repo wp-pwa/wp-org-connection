@@ -1,8 +1,6 @@
 import Wpapi from 'wpapi';
 import forOwn from 'lodash/forOwn';
 
-let api = null;
-
 const typesToEndpoints = type => {
   const endpoints = {
     post: 'posts',
