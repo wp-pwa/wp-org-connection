@@ -27,6 +27,7 @@
     "wpapi": "^1.1.2"
   },
   "devDependencies": {
+    "husky": "^1.0.0-rc.9",
     "jest": "^23.2.0"
   },
   "bugs": {
