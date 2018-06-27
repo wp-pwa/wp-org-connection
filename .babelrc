@@ -1,0 +1,15 @@
+{
+  "presets": [
+    [
+      "@babel/preset-env",
+      {
+        "targets": { "browsers": ["android >= 5", "ios_saf > 9", "and_chr >= 40"] },
+        "useBuiltIns": "usage"
+      }
+    ],
+    "@babel/preset-react"
+  ],
+  "plugins": [
+    "transform-class-properties",
+  ]
+}
