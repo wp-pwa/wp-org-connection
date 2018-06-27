@@ -1,24 +1,23 @@
 {
-  "name": "wp-org-connection-app-extension-worona",
-  "version": "1.6.3",
+  "name": "wp-org-connection",
+  "version": "0.6.3",
   "private": true,
-  "description": "Connect to any self hosted WP using the WP-API",
+  "description": "Connect Frontity to any self hosted WP using the REST API",
   "scripts": {
     "start": "node node_modules/worona-packages/dist/start.js"
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/worona/wp-org-connection-app-extension-worona.git"
+    "url": "git+https://github.com/frontity/wp-org-connection.git"
   },
   "keywords": [
     "wordpress",
     "org",
     "connection",
-    "app",
-    "worona",
+    "frontity",
     "package"
   ],
-  "author": "luis@worona.org",
+  "author": "luis@frontity.com, edu@frontity.com, david@frontity.com",
   "license": "MIT",
   "dependencies": {
     "he": "^1.1.1",
@@ -28,17 +27,7 @@
   },
   "devDependencies": {},
   "bugs": {
-    "url": "https://github.com/worona/wp-org-connection-app-extension-worona/issues"
+    "url": "https://github.com/frontity/wp-org-connection/issues"
   },
-  "homepage": "https://github.com/worona/wp-org-connection-app-extension-worona#readme",
-  "worona": {
-    "authors": [
-      "luis@worona.org"
-    ],
-    "app": {
-      "type": "extension",
-      "namespace": "connection",
-      "listed": false
-    }
-  }
+  "homepage": "https://github.com/frontity/wp-org-connection#readme"
 }
