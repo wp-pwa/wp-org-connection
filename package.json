@@ -4,7 +4,8 @@
   "private": true,
   "description": "Connect Frontity to any self hosted WP using the REST API",
   "scripts": {
-    "start": "node node_modules/worona-packages/dist/start.js"
+    "test": "jest --watch --silent",
+    "test:ci": "jest --silent"
   },
   "repository": {
     "type": "git",
@@ -25,7 +26,9 @@
     "query-parse": "^2.0.0",
     "wpapi": "^1.1.2"
   },
-  "devDependencies": {},
+  "devDependencies": {
+    "jest": "^23.2.0"
+  },
   "bugs": {
     "url": "https://github.com/frontity/wp-org-connection/issues"
   },
