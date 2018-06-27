@@ -5,7 +5,8 @@
   "description": "Connect Frontity to any self hosted WP using the REST API",
   "scripts": {
     "test": "jest --watch --silent",
-    "test:ci": "jest --silent"
+    "test:ci": "jest --silent",
+    "cz": "git-cz"
   },
   "repository": {
     "type": "git",
@@ -27,6 +28,8 @@
     "wpapi": "^1.1.2"
   },
   "devDependencies": {
+    "commitizen": "^2.10.1",
+    "cz-conventional-changelog": "^2.1.0",
     "husky": "^1.0.0-rc.9",
     "jest": "^23.2.0"
   },
