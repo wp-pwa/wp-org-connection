@@ -1,6 +1,7 @@
 /* eslint-disable no-use-before-define */
 import { observable } from 'mobx';
 import { types, resolveIdentifier } from 'mobx-state-tree';
+import { decode } from 'he';
 import { join, extract } from './utils';
 import entityShape, {
   link,
@@ -33,25 +34,29 @@ const common = self => ({
 
 const single = self => ({
   get title() {
-    return self.isReady ? self.raw.title : '';
+    return self.isReady ? self.raw.title.rendered : '';
   },
   get creationDate() {
-    return self.isReady ? self.raw.creationDate : null;
+    return self.isReady
+      ? new Date(`${self.raw.date_gmt || self.raw.date}+00:00`).getTime()
+      : null;
   },
   get modificationDate() {
-    return self.isReady ? self.raw.modificationDate : null;
+    return self.isReady
+      ? new Date(`${self.raw.modified_gmt}+00:00`).getTime()
+      : null;
   },
   get slug() {
     return self.isReady ? self.raw.slug : '';
   },
   get content() {
-    return self.isReady ? self.raw.content : '';
+    return self.isReady ? self.raw.content.rendered : '';
   },
   get excerpt() {
-    return self.isReady ? self.raw.excerpt : '';
+    return self.isReady ? self.raw.excerpt && self.raw.excerpt.rendered : '';
   },
   get target() {
-    return self.isReady ? self.raw.target : '';
+    return self.isReady ? self.raw['post-target'] : '';
   },
   get parent() {
     return self.isReady && self.raw.parent
@@ -60,9 +65,11 @@ const single = self => ({
       : null;
   },
   taxonomy(type) {
-    return self.isReady && self.raw.taxonomies && self.raw.taxonomies[type]
+    return self.isReady &&
+      self.raw.taxonomiesMap &&
+      self.raw.taxonomiesMap[type]
       ? observable(
-          self.raw.taxonomies[type].map(
+          self.raw.taxonomiesMap[type].map(
             id =>
               resolveIdentifier(Entity, self, join(type, id)) ||
               entityShape(type, id),
@@ -74,21 +81,21 @@ const single = self => ({
     return {
       featured:
         (self.isReady &&
-          self.raw.media.featured &&
+          self.raw.media.featured_media &&
           resolveIdentifier(
             Entity,
             self,
-            join('media', self.raw.media.featured),
+            join('media', self.raw.media.featured_media),
           )) ||
-        mediaShape('media', self.isReady && self.raw.media.featured),
-      content: self.isReady ? self.raw.media.content : observable([]),
+        mediaShape('media', self.isReady && self.raw.media.featured_media),
+      content: self.isReady ? self.raw.media.content_media : observable([]),
     };
   },
   get meta() {
     return self.isReady ? self.raw.meta : '';
   },
   get hasFeaturedMedia() {
-    return self.isReady && self.raw.media.featured !== null;
+    return self.isReady && self.raw.media.featured_media !== null;
   },
   get author() {
     return (
@@ -99,7 +106,15 @@ const single = self => ({
     );
   },
   get headMeta() {
-    return (self.isReady && self.raw.headMeta) || headMetaShape;
+    return self.isReady
+      ? {
+          title: decode(
+            (self.raw.yoast_meta && self.raw.yoast_meta.title) ||
+              self.raw.name ||
+              self.raw.title.rendered,
+          ),
+        }
+      : headMetaShape;
   },
 });
 
@@ -156,7 +171,10 @@ const author = self => ({
     return self.isReady ? self.raw.description : '';
   },
   get avatar() {
-    return self.isReady ? self.raw.avatar : '';
+    return self.isReady
+      ? self.raw.avatar_urls &&
+          Object.values(self.raw.avatar_urls)[0].replace(/\?.*$/, '')
+      : '';
   },
 });
 

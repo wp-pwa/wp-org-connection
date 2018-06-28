@@ -16,7 +16,6 @@ import customShape from './custom-shape';
 import List from './list';
 import Custom from './custom';
 import Head from './head';
-import convert from '../../converters';
 import * as schemas from '../../schemas';
 
 const dev = process.env.NODE_ENV !== 'production';
@@ -178,7 +177,7 @@ export const actions = self => {
       // Don't add entity if it doesn't have id or type
       if (!entity.id || !entity.type) return;
       const item = self.getEntity({ type: entity.type, id: entity.id });
-      if (!item.raw) item.raw = convert(entity);
+      if (!item.raw) item.raw = entity;
       item.isFetching = false;
     },
     addEntities({ entities }) {
