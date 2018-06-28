@@ -26,6 +26,7 @@
   "dependencies": {
     "he": "^1.1.1",
     "himalaya": "^1.0.1",
+    "history": "^4.7.2",
     "normalizr": "^3.2.4",
     "query-parse": "^2.0.0",
     "wpapi": "^1.1.2"
