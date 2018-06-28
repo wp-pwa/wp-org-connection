@@ -1,6 +1,6 @@
 /* eslint-disable no-use-before-define */
 import { observable } from 'mobx';
-import { types, resolveIdentifier, flow } from 'mobx-state-tree';
+import { types, resolveIdentifier } from 'mobx-state-tree';
 import { join, extract } from './utils';
 import entityShape, {
   link,
@@ -22,7 +22,12 @@ const common = self => ({
   },
   pagedLink: (page = 1) => {
     const { type, id } = extract(self.mstId);
-    return pagedLink({ type, id, page, entityLink: self.entity && self.entity.link });
+    return pagedLink({
+      type,
+      id,
+      page,
+      entityLink: self.entity && self.entity.link,
+    });
   },
 });
 
@@ -55,10 +60,14 @@ const single = self => ({
       : null;
   },
   taxonomy(type) {
-    return self.isReady && self.entity.taxonomies && self.entity.taxonomies[type]
+    return self.isReady &&
+      self.entity.taxonomies &&
+      self.entity.taxonomies[type]
       ? observable(
           self.entity.taxonomies[type].map(
-            id => resolveIdentifier(Entity, self, join(type, id)) || entityShape(type, id),
+            id =>
+              resolveIdentifier(Entity, self, join(type, id)) ||
+              entityShape(type, id),
           ),
         )
       : observable([]);
@@ -68,7 +77,11 @@ const single = self => ({
       featured:
         (self.isReady &&
           self.entity.media.featured &&
-          resolveIdentifier(Entity, self, join('media', self.entity.media.featured))) ||
+          resolveIdentifier(
+            Entity,
+            self,
+            join('media', self.entity.media.featured),
+          )) ||
         mediaShape('media', self.isReady && self.entity.media.featured),
       content: self.isReady ? self.entity.media.content : observable([]),
     };
@@ -130,7 +143,9 @@ const media = self => ({
     return originalShape;
   },
   get sizes() {
-    return self.isReady && self.entity.sizes ? self.entity.sizes : observable([]);
+    return self.isReady && self.entity.sizes
+      ? self.entity.sizes
+      : observable([]);
   },
 });
 
@@ -149,12 +164,6 @@ const author = self => ({
   },
 });
 
-const actions = self => ({
-  fetch: flow(function* fetch() {
-
-  }),
-});
-
 const Entity = types
   .model('Entity')
   .props({
@@ -169,8 +178,6 @@ const Entity = types
   .views(single)
   .views(taxonomy)
   .views(media)
-  .views(author)
-  .actions(actions);
-
+  .views(author);
 
 export default Entity;
