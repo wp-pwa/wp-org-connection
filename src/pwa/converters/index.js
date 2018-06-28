@@ -22,7 +22,9 @@ export const single = entity => ({
   parent: entity.parent,
   target: entity['post-target'],
   headMeta: {
-    title: decode((entity.yoast_meta && entity.yoast_meta.title) || entity.title.rendered),
+    title: decode(
+      (entity.yoast_meta && entity.yoast_meta.title) || entity.title.rendered,
+    ),
   },
 });
 
@@ -47,7 +49,9 @@ export const author = entity => ({
   slug: entity.slug,
   description: entity.description,
   link: entity.link,
-  avatar: entity.avatar_urls && Object.values(entity.avatar_urls)[0].replace(/\?.*$/, ''),
+  avatar:
+    entity.avatar_urls &&
+    Object.values(entity.avatar_urls)[0].replace(/\?.*$/, ''),
   headMeta: {
     title: (entity.yoast_meta && entity.yoast_meta.title) || entity.name,
   },
@@ -57,7 +61,7 @@ export const media = entity => ({
   mst: 'media',
   id: entity.id,
   type: 'media',
-  creationDate: new Date(`${entity.date_gmt}+0000`).getTime(),
+  creationDate: new Date(`${entity.date}+0000`).getTime(),
   slug: entity.slug,
   alt: entity.alt_text,
   link: entity.link,
@@ -68,7 +72,9 @@ export const media = entity => ({
   caption: entity.caption && entity.caption.rendered,
   author: entity.author,
   headMeta: {
-    title: decode((entity.yoast_meta && entity.yoast_meta.title) || entity.title.rendered),
+    title: decode(
+      (entity.yoast_meta && entity.yoast_meta.title) || entity.title.rendered,
+    ),
   },
   original: {
     height: entity.media_details.height,
