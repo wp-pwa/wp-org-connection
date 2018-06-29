@@ -81,21 +81,21 @@ const single = self => ({
     return {
       featured:
         (self.isReady &&
-          self.raw.media.featured_media &&
+          self.raw.featured_media &&
           resolveIdentifier(
             Entity,
             self,
-            join('media', self.raw.media.featured_media),
+            join('media', self.raw.featured_media),
           )) ||
-        mediaShape('media', self.isReady && self.raw.media.featured_media),
-      content: self.isReady ? self.raw.media.content_media : observable([]),
+        mediaShape('media', self.isReady && self.raw.featured_media),
+      content: self.isReady ? self.raw.content_media : observable([]),
     };
   },
   get meta() {
     return self.isReady ? self.raw.meta : '';
   },
   get hasFeaturedMedia() {
-    return self.isReady && self.raw.media.featured_media !== null;
+    return self.isReady && self.raw.featured_media !== null;
   },
   get author() {
     return (
@@ -142,12 +142,14 @@ const media = self => ({
   },
   get original() {
     if (self.isReady) {
-      const { width, height, filename, url } = self.raw.original;
+      const url = self.raw.source_url;
+      const { width, height, file: filename } = self.raw.media_details;
 
-      if (width && height && filename && url) return self.raw.original;
+      if (width && height && filename && url)
+        return { width, height, filename, url };
 
-      if (self.raw.sizes)
-        return self.raw.sizes.reduce((current, final) => {
+      if (self.sizes)
+        return self.sizes.reduce((current, final) => {
           if (current.width > final.width) return current;
           return final;
         });
@@ -156,7 +158,14 @@ const media = self => ({
     return originalShape;
   },
   get sizes() {
-    return self.isReady && self.raw.sizes ? self.raw.sizes : observable([]);
+    return self.isReady && self.raw.media_details.sizes
+      ? Object.values(self.raw.media_details.sizes).map(image => ({
+          height: image.height,
+          width: image.width,
+          filename: image.file,
+          url: image.source_url,
+        }))
+      : observable([]);
   },
 });
 
