@@ -5,10 +5,12 @@ export const taxonomy = new schema.Entity(
   {},
   {
     processStrategy(entity) {
-      entity.taxonomy = entity.taxonomy === 'post_tag' ? 'tag' : entity.taxonomy;
-      entity.type = entity.taxonomy;
-      entity.mst = 'taxonomy';
-      return entity;
+      const result = { ...entity };
+      result.taxonomy =
+        result.taxonomy === 'post_tag' ? 'tag' : result.taxonomy;
+      result.type = result.taxonomy;
+      result.mst = 'taxonomy';
+      return result;
     },
   },
 );

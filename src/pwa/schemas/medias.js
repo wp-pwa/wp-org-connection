@@ -10,9 +10,10 @@ export const media = new schema.Entity(
   },
   {
     processStrategy(entity) {
-      entity.mst = 'media';
-      entity.type = 'media';
-      return entity;
+      const result = { ...entity };
+      result.mst = 'media';
+      result.type = 'media';
+      return result;
     },
   },
 );
