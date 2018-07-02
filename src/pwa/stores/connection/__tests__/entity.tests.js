@@ -436,13 +436,22 @@ describe('Connection › Entity', () => {
       'https://demo.worona.org/page/2',
     );
   });
-});
 
-test('Subscribe to meta object before entity is ready', done => {
-  expect(connection.entity('post', 60).meta).toEqual({});
-  autorun(() => {
-    if (connection.entity('post', 60).meta.custom_field === 'test value')
-      done();
+  test('Subscribe to meta object before entity is ready', done => {
+    expect(connection.entity('post', 60).meta).toEqual({});
+    autorun(() => {
+      if (connection.entity('post', 60).meta.custom_field === 'test value')
+        done();
+    });
+    connection.addEntity({ entity: entities.single[60] });
   });
-  connection.addEntity({ entity: entities.single[60] });
+
+  test('Get stuff from raw api response', done => {
+    expect(connection.entity('post', 60).raw).toEqual({});
+    autorun(() => {
+      if (connection.entity('post', 60).raw.sticky === false) done();
+    });
+    connection.addEntity({ entity: entities.single[60] });
+    expect(connection.entity('post', 60).raw.sticky).toEqual(false);
+  });
 });
