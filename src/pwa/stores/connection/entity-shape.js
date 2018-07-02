@@ -28,6 +28,7 @@ const common = (type, id) => ({
   type: type || null,
   isReady: false,
   isFetching: false,
+  raw: {},
   get link() {
     return link(type, id);
   },
