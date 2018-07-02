@@ -691,7 +691,9 @@ Object {
     "post",
   ],
   "link": "https://demo.worona.org/the-beauties-of-gullfoss/",
-  "meta": Object {},
+  "meta": Object {
+    "custom_field": "test value",
+  },
   "modified": "2018-03-22T17:09:55",
   "modified_gmt": "2018-03-22T17:09:55",
   "mst": "single",

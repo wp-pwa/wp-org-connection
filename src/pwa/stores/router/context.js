@@ -52,7 +52,7 @@ const Context = types
 
       return (
         (nextColumnWithNonVisited &&
-          nextColumnWithNonVisited.items.find(item => item.visited === false)) ||
+          nextColumnWithNonVisited.items.find(item => item.hasBeenVisited === false)) ||
         null
       );
     },

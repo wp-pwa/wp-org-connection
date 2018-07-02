@@ -15,25 +15,33 @@ const Custom = types
     params: types.optional(types.frozen, {}),
   })
   .views(self => ({
-    get ready() {
+    get isReady() {
       return values(self.pageMap)
-        .map(page => page.ready)
+        .map(page => page.isReady)
         .reduce((acc, cur) => acc || cur, false);
     },
-    get fetching() {
+    get isFetching() {
       return values(self.pageMap)
-        .map(page => page.fetching)
+        .map(page => page.isFetching)
+        .reduce((acc, cur) => acc || cur, false);
+    },
+    get hasFailed() {
+      return values(self.pageMap)
+        .map(page => page.hasFailed)
         .reduce((acc, cur) => acc || cur, false);
     },
     get entities() {
       const results = flatten(self.pages.map(page => page.results.peek()));
-      return observable(results.map(mstId => {
-        const { type, id } = extract(mstId);
-        return getParent(self, 2).entity(type, id);
-      }));
+      return observable(
+        results.map(mstId => {
+          const { type, id } = extract(mstId);
+          return getParent(self, 2).entity(type, id);
+        }),
+      );
     },
     page(page) {
-      return self.pageMap.get(page) || pageShape;
+      const strPage = page.toString();
+      return self.pageMap.get(strPage) || pageShape;
     },
     get pages() {
       return values(self.pageMap);

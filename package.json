@@ -1,47 +1,57 @@
 {
-  "name": "wp-org-connection-app-extension-worona",
-  "version": "1.5.15",
+  "name": "wp-org-connection",
+  "version": "0.6.3",
   "private": true,
-  "description": "Connect to any self hosted WP using the WP-API",
+  "description": "Connect Frontity to any self hosted WP using the REST API",
   "scripts": {
-    "start": "node node_modules/worona-packages/dist/start.js"
+    "test": "jest --watch --silent",
+    "test:debug": "node --inspect node_modules/.bin/jest --watch",
+    "test:ci": "jest --silent",
+    "cz": "git-cz",
+    "travis-deploy-once": "travis-deploy-once",
+    "semantic-release": "semantic-release"
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/worona/wp-org-connection-app-extension-worona.git"
+    "url": "git+https://github.com/frontity/wp-org-connection.git"
   },
   "keywords": [
     "wordpress",
     "org",
     "connection",
-    "app",
-    "worona",
+    "frontity",
     "package"
   ],
-  "author": "luis@worona.org",
+  "author": "luis@frontity.com, edu@frontity.com, david@frontity.com",
   "license": "MIT",
   "dependencies": {
     "he": "^1.1.1",
     "himalaya": "^1.0.1",
-    "nprogress": "^0.2.0",
+    "history": "^4.7.2",
+    "normalizr": "^3.2.4",
     "query-parse": "^2.0.0",
-    "react-waypoint": "^8.0.0",
-    "url": "^0.11.0",
     "wpapi": "^1.1.2"
   },
-  "devDependencies": {},
-  "bugs": {
-    "url": "https://github.com/worona/wp-org-connection-app-extension-worona/issues"
+  "devDependencies": {
+    "@semantic-release/changelog": "^2.1.0",
+    "@semantic-release/git": "^5.0.0",
+    "@semantic-release/github": "^4.2.17",
+    "@semantic-release/npm": "^3.3.2",
+    "babel-core": "^6.26.3",
+    "babel-plugin-transform-class-properties": "^6.24.1",
+    "babel-preset-env": "^1.7.0",
+    "babel-preset-react": "^6.24.1",
+    "commitizen": "^2.10.1",
+    "cz-conventional-changelog": "^2.1.0",
+    "husky": "^1.0.0-rc.9",
+    "jest": "^23.2.0",
+    "mobx": "^4.3.1",
+    "mobx-state-tree": "^2.2.0",
+    "semantic-release": "^15.6.0",
+    "travis-deploy-once": "^5.0.0"
   },
-  "homepage": "https://github.com/worona/wp-org-connection-app-extension-worona#readme",
-  "worona": {
-    "authors": [
-      "luis@worona.org"
-    ],
-    "app": {
-      "type": "extension",
-      "namespace": "connection",
-      "listed": false
-    }
-  }
+  "bugs": {
+    "url": "https://github.com/frontity/wp-org-connection/issues"
+  },
+  "homepage": "https://github.com/frontity/wp-org-connection#readme"
 }

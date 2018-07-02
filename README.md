@@ -8,6 +8,26 @@ Finally, use `npm run start:pwa` to start the development environment.
 
 ## Changelog
 
+#### 1.6.4
+
+- Convert WpApi to class
+
+#### 1.6.3
+
+- Fix GTM time
+
+#### 1.6.2
+
+- Fix GTM time
+
+#### 1.6.1
+
+- Fix for duplicate entities
+
+#### 1.6.0
+
+- Remove redux
+
 #### 1.5.15
 
 - Fixes goToPreviousContext bug

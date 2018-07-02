@@ -1,23 +1,15 @@
-/* eslint-disable no-restricted-syntax */
-import { types, unprotect } from 'mobx-state-tree';
-import { normalize } from 'normalizr';
+/* eslint-disable no-restricted-syntax, no-underscore-dangle */
+import { types } from 'mobx-state-tree';
 import * as connect from '../';
-import { list, entity } from '../../../schemas';
-import * as actions from '../../../actions';
-import * as actionTypes from '../../../actionTypes';
+import WpApi from '../../../env/wpapi';
 import post60 from '../../../__tests__/post-60.json';
 import postsFromCategory7 from '../../../__tests__/posts-from-category-7.json';
 import postsFromCategory7Page2 from '../../../__tests__/posts-from-category-7-page-2.json';
 
-const { result: resultFromCategory7, entities: entitiesFromCategory } = normalize(
-  postsFromCategory7,
-  list,
-);
-const { result: resultFromCategory7Page2, entities: entitiesFromCategoryPage2 } = normalize(
-  postsFromCategory7Page2,
-  list,
-);
-const { entities: entitiesFromPost60 } = normalize(post60, entity);
+jest.mock('../../../env/wpapi');
+
+postsFromCategory7._paging = { total: 15, totalPages: 3 };
+postsFromCategory7Page2._paging = { total: 15, totalPages: 3 };
 
 const Connection = types
   .model()
@@ -25,272 +17,195 @@ const Connection = types
   .views(connect.views)
   .actions(connect.actions);
 
+const Stores = types.model().props({
+  connection: types.optional(Connection, {}),
+  settings: types.optional(types.frozen, {
+    connection: {},
+    generalSite: { url: 'https://example.com' },
+  }),
+  build: types.optional(types.frozen, { perPage: 10 }),
+});
+
 let connection = null;
+let getEntity = null;
+let getListPage = null;
+let getCustomPage = null;
+
 beforeEach(() => {
-  connection = Connection.create({});
-  unprotect(connection);
+  WpApi.mockClear();
+  connection = Stores.create({}, { connection: { WpApi } }).connection; // eslint-disable-line
+  connection.initApi();
+  ({ getEntity, getListPage, getCustomPage } = WpApi.mock.instances[0]);  // eslint-disable-line
 });
 
 describe('Connection › Actions', () => {
-  test('Entity: Action Succeed', () => {
-    expect(connection.entity('post', 60).ready).toBe(false);
-    expect(connection.entity('post', 60).fetching).toBe(false);
-    connection[actionTypes.ENTITY_REQUESTED](
-      actions.entityRequested({
-        entity: {
-          type: 'post',
-          id: 60,
-        },
-      }),
-    );
-    expect(connection.entity('post', 60).ready).toBe(false);
-    expect(connection.entity('post', 60).fetching).toBe(true);
-    connection[actionTypes.ENTITY_SUCCEED](
-      actions.entitySucceed({
-        entity: {
-          type: 'post',
-          id: 60,
-        },
-        entities: entitiesFromPost60,
-      }),
-    );
-    expect(connection.entity('post', 60).ready).toBe(true);
+  test('Entity: Fetching Succeed', async () => {
+    getEntity.mockReturnValueOnce(Promise.resolve(post60));
+    expect(connection.entity('post', 60).isReady).toBe(false);
+    expect(connection.entity('post', 60).isFetching).toBe(false);
+    const fetchPromise = connection.fetchEntity({ type: 'post', id: 60 });
+    expect(getEntity).toBeCalledWith({ type: 'post', id: 60 });
+    expect(connection.entity('post', 60).isReady).toBe(false);
+    expect(connection.entity('post', 60).isFetching).toBe(true);
+    await fetchPromise;
+    expect(connection.entity('post', 60).isReady).toBe(true);
     expect(connection.entity('post', 60).title).toBe('The Beauties of Gullfoss');
     expect(connection.entity('media', 62).title).toBe('iceland');
     expect(connection.entity('author', 4).name).toBe('Alan Martin');
   });
 
-  test('Entity: Action Failed', () => {
-    connection[actionTypes.ENTITY_REQUESTED](
-      actions.entityRequested({
-        entity: {
-          type: 'post',
-          id: 60,
-        },
-      }),
-    );
-    connection[actionTypes.ENTITY_FAILED](
-      actions.entityFailed({
-        entity: {
-          type: 'post',
-          id: 60,
-        },
-      }),
-    );
-    expect(connection.entity('post', 60).ready).toBe(false);
-    expect(connection.entity('post', 60).fetching).toBe(false);
+  test('Entity: Fetching Failed', async () => {
+    getEntity.mockReturnValueOnce(Promise.reject());
+    await connection.fetchEntity({ type: 'post', id: 60 });
+    expect(connection.entity('post', 60).isReady).toBe(false);
+    expect(connection.entity('post', 60).isFetching).toBe(false);
+    expect(connection.entity('post', 60).hasFailed).toBe(true);
   });
 
-  test('List: Action Succeed', () => {
-    expect(connection.list('category', 7).ready).toBe(false);
-    expect(connection.list('category', 7).fetching).toBe(false);
-    expect(connection.list('category', 7).page(1).ready).toBe(false);
-    expect(connection.list('category', 7).page(1).fetching).toBe(false);
-    connection[actionTypes.LIST_REQUESTED](
-      actions.listRequested({
-        list: {
-          type: 'category',
-          id: 7,
-          page: 1,
-        },
-      }),
-    );
-    expect(connection.list('category', 7).ready).toBe(false);
-    expect(connection.list('category', 7).fetching).toBe(true);
-    expect(connection.list('category', 7).page(1).ready).toBe(false);
-    expect(connection.list('category', 7).page(1).fetching).toBe(true);
-    connection[actionTypes.LIST_SUCCEED](
-      actions.listSucceed({
-        list: {
-          type: 'category',
-          id: 7,
-          page: 1,
-        },
-        result: resultFromCategory7,
-        entities: entitiesFromCategory,
-      }),
-    );
-    expect(connection.list('category', 7).ready).toBe(true);
-    expect(connection.list('category', 7).fetching).toBe(false);
-    expect(connection.list('category', 7).page(1).ready).toBe(true);
-    expect(connection.list('category', 7).page(1).fetching).toBe(false);
+  test('Entity: Not refetching if ready', async () => {
+    getEntity.mockReturnValueOnce(Promise.resolve(post60));
+    await connection.fetchEntity({ type: 'post', id: 60 });
+    expect(connection.entity('post', 60).isReady).toBe(true);
+    await connection.fetchEntity({ type: 'post', id: 60 });
+    expect(getEntity.mock.calls.length).toBe(1);
   });
 
-  test('List: Action Succeed with 2 pages (reverse order)', () => {
-    expect(connection.list('category', 7).ready).toBe(false);
-    expect(connection.list('category', 7).fetching).toBe(false);
-    expect(connection.list('category', 7).page(1).ready).toBe(false);
-    expect(connection.list('category', 7).page(1).fetching).toBe(false);
-    expect(connection.list('category', 7).page(2).ready).toBe(false);
-    expect(connection.list('category', 7).page(2).fetching).toBe(false);
-    connection[actionTypes.LIST_REQUESTED](
-      actions.listRequested({
-        list: {
-          type: 'category',
-          id: 7,
-          page: 2,
-        },
-      }),
-    );
-    expect(connection.list('category', 7).ready).toBe(false);
-    expect(connection.list('category', 7).fetching).toBe(true);
-    expect(connection.list('category', 7).page(1).ready).toBe(false);
-    expect(connection.list('category', 7).page(1).fetching).toBe(false);
-    expect(connection.list('category', 7).page(2).ready).toBe(false);
-    expect(connection.list('category', 7).page(2).fetching).toBe(true);
-    connection[actionTypes.LIST_SUCCEED](
-      actions.listSucceed({
-        list: {
-          type: 'category',
-          id: 7,
-          page: 2,
-        },
-        result: resultFromCategory7Page2,
-        entities: entitiesFromCategoryPage2,
-      }),
-    );
-    expect(connection.list('category', 7).ready).toBe(true);
-    expect(connection.list('category', 7).fetching).toBe(false);
-    expect(connection.list('category', 7).page(1).ready).toBe(false);
-    expect(connection.list('category', 7).page(1).fetching).toBe(false);
-    expect(connection.list('category', 7).page(2).ready).toBe(true);
-    expect(connection.list('category', 7).page(2).fetching).toBe(false);
-    connection[actionTypes.LIST_REQUESTED](
-      actions.listRequested({
-        list: {
-          type: 'category',
-          id: 7,
-          page: 1,
-        },
-      }),
-    );
-    expect(connection.list('category', 7).ready).toBe(true);
-    expect(connection.list('category', 7).fetching).toBe(true);
-    expect(connection.list('category', 7).page(1).ready).toBe(false);
-    expect(connection.list('category', 7).page(1).fetching).toBe(true);
-    expect(connection.list('category', 7).page(2).ready).toBe(true);
-    expect(connection.list('category', 7).page(2).fetching).toBe(false);
-    connection[actionTypes.LIST_SUCCEED](
-      actions.listSucceed({
-        list: {
-          type: 'category',
-          id: 7,
-          page: 1,
-        },
-        result: resultFromCategory7,
-        entities: entitiesFromCategory,
-      }),
-    );
-    expect(connection.list('category', 7).ready).toBe(true);
-    expect(connection.list('category', 7).fetching).toBe(false);
-    expect(connection.list('category', 7).page(1).ready).toBe(true);
-    expect(connection.list('category', 7).page(1).fetching).toBe(false);
-    expect(connection.list('category', 7).page(2).ready).toBe(true);
-    expect(connection.list('category', 7).page(2).fetching).toBe(false);
+  test('Entity: Refetching if force is true', async () => {
+    getEntity.mockReturnValue(Promise.resolve(post60));
+    await connection.fetchEntity({ type: 'post', id: 60 });
+    expect(connection.entity('post', 60).isReady).toBe(true);
+    await connection.fetchEntity({ type: 'post', id: 60, force: true });
+    expect(getEntity.mock.calls.length).toBe(2);
   });
 
-  test('List: Action Failed', () => {
-    connection[actionTypes.LIST_REQUESTED](
-      actions.listRequested({
-        list: {
-          type: 'category',
-          id: 7,
-          page: 1,
-        },
-      }),
-    );
-    connection[actionTypes.LIST_FAILED](
-      actions.listFailed({
-        list: {
-          type: 'category',
-          id: 7,
-          page: 1,
-        },
-      }),
-    );
-    expect(connection.list('category', 7).ready).toBe(false);
-    expect(connection.list('category', 7).fetching).toBe(false);
-    expect(connection.list('category', 7).page(1).ready).toBe(false);
-    expect(connection.list('category', 7).page(1).fetching).toBe(false);
+  test('List: Fetching Succeed', async () => {
+    getListPage.mockReturnValueOnce(Promise.resolve(postsFromCategory7));
+    expect(connection.list('category', 7).isReady).toBe(false);
+    expect(connection.list('category', 7).isFetching).toBe(false);
+    expect(connection.list('category', 7).page(1).isReady).toBe(false);
+    expect(connection.list('category', 7).page(1).isFetching).toBe(false);
+    const fetchPromise = connection.fetchListPage({ type: 'category', id: 7, page: 1 });
+    expect(connection.list('category', 7).isReady).toBe(false);
+    expect(connection.list('category', 7).isFetching).toBe(true);
+    expect(connection.list('category', 7).page(1).isReady).toBe(false);
+    expect(connection.list('category', 7).page(1).isFetching).toBe(true);
+    await fetchPromise;
+    expect(connection.list('category', 7).isReady).toBe(true);
+    expect(connection.list('category', 7).isFetching).toBe(false);
+    expect(connection.list('category', 7).page(1).isReady).toBe(true);
+    expect(connection.list('category', 7).page(1).isFetching).toBe(false);
+    expect(connection.list('category', 7).total.pages).toBe(3);
+    expect(connection.list('category', 7).total.entities).toBe(15);
+    expect(connection.list('category', 7).total.fetched.pages).toBe(1);
+    expect(connection.list('category', 7).total.fetched.entities).toBe(5);
+    expect(connection.list('category', 7).page(1).total).toBe(5);
   });
 
-  test('List: Throw an error if page is not provided', () => {
-    expect(() => {
-      connection[actionTypes.LIST_REQUESTED](
-        actions.listRequested({
-          list: {
-            type: 'category',
-            id: 7,
-          },
-        }),
-      );
-    }).toThrow('The field `page` is mandatory in listRequested.');
+  test('List: Fetching Succeed with 2 pages (reverse order)', async () => {
+    getListPage
+      .mockReturnValueOnce(Promise.resolve(postsFromCategory7Page2))
+      .mockReturnValueOnce(Promise.resolve(postsFromCategory7));
+    expect(connection.list('category', 7).isReady).toBe(false);
+    expect(connection.list('category', 7).isFetching).toBe(false);
+    expect(connection.list('category', 7).page(1).isReady).toBe(false);
+    expect(connection.list('category', 7).page(1).isFetching).toBe(false);
+    expect(connection.list('category', 7).page(2).isReady).toBe(false);
+    expect(connection.list('category', 7).page(2).isFetching).toBe(false);
+    const fetchPromise2 = connection.fetchListPage({ type: 'category', id: 7, page: 2 });
+    expect(connection.list('category', 7).isReady).toBe(false);
+    expect(connection.list('category', 7).isFetching).toBe(true);
+    expect(connection.list('category', 7).page(1).isReady).toBe(false);
+    expect(connection.list('category', 7).page(1).isFetching).toBe(false);
+    expect(connection.list('category', 7).page(2).isReady).toBe(false);
+    expect(connection.list('category', 7).page(2).isFetching).toBe(true);
+    await fetchPromise2;
+    expect(connection.list('category', 7).isReady).toBe(true);
+    expect(connection.list('category', 7).isFetching).toBe(false);
+    expect(connection.list('category', 7).page(1).isReady).toBe(false);
+    expect(connection.list('category', 7).page(1).isFetching).toBe(false);
+    expect(connection.list('category', 7).page(2).isReady).toBe(true);
+    expect(connection.list('category', 7).page(2).isFetching).toBe(false);
+    const fetchPromise1 = connection.fetchListPage({ type: 'category', id: 7, page: 1 });
+    expect(connection.list('category', 7).isReady).toBe(true);
+    expect(connection.list('category', 7).isFetching).toBe(true);
+    expect(connection.list('category', 7).page(1).isReady).toBe(false);
+    expect(connection.list('category', 7).page(1).isFetching).toBe(true);
+    expect(connection.list('category', 7).page(2).isReady).toBe(true);
+    expect(connection.list('category', 7).page(2).isFetching).toBe(false);
+    await fetchPromise1;
+    expect(connection.list('category', 7).isReady).toBe(true);
+    expect(connection.list('category', 7).isFetching).toBe(false);
+    expect(connection.list('category', 7).page(1).isReady).toBe(true);
+    expect(connection.list('category', 7).page(1).isFetching).toBe(false);
+    expect(connection.list('category', 7).page(2).isReady).toBe(true);
+    expect(connection.list('category', 7).page(2).isFetching).toBe(false);
   });
 
-  test('Custom: Action Succeed', () => {
-    expect(connection.custom('test').ready).toBe(false);
-    expect(connection.custom('test').fetching).toBe(false);
-    expect(connection.custom('test').page(1).ready).toBe(false);
-    expect(connection.custom('test').page(1).fetching).toBe(false);
+  test('List: Action Failed', async () => {
+    getListPage.mockReturnValueOnce(Promise.reject());
+    await connection.fetchListPage({ type: 'category', id: 7, page: 1 });
+    expect(connection.list('category', 7).isReady).toBe(false);
+    expect(connection.list('category', 7).isFetching).toBe(false);
+    expect(connection.list('category', 7).page(1).isReady).toBe(false);
+    expect(connection.list('category', 7).page(1).isFetching).toBe(false);
+  });
+
+  test('List: Not refetching if ready', async () => {
+    getListPage.mockReturnValueOnce(Promise.resolve(postsFromCategory7));
+    await connection.fetchListPage({ type: 'category', id: 7, page: 1 });
+    expect(connection.list('category', 7).page(1).isReady).toBe(true);
+    await connection.fetchListPage({ type: 'category', id: 7, page: 1 });
+    expect(getListPage.mock.calls.length).toBe(1);
+  });
+
+  test('List: Refetching if force is true', async () => {
+    getListPage.mockReturnValue(Promise.resolve(postsFromCategory7));
+    await connection.fetchListPage({ type: 'category', id: 7, page: 1 });
+    expect(connection.list('category', 7).page(1).isReady).toBe(true);
+    await connection.fetchListPage({ type: 'category', id: 7, page: 1, force: true });
+    expect(getListPage.mock.calls.length).toBe(2);
+  });
+
+  test('Custom: Fetching Succeed', async () => {
+    getCustomPage.mockReturnValue(Promise.resolve(postsFromCategory7));
+    expect(connection.custom('test').isReady).toBe(false);
+    expect(connection.custom('test').isFetching).toBe(false);
+    expect(connection.custom('test').page(1).isReady).toBe(false);
+    expect(connection.custom('test').page(1).isFetching).toBe(false);
     const params = { a: 'b' };
-    connection[actionTypes.CUSTOM_REQUESTED](
-      actions.customRequested({
-        custom: {
-          name: 'test',
-          page: 1,
-        },
-        params,
-        url: '/#test',
-      }),
-    );
-    expect(connection.custom('test').ready).toBe(false);
-    expect(connection.custom('test').fetching).toBe(true);
+    const fetchPromise = connection.fetchCustomPage({
+      name: 'test',
+      page: 1,
+      type: 'post',
+      params,
+      url: '/#test',
+    });
+    expect(connection.custom('test').isReady).toBe(false);
+    expect(connection.custom('test').isFetching).toBe(true);
     expect(connection.custom('test').params).toEqual(params);
     expect(connection.custom('test').url).toBe('/#test');
-    expect(connection.custom('test').page(1).ready).toBe(false);
-    expect(connection.custom('test').page(1).fetching).toBe(true);
-    connection[actionTypes.CUSTOM_SUCCEED](
-      actions.customSucceed({
-        custom: {
-          name: 'test',
-        },
-        result: resultFromCategory7,
-        entities: entitiesFromCategory,
-      }),
-    );
-    expect(connection.custom('test').ready).toBe(true);
-    expect(connection.custom('test').fetching).toBe(false);
-    expect(connection.custom('test').page(1).ready).toBe(true);
-    expect(connection.custom('test').page(1).fetching).toBe(false);
+    expect(connection.custom('test').page(1).isReady).toBe(false);
+    expect(connection.custom('test').page(1).isFetching).toBe(true);
+    await fetchPromise;
+    expect(connection.custom('test').isReady).toBe(true);
+    expect(connection.custom('test').isFetching).toBe(false);
+    expect(connection.custom('test').page(1).isReady).toBe(true);
+    expect(connection.custom('test').page(1).isFetching).toBe(false);
   });
 
-  test('Custom: Action Failed', () => {
-    connection[actionTypes.CUSTOM_REQUESTED](
-      actions.customRequested({
-        custom: {
-          name: 'test',
-          page: 1,
-        },
-        params: {},
-      }),
-    );
-    connection[actionTypes.CUSTOM_FAILED](actions.customFailed({ custom: { name: 'test' } }));
-    expect(connection.custom('test').ready).toBe(false);
-    expect(connection.custom('test').fetching).toBe(false);
-    expect(connection.custom('test').page(1).ready).toBe(false);
-    expect(connection.custom('test').page(1).fetching).toBe(false);
-  });
-
-  test('Custom: Throw an error if page is not provided', () => {
-    expect(() => {
-      connection[actionTypes.CUSTOM_REQUESTED](
-        actions.customRequested({
-          custom: {
-            name: 'test',
-          },
-          params: {},
-        }),
-      );
-    }).toThrow('The field `page` is mandatory in customRequested.');
+  test('Custom: Fetching Failed', async () => {
+    getCustomPage.mockReturnValue(Promise.reject());
+    const params = { a: 'b' };
+    await connection.fetchCustomPage({
+      name: 'test',
+      page: 1,
+      type: 'post',
+      params,
+      url: '/#test',
+    });
+    expect(connection.custom('test').isReady).toBe(false);
+    expect(connection.custom('test').isFetching).toBe(false);
+    expect(connection.custom('test').page(1).isReady).toBe(false);
+    expect(connection.custom('test').page(1).isFetching).toBe(false);
   });
 });

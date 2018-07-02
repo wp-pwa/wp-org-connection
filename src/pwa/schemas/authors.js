@@ -5,9 +5,10 @@ export const author = new schema.Entity(
   {},
   {
     processStrategy(entity) {
-      entity.mst = 'author';
-      entity.type = 'author';
-      return entity;
+      const result = { ...entity };
+      result.mst = 'author';
+      result.type = 'author';
+      return result;
     },
   },
 );

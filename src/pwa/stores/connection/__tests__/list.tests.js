@@ -37,9 +37,9 @@ describe('Connection › List', () => {
   });
 
   test('Get list shape when entity is not ready', () => {
-    expect(connection.list('category', 7).ready).toBe(false);
+    expect(connection.list('category', 7).isReady).toBe(false);
     expect(connection.list('category', 7).pages).toEqual(observable([]));
-    expect(connection.list('category', 7).page(2).ready).toBe(false);
+    expect(connection.list('category', 7).page(2).isReady).toBe(false);
     expect(connection.list('category', 7).page(2).entities).toEqual(observable([]));
     expect(connection.list('category', 7).pages).toEqual(observable([]));
     expect(connection.list('category', 7).entity.id).toBe(7);
@@ -120,9 +120,9 @@ describe('Connection › List', () => {
   });
 
   test('Subscribe to ready (in page) before entity is ready', done => {
-    expect(connection.list('category', 7).page(2).ready).toBe(false);
+    expect(connection.list('category', 7).page(2).isReady).toBe(false);
     autorun(() => {
-      if (connection.list('category', 7).page(2).ready) done();
+      if (connection.list('category', 7).page(2).isReady) done();
     });
     connection.addListPage({
       type: 'category',
@@ -134,9 +134,9 @@ describe('Connection › List', () => {
   });
 
   test('Subscribe to ready before entity is ready', done => {
-    expect(connection.list('category', 7).ready).toBe(false);
+    expect(connection.list('category', 7).isReady).toBe(false);
     autorun(() => {
-      if (connection.list('category', 7).ready) done();
+      if (connection.list('category', 7).isReady) done();
     });
     connection.addListPage({
       type: 'category',
@@ -148,27 +148,27 @@ describe('Connection › List', () => {
   });
 
   test('Subscribe to fetching (in page) before entity is ready', done => {
-    expect(connection.list('category', 7).page(1).fetching).toBe(false);
+    expect(connection.list('category', 7).page(1).isFetching).toBe(false);
     autorun(() => {
-      if (connection.list('category', 7).page(1).fetching) done();
+      if (connection.list('category', 7).page(1).isFetching) done();
     });
     connection.fetchingListPage({ type: 'category', id: 7, page: 1 });
-    expect(connection.list('category', 7).page(1).ready).toBe(false);
+    expect(connection.list('category', 7).page(1).isReady).toBe(false);
   });
 
   test('Subscribe to fetching before entity is ready', done => {
-    expect(connection.list('category', 7).fetching).toBe(false);
+    expect(connection.list('category', 7).isFetching).toBe(false);
     autorun(() => {
-      if (connection.list('category', 7).fetching) done();
+      if (connection.list('category', 7).isFetching) done();
     });
     connection.fetchingListPage({ type: 'category', id: 7, page: 1 });
-    expect(connection.list('category', 7).ready).toBe(false);
+    expect(connection.list('category', 7).isReady).toBe(false);
   });
 
   test('Ready should remain true even if new pages are fetched', () => {
-    expect(connection.list('category', 7).ready).toBe(false);
-    expect(connection.list('category', 7).page(1).ready).toBe(false);
-    expect(connection.list('category', 7).page(2).ready).toBe(false);
+    expect(connection.list('category', 7).isReady).toBe(false);
+    expect(connection.list('category', 7).page(1).isReady).toBe(false);
+    expect(connection.list('category', 7).page(2).isReady).toBe(false);
     connection.addListPage({
       type: 'category',
       id: 7,
@@ -176,22 +176,22 @@ describe('Connection › List', () => {
       result: resultFromCategory7,
       entities: entitiesFromCategory,
     });
-    expect(connection.list('category', 7).ready).toBe(true);
-    expect(connection.list('category', 7).page(1).ready).toBe(true);
-    expect(connection.list('category', 7).page(2).ready).toBe(false);
+    expect(connection.list('category', 7).isReady).toBe(true);
+    expect(connection.list('category', 7).page(1).isReady).toBe(true);
+    expect(connection.list('category', 7).page(2).isReady).toBe(false);
     connection.fetchingListPage({ type: 'category', id: 7, page: 2 });
-    expect(connection.list('category', 7).ready).toBe(true);
-    expect(connection.list('category', 7).page(1).ready).toBe(true);
-    expect(connection.list('category', 7).page(2).ready).toBe(false);
+    expect(connection.list('category', 7).isReady).toBe(true);
+    expect(connection.list('category', 7).page(1).isReady).toBe(true);
+    expect(connection.list('category', 7).page(2).isReady).toBe(false);
   });
 
   test('Fetching should go back to false when new pages are fetched', () => {
-    expect(connection.list('category', 7).fetching).toBe(false);
-    expect(connection.list('category', 7).page(1).fetching).toBe(false);
-    expect(connection.list('category', 7).page(2).fetching).toBe(false);
+    expect(connection.list('category', 7).isFetching).toBe(false);
+    expect(connection.list('category', 7).page(1).isFetching).toBe(false);
+    expect(connection.list('category', 7).page(2).isFetching).toBe(false);
     connection.fetchingListPage({ type: 'category', id: 7, page: 1 });
-    expect(connection.list('category', 7).fetching).toBe(true);
-    expect(connection.list('category', 7).page(1).fetching).toBe(true);
+    expect(connection.list('category', 7).isFetching).toBe(true);
+    expect(connection.list('category', 7).page(1).isFetching).toBe(true);
     connection.addListPage({
       type: 'category',
       id: 7,
@@ -199,12 +199,12 @@ describe('Connection › List', () => {
       result: resultFromCategory7,
       entities: entitiesFromCategory,
     });
-    expect(connection.list('category', 7).fetching).toBe(false);
-    expect(connection.list('category', 7).page(1).fetching).toBe(false);
+    expect(connection.list('category', 7).isFetching).toBe(false);
+    expect(connection.list('category', 7).page(1).isFetching).toBe(false);
     connection.fetchingListPage({ type: 'category', id: 7, page: 2 });
-    expect(connection.list('category', 7).fetching).toBe(true);
-    expect(connection.list('category', 7).page(1).fetching).toBe(false);
-    expect(connection.list('category', 7).page(2).fetching).toBe(true);
+    expect(connection.list('category', 7).isFetching).toBe(true);
+    expect(connection.list('category', 7).page(1).isFetching).toBe(false);
+    expect(connection.list('category', 7).page(2).isFetching).toBe(true);
   });
 
   test('Total shapes before and after initialization', () => {

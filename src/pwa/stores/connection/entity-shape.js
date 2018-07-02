@@ -26,8 +26,9 @@ const common = (type, id) => ({
   mstId: join(type, id),
   id: id || null,
   type: type || null,
-  ready: false,
-  fetching: false,
+  isReady: false,
+  isFetching: false,
+  raw: {},
   get link() {
     return link(type, id);
   },
@@ -84,6 +85,7 @@ export const singleShape = (type, id) => ({
   hasFeaturedMedia: false,
   author: authorShape('author'),
   target: '',
+  meta: {},
   headMeta: headMetaShape,
   parent: null,
   ...common(type, id),

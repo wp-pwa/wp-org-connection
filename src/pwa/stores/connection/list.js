@@ -24,8 +24,9 @@ export const Total = types
 export const Page = types
   .model('Page')
   .props({
-    page: types.identifier(types.number),
-    fetching: false,
+    page: types.identifier(types.string),
+    isFetching: false,
+    hasFailed: false,
     results: types.optional(types.array(types.string), observable([])),
   })
   .views(self => ({
@@ -33,12 +34,14 @@ export const Page = types
       return getRoot(self).connection || getRoot(self);
     },
     get entities() {
-      return observable(self.results.map(mstId => {
-        const { type, id } = extract(mstId);
-        return self.connection.entity(type, id);
-      }));
+      return observable(
+        self.results.map(mstId => {
+          const { type, id } = extract(mstId);
+          return self.connection.entity(type, id);
+        }),
+      );
     },
-    get ready() {
+    get isReady() {
       return self.results.length > 0;
     },
     get total() {
@@ -56,25 +59,33 @@ const List = types
     total: types.optional(Total, {}),
   })
   .views(self => ({
-    get ready() {
+    get isReady() {
       return values(self.pageMap)
-        .map(page => page.ready)
+        .map(page => page.isReady)
         .reduce((acc, cur) => acc || cur, false);
     },
-    get fetching() {
+    get isFetching() {
       return values(self.pageMap)
-        .map(page => page.fetching)
+        .map(page => page.isFetching)
+        .reduce((acc, cur) => acc || cur, false);
+    },
+    get hasFailed() {
+      return values(self.pageMap)
+        .map(page => page.hasFailed)
         .reduce((acc, cur) => acc || cur, false);
     },
     get entities() {
       const results = flatten(self.pages.map(page => page.results.peek()));
-      return observable(results.map(mstId => {
-        const { type, id } = extract(mstId);
-        return getParent(self, 2).entity(type, id);
-      }));
+      return observable(
+        results.map(mstId => {
+          const { type, id } = extract(mstId);
+          return getParent(self, 2).entity(type, id);
+        }),
+      );
     },
     page(page) {
-      return self.pageMap.get(page) || self.pageMap.get(String(page)) || pageShape;
+      const strPage = page.toString();
+      return self.pageMap.get(strPage) || self.pageMap.get(strPage) || pageShape;
     },
     get pages() {
       return values(self.pageMap);
