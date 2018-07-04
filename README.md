@@ -10,7 +10,7 @@ Clone the main [Frontity](https://github.com/frontity/frontity) repository first
 
 Finally, use `npm run start:pwa` to start the development environment.
 
-## Changelog
+## Changelog
 
 Please take a look at our [Changelog file](https://github.com/frontity/wp-org-connection/blob/master/CHANGELOG.md).
 
