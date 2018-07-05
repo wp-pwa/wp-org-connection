@@ -23,7 +23,7 @@
     "package"
   ],
   "author": "luis@frontity.com, edu@frontity.com, david@frontity.com",
-  "license": "MIT",
+  "license": "Apache-2.0",
   "dependencies": {
     "he": "^1.1.1",
     "himalaya": "^1.0.1",
