@@ -2,11 +2,11 @@
 
 [![Build Status](https://travis-ci.org/frontity/wp-org-connection.svg?branch=master)](https://travis-ci.org/frontity/wp-org-connection)
 
-This package connects the [Frontity framework](https://github.com/frontity/frontity) with a self-hosted WordPress.org site.
+This package connects the [» Frontity](https://github.com/frontity/frontity) framework with a self-hosted WordPress.org site.
 
 ## Installation
 
-Clone the main [Frontity](https://github.com/frontity/frontity) repository first. Then, inside the `packages` folder, clone this repository.
+Clone the main [» Frontity](https://github.com/frontity/frontity) repository first. Then, inside the `packages` folder, clone this repository.
 
 Finally, use `npm run start:pwa` to start the development environment.
 
