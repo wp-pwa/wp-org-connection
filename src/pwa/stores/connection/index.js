@@ -262,7 +262,6 @@ export const actions = self => {
         const headHtml = html.match(
           /<\s*?head[^>]*>([\w\W]+)<\s*?\/\s*?head\s*?>/,
         )[1];
-
         const { title, content } = getHeadContent(headHtml);
 
         self.head.title = title;
