@@ -1,4 +1,5 @@
-import { types } from 'mobx-state-tree';
+/* eslint-disable func-names */
+import { flow, types } from 'mobx-state-tree';
 import * as connection from './connection';
 import * as router from './router';
 import * as history from './router/history';
@@ -13,6 +14,9 @@ const Connection = types
   .actions(router.actions)
   .actions(history.actions)
   .actions(self => ({
+    beforeSsr: flow(function*() {
+      yield self.fetchHeadContent();
+    }),
     afterCsr() {
       self.replaceFirstUrl();
     },
