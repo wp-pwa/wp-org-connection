@@ -1,8 +1,7 @@
 /* eslint-disable no-use-before-define */
 import { observable } from 'mobx';
-import { types, resolveIdentifier, getParent, getEnv } from 'mobx-state-tree';
-import { decode } from 'he';
-import { isMatch } from 'lodash';
+import { types, resolveIdentifier } from 'mobx-state-tree';
+import HeadMeta from './head-meta';
 import { join, extract } from './utils';
 import entityShape, {
   link,
@@ -11,41 +10,6 @@ import entityShape, {
   authorShape,
   originalShape,
 } from './entity-shape';
-
-export const HeadMeta = types.model('HeadMeta').views(self => {
-  const getEntityTitle = entity =>
-    decode(
-      (entity.raw.yoast_meta && entity.raw.yoast_meta.title) ||
-        entity.raw.name ||
-        entity.raw.title.rendered,
-    ).replace(/<\/?[^>]+(>|$)/g, '');
-
-  return {
-    get title() {
-      const { initialSelectedItem: initial } = getEnv(self);
-      const { head } = getParent(self, 3);
-      const entity = getParent(self);
-
-      return head.title &&
-        isMatch(entity, { type: initial.type, id: initial.id })
-        ? head.title
-        : getEntityTitle(entity);
-    },
-    pagedTitle(page) {
-      if (!page) return self.title;
-
-      const { initialSelectedItem: initial } = getEnv(self);
-      const { head } = getParent(self, 3);
-      const entity = getParent(self);
-
-      return head.title &&
-        isMatch(entity, { type: initial.type, id: initial.id }) &&
-        page === initial.page
-        ? head.title
-        : getEntityTitle(entity);
-    },
-  };
-});
 
 const common = self => ({
   get isReady() {
