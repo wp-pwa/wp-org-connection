@@ -1,16 +1,51 @@
 /* eslint-disable no-use-before-define */
 import { observable } from 'mobx';
-import { types, resolveIdentifier } from 'mobx-state-tree';
+import { types, resolveIdentifier, getParent, getEnv } from 'mobx-state-tree';
 import { decode } from 'he';
+import { isMatch } from 'lodash';
 import { join, extract } from './utils';
 import entityShape, {
   link,
   pagedLink,
   mediaShape,
   authorShape,
-  headMetaShape,
   originalShape,
 } from './entity-shape';
+
+export const HeadMeta = types.model('HeadMeta').views(self => {
+  const getEntityTitle = entity =>
+    decode(
+      (entity.raw.yoast_meta && entity.raw.yoast_meta.title) ||
+        entity.raw.name ||
+        entity.raw.title.rendered,
+    ).replace(/<\/?[^>]+(>|$)/g, '');
+
+  return {
+    get title() {
+      const { initialSelectedItem: initial } = getEnv(self);
+      const { head } = getParent(self, 3);
+      const entity = getParent(self);
+
+      return head.title &&
+        isMatch(entity, { type: initial.type, id: initial.id })
+        ? head.title
+        : getEntityTitle(entity);
+    },
+    pagedTitle(page) {
+      if (!page) return self.title;
+
+      const { initialSelectedItem: initial } = getEnv(self);
+      const { head } = getParent(self, 3);
+      const entity = getParent(self);
+
+      return head.title &&
+        isMatch(entity, { type: initial.type, id: initial.id }) &&
+        page === initial.page
+        ? head.title
+        : getEntityTitle(entity);
+    },
+  };
+});
 
 const common = self => ({
   get isReady() {
@@ -105,17 +140,6 @@ const single = self => ({
       authorShape('author', self.isReady && self.raw.author)
     );
   },
-  get headMeta() {
-    return self.isReady
-      ? {
-          title: decode(
-            (self.raw.yoast_meta && self.raw.yoast_meta.title) ||
-              self.raw.name ||
-              self.raw.title.rendered,
-          ),
-        }
-      : headMetaShape;
-  },
 });
 
 const taxonomy = self => ({
@@ -196,6 +220,7 @@ const Entity = types
     isFetching: false,
     hasFailed: false,
     raw: types.frozen,
+    headMeta: types.optional(HeadMeta, {}),
   })
   .views(common)
   .views(single)
