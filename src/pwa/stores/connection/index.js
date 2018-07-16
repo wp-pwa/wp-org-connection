@@ -7,6 +7,7 @@ import {
   getEnv,
 } from 'mobx-state-tree';
 import { normalize } from 'normalizr';
+import { decode } from 'he';
 import getHeadContent from './head/getHeadContent';
 import { join } from './utils';
 import Entity from './entity';
@@ -264,7 +265,7 @@ export const actions = self => {
         )[1];
         const { title, content } = getHeadContent(headHtml);
 
-        self.head.title = title;
+        self.head.title = decode(title);
         self.head.content = content;
       } catch (error) {
         self.head.hasFailed = true;
