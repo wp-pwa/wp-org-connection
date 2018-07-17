@@ -1,4 +1,4 @@
-# [1.0.0](https://github.com/frontity/wp-org-connection/compare/v0.7.0...v1.0.0) (2018-07-17)
+# [0.8.0](https://github.com/frontity/wp-org-connection/compare/v0.7.0...v0.8.0) (2018-07-17)
 
 
 ### Bug Fixes
