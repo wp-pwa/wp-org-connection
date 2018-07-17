@@ -1,3 +1,24 @@
+# [1.0.0](https://github.com/frontity/wp-org-connection/compare/v0.7.0...v1.0.0) (2018-07-17)
+
+
+### Bug Fixes
+
+* **head-content:** calls fetchHeadContent in beforeSsr ([0f5e9ca](https://github.com/frontity/wp-org-connection/commit/0f5e9ca))
+
+
+### Features
+
+* **entity:** create HeadMeta model with title and pagedTitle  views ([13c6f27](https://github.com/frontity/wp-org-connection/commit/13c6f27))
+* **flows:** removes flows ([696b05c](https://github.com/frontity/wp-org-connection/commit/696b05c))
+* **stores:** removes flows and adds afterCsr hook ([4dbe933](https://github.com/frontity/wp-org-connection/commit/4dbe933))
+
+
+### BREAKING CHANGES
+
+* **flows:** removes flows
+
+https://github.com/wp-pwa/saturn-theme/issues/329
+
 # [0.7.0](https://github.com/frontity/wp-org-connection/compare/v0.6.3...v0.7.0) (2018-07-02)
 
 
