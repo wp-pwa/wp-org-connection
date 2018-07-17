@@ -1,14 +1,13 @@
 /* eslint-disable no-use-before-define */
 import { observable } from 'mobx';
 import { types, resolveIdentifier } from 'mobx-state-tree';
-import { decode } from 'he';
+import HeadMeta from './head-meta';
 import { join, extract } from './utils';
 import entityShape, {
   link,
   pagedLink,
   mediaShape,
   authorShape,
-  headMetaShape,
   originalShape,
 } from './entity-shape';
 
@@ -105,17 +104,6 @@ const single = self => ({
       authorShape('author', self.isReady && self.raw.author)
     );
   },
-  get headMeta() {
-    return self.isReady
-      ? {
-          title: decode(
-            (self.raw.yoast_meta && self.raw.yoast_meta.title) ||
-              self.raw.name ||
-              self.raw.title.rendered,
-          ),
-        }
-      : headMetaShape;
-  },
 });
 
 const taxonomy = self => ({
@@ -196,6 +184,7 @@ const Entity = types
     isFetching: false,
     hasFailed: false,
     raw: types.frozen,
+    headMeta: types.optional(HeadMeta, {}),
   })
   .views(common)
   .views(single)
