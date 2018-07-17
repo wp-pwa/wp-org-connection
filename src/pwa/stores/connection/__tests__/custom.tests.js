@@ -34,9 +34,9 @@ describe('Connection › Custom', () => {
   });
 
   test('Get custom shape when entity is not ready', () => {
-    expect(connection.custom('test').ready).toBe(false);
+    expect(connection.custom('test').isReady).toBe(false);
     expect(connection.custom('test').pages).toEqual(observable([]));
-    expect(connection.custom('test').page(2).ready).toBe(false);
+    expect(connection.custom('test').page(2).isReady).toBe(false);
     expect(connection.custom('test').page(2).entities).toEqual(observable([]));
     expect(connection.custom('test').pages).toEqual(observable([]));
     expect(connection.custom('test').name).toBe('test');
@@ -103,10 +103,10 @@ describe('Connection › Custom', () => {
   });
 
   test('Subscribe to ready before entity is ready', done => {
-    expect(connection.custom('test').page(2).ready).toBe(false);
-    expect(connection.custom('test').ready).toBe(false);
+    expect(connection.custom('test').page(2).isReady).toBe(false);
+    expect(connection.custom('test').isReady).toBe(false);
     autorun(() => {
-      if (connection.custom('test').page(2).ready && connection.custom('test').ready) done();
+      if (connection.custom('test').page(2).isReady && connection.custom('test').isReady) done();
     });
     connection.addCustomPage({
       name: 'test',
@@ -117,53 +117,53 @@ describe('Connection › Custom', () => {
   });
 
   test('Subscribe to fetching before entity is ready', done => {
-    expect(connection.custom('test').page(1).fetching).toBe(false);
-    expect(connection.custom('test').page(1).fetching).toBe(false);
+    expect(connection.custom('test').page(1).isFetching).toBe(false);
+    expect(connection.custom('test').page(1).isFetching).toBe(false);
     autorun(() => {
-      if (connection.custom('test').page(1).fetching && connection.custom('test').fetching) done();
+      if (connection.custom('test').page(1).isFetching && connection.custom('test').isFetching) done();
     });
     connection.fetchingCustomPage({ name: 'test', page: 1 });
-    expect(connection.custom('test').page(1).ready).toBe(false);
+    expect(connection.custom('test').page(1).isReady).toBe(false);
   });
 
   test('Ready should remain true even if new pages are fetched', () => {
-    expect(connection.custom('test').ready).toBe(false);
-    expect(connection.custom('test').page(1).ready).toBe(false);
-    expect(connection.custom('test').page(2).ready).toBe(false);
+    expect(connection.custom('test').isReady).toBe(false);
+    expect(connection.custom('test').page(1).isReady).toBe(false);
+    expect(connection.custom('test').page(2).isReady).toBe(false);
     connection.addCustomPage({
       name: 'test',
       page: 1,
       result: resultFromCategoryList,
       entities: entitiesFromCategoryList,
     });
-    expect(connection.custom('test').ready).toBe(true);
-    expect(connection.custom('test').page(1).ready).toBe(true);
-    expect(connection.custom('test').page(2).ready).toBe(false);
+    expect(connection.custom('test').isReady).toBe(true);
+    expect(connection.custom('test').page(1).isReady).toBe(true);
+    expect(connection.custom('test').page(2).isReady).toBe(false);
     connection.fetchingCustomPage({ name: 'test', page: 2 });
-    expect(connection.custom('test').ready).toBe(true);
-    expect(connection.custom('test').page(1).ready).toBe(true);
-    expect(connection.custom('test').page(2).ready).toBe(false);
+    expect(connection.custom('test').isReady).toBe(true);
+    expect(connection.custom('test').page(1).isReady).toBe(true);
+    expect(connection.custom('test').page(2).isReady).toBe(false);
   });
 
   test('Fetching should go back to false when new pages are fetched', () => {
-    expect(connection.custom('test').fetching).toBe(false);
-    expect(connection.custom('test').page(1).fetching).toBe(false);
-    expect(connection.custom('test').page(2).fetching).toBe(false);
+    expect(connection.custom('test').isFetching).toBe(false);
+    expect(connection.custom('test').page(1).isFetching).toBe(false);
+    expect(connection.custom('test').page(2).isFetching).toBe(false);
     connection.fetchingCustomPage({ name: 'test', page: 1 });
-    expect(connection.custom('test').fetching).toBe(true);
-    expect(connection.custom('test').page(1).fetching).toBe(true);
+    expect(connection.custom('test').isFetching).toBe(true);
+    expect(connection.custom('test').page(1).isFetching).toBe(true);
     connection.addCustomPage({
       name: 'test',
       page: 1,
       result: resultFromCategoryList,
       entities: entitiesFromCategoryList,
     });
-    expect(connection.custom('test').fetching).toBe(false);
-    expect(connection.custom('test').page(1).fetching).toBe(false);
+    expect(connection.custom('test').isFetching).toBe(false);
+    expect(connection.custom('test').page(1).isFetching).toBe(false);
     connection.fetchingCustomPage({ name: 'test', page: 2 });
-    expect(connection.custom('test').fetching).toBe(true);
-    expect(connection.custom('test').page(1).fetching).toBe(false);
-    expect(connection.custom('test').page(2).fetching).toBe(true);
+    expect(connection.custom('test').isFetching).toBe(true);
+    expect(connection.custom('test').page(1).isFetching).toBe(false);
+    expect(connection.custom('test').page(2).isFetching).toBe(true);
   });
 
   test('Total shapes before and after initialization', () => {

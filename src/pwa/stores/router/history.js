@@ -1,10 +1,7 @@
 /* eslint-disable import/prefer-default-export, global-require, no-eval */
-import { getEnv } from 'mobx-state-tree';
 import { when } from 'mobx';
 import { isEqual, isMatch, omitBy, isNil } from 'lodash';
 import url from 'url';
-import { routeChangeSucceed } from '../../actions';
-import * as actionTypes from '../../actionTypes';
 
 export const actions = self => {
   // Initialize historyKeys
@@ -33,6 +30,8 @@ export const actions = self => {
     const { state, key } = location;
     const { selectedItem, selectedContext } = self;
     const generator = selectedContext ? selectedContext.generator : null;
+
+    // debugger;
 
     // If context has changed, stores the key in contextKeys
     if (
@@ -66,13 +65,13 @@ export const actions = self => {
     if (disposer) disposer();
 
     // Dispatchs a route-change-succeed action
-    getEnv(self).store.dispatch(routeChangeSucceed({ ...state }));
+    self.routeChangeSucceed({ ...state });
 
     // Updates url when the new item is ready
     const { type, id } = state.selectedItem;
-    if (!self.entity(type, id).ready) {
+    if (!self.entity(type, id).isReady) {
       disposer = when(
-        () => self.entity(type, id).ready,
+        () => self.entity(type, id).isReady,
         () => {
           const path = getPath(state.selectedItem);
           self.history.replace(path, state);
@@ -81,8 +80,10 @@ export const actions = self => {
     }
   });
 
+  let replaceFirstUrl = null;
+
   return {
-    [actionTypes.PREVIOUS_CONTEXT_REQUESTED]: () => {
+    previousContextRequested: () => {
       if (contextKeys.length < 1) return;
 
       const [previousContextKey] = contextKeys.slice(-1);
@@ -95,13 +96,21 @@ export const actions = self => {
         self.history.go(-pagesBack);
       }
     },
-    [actionTypes.ROUTE_CHANGE_REQUESTED]: action => {
-      const { selectedItem, method } = action;
+    routeChangeRequested: ({ selectedItem, method = 'push', context: actionContext }) => {
+      const context =
+        actionContext ||
+        (self.selectedContext && self.selectedContext.hasItem({ item: selectedItem })
+          ? self.selectedContext.generator
+          : { columns: [[{ ...selectedItem }]] });
       const path = getPath(selectedItem);
-      if (['push', 'replace'].includes(method)) self.history[method](path, action);
+      if (['push', 'replace'].includes(method))
+        self.history[method](path, { selectedItem, method, context });
     },
-    afterCreate: () => {
-      disposer = when(
+    beforeDestroy() {
+      if (replaceFirstUrl) replaceFirstUrl();
+    },
+    replaceFirstUrl: () => {
+      replaceFirstUrl = when(
         () => self.selectedItem !== null,
         () => {
           // Set the first route in history

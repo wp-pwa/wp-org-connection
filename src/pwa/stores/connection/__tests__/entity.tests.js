@@ -8,7 +8,6 @@ import page184 from '../../../__tests__/page-with-subpage.json';
 import page211 from '../../../__tests__/page-211.json';
 import media581 from '../../../__tests__/media-581.json';
 import { entity } from '../../../schemas';
-import convert from '../../../converters';
 
 const { entities } = normalize(post60, entity);
 const { entities: entitiesFromMedia581 } = normalize(media581, entity);
@@ -19,10 +18,16 @@ const Connection = types
   .views(connect.views)
   .actions(connect.actions);
 
+const Stores = types.model().props({
+  connection: types.optional(Connection, {}),
+});
+
+let stores = null;
 let connection = null;
 beforeEach(() => {
-  connection = Connection.create({});
-  unprotect(connection);
+  stores = Stores.create({});
+  connection = stores.connection; // eslint-disable-line
+  unprotect(stores);
 });
 
 describe('Connection › Entity', () => {
@@ -31,46 +36,56 @@ describe('Connection › Entity', () => {
   });
 
   test('Get single shape when entity is not ready', () => {
-    expect(connection.entity('post', 60).ready).toBe(false);
-    expect(connection.entity('post', 60).fetching).toBe(false);
+    expect(connection.entity('post', 60).isReady).toBe(false);
+    expect(connection.entity('post', 60).isFetching).toBe(false);
     expect(connection.entity('post', 60).title).toBe('');
     expect(connection.entity('post', 60).link).toBe('/?p=60');
     expect(() => connection.entity('post', 60).pagedLink(3)).toThrow();
-    expect(connection.entity('post', 60).taxonomy('category')).toEqual(observable([]));
+    expect(connection.entity('post', 60).taxonomy('category')).toEqual(
+      observable([]),
+    );
     expect(connection.entity('post', 60).hasFeaturedMedia).toBe(false);
-    expect(connection.entity('post', 60).media.featured.ready).toBe(false);
-    expect(connection.entity('post', 60).media.featured.sizes).toEqual(observable([]));
+    expect(connection.entity('post', 60).media.featured.isReady).toBe(false);
+    expect(connection.entity('post', 60).media.featured.sizes).toEqual(
+      observable([]),
+    );
     expect(connection.entity('post', 60).media.content).toEqual(observable([]));
     expect(connection.entity('post', 60).author.name).toBe('');
   });
 
-  test('Get taxonomy shape when entity is not ready', () => {
-    expect(connection.entity('category', 3).ready).toBe(false);
+  test('Get category shape when entity is not ready', () => {
+    expect(connection.entity('category', 3).isReady).toBe(false);
     expect(connection.entity('category', 3).name).toBe('');
     expect(connection.entity('category', 3).link).toBe('/?cat=3');
     expect(connection.entity('category', 3).pagedLink(1)).toBe('/?cat=3');
-    expect(connection.entity('category', 3).pagedLink(3)).toBe('/?cat=3&paged=3');
+    expect(connection.entity('category', 3).pagedLink(3)).toBe(
+      '/?cat=3&paged=3',
+    );
   });
 
-  test('Get taxonomy shape when entity is not ready', () => {
-    expect(connection.entity('tag', 10).ready).toBe(false);
+  test('Get tag shape when entity is not ready', () => {
+    expect(connection.entity('tag', 10).isReady).toBe(false);
     expect(connection.entity('tag', 10).name).toBe('');
     expect(connection.entity('tag', 10).link).toBe('/?tag_ID=10');
     expect(connection.entity('tag', 10).pagedLink(1)).toBe('/?tag_ID=10');
-    expect(connection.entity('tag', 10).pagedLink(3)).toBe('/?tag_ID=10&paged=3');
+    expect(connection.entity('tag', 10).pagedLink(3)).toBe(
+      '/?tag_ID=10&paged=3',
+    );
   });
 
   test('Get author shape when entity is not ready', () => {
-    expect(connection.entity('author', 4).ready).toBe(false);
+    expect(connection.entity('author', 4).isReady).toBe(false);
     expect(connection.entity('author', 4).name).toBe('');
     expect(connection.entity('author', 4).avatar).toBe('');
     expect(connection.entity('author', 4).link).toBe('/?author=4');
     expect(connection.entity('author', 4).pagedLink(1)).toBe('/?author=4');
-    expect(connection.entity('author', 4).pagedLink(2)).toBe('/?author=4&paged=2');
+    expect(connection.entity('author', 4).pagedLink(2)).toBe(
+      '/?author=4&paged=2',
+    );
   });
 
   test('Get latest post taxonomy shape when entity is not ready', () => {
-    expect(connection.entity('latest', 'post').ready).toBe(false);
+    expect(connection.entity('latest', 'post').isReady).toBe(false);
     expect(connection.entity('latest', 'post').name).toBe('');
     expect(connection.entity('latest', 'post').link).toBe('/');
     expect(connection.entity('latest', 'post').pagedLink(1)).toBe('/');
@@ -78,7 +93,7 @@ describe('Connection › Entity', () => {
   });
 
   test('Get latest movie taxonomy shape when entity is not ready', () => {
-    expect(connection.entity('latest', 'movie').ready).toBe(false);
+    expect(connection.entity('latest', 'movie').isReady).toBe(false);
     expect(connection.entity('latest', 'movie').name).toBe('');
     expect(connection.entity('latest', 'movie').link).toBe('/');
     expect(connection.entity('latest', 'movie').pagedLink(1)).toBe('/');
@@ -86,7 +101,7 @@ describe('Connection › Entity', () => {
   });
 
   test("Get media shape when entity is not ready and entity hasn't been created", () => {
-    expect(connection.entity('media', 62).ready).toBe(false);
+    expect(connection.entity('media', 62).isReady).toBe(false);
     expect(connection.entity('media', 62).link).toBe('/?attachement_id=62');
     expect(() => connection.entity('media', 62).pagedLink(2)).toThrow();
     expect(connection.entity('media', 62).author.name).toBe('');
@@ -96,7 +111,7 @@ describe('Connection › Entity', () => {
 
   test('Get media shape when entity is not ready and entity has been created', () => {
     connection.getEntity({ type: 'media', id: 62 });
-    expect(connection.entity('media', 62).ready).toBe(false);
+    expect(connection.entity('media', 62).isReady).toBe(false);
     expect(connection.entity('media', 62).link).toBe('/?attachement_id=62');
     expect(() => connection.entity('media', 62).pagedLink(2)).toThrow();
     expect(connection.entity('media', 62).author.name).toBe('');
@@ -106,20 +121,20 @@ describe('Connection › Entity', () => {
 
   test('Media original should be biggest size if any parameter is not present', () => {
     connection.addEntity({ entity: entitiesFromMedia581.media[581] });
-    expect(connection.entity('media', 581).ready).toBe(true);
+    expect(connection.entity('media', 581).isReady).toBe(true);
     expect(connection.entity('media', 581).original.width).toBe(290);
   });
 
   test("Don't add an entity if it doesn't have type or id", () => {
-    expect(connection.entity('media', 42).ready).toBe(false);
+    expect(connection.entity('media', 42).isReady).toBe(false);
     connection.addEntity({ entity: { type: 'media' } });
     connection.addEntity({ entity: { id: 42 } });
   });
 
   test('Subscribe to ready before entity is ready', done => {
-    expect(connection.entity('post', 60).ready).toBe(false);
+    expect(connection.entity('post', 60).isReady).toBe(false);
     autorun(() => {
-      if (connection.entity('post', 60).ready) done();
+      if (connection.entity('post', 60).isReady) done();
     });
     connection.addEntity({ entity: entities.single[60] });
   });
@@ -128,7 +143,8 @@ describe('Connection › Entity', () => {
     expect(connection.entity('post', 60).link).toBe('/?p=60');
     autorun(() => {
       if (
-        connection.entity('post', 60).link === 'https://demo.worona.org/the-beauties-of-gullfoss/'
+        connection.entity('post', 60).link ===
+        'https://demo.worona.org/the-beauties-of-gullfoss/'
       )
         done();
     });
@@ -147,7 +163,9 @@ describe('Connection › Entity', () => {
   });
 
   test('Subscribe to paged link before entity is ready', done => {
-    expect(connection.entity('category', 3).pagedLink(2)).toBe('/?cat=3&paged=2');
+    expect(connection.entity('category', 3).pagedLink(2)).toBe(
+      '/?cat=3&paged=2',
+    );
     autorun(() => {
       if (
         connection.entity('category', 3).pagedLink(2) ===
@@ -163,33 +181,34 @@ describe('Connection › Entity', () => {
   test('Subscribe to single fields before entity is ready', done => {
     expect(connection.entity('post', 60).title).toBe('');
     autorun(() => {
-      if (connection.entity('post', 60).title === 'The Beauties of Gullfoss') done();
+      if (connection.entity('post', 60).title === 'The Beauties of Gullfoss')
+        done();
     });
     connection.addEntity({ entity: entities.single[60] });
   });
 
   test('Fetching should be false after item is added', () => {
-    expect(connection.entity('post', 60).fetching).toBe(false);
+    expect(connection.entity('post', 60).isFetching).toBe(false);
     connection.fetchingEntity({ type: 'post', id: 60 });
-    expect(connection.entity('post', 60).fetching).toBe(true);
+    expect(connection.entity('post', 60).isFetching).toBe(true);
     connection.addEntity({ entity: entities.single[60] });
-    expect(connection.entity('post', 60).fetching).toBe(false);
+    expect(connection.entity('post', 60).isFetching).toBe(false);
   });
 
   test('Subscribe to fetching from false to true', done => {
-    expect(connection.entity('post', 60).fetching).toBe(false);
+    expect(connection.entity('post', 60).isFetching).toBe(false);
     autorun(() => {
-      if (connection.entity('post', 60).fetching) done();
+      if (connection.entity('post', 60).isFetching) done();
     });
     connection.fetchingEntity({ type: 'post', id: 60 });
-    expect(connection.entity('post', 60).ready).toBe(false);
+    expect(connection.entity('post', 60).isReady).toBe(false);
   });
 
   test('Subscribe to fetching from true to false', done => {
     connection.fetchingEntity({ type: 'post', id: 60 });
-    expect(connection.entity('post', 60).fetching).toBe(true);
+    expect(connection.entity('post', 60).isFetching).toBe(true);
     autorun(() => {
-      if (!connection.entity('post', 60).fetching) done();
+      if (!connection.entity('post', 60).isFetching) done();
     });
     connection.addEntity({ entity: entities.single[60] });
   });
@@ -199,9 +218,11 @@ describe('Connection › Entity', () => {
     connection.fetchingEntity({ type: 'post', id: 60 });
     const authorId2 = connection.entity('post', 60).author.id;
     expect(authorId1).toEqual(authorId2);
-    const featuredOriginal1 = connection.entity('post', 60).media.featured.original.url;
+    const featuredOriginal1 = connection.entity('post', 60).media.featured
+      .original.url;
     connection.fetchingEntity({ type: 'post', id: 60 });
-    const featuredOriginal2 = connection.entity('post', 60).media.featured.original.url;
+    const featuredOriginal2 = connection.entity('post', 60).media.featured
+      .original.url;
     expect(featuredOriginal1).toEqual(featuredOriginal2);
     const link1 = connection.entity('post', 60).link;
     connection.fetchingEntity({ type: 'post', id: 60 });
@@ -214,37 +235,44 @@ describe('Connection › Entity', () => {
   });
 
   test('Get taxonomies inside post before taxonomies are ready', () => {
-    expect(connection.entity('post', 60).taxonomy('category').length).toBe(0);
-    expect(connection.entity('post', 60).taxonomy('tag').length).toBe(0);
+    expect(connection.entity('post', 60).taxonomy('category')).toHaveLength(0);
+    expect(connection.entity('post', 60).taxonomy('tag')).toHaveLength(0);
     connection.addEntity({ entity: entities.single[60] });
-    expect(connection.entity('post', 60).taxonomy('category').length).toBe(2);
+    expect(connection.entity('post', 60).taxonomy('category')).toHaveLength(2);
     expect(connection.entity('post', 60).taxonomy('category')[0].id).toBe(3);
-    expect(connection.entity('post', 60).taxonomy('tag').length).toBe(4);
+    expect(connection.entity('post', 60).taxonomy('tag')).toHaveLength(4);
     expect(connection.entity('post', 60).taxonomy('tag')[1].id).toBe(9);
   });
 
   test('Subscribe to taxonomies array before entity is ready', done => {
-    expect(connection.entity('post', 60).taxonomy('category').length).toBe(0);
+    expect(connection.entity('post', 60).taxonomy('category')).toHaveLength(0);
     autorun(() => {
-      if (connection.entity('post', 60).taxonomy('category').length === 2) done();
+      if (connection.entity('post', 60).taxonomy('category').length === 2)
+        done();
     });
     connection.addEntity({ entity: entities.single[60] });
   });
 
   test('Subscribe to taxonomies array fields before entity is ready', done => {
     connection.addEntity({ entity: entities.single[60] });
-    expect(connection.entity('post', 60).taxonomy('category').length).toBe(2);
+    expect(connection.entity('post', 60).taxonomy('category')).toHaveLength(2);
     expect(connection.entity('post', 60).taxonomy('category')[0].id).toBe(3);
     expect(connection.entity('post', 60).taxonomy('category')[0].name).toBe('');
     autorun(() => {
-      if (connection.entity('post', 60).taxonomy('category')[0].name === 'Photography') done();
+      if (
+        connection.entity('post', 60).taxonomy('category')[0].name ===
+        'Photography'
+      )
+        done();
     });
     connection.addEntity({ entity: entities.taxonomy[3] });
   });
 
   test('Get featured inside post before entity is ready', () => {
     expect(connection.entity('post', 60).media.featured.id).toBe(null);
-    expect(connection.entity('post', 60).media.featured.sizes).toEqual(observable([]));
+    expect(connection.entity('post', 60).media.featured.sizes).toEqual(
+      observable([]),
+    );
     connection.addEntity({ entity: entities.single[60] });
     expect(connection.entity('post', 60).media.featured.id).toBe(62);
     expect(connection.entity('post', 60).media.featured.title).toBe('');
@@ -260,9 +288,12 @@ describe('Connection › Entity', () => {
   });
 
   test('Subscribe to featured fields before entity is ready', done => {
-    expect(connection.entity('post', 60).media.featured.original.width).toBe(null);
+    expect(connection.entity('post', 60).media.featured.original.width).toBe(
+      null,
+    );
     autorun(() => {
-      if (connection.entity('post', 60).media.featured.original.width === 5000) done();
+      if (connection.entity('post', 60).media.featured.original.width === 5000)
+        done();
     });
     connection.addEntity({ entity: entities.single[60] });
     connection.addEntity({ entity: entities.media[62] });
@@ -281,35 +312,31 @@ describe('Connection › Entity', () => {
     expect(connection.entity('media', 62).author.name).toBe('');
   });
 
-  test('Subscribe to author fields before entity is ready', done => {
-    expect(connection.entity('post', 60).author.name).toBe('');
-    autorun(() => {
-      if (connection.entity('post', 60).author.name === 'Alan Martin') done();
-    });
-    connection.addEntity({ entity: entities.single[60] });
-    connection.addEntity({ entity: entities.author[4] });
-  });
-
   test('Get meta inside post before entity is ready', () => {
     expect(connection.entity('post', 60).headMeta.title).toBe('');
     expect(connection.entity('category', 3).headMeta.title).toBe('');
     expect(connection.entity('media', 62).headMeta.title).toBe('');
     connection.addEntity({ entity: entities.single[60] });
     expect(connection.entity('post', 60).headMeta.title).toBe(
-      convert(entities.single[60]).headMeta.title,
+      'The Beauties of Gullfoss - Demo Worona',
     );
     connection.addEntity({ entity: entities.taxonomy[3] });
     expect(connection.entity('category', 3).headMeta.title).toBe(
-      convert(entities.taxonomy[3]).headMeta.title,
+      'Photography Archives - Demo Worona',
     );
     connection.addEntity({ entity: entities.media[62] });
-    expect(connection.entity('media', 62).headMeta.title).toBe('iceland - Demo Worona');
+    expect(connection.entity('media', 62).headMeta.title).toBe(
+      'iceland - Demo Worona',
+    );
   });
 
   test('Subscribe to meta fields before entity is ready', done => {
     expect(connection.entity('post', 60).headMeta.title).toBe('');
     autorun(() => {
-      if (connection.entity('post', 60).headMeta.title === 'The Beauties of Gullfoss - Demo Worona')
+      if (
+        connection.entity('post', 60).headMeta.title ===
+        'The Beauties of Gullfoss - Demo Worona'
+      )
         done();
     });
     connection.addEntity({ entity: entities.single[60] });
@@ -324,7 +351,7 @@ describe('Connection › Entity', () => {
   });
 
   test('Subscribe to media sizes before entity is ready', done => {
-    expect(connection.entity('media', 62).sizes.length).toBe(0);
+    expect(connection.entity('media', 62).sizes).toHaveLength(0);
     autorun(() => {
       if (connection.entity('media', 62).sizes.length === 6) done();
     });
@@ -332,7 +359,7 @@ describe('Connection › Entity', () => {
   });
 
   test('Subscribe to media content on post before entity is ready', done => {
-    expect(connection.entity('post', 60).media.content.length).toBe(0);
+    expect(connection.entity('post', 60).media.content).toHaveLength(0);
     autorun(() => {
       if (connection.entity('post', 60).media.content.length === 6) done();
     });
@@ -345,6 +372,15 @@ describe('Connection › Entity', () => {
       if (connection.entity('category', 3).name === 'Photography') done();
     });
     connection.addEntity({ entity: entities.taxonomy[3] });
+  });
+
+  test('Subscribe to author fields inside post before entity is ready', done => {
+    expect(connection.entity('post', 60).author.name).toBe('');
+    autorun(() => {
+      if (connection.entity('post', 60).author.name === 'Alan Martin') done();
+    });
+    connection.addEntity({ entity: entities.single[60] });
+    connection.addEntity({ entity: entities.author[4] });
   });
 
   test('Subscribe to author fields before entity is ready', done => {
@@ -362,10 +398,12 @@ describe('Connection › Entity', () => {
   test('Get missing media (featured) inside ready post', () => {
     connection.addEntity({ entity: entities.single[60] });
     expect(connection.entity('post', 60).media.featured.id).toBe(62);
-    expect(connection.entity('media', 62).ready).toBe(false);
+    expect(connection.entity('media', 62).isReady).toBe(false);
     expect(connection.entity('media', 62).sizes).toEqual(observable([]));
-    expect(connection.entity('post', 60).media.featured.ready).toBe(false);
-    expect(connection.entity('post', 60).media.featured.sizes).toEqual(observable([]));
+    expect(connection.entity('post', 60).media.featured.isReady).toBe(false);
+    expect(connection.entity('post', 60).media.featured.sizes).toEqual(
+      observable([]),
+    );
   });
 
   test('Get parent page', done => {
@@ -384,12 +422,36 @@ describe('Connection › Entity', () => {
   });
 
   test('Get latest taxonomy', () => {
-    expect(connection.entity('latest', 'post').ready).toBe(false);
+    expect(connection.entity('latest', 'post').isReady).toBe(false);
     expect(connection.entity('latest', 'post').link).toBe('/');
     connection.addEntity({ entity: entities.taxonomy.post });
-    expect(connection.entity('latest', 'post').ready).toBe(true);
-    expect(connection.entity('latest', 'post').link).toBe('https://demo.worona.org');
-    expect(connection.entity('latest', 'post').pagedLink(1)).toBe('https://demo.worona.org');
-    expect(connection.entity('latest', 'post').pagedLink(2)).toBe('https://demo.worona.org/page/2');
+    expect(connection.entity('latest', 'post').isReady).toBe(true);
+    expect(connection.entity('latest', 'post').link).toBe(
+      'https://demo.worona.org',
+    );
+    expect(connection.entity('latest', 'post').pagedLink(1)).toBe(
+      'https://demo.worona.org',
+    );
+    expect(connection.entity('latest', 'post').pagedLink(2)).toBe(
+      'https://demo.worona.org/page/2',
+    );
+  });
+
+  test('Subscribe to meta object before entity is ready', done => {
+    expect(connection.entity('post', 60).meta).toEqual({});
+    autorun(() => {
+      if (connection.entity('post', 60).meta.custom_field === 'test value')
+        done();
+    });
+    connection.addEntity({ entity: entities.single[60] });
+  });
+
+  test('Get stuff from raw api response', done => {
+    expect(connection.entity('post', 60).raw).toEqual({});
+    autorun(() => {
+      if (connection.entity('post', 60).raw.sticky === false) done();
+    });
+    connection.addEntity({ entity: entities.single[60] });
+    expect(connection.entity('post', 60).raw.sticky).toEqual(false);
   });
 });

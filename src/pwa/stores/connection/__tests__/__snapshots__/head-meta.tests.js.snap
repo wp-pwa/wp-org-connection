@@ -1,0 +1,11 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Connection › HeadMeta pagedTitle returns entity's title if page doesn't match the initialSelectedItem's page 1`] = `"Photography Archives - Demo Worona"`;
+
+exports[`Connection › HeadMeta pagedTitle returns head.title when the entity matchs initialSelectedItem 1`] = `"Category 3 - page 2 - Title from head"`;
+
+exports[`Connection › HeadMeta title returns entity's title if head.title is not present 1`] = `"The Beauties of Gullfoss - Demo Worona"`;
+
+exports[`Connection › HeadMeta title returns entity's title when the entity does't match initialSelectedItem 1`] = `"The Beauties of Gullfoss - Demo Worona"`;
+
+exports[`Connection › HeadMeta title returns head.title when the entity matchs initialSelectedItem 1`] = `"Post 60 - Title from head"`;

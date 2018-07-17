@@ -25,7 +25,9 @@
   "ping_status": "open",
   "sticky": false,
   "format": "standard",
-  "meta": {},
+  "meta": {
+    "custom_field": "test value"
+  },
   "categories": [3, 8],
   "tags": [10, 9, 13, 11],
   "latest": ["post"],

@@ -7,15 +7,15 @@ const entityListShape = (type, id) => ({
 });
 
 export const pageShape = {
-  ready: false,
-  fetching: false,
+  isReady: false,
+  isFetching: false,
   entities: observable([]),
   total: null,
 };
 
 const listShape = (type, id) => ({
-  ready: false,
-  fetching: false,
+  isReady: false,
+  isFetching: false,
   type,
   id,
   total: {
