@@ -1,3 +1,11 @@
+## [0.8.1](https://github.com/frontity/wp-org-connection/compare/v0.8.0...v0.8.1) (2018-07-25)
+
+
+### Bug Fixes
+
+* **head-meta:** fix headMeta shape ([82365e9](https://github.com/frontity/wp-org-connection/commit/82365e9))
+* **paged-link:** add trailing slash to paged links ([94202c8](https://github.com/frontity/wp-org-connection/commit/94202c8))
+
 # [0.8.0](https://github.com/frontity/wp-org-connection/compare/v0.7.0...v0.8.0) (2018-07-17)
 
 
