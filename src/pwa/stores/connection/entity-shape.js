@@ -37,6 +37,7 @@ const common = (type, id) => ({
 
 export const headMetaShape = {
   title: '',
+  pagedTitle: () => '',
 };
 
 export const originalShape = {
