@@ -89,7 +89,7 @@ describe('Connection › Entity', () => {
     expect(connection.entity('latest', 'post').name).toBe('');
     expect(connection.entity('latest', 'post').link).toBe('/');
     expect(connection.entity('latest', 'post').pagedLink(1)).toBe('/');
-    expect(connection.entity('latest', 'post').pagedLink(3)).toBe('/page/3');
+    expect(connection.entity('latest', 'post').pagedLink(3)).toBe('/page/3/');
   });
 
   test('Get latest movie taxonomy shape when entity is not ready', () => {
@@ -97,7 +97,7 @@ describe('Connection › Entity', () => {
     expect(connection.entity('latest', 'movie').name).toBe('');
     expect(connection.entity('latest', 'movie').link).toBe('/');
     expect(connection.entity('latest', 'movie').pagedLink(1)).toBe('/');
-    expect(connection.entity('latest', 'movie').pagedLink(3)).toBe('/page/3');
+    expect(connection.entity('latest', 'movie').pagedLink(3)).toBe('/page/3/');
   });
 
   test("Get media shape when entity is not ready and entity hasn't been created", () => {
@@ -169,7 +169,7 @@ describe('Connection › Entity', () => {
     autorun(() => {
       if (
         connection.entity('category', 3).pagedLink(2) ===
-          'https://demo.worona.org/wp-cat/photography/page/2' &&
+          'https://demo.worona.org/wp-cat/photography/page/2/' &&
         connection.entity('category', 3).pagedLink(1) ===
           'https://demo.worona.org/wp-cat/photography/'
       )
@@ -433,7 +433,7 @@ describe('Connection › Entity', () => {
       'https://demo.worona.org',
     );
     expect(connection.entity('latest', 'post').pagedLink(2)).toBe(
-      'https://demo.worona.org/page/2',
+      'https://demo.worona.org/page/2/',
     );
   });
 
