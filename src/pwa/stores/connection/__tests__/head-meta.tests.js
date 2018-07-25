@@ -31,6 +31,10 @@ beforeEach(() => {
 });
 
 describe('Connection › HeadMeta', () => {
+  test('headMeta can be accessed when entity is not ready', () => {
+    expect(connection.entity('post', 60).headMeta.title).toBe('');
+    expect(connection.entity('post', 60).headMeta.pagedTitle(1)).toBe('');
+  });
   test("title returns entity's title if head.title is not present", () => {
     Object.assign(initialSelectedItem, { type: 'post', id: 60 });
     connection.addEntity({ entity: entities.single[60] });

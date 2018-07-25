@@ -25,6 +25,7 @@ Object {
   "excerpt": "",
   "hasFeaturedMedia": false,
   "headMeta": Object {
+    "pagedTitle": [Function],
     "title": "",
   },
   "id": "someId",
@@ -53,6 +54,7 @@ Object {
       "creationDate": null,
       "description": "",
       "headMeta": Object {
+        "pagedTitle": [Function],
         "title": "",
       },
       "id": null,
