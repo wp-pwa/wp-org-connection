@@ -10,26 +10,27 @@ const getEntityTitle = entity =>
   ).replace(/<\/?[^>]+(>|$)/g, '');
 
 export default types.model('HeadMeta').views(self => ({
+  get head() {
+    return getParent(self, 3).head;
+  },
+  get entity() {
+    return getParent(self);
+  },
+  get initial() {
+    return getEnv(self).initialSelectedItem;
+  },
   get title() {
-    const { initialSelectedItem: initial } = getEnv(self);
-    const { head } = getParent(self, 3);
-    const entity = getParent(self);
-
-    return head.title && isMatch(entity, { type: initial.type, id: initial.id })
-      ? head.title
-      : getEntityTitle(entity);
+    return self.head.title &&
+      isMatch(self.entity, { type: self.initial.type, id: self.initial.id })
+      ? self.head.title
+      : getEntityTitle(self.entity);
   },
   pagedTitle(page) {
     if (!page) return self.title;
-
-    const { initialSelectedItem: initial } = getEnv(self);
-    const { head } = getParent(self, 3);
-    const entity = getParent(self);
-
-    return head.title &&
-      isMatch(entity, { type: initial.type, id: initial.id }) &&
-      page === initial.page
-      ? head.title
-      : getEntityTitle(entity);
+    return self.head.title &&
+      isMatch(self.entity, { type: self.initial.type, id: self.initial.id }) &&
+      page === self.initial.page
+      ? self.head.title
+      : getEntityTitle(self.entity);
   },
 }));
