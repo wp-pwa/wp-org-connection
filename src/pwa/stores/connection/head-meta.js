@@ -2,37 +2,35 @@ import { types, getParent, getEnv } from 'mobx-state-tree';
 import { isMatch } from 'lodash';
 import { decode } from 'he';
 
-export default types.model('HeadMeta').views(self => {
-  const getEntityTitle = entity =>
-    decode(
-      (entity.raw.yoast_meta && entity.raw.yoast_meta.title) ||
-        entity.raw.name ||
-        entity.raw.title.rendered,
-    ).replace(/<\/?[^>]+(>|$)/g, '');
+const getEntityTitle = entity =>
+  decode(
+    (entity.raw.yoast_meta && entity.raw.yoast_meta.title) ||
+      entity.raw.name ||
+      entity.raw.title.rendered,
+  ).replace(/<\/?[^>]+(>|$)/g, '');
 
-  return {
-    get title() {
-      const { initialSelectedItem: initial } = getEnv(self);
-      const { head } = getParent(self, 3);
-      const entity = getParent(self);
-
-      return head.title &&
-        isMatch(entity, { type: initial.type, id: initial.id })
-        ? head.title
-        : getEntityTitle(entity);
-    },
-    pagedTitle(page) {
-      if (!page) return self.title;
-
-      const { initialSelectedItem: initial } = getEnv(self);
-      const { head } = getParent(self, 3);
-      const entity = getParent(self);
-
-      return head.title &&
-        isMatch(entity, { type: initial.type, id: initial.id }) &&
-        page === initial.page
-        ? head.title
-        : getEntityTitle(entity);
-    },
-  };
-});
+export default types.model('HeadMeta').views(self => ({
+  get head() {
+    return getParent(self, 3).head;
+  },
+  get entity() {
+    return getParent(self);
+  },
+  get initial() {
+    return getEnv(self).initialSelectedItem;
+  },
+  get title() {
+    return self.head.title &&
+      isMatch(self.entity, { type: self.initial.type, id: self.initial.id })
+      ? self.head.title
+      : getEntityTitle(self.entity);
+  },
+  pagedTitle(page) {
+    if (!page) return self.title;
+    return self.head.title &&
+      isMatch(self.entity, { type: self.initial.type, id: self.initial.id }) &&
+      page === self.initial.page
+      ? self.head.title
+      : getEntityTitle(self.entity);
+  },
+}));
