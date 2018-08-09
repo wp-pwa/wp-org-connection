@@ -454,4 +454,70 @@ describe('Connection › Entity', () => {
     connection.addEntity({ entity: entities.single[60] });
     expect(connection.entity('post', 60).raw.sticky).toEqual(false);
   });
+
+  test('Get src with and without cdn from media', () => {
+    connection.addEntity({ entity: entitiesFromMedia581.media[581] });
+
+    Object.defineProperty(stores, 'settings', {
+      writable: true,
+      value: {
+        connection: {},
+      },
+    });
+
+    expect(connection.entity('media', 581).src).toBe(
+      'https://viviendosanos.com/wp-content/uploads/2007/08/amorreal2-290x185.jpg',
+    );
+
+    Object.defineProperty(stores.settings.connection, 'cdn', {
+      writable: true,
+      value: {},
+    });
+
+    expect(connection.entity('media', 581).src).toBe(
+      'https://viviendosanos.com/wp-content/uploads/2007/08/amorreal2-290x185.jpg',
+    );
+
+    Object.defineProperty(stores.settings.connection.cdn, 'media', {
+      writable: true,
+      value: 'https://cdn.frontity.media',
+    });
+
+    expect(connection.entity('media', 581).src).toBe(
+      'https://cdn.frontity.media/wp-content/uploads/2007/08/amorreal2-290x185.jpg',
+    );
+  });
+
+  test('Get srcSet with and without cdn from media', () => {
+    connection.addEntity({ entity: entitiesFromMedia581.media[581] });
+
+    Object.defineProperty(stores, 'settings', {
+      writable: true,
+      value: {
+        connection: {},
+      },
+    });
+
+    expect(connection.entity('media', 581).srcSet).toBe(
+      'https://viviendosanos.com/wp-content/uploads/2007/08/amorreal2-290x185.jpg 290w',
+    );
+
+    Object.defineProperty(stores.settings.connection, 'cdn', {
+      writable: true,
+      value: {},
+    });
+
+    expect(connection.entity('media', 581).srcSet).toBe(
+      'https://viviendosanos.com/wp-content/uploads/2007/08/amorreal2-290x185.jpg 290w',
+    );
+
+    Object.defineProperty(stores.settings.connection.cdn, 'media', {
+      writable: true,
+      value: 'https://cdn.frontity.media',
+    });
+
+    expect(connection.entity('media', 581).srcSet).toBe(
+      'https://cdn.frontity.media/wp-content/uploads/2007/08/amorreal2-290x185.jpg 290w',
+    );
+  });
 });
