@@ -1,6 +1,7 @@
 /* eslint-disable no-use-before-define */
 import { observable } from 'mobx';
-import { types, resolveIdentifier } from 'mobx-state-tree';
+import { types, resolveIdentifier, getParent } from 'mobx-state-tree';
+import { parse } from 'url';
 import HeadMeta from './head-meta';
 import { join, extract } from './utils';
 import entityShape, {
@@ -112,50 +113,102 @@ const taxonomy = self => ({
   },
 });
 
-const media = self => ({
-  get caption() {
-    return self.isReady ? self.raw.caption : '';
-  },
-  get description() {
-    return self.isReady ? self.raw.description : '';
-  },
-  get alt() {
-    return self.isReady ? self.raw.alt : '';
-  },
-  get mimeType() {
-    return self.isReady ? self.raw.mimeType : '';
-  },
-  get mediaType() {
-    return self.isReady ? self.raw.mediaType : '';
-  },
-  get original() {
-    if (self.isReady) {
-      const url = self.raw.source_url;
-      const { width, height, file: filename } = self.raw.media_details;
+const media = self => {
+  const sameRatio = ({ width: w1, height: h1 }, { width: w2, height: h2 }) =>
+    Math.abs(w1 / h1 - w2 / h2) < 0.01;
 
-      if (width && height && filename && url)
-        return { width, height, filename, url };
+  return {
+    get caption() {
+      return self.isReady ? self.raw.caption : '';
+    },
+    get description() {
+      return self.isReady ? self.raw.description : '';
+    },
+    get alt() {
+      return self.isReady ? self.raw.alt : '';
+    },
+    get mimeType() {
+      return self.isReady ? self.raw.mimeType : '';
+    },
+    get mediaType() {
+      return self.isReady ? self.raw.mediaType : '';
+    },
+    get src() {
+      if (self.isReady) {
+        const { cdn } = getParent(self, 3).settings.connection;
+        const { path } = parse(self.original.url);
 
-      if (self.sizes)
-        return self.sizes.reduce((current, final) => {
-          if (current.width > final.width) return current;
+        if (cdn && cdn.media && path) return `${cdn.media}${path}`;
+
+        return self.original.url;
+      }
+
+      return '';
+    },
+    get srcSet() {
+      if (self.isReady) {
+        const { cdn } = getParent(self, 3).settings.connection;
+
+        // Reduces sizes array to those not repeated and with the same
+        // ratio than the original one.
+        const reducedSizes = self.sizes.reduce((final, current) => {
+          if (
+            sameRatio(current, self.original) &&
+            !final.find(size => size.width === current.width)
+          ) {
+            final.push(current);
+          }
+
           return final;
-        });
-    }
+        }, []);
 
-    return originalShape;
-  },
-  get sizes() {
-    return self.isReady && self.raw.media_details.sizes
-      ? Object.values(self.raw.media_details.sizes).map(image => ({
-          height: image.height,
-          width: image.width,
-          filename: image.file,
-          url: image.source_url,
-        }))
-      : observable([]);
-  },
-});
+        // Maps the reduced sizes array into the couples ['url size'] needed
+        // for the srcSet attribute.
+        const mappedSizes = reducedSizes.map(size => {
+          const { path } = parse(size.url);
+          const url =
+            cdn && cdn.media && path ? `${cdn.media}${path}` : size.url;
+
+          return `${url} ${size.width}w`;
+        });
+
+        // Joins the mapped sizes array into the string needed for srcSet.
+        const srcSet = mappedSizes.join(', ');
+
+        return srcSet || '';
+      }
+
+      return '';
+    },
+    get original() {
+      if (self.isReady) {
+        const url = self.raw.source_url;
+        const { width, height, file: filename } = self.raw.media_details;
+
+        if (width && height && filename && url)
+          return { width, height, filename, url };
+
+        if (self.sizes)
+          return self.sizes.reduce((current, final) => {
+            if (current.width > final.width) return current;
+            return final;
+          });
+      }
+
+      return originalShape;
+    },
+    get sizes() {
+      return self.isReady && self.raw.media_details.sizes
+        ? Object.values(self.raw.media_details.sizes).map(image => ({
+            height: image.height,
+            width: image.width,
+            filename: image.file,
+            url: image.source_url,
+          }))
+        : observable([]);
+    },
+  };
+};
 
 const author = self => ({
   get name() {
