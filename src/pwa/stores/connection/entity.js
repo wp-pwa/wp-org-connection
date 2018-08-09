@@ -114,6 +114,8 @@ const taxonomy = self => ({
 });
 
 const media = self => {
+  // Returns true if width/height ratio of both objects are very, very close.
+  // Used when computing the srcSet attribute value.
   const sameRatio = ({ width: w1, height: h1 }, { width: w2, height: h2 }) =>
     Math.abs(w1 / h1 - w2 / h2) < 0.01;
 
