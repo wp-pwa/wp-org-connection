@@ -25,6 +25,7 @@ export const Page = types
   .model('Page')
   .props({
     page: types.identifier(types.string),
+    isReady: false,
     isFetching: false,
     hasFailed: false,
     results: types.optional(types.array(types.string), observable([])),
@@ -41,8 +42,8 @@ export const Page = types
         }),
       );
     },
-    get isReady() {
-      return self.results.length > 0;
+    get isEmpty() {
+      return self.results.length === 0;
     },
     get total() {
       return self.results.length || null;
@@ -85,13 +86,18 @@ const List = types
     },
     page(page) {
       const strPage = page.toString();
-      return self.pageMap.get(strPage) || self.pageMap.get(strPage) || pageShape;
+      return (
+        self.pageMap.get(strPage) || self.pageMap.get(strPage) || pageShape
+      );
     },
     get pages() {
       return values(self.pageMap);
     },
     get entity() {
-      return resolveIdentifier(Entity, self, self.mstId) || entityShape(self.type, self.id);
+      return (
+        resolveIdentifier(Entity, self, self.mstId) ||
+        entityShape(self.type, self.id)
+      );
     },
   }));
 
