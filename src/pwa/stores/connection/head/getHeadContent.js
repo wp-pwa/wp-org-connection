@@ -1,6 +1,13 @@
 import { parse } from 'himalaya';
 import whitelist from './whitelist';
 
+const metaTagAttributes = [
+  'charset',
+  'property',
+  'content',
+  'http-equiv',
+  'name',
+];
 const allowedTags = new Set(whitelist.map(item => item.tagName));
 
 export default headString => {
@@ -32,8 +39,20 @@ export default headString => {
       if (valid.attributes) {
         if (node.attributes.length < 1) return false;
 
+        // Filters out <meta>'s with HTML invalid attributes.
+        if (node.tagName === 'meta') {
+          const attributes = Object.keys(node.attributes);
+          const areInvalidAttributes = attributes.some(
+            attribute => !metaTagAttributes.includes(attribute),
+          );
+          if (areInvalidAttributes) return false;
+        }
+
+        // Checks that the attributes in the whitelist are present in the node.
         const keys = Object.keys(valid.attributes);
-        const sameAttributes = keys.every(key => node.attributes[key] === valid.attributes[key]);
+        const sameAttributes = keys.every(
+          key => node.attributes[key] === valid.attributes[key],
+        );
 
         if (!sameAttributes) return false;
 
@@ -50,11 +69,15 @@ export default headString => {
         if (n.tagName === 'meta') {
           return r.meta.findIndex(
             item =>
-              (item.attributes.name && item.attributes.name === n.attributes.name) ||
-              (item.attributes.property && item.attributes.property === n.attributes.property),
+              (item.attributes.name &&
+                item.attributes.name === n.attributes.name) ||
+              (item.attributes.property &&
+                item.attributes.property === n.attributes.property),
           );
         } else if (n.tagName === 'link') {
-          return r.link.findIndex(item => item.attributes.rel === n.attributes.rel);
+          return r.link.findIndex(
+            item => item.attributes.rel === n.attributes.rel,
+          );
         }
       }
 
@@ -73,12 +96,14 @@ export default headString => {
       // Pushes node into tag array.
       result[node.tagName].push(node);
     }
-
     return result;
   }, {});
 
   return {
-    title: content.title && content.title[0].children && content.title[0].children[0].content,
+    title:
+      content.title &&
+      content.title[0].children &&
+      content.title[0].children[0].content,
     content: Object.keys(content).reduce((result, key) => {
       if (key !== 'title') return result.concat(content[key]);
       return result;
