@@ -1,3 +1,10 @@
+## [0.9.1](https://github.com/frontity/wp-org-connection/compare/v0.9.0...v0.9.1) (2018-08-23)
+
+
+### Bug Fixes
+
+* **head-content:** filters out meta tags with invalid attributes ([428bb6e](https://github.com/frontity/wp-org-connection/commit/428bb6e))
+
 # [0.9.0](https://github.com/frontity/wp-org-connection/compare/v0.8.1...v0.9.0) (2018-08-16)
 
 
