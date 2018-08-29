@@ -1,3 +1,10 @@
+## [0.9.2](https://github.com/frontity/wp-org-connection/compare/v0.9.1...v0.9.2) (2018-08-29)
+
+
+### Bug Fixes
+
+* **head-meta:** fix bug with title when entity is not ready yet ([8169e30](https://github.com/frontity/wp-org-connection/commit/8169e30))
+
 ## [0.9.1](https://github.com/frontity/wp-org-connection/compare/v0.9.0...v0.9.1) (2018-08-23)
 
 
@@ -57,4 +64,3 @@ https://github.com/wp-pwa/saturn-theme/issues/329
 ### Features
 
 * **entity:** rename .entity to .raw ([2bb5e10](https://github.com/frontity/wp-org-connection/commit/2bb5e10))
-
