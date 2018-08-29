@@ -57,3 +57,4 @@ https://github.com/wp-pwa/saturn-theme/issues/329
 ### Features
 
 * **entity:** rename .entity to .raw ([2bb5e10](https://github.com/frontity/wp-org-connection/commit/2bb5e10))
+
