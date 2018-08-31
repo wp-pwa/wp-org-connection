@@ -190,11 +190,11 @@ const media = self => {
         if (width && height && filename && url)
           return { width, height, filename, url };
 
-        if (self.sizes)
+        if (self.sizes && self.sizes.length > 0)
           return self.sizes.reduce((current, final) => {
             if (current.width > final.width) return current;
             return final;
-          });
+          }, []);
       }
 
       return originalShape;
