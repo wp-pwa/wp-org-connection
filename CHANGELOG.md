@@ -1,3 +1,10 @@
+## [0.9.3](https://github.com/frontity/wp-org-connection/compare/v0.9.2...v0.9.3) (2018-08-31)
+
+
+### Bug Fixes
+
+* **entity:** check if sizes.length is not 0 before reducing the array ([09f0585](https://github.com/frontity/wp-org-connection/commit/09f0585))
+
 ## [0.9.2](https://github.com/frontity/wp-org-connection/compare/v0.9.1...v0.9.2) (2018-08-29)
 
 
