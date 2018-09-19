@@ -15,7 +15,7 @@ const Connection = types
 
 const Stores = types.model().props({
   connection: types.optional(Connection, {}),
-  build: types.optional(types.frozen, {
+  build: types.frozen({
     initialUrl: 'https://www.example.com/some-post',
   }),
 });

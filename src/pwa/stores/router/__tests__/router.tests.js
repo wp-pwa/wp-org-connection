@@ -12,11 +12,11 @@ configure({ disableErrorBoundaries: true });
 
 const Stores = types.model().props({
   connection: types.optional(Connection, {}),
-  settings: types.optional(types.frozen, {
+  settings: types.frozen({
     connection: {},
     generalSite: { url: 'https://example.com' },
   }),
-  build: types.optional(types.frozen, { perPage: 10 }),
+  build: types.frozen({ perPage: 10 }),
 });
 
 let connection = null;
@@ -27,13 +27,13 @@ beforeEach(() => {
   WpApi.mockClear();
   connection = Stores.create({}, { connection: { WpApi } }).connection; // eslint-disable-line
   connection.initApi();
-  ({ getEntity, getListPage } = WpApi.mock.instances[0]);  // eslint-disable-line
+  ({ getEntity, getListPage } = WpApi.mock.instances[0]); // eslint-disable-line
 });
 
 describe('Connection › Router', () => {
   test('Initializes contexts as empty array', () => {
     expect(connection.contexts).toMatchSnapshot();
-    expect(connection.selectedContext).toBe(null);
+    expect(connection.selectedContext).toBeUndefined();
   });
 
   test('Options should be populated', () => {
@@ -45,23 +45,31 @@ describe('Connection › Router', () => {
       },
     });
     expect(connection.contexts).toMatchSnapshot();
-    expect(connection.selectedContext.options).toEqual({ someThemeOption: 123 });
+    expect(connection.selectedContext.options).toEqual({
+      someThemeOption: 123,
+    });
     expect(connection.contexts[0].options).toEqual({ someThemeOption: 123 });
   });
 
   test('Selected single', () => {
     connection.routeChangeSucceed({ selectedItem: { type: 'post', id: 60 } });
     expect(connection.contexts).toMatchSnapshot();
-    expect(getSnapshot(connection).selectedContext).toBe(connection.contexts[0].index);
+    expect(getSnapshot(connection).selectedContext).toBe(
+      connection.contexts[0].index,
+    );
     expect(connection.selectedItem.page).toBe(undefined);
     expect(connection.selectedItem.isSingle).toBe(true);
     expect(connection.selectedItem.isList).toBe(false);
   });
 
   test('Selected list', () => {
-    connection.routeChangeSucceed({ selectedItem: { type: 'category', id: 7, page: 2 } });
+    connection.routeChangeSucceed({
+      selectedItem: { type: 'category', id: 7, page: 2 },
+    });
     expect(connection.contexts).toMatchSnapshot();
-    expect(getSnapshot(connection).selectedContext).toBe(connection.contexts[0].index);
+    expect(getSnapshot(connection).selectedContext).toBe(
+      connection.contexts[0].index,
+    );
     expect(connection.selectedItem.page).toBe(2);
     expect(connection.selectedItem.isSingle).toBe(false);
     expect(connection.selectedItem.isList).toBe(true);
@@ -71,7 +79,9 @@ describe('Connection › Router', () => {
     connection.routeChangeSucceed({ selectedItem: { type: 'post', id: 63 } });
     connection.routeChangeSucceed({ selectedItem: { type: 'post', id: 60 } });
     expect(connection.contexts).toMatchSnapshot();
-    expect(getSnapshot(connection).selectedContext).toBe(connection.contexts[1].index);
+    expect(getSnapshot(connection).selectedContext).toBe(
+      connection.contexts[1].index,
+    );
     expect(getSnapshot(connection.selectedContext).generator).toEqual({
       columns: [[{ type: 'post', id: 60, page: undefined }]],
     });
@@ -80,9 +90,13 @@ describe('Connection › Router', () => {
 
   test('Selected list with previous different context', () => {
     connection.routeChangeSucceed({ selectedItem: { type: 'post', id: 60 } });
-    connection.routeChangeSucceed({ selectedItem: { type: 'category', id: 7, page: 1 } });
+    connection.routeChangeSucceed({
+      selectedItem: { type: 'category', id: 7, page: 1 },
+    });
     expect(connection.contexts).toMatchSnapshot();
-    expect(getSnapshot(connection).selectedContext).toBe(connection.contexts[1].index);
+    expect(getSnapshot(connection).selectedContext).toBe(
+      connection.contexts[1].index,
+    );
     expect(connection.selectedItem.id).toBe(7);
   });
 
@@ -91,12 +105,17 @@ describe('Connection › Router', () => {
       selectedItem: { type: 'post', id: 60 },
       context: {
         options: { someThemeOption: 123 },
-        columns: [[{ type: 'post', id: 63 }], [{ type: 'post', id: 62 }, { type: 'post', id: 60 }]],
+        columns: [
+          [{ type: 'post', id: 63 }],
+          [{ type: 'post', id: 62 }, { type: 'post', id: 60 }],
+        ],
       },
     });
     expect(connection.contexts).toMatchSnapshot();
     expect(connection.selectedColumn).toBe(connection.contexts[0].columns[1]);
-    expect(connection.selectedItem).toBe(connection.contexts[0].columns[1].items[1]);
+    expect(connection.selectedItem).toBe(
+      connection.contexts[0].columns[1].items[1],
+    );
   });
 
   test('Selected single and new context without selected', () => {
@@ -104,7 +123,10 @@ describe('Connection › Router', () => {
       selectedItem: { type: 'post', id: 60 },
       context: {
         options: { someThemeOption: 123 },
-        columns: [[{ type: 'post', id: 63 }], [{ type: 'post', id: 62 }, { type: 'post', id: 64 }]],
+        columns: [
+          [{ type: 'post', id: 63 }],
+          [{ type: 'post', id: 62 }, { type: 'post', id: 64 }],
+        ],
       },
     });
     expect(connection.contexts).toMatchSnapshot();
@@ -126,7 +148,9 @@ describe('Connection › Router', () => {
     });
     expect(connection.contexts).toMatchSnapshot();
     expect(connection.selectedColumn).toBe(connection.contexts[0].columns[1]);
-    expect(connection.selectedItem).toBe(connection.contexts[0].columns[1].items[0]);
+    expect(connection.selectedItem).toBe(
+      connection.contexts[0].columns[1].items[0],
+    );
   });
 
   test('Selected list and new context without selected', () => {
@@ -152,7 +176,9 @@ describe('Connection › Router', () => {
     connection.routeChangeSucceed({ selectedItem: { type: 'post', id: 60 } });
     expect(connection.contexts).toMatchSnapshot();
     expect(connection.selectedColumn).toBe(connection.contexts[0].columns[0]);
-    expect(connection.selectedItem).toBe(connection.contexts[0].columns[0].items[0]);
+    expect(connection.selectedItem).toBe(
+      connection.contexts[0].columns[0].items[0],
+    );
   });
 
   test('Selected single and new context, with previous diff context', () => {
@@ -161,12 +187,17 @@ describe('Connection › Router', () => {
       selectedItem: { type: 'post', id: 60 },
       context: {
         options: { someThemeOption: 123 },
-        columns: [[{ type: 'post', id: 63 }], [{ type: 'post', id: 62 }, { type: 'post', id: 60 }]],
+        columns: [
+          [{ type: 'post', id: 63 }],
+          [{ type: 'post', id: 62 }, { type: 'post', id: 60 }],
+        ],
       },
     });
     expect(connection.contexts).toMatchSnapshot();
     expect(connection.selectedColumn).toBe(connection.contexts[1].columns[1]);
-    expect(connection.selectedItem).toBe(connection.contexts[1].columns[1].items[1]);
+    expect(connection.selectedItem).toBe(
+      connection.contexts[1].columns[1].items[1],
+    );
   });
 
   test('Selected single and previous context with selected', () => {
@@ -174,18 +205,25 @@ describe('Connection › Router', () => {
       selectedItem: { type: 'post', id: 60 },
       context: {
         options: { someThemeOption: 123 },
-        columns: [[{ type: 'post', id: 63 }], [{ type: 'post', id: 62 }, { type: 'post', id: 60 }]],
+        columns: [
+          [{ type: 'post', id: 63 }],
+          [{ type: 'post', id: 62 }, { type: 'post', id: 60 }],
+        ],
       },
     });
     connection.routeChangeSucceed({ selectedItem: { type: 'post', id: 63 } });
     expect(connection.contexts).toMatchSnapshot();
-    expect(connection.contexts.length).toBe(1);
+    expect(connection.contexts).toHaveLength(1);
     expect(connection.selectedColumn).toBe(connection.contexts[0].columns[0]);
-    expect(connection.selectedItem).toBe(connection.contexts[0].columns[0].items[0]);
+    expect(connection.selectedItem).toBe(
+      connection.contexts[0].columns[0].items[0],
+    );
   });
 
   test('First selected item should be visited', () => {
-    connection.routeChangeSucceed({ selectedItem: { type: 'category', id: 7, page: 1 } });
+    connection.routeChangeSucceed({
+      selectedItem: { type: 'category', id: 7, page: 1 },
+    });
     expect(connection.selectedItem.hasBeenVisited).toBe(true);
   });
 
@@ -194,18 +232,24 @@ describe('Connection › Router', () => {
       selectedItem: { type: 'post', id: 60 },
       context: {
         options: { someThemeOption: 123 },
-        columns: [[{ type: 'post', id: 63 }], [{ type: 'post', id: 62 }, { type: 'post', id: 60 }]],
+        columns: [
+          [{ type: 'post', id: 63 }],
+          [{ type: 'post', id: 62 }, { type: 'post', id: 60 }],
+        ],
       },
     });
     connection.routeChangeSucceed({ selectedItem: { type: 'post', id: 63 } });
     expect(
-      connection.selectedContext.getItem({ item: { type: 'post', id: 60 } }).hasBeenVisited,
+      connection.selectedContext.getItem({ item: { type: 'post', id: 60 } })
+        .hasBeenVisited,
     ).toBe(true);
     expect(
-      connection.selectedContext.getItem({ item: { type: 'post', id: 63 } }).hasBeenVisited,
+      connection.selectedContext.getItem({ item: { type: 'post', id: 63 } })
+        .hasBeenVisited,
     ).toBe(true);
     expect(
-      connection.selectedContext.getItem({ item: { type: 'post', id: 62 } }).hasBeenVisited,
+      connection.selectedContext.getItem({ item: { type: 'post', id: 62 } })
+        .hasBeenVisited,
     ).toBe(false);
   });
 
@@ -214,14 +258,19 @@ describe('Connection › Router', () => {
       selectedItem: { type: 'post', id: 63 },
       context: {
         options: { someThemeOption: 123 },
-        columns: [[{ type: 'post', id: 63 }], [{ type: 'post', id: 62 }, { type: 'post', id: 60 }]],
+        columns: [
+          [{ type: 'post', id: 63 }],
+          [{ type: 'post', id: 62 }, { type: 'post', id: 60 }],
+        ],
       },
     });
     connection.moveItemToColumn({ item: { type: 'post', id: 62 } });
     expect(connection.contexts).toMatchSnapshot();
-    expect(connection.contexts.length).toBe(1);
+    expect(connection.contexts).toHaveLength(1);
     expect(connection.selectedColumn).toBe(connection.contexts[0].columns[0]);
-    expect(connection.selectedItem).toBe(connection.contexts[0].columns[0].items[0]);
+    expect(connection.selectedItem).toBe(
+      connection.contexts[0].columns[0].items[0],
+    );
     expect(connection.selectedItem.id).toBe(63);
     expect(connection.selectedItem.nextItem.id).toBe(62);
     expect(connection.selectedItem.nextItem.hasBeenVisited).toBe(true);
@@ -242,9 +291,11 @@ describe('Connection › Router', () => {
     });
     connection.moveItemToColumn({ item: { type: 'post', id: 60 } });
     expect(connection.contexts).toMatchSnapshot();
-    expect(connection.contexts[0].columns.length).toBe(2);
+    expect(connection.contexts[0].columns).toHaveLength(2);
     expect(connection.selectedColumn).toBe(connection.contexts[0].columns[1]);
-    expect(connection.selectedItem).toBe(connection.contexts[0].columns[1].items[0]);
+    expect(connection.selectedItem).toBe(
+      connection.contexts[0].columns[1].items[0],
+    );
     expect(connection.selectedItem.nextItem.id).toBe(60);
     expect(connection.selectedItem.nextItem.hasBeenVisited).toBe(true);
   });
@@ -261,9 +312,9 @@ describe('Connection › Router', () => {
         ],
       },
     });
-    expect(() => connection.moveItemToColumn({ item: { type: 'post', id: 60 } })).toThrow(
-      "Can't move if selected doesn't exist in the previous context.",
-    );
+    expect(() =>
+      connection.moveItemToColumn({ item: { type: 'post', id: 60 } }),
+    ).toThrow("Can't move if selected doesn't exist in the previous context.");
   });
 
   test("Don't move item if it's in selected column", () => {
@@ -276,9 +327,11 @@ describe('Connection › Router', () => {
     });
     connection.moveItemToColumn({ item: { type: 'post', id: 63 } });
     expect(connection.contexts).toMatchSnapshot();
-    expect(connection.contexts.length).toBe(1);
+    expect(connection.contexts).toHaveLength(1);
     expect(connection.selectedColumn).toBe(connection.contexts[0].columns[0]);
-    expect(connection.selectedItem).toBe(connection.contexts[0].columns[0].items[1]);
+    expect(connection.selectedItem).toBe(
+      connection.contexts[0].columns[0].items[1],
+    );
     expect(connection.selectedItem.id).toBe(62);
   });
 
@@ -303,9 +356,11 @@ describe('Connection › Router', () => {
       },
     });
     expect(connection.contexts).toMatchSnapshot();
-    expect(connection.contexts.length).toBe(1);
+    expect(connection.contexts).toHaveLength(1);
     expect(connection.selectedColumn).toBe(connection.contexts[0].columns[0]);
-    expect(connection.selectedItem).toBe(connection.contexts[0].columns[0].items[0]);
+    expect(connection.selectedItem).toBe(
+      connection.contexts[0].columns[0].items[0],
+    );
     expect(connection.selectedItem.type).toBe('post');
     expect(connection.contexts[0].columns[0].items[0].type).toBe('post');
     expect(connection.contexts[0].columns[0].items[1].type).toBe('latest');
@@ -322,7 +377,9 @@ describe('Connection › Router', () => {
     autorun(() => {
       if (connection.selectedItem.isReady) done();
     });
-    connection.replaceContext({ context: { columns: [[{ type: 'post', id: 60 }]] } });
+    connection.replaceContext({
+      context: { columns: [[{ type: 'post', id: 60 }]] },
+    });
     connection.fetchEntity({ type: 'post', id: 60 });
   });
 
@@ -330,7 +387,12 @@ describe('Connection › Router', () => {
     connection.routeChangeSucceed({
       selectedItem: { type: 'category', id: 7, page: 1 },
       context: {
-        columns: [[{ type: 'category', id: 7, page: 1 }, { type: 'category', id: 7, page: 2 }]],
+        columns: [
+          [
+            { type: 'category', id: 7, page: 1 },
+            { type: 'category', id: 7, page: 2 },
+          ],
+        ],
       },
     });
     connection.routeChangeSucceed({ selectedItem: { type: 'post', id: 62 } });
@@ -339,9 +401,11 @@ describe('Connection › Router', () => {
       method: 'backward',
     });
     expect(connection.contexts).toMatchSnapshot();
-    expect(connection.contexts.length).toBe(2);
+    expect(connection.contexts).toHaveLength(2);
     expect(connection.selectedContext.index).toBe(0);
-    expect(connection.selectedContext.columns[0].items[1].id).toBe(connection.selectedItem.id);
+    expect(connection.selectedContext.columns[0].items[1].id).toBe(
+      connection.selectedItem.id,
+    );
     expect(connection.selectedItem.id).toBe(7);
   });
 
@@ -349,7 +413,12 @@ describe('Connection › Router', () => {
     connection.routeChangeSucceed({
       selectedItem: { type: 'category', id: 7, page: 1 },
       context: {
-        columns: [[{ type: 'category', id: 7, page: 1 }, { type: 'category', id: 7, page: 2 }]],
+        columns: [
+          [
+            { type: 'category', id: 7, page: 1 },
+            { type: 'category', id: 7, page: 2 },
+          ],
+        ],
       },
     });
     connection.routeChangeSucceed({ selectedItem: { type: 'post', id: 62 } });
@@ -358,14 +427,21 @@ describe('Connection › Router', () => {
         selectedItem: { type: 'category', id: 7, page: 3 },
         method: 'backward',
       }),
-    ).toThrow("You are trying to select an item in a context where doesn't exist");
+    ).toThrow(
+      "You are trying to select an item in a context where doesn't exist",
+    );
   });
 
   test('Select in next context', () => {
     connection.routeChangeSucceed({
       selectedItem: { type: 'category', id: 7, page: 1 },
       context: {
-        columns: [[{ type: 'category', id: 7, page: 1 }, { type: 'category', id: 7, page: 2 }]],
+        columns: [
+          [
+            { type: 'category', id: 7, page: 1 },
+            { type: 'category', id: 7, page: 2 },
+          ],
+        ],
       },
     });
     connection.routeChangeSucceed({ selectedItem: { type: 'post', id: 62 } });
@@ -378,7 +454,7 @@ describe('Connection › Router', () => {
       method: 'forward',
     });
     expect(connection.contexts).toMatchSnapshot();
-    expect(connection.contexts.length).toBe(2);
+    expect(connection.contexts).toHaveLength(2);
     expect(connection.selectedContext.index).toBe(1);
     expect(connection.selectedItem.id).toBe(62);
   });
@@ -387,7 +463,12 @@ describe('Connection › Router', () => {
     connection.routeChangeSucceed({
       selectedItem: { type: 'category', id: 7, page: 1 },
       context: {
-        columns: [[{ type: 'category', id: 7, page: 1 }, { type: 'category', id: 7, page: 2 }]],
+        columns: [
+          [
+            { type: 'category', id: 7, page: 1 },
+            { type: 'category', id: 7, page: 2 },
+          ],
+        ],
       },
     });
     connection.routeChangeSucceed({ selectedItem: { type: 'post', id: 62 } });
@@ -400,16 +481,22 @@ describe('Connection › Router', () => {
         selectedItem: { type: 'post', id: 63 },
         method: 'forward',
       }),
-    ).toThrow("You are trying to select an item in a context where doesn't exist");
+    ).toThrow(
+      "You are trying to select an item in a context where doesn't exist",
+    );
   });
 
   test('Selected single and context object with extracted', () => {
     connection.routeChangeSucceed({
       selectedItem: { type: 'post', id: 60 },
-      context: { columns: [[{ type: 'latest', id: 'post', page: 1, extract: 'horizontal' }]] },
+      context: {
+        columns: [
+          [{ type: 'latest', id: 'post', page: 1, extract: 'horizontal' }],
+        ],
+      },
     });
     expect(connection.contexts).toMatchSnapshot();
-    expect(connection.selectedContext.columns.length).toBe(1);
+    expect(connection.selectedContext.columns).toHaveLength(1);
   });
 
   test('Columns should not show next items if extracted after that item is not resolved', () => {
@@ -424,7 +511,7 @@ describe('Connection › Router', () => {
       },
     });
     expect(connection.contexts).toMatchSnapshot();
-    expect(connection.selectedContext.columns.length).toBe(1);
+    expect(connection.selectedContext.columns).toHaveLength(1);
   });
 
   test('Columns should not show previous items if extracted before that item is not resolved', () => {
@@ -439,7 +526,7 @@ describe('Connection › Router', () => {
       },
     });
     expect(connection.contexts).toMatchSnapshot();
-    expect(connection.selectedContext.columns.length).toBe(1);
+    expect(connection.selectedContext.columns).toHaveLength(1);
   });
 
   test('Columns should not below items if extracted before that item is not resolved', () => {
@@ -480,17 +567,20 @@ describe('Connection › Router', () => {
             { type: 'post', id: 17 },
           ],
           [{ type: 'post', id: 18 }],
-          [{ type: 'category', id: 19, page: 1, extract: 'vertical' }, { type: 'post', id: 20 }],
+          [
+            { type: 'category', id: 19, page: 1, extract: 'vertical' },
+            { type: 'post', id: 20 },
+          ],
           [{ type: 'post', id: 21 }],
         ],
       },
     });
     expect(connection.contexts).toMatchSnapshot();
-    expect(connection.selectedContext.columns.length).toBe(7);
-    expect(connection.selectedContext.columns[0].items.length).toBe(1);
-    expect(connection.selectedContext.columns[1].items.length).toBe(2);
-    expect(connection.selectedContext.columns[3].items.length).toBe(2);
-    expect(connection.selectedContext.columns[5].items.length).toBe(2);
+    expect(connection.selectedContext.columns).toHaveLength(7);
+    expect(connection.selectedContext.columns[0].items).toHaveLength(1);
+    expect(connection.selectedContext.columns[1].items).toHaveLength(2);
+    expect(connection.selectedContext.columns[3].items).toHaveLength(2);
+    expect(connection.selectedContext.columns[5].items).toHaveLength(2);
   });
 
   test('Add items from extracted once they are ready', async () => {
@@ -498,15 +588,17 @@ describe('Connection › Router', () => {
     connection.routeChangeSucceed({
       selectedItem: { type: 'post', id: 60 },
       context: {
-        columns: [[{ type: 'category', id: 7, page: 1, extract: 'horizontal' }]],
+        columns: [
+          [{ type: 'category', id: 7, page: 1, extract: 'horizontal' }],
+        ],
       },
     });
-    expect(connection.selectedContext.rawColumns.length).toBe(2);
-    expect(connection.selectedContext.columns.length).toBe(1);
+    expect(connection.selectedContext.rawColumns).toHaveLength(2);
+    expect(connection.selectedContext.columns).toHaveLength(1);
     await connection.fetchListPage({ type: 'category', id: 7, page: 1 });
     expect(connection.contexts).toMatchSnapshot();
-    expect(connection.selectedContext.rawColumns.length).toBe(6);
-    expect(connection.selectedContext.columns.length).toBe(6);
+    expect(connection.selectedContext.rawColumns).toHaveLength(6);
+    expect(connection.selectedContext.columns).toHaveLength(6);
   });
 
   test('Add items from extracted once they are ready, which include an item in the context', async () => {
@@ -514,29 +606,35 @@ describe('Connection › Router', () => {
     connection.routeChangeSucceed({
       selectedItem: { type: 'post', id: 54 },
       context: {
-        columns: [[{ type: 'category', id: 7, page: 1, extract: 'horizontal' }]],
+        columns: [
+          [{ type: 'category', id: 7, page: 1, extract: 'horizontal' }],
+        ],
       },
     });
-    expect(connection.selectedContext.rawColumns.length).toBe(2);
-    expect(connection.selectedContext.columns.length).toBe(1);
+    expect(connection.selectedContext.rawColumns).toHaveLength(2);
+    expect(connection.selectedContext.columns).toHaveLength(1);
     await connection.fetchListPage({ type: 'category', id: 7, page: 1 });
     expect(connection.contexts).toMatchSnapshot();
-    expect(connection.selectedContext.rawColumns.length).toBe(5);
-    expect(connection.selectedContext.columns.length).toBe(5);
+    expect(connection.selectedContext.rawColumns).toHaveLength(5);
+    expect(connection.selectedContext.columns).toHaveLength(5);
   });
 
   test('Add items from extracted once they are ready avoiding duplications', async () => {
     getListPage.mockReturnValueOnce(Promise.resolve(postsFromCategory7));
     connection.routeChangeSucceed({
       selectedItem: { type: 'post', id: 54 },
-      context: { columns: [[{ type: 'category', id: 7, page: 1, extract: 'horizontal' }]] },
+      context: {
+        columns: [
+          [{ type: 'category', id: 7, page: 1, extract: 'horizontal' }],
+        ],
+      },
     });
-    expect(connection.selectedContext.rawColumns.length).toBe(2);
-    expect(connection.selectedContext.columns.length).toBe(1);
+    expect(connection.selectedContext.rawColumns).toHaveLength(2);
+    expect(connection.selectedContext.columns).toHaveLength(1);
     await connection.fetchListPage({ type: 'category', id: 7, page: 1 });
     expect(connection.contexts).toMatchSnapshot();
-    expect(connection.selectedContext.rawColumns.length).toBe(5);
-    expect(connection.selectedContext.columns.length).toBe(5);
+    expect(connection.selectedContext.rawColumns).toHaveLength(5);
+    expect(connection.selectedContext.columns).toHaveLength(5);
   });
 
   test('`selectedItem` should be in its natural position inside horizontal extracted list', async () => {
@@ -565,11 +663,13 @@ describe('Connection › Router', () => {
     connection.routeChangeSucceed({
       selectedItem: { type: 'post', id: 60 },
       context: {
-        columns: [[{ type: 'category', id: 7, page: 1, extract: 'horizontal' }]],
+        columns: [
+          [{ type: 'category', id: 7, page: 1, extract: 'horizontal' }],
+        ],
       },
     });
-    expect(connection.selectedContext.rawColumns.length).toBe(2);
-    expect(connection.selectedContext.columns.length).toBe(1);
+    expect(connection.selectedContext.rawColumns).toHaveLength(2);
+    expect(connection.selectedContext.columns).toHaveLength(1);
     await connection.fetchListPage({ type: 'category', id: 7, page: 1 });
     expect(connection.contexts).toMatchSnapshot();
     expect(connection.selectedContext.columns[0].items[0].fromList).toEqual({
@@ -587,13 +687,19 @@ describe('Connection › Router', () => {
   test('Items should have the `fromList` from `selectedItem` as their `fromList`', async () => {
     getListPage.mockReturnValueOnce(Promise.resolve(postsFromCategory7));
     connection.routeChangeSucceed({
-      selectedItem: { type: 'post', id: 60, fromList: { type: 'tag', id: 20, page: 1 } },
+      selectedItem: {
+        type: 'post',
+        id: 60,
+        fromList: { type: 'tag', id: 20, page: 1 },
+      },
       context: {
-        columns: [[{ type: 'category', id: 7, page: 1, extract: 'horizontal' }]],
+        columns: [
+          [{ type: 'category', id: 7, page: 1, extract: 'horizontal' }],
+        ],
       },
     });
-    expect(connection.selectedContext.rawColumns.length).toBe(2);
-    expect(connection.selectedContext.columns.length).toBe(1);
+    expect(connection.selectedContext.rawColumns).toHaveLength(2);
+    expect(connection.selectedContext.columns).toHaveLength(1);
     await connection.fetchListPage({ type: 'category', id: 7, page: 1 });
     expect(connection.contexts).toMatchSnapshot();
     expect(connection.selectedContext.columns[0].items[0].fromList).toEqual({
@@ -615,7 +721,10 @@ describe('Connection › Router', () => {
         context: {
           columns: [
             [{ type: 'post', id: 60 }],
-            [{ type: 'post', id: 63 }, { type: 'category', id: 7, page: 1, extract: 'vertical' }],
+            [
+              { type: 'post', id: 63 },
+              { type: 'category', id: 7, page: 1, extract: 'vertical' },
+            ],
           ],
         },
       }),
@@ -629,7 +738,10 @@ describe('Connection › Router', () => {
         context: {
           columns: [
             { type: 'post', id: 60 },
-            [{ type: 'post', id: 63 }, { type: 'category', id: 7, page: 1, extract: 'horizontal' }],
+            [
+              { type: 'post', id: 63 },
+              { type: 'category', id: 7, page: 1, extract: 'horizontal' },
+            ],
           ],
         },
       }),
@@ -649,9 +761,11 @@ describe('Connection › Router', () => {
     });
     connection.addItemToColumn({ item: { type: 'post', id: 64 } });
     expect(connection.contexts).toMatchSnapshot();
-    expect(connection.contexts[0].columns.length).toBe(3);
+    expect(connection.contexts[0].columns).toHaveLength(3);
     expect(connection.selectedColumn).toBe(connection.contexts[0].columns[1]);
-    expect(connection.selectedItem).toBe(connection.contexts[0].columns[1].items[0]);
+    expect(connection.selectedItem).toBe(
+      connection.contexts[0].columns[1].items[0],
+    );
     expect(connection.contexts[0].columns[1].items[1].id).toBe(64);
   });
 
@@ -668,24 +782,32 @@ describe('Connection › Router', () => {
       },
     });
     expect(connection.contexts).toMatchSnapshot();
-    expect(connection.contexts[0].columns.length).toBe(2);
+    expect(connection.contexts[0].columns).toHaveLength(2);
     await connection.fetchListPage({ type: 'category', id: 7, page: 1 });
     expect(connection.contexts).toMatchSnapshot();
-    expect(connection.contexts[0].columns.length).toBe(7);
+    expect(connection.contexts[0].columns).toHaveLength(7);
   });
 
   test('Throw if horizontal extracted is added in a column with more items', () => {
-    expect(() =>
+    expect(() => {
       connection.routeChangeSucceed({
         selectedItem: { type: 'post', id: 60 },
         context: {
           columns: [
             [{ type: 'post', id: 60 }],
-            [{ type: 'post', id: 63 }, { type: 'category', id: 7, page: 1, extract: 'horizontal' }],
+            [
+              { type: 'post', id: 63 },
+              { type: 'category', id: 7, page: 1, extract: 'horizontal' },
+            ],
           ],
         },
-      }),
-    ).toThrow();
+      });
+      // Initializes mst node
+      connection.contexts[0].rawColumns[1]; // eslint-disable-line
+    }).toThrow(
+      "Don't add extracted lists with other items in the same column.",
+    );
+    // ).toThrow();
     _resetGlobalState();
   });
 
@@ -767,7 +889,9 @@ describe('Connection › Router', () => {
     connection.routeChangeSucceed({
       selectedItem: { type: 'post', id: 60 },
       context: {
-        columns: [[{ type: 'latest', id: 'post', page: 1, extract: 'horizontal' }]],
+        columns: [
+          [{ type: 'latest', id: 'post', page: 1, extract: 'horizontal' }],
+        ],
       },
     });
     expect(connection.contexts).toMatchSnapshot();
@@ -803,7 +927,9 @@ describe('Connection › Router', () => {
     connection.routeChangeSucceed({
       selectedItem: { type: 'post', id: 60 },
       context: {
-        columns: [[{ type: 'latest', id: 'post', page: 1, extract: 'horizontal' }]],
+        columns: [
+          [{ type: 'latest', id: 'post', page: 1, extract: 'horizontal' }],
+        ],
       },
     });
     expect(connection.contexts).toMatchSnapshot();
@@ -814,7 +940,9 @@ describe('Connection › Router', () => {
     connection.routeChangeSucceed({
       selectedItem: { type: 'post', id: 60 },
       context: {
-        columns: [[{ type: 'latest', id: 'post', page: 1, extract: 'horizontal' }]],
+        columns: [
+          [{ type: 'latest', id: 'post', page: 1, extract: 'horizontal' }],
+        ],
       },
     });
     expect(connection.contexts).toMatchSnapshot();
@@ -850,7 +978,9 @@ describe('Connection › Router', () => {
     connection.routeChangeSucceed({
       selectedItem: { type: 'post', id: 60 },
       context: {
-        columns: [[{ type: 'latest', id: 'post', page: 1, extract: 'horizontal' }]],
+        columns: [
+          [{ type: 'latest', id: 'post', page: 1, extract: 'horizontal' }],
+        ],
       },
     });
     expect(connection.contexts).toMatchSnapshot();
@@ -910,7 +1040,10 @@ describe('Connection › Router', () => {
       context: {
         columns: [
           [{ type: 'latest', id: 'post', page: 1 }],
-          [{ type: 'category', id: 1, page: 1 }, { type: 'category', id: 2, page: 1 }],
+          [
+            { type: 'category', id: 1, page: 1 },
+            { type: 'category', id: 2, page: 1 },
+          ],
         ],
       },
     });
@@ -919,9 +1052,15 @@ describe('Connection › Router', () => {
     connection.routeChangeSucceed({
       selectedItem: { type: 'category', id: 2, page: 1 },
     });
-    expect(connection.selectedContext.columns[0].items[0].isSelected).toBe(false);
-    expect(connection.selectedContext.columns[1].items[0].isSelected).toBe(false);
-    expect(connection.selectedContext.columns[1].items[1].isSelected).toBe(true);
+    expect(connection.selectedContext.columns[0].items[0].isSelected).toBe(
+      false,
+    );
+    expect(connection.selectedContext.columns[1].items[0].isSelected).toBe(
+      false,
+    );
+    expect(connection.selectedContext.columns[1].items[1].isSelected).toBe(
+      true,
+    );
     expect(connection.selectedColumn.items[0].isSelected).toBe(false);
     expect(connection.selectedColumn.items[1].isSelected).toBe(true);
   });
@@ -933,19 +1072,21 @@ describe('Connection › Router', () => {
     connection.routeChangeSucceed({
       selectedItem: { type: 'post', id: 54 },
       context: {
-        columns: [[{ type: 'category', id: 7, page: 1, extract: 'horizontal' }]],
+        columns: [
+          [{ type: 'category', id: 7, page: 1, extract: 'horizontal' }],
+        ],
       },
     });
-    expect(connection.selectedContext.columns.length).toBe(1);
+    expect(connection.selectedContext.columns).toHaveLength(1);
     await connection.fetchListPage({ type: 'category', id: 7, page: 1 });
-    expect(connection.selectedContext.columns.length).toBe(5);
+    expect(connection.selectedContext.columns).toHaveLength(5);
     connection.addColumnToContext({
       column: [{ type: 'category', id: 7, page: 2, extract: 'horizontal' }],
     });
-    expect(connection.selectedContext.columns.length).toBe(5);
+    expect(connection.selectedContext.columns).toHaveLength(5);
     expect(connection.contexts).toMatchSnapshot();
     await connection.fetchListPage({ type: 'category', id: 7, page: 2 });
     expect(connection.contexts).toMatchSnapshot();
-    expect(connection.selectedContext.columns.length).toBe(10);
+    expect(connection.selectedContext.columns).toHaveLength(10);
   });
 });

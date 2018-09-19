@@ -24,7 +24,7 @@ export const Total = types
 export const Page = types
   .model('Page')
   .props({
-    page: types.identifier(types.string),
+    page: types.identifier,
     isFetching: false,
     hasFailed: false,
     results: types.optional(types.array(types.string), observable([])),
@@ -52,10 +52,10 @@ export const Page = types
 const List = types
   .model('List')
   .props({
-    mstId: types.identifier(types.string), // latest_post, category_7, movie_34, author_3
+    mstId: types.identifier, // latest_post, category_7, movie_34, author_3
     type: types.string,
     id: types.union(types.string, types.number),
-    pageMap: types.optional(types.map(Page), {}),
+    pageMap: types.map(Page),
     total: types.optional(Total, {}),
   })
   .views(self => ({
@@ -85,13 +85,18 @@ const List = types
     },
     page(page) {
       const strPage = page.toString();
-      return self.pageMap.get(strPage) || self.pageMap.get(strPage) || pageShape;
+      return (
+        self.pageMap.get(strPage) || self.pageMap.get(strPage) || pageShape
+      );
     },
     get pages() {
       return values(self.pageMap);
     },
     get entity() {
-      return resolveIdentifier(Entity, self, self.mstId) || entityShape(self.type, self.id);
+      return (
+        resolveIdentifier(Entity, self, self.mstId) ||
+        entityShape(self.type, self.id)
+      );
     },
   }));
 
