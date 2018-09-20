@@ -164,6 +164,9 @@ const media = self => {
           return final;
         }, []);
 
+        // If there are no reduced sizes use src and original width.
+        if (!reducedSizes.length) return `${self.src} ${self.original.width}w`;
+
         // Maps the reduced sizes array into the couples ['url size'] needed
         // for the srcSet attribute.
         const mappedSizes = reducedSizes.map(size => {
