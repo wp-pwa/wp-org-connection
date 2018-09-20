@@ -4,7 +4,7 @@ import { types, getParent } from 'mobx-state-tree';
 const BaseItem = types
   .model('BaseItem')
   .props({
-    mstId: types.identifier(types.string),
+    mstId: types.identifier,
     type: types.string,
     id: types.union(types.string, types.number),
     hasBeenVisited: false,
@@ -49,7 +49,9 @@ const BaseItem = types
 export const List = BaseItem.named('List')
   .props({
     page: types.number,
-    extract: types.maybe(types.enumeration('Extract', ['horizontal', 'vertical'])),
+    extract: types.maybe(
+      types.enumeration('Extract', ['horizontal', 'vertical']),
+    ),
   })
   .views(self => ({
     get list() {
@@ -72,7 +74,12 @@ export const List = BaseItem.named('List')
           stopReplace = when(
             () => self.connection.list(type, id).page(page).isReady === true,
             () => {
-              self.parentContext.replaceExtractedList({ type, id, page, extract });
+              self.parentContext.replaceExtractedList({
+                type,
+                id,
+                page,
+                extract,
+              });
             },
           );
         }
@@ -81,9 +88,13 @@ export const List = BaseItem.named('List')
   });
 
 export const Single = BaseItem.named('Single').props({
-  fromList: types.optional(types.frozen, { type: 'latest', id: 'post', page: 1 }),
+  fromList: types.frozen({ type: 'latest', id: 'post', page: 1 }),
 });
 
-const Item = types.union(({ page }) => (page ? List : Single), List, Single);
+const Item = types.union(
+  { dispatcher: ({ page }) => (page ? List : Single) },
+  List,
+  Single,
+);
 
 export default Item;

@@ -5,11 +5,12 @@ import Item from './item';
 const Column = types
   .model('Column')
   .props({
-    mstId: types.identifier(types.string),
-    rawItems: types.optional(types.array(types.late(() => Item)), []),
+    mstId: types.identifier,
+    rawItems: types.array(types.late(() => Item)),
     selectedItem: types.optional(
       types.reference(types.late(() => Item), {
-        get: (mstId, parent) => resolveIdentifier(Item, parent, mstId) || parent.items[0] || null,
+        get: (mstId, parent) =>
+          resolveIdentifier(Item, parent, mstId) || parent.items[0] || null,
         set: item => item.mstId || item,
       }),
       '',
@@ -49,7 +50,10 @@ const Column = types
     },
     hasExtracted(direction) {
       direction = direction ? [direction] : ['horizontal', 'vertical'];
-      return self.rawItems.reduce((acc, item) => acc || direction.includes(item.extract), false);
+      return self.rawItems.reduce(
+        (acc, item) => acc || direction.includes(item.extract),
+        false,
+      );
     },
     get parentContext() {
       return getParent(self, 2);
@@ -71,7 +75,9 @@ const Column = types
       afterCreate: () => {
         self.stopExtractCheck = autorun(() => {
           if (self.hasExtracted('horizontal') && self.rawItems.length > 1) {
-            throw new Error("Don't add extracted lists with other items in the same column.");
+            throw new Error(
+              "Don't add extracted lists with other items in the same column.",
+            );
           }
         });
       },

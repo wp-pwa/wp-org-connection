@@ -7,11 +7,11 @@ jest.mock('../../../env/wpapi');
 
 const Stores = types.model().props({
   connection: types.optional(Connection, {}),
-  settings: types.optional(types.frozen, {
+  settings: types.frozen({
     connection: {},
     generalSite: { url: 'https://example.com' },
   }),
-  build: types.optional(types.frozen, { perPage: 10 }),
+  build: types.frozen({ perPage: 10 }),
 });
 
 let connection = null;

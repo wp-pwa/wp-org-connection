@@ -8,11 +8,11 @@ import { extract } from './utils';
 const Custom = types
   .model('Custom')
   .props({
-    name: types.identifier(types.string),
+    name: types.identifier,
     pageMap: types.optional(types.map(Page), {}),
     total: types.optional(Total, {}),
     url: types.optional(types.string, '/'),
-    params: types.optional(types.frozen, {}),
+    params: types.frozen(),
   })
   .views(self => ({
     get isReady() {

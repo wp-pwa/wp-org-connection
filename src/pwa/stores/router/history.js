@@ -61,7 +61,8 @@ export const actions = self => {
     const stateSelectedWithoutNil = omitBy(state.selectedItem, isNil);
 
     // Prevents a dispatch when just replacing the URL
-    if (action === 'REPLACE' && isMatch(selectedItem, stateSelectedWithoutNil)) return;
+    if (action === 'REPLACE' && isMatch(selectedItem, stateSelectedWithoutNil))
+      return;
     if (disposer) disposer();
 
     // Dispatchs a route-change-succeed action
@@ -96,10 +97,15 @@ export const actions = self => {
         self.history.go(-pagesBack);
       }
     },
-    routeChangeRequested: ({ selectedItem, method = 'push', context: actionContext }) => {
+    routeChangeRequested: ({
+      selectedItem,
+      method = 'push',
+      context: actionContext,
+    }) => {
       const context =
         actionContext ||
-        (self.selectedContext && self.selectedContext.hasItem({ item: selectedItem })
+        (self.selectedContext &&
+        self.selectedContext.hasItem({ item: selectedItem })
           ? self.selectedContext.generator
           : { columns: [[{ ...selectedItem }]] });
       const path = getPath(selectedItem);
@@ -111,7 +117,7 @@ export const actions = self => {
     },
     replaceFirstUrl: () => {
       replaceFirstUrl = when(
-        () => self.selectedItem !== null,
+        () => typeof self.selectedItem !== 'undefined',
         () => {
           // Set the first route in history
           const { selectedItem, selectedContext } = self;
