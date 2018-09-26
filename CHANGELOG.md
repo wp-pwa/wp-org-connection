@@ -1,3 +1,10 @@
+## [0.9.4](https://github.com/frontity/wp-org-connection/compare/v0.9.3...v0.9.4) (2018-09-26)
+
+
+### Bug Fixes
+
+* **media:** use original src and width for srcset if no sizes ([f76a719](https://github.com/frontity/wp-org-connection/commit/f76a719))
+
 ## [0.9.3](https://github.com/frontity/wp-org-connection/compare/v0.9.2...v0.9.3) (2018-08-31)
 
 
