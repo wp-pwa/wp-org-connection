@@ -7,10 +7,12 @@ import post60 from '../../../__tests__/post-60.json';
 import page184 from '../../../__tests__/page-with-subpage.json';
 import page211 from '../../../__tests__/page-211.json';
 import media581 from '../../../__tests__/media-581.json';
+import media11680 from '../../../__tests__/media-11680.json';
 import { entity } from '../../../schemas';
 
 const { entities } = normalize(post60, entity);
 const { entities: entitiesFromMedia581 } = normalize(media581, entity);
+const { entities: entitiesFromMedia11680 } = normalize(media11680, entity);
 
 const Connection = types
   .model()
@@ -518,6 +520,39 @@ describe('Connection › Entity', () => {
 
     expect(connection.entity('media', 581).srcSet).toBe(
       'https://cdn.frontity.media/wp-content/uploads/2007/08/amorreal2-290x185.jpg 290w',
+    );
+  });
+
+  test('Get srcSet with original src and size if no sizes are provided', () => {
+    connection.addEntity({ entity: entitiesFromMedia11680.media[11680] });
+
+    Object.defineProperty(stores, 'settings', {
+      writable: true,
+      value: {
+        connection: {},
+      },
+    });
+
+    expect(connection.entity('media', 11680).srcSet).toBe(
+      'https://thewing.es/wp-content/uploads/2018/04/WNBA-PO-explicación.bmp 855w',
+    );
+
+    Object.defineProperty(stores.settings.connection, 'cdn', {
+      writable: true,
+      value: {},
+    });
+
+    expect(connection.entity('media', 11680).srcSet).toBe(
+      'https://thewing.es/wp-content/uploads/2018/04/WNBA-PO-explicación.bmp 855w',
+    );
+
+    Object.defineProperty(stores.settings.connection.cdn, 'media', {
+      writable: true,
+      value: 'https://cdn.frontity.media',
+    });
+
+    expect(connection.entity('media', 11680).srcSet).toBe(
+      'https://cdn.frontity.media/wp-content/uploads/2018/04/WNBA-PO-explicación.bmp 855w',
     );
   });
 });

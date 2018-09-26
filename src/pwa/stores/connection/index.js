@@ -22,9 +22,9 @@ import * as schemas from '../../schemas';
 const dev = process.env.NODE_ENV !== 'production';
 
 export const props = {
-  entities: types.optional(types.map(Entity), {}),
-  lists: types.optional(types.map(List), {}),
-  customs: types.optional(types.map(Custom), {}),
+  entities: types.map(Entity),
+  lists: types.map(List),
+  customs: types.map(Custom),
   head: types.optional(Head, {}),
   typeRelations: types.optional(types.map(types.string), {
     post: 'single',
