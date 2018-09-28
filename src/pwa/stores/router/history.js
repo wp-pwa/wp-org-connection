@@ -1,6 +1,6 @@
 /* eslint-disable import/prefer-default-export, global-require, no-eval */
 import { when } from 'mobx';
-import { isEqual, isMatch, omitBy, isNil } from 'lodash';
+import { isEqual, isMatch, omitBy, isNil } from 'lodash-es';
 import url from 'url';
 
 export const actions = self => {
