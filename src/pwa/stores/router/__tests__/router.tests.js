@@ -1065,6 +1065,26 @@ describe('Connection › Router', () => {
     expect(connection.selectedColumn.items[1].isSelected).toBe(true);
   });
 
+  test('Get the proper values from nextItem in item', () => {
+    connection.routeChangeSucceed({
+      selectedItem: { type: 'latest', id: 'post', page: 1 },
+      context: {
+        columns: [
+          [{ type: 'latest', id: 'post', page: 1 }],
+          [
+            { type: 'category', id: 1, page: 1 },
+            { type: 'category', id: 2, page: 1 },
+          ],
+        ],
+      },
+    });
+    const [item1] = connection.selectedContext.columns[0].items;
+    const [item2, item3] = connection.selectedContext.columns[1].items;
+    expect(item1.nextItem).toBe(item2);
+    expect(item2.nextItem).toBe(item3);
+    expect(item3.nextItem).toBeNull();
+  });
+
   test('Add column to context', async () => {
     getListPage
       .mockReturnValueOnce(Promise.resolve(postsFromCategory7))
