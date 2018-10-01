@@ -35,7 +35,7 @@ const BaseItem = types
       const items = getParent(self);
       const index = items.indexOf(self);
       return index === items.length - 1
-        ? self.column.nextColumn && self.column.nextColumn.items[0]
+        ? self.parentColumn.nextColumn && self.parentColumn.nextColumn.items[0]
         : items[index + 1];
     },
     isExtracted() {
@@ -68,20 +68,19 @@ export const List = BaseItem.named('List')
       beforeDestroy: () => {
         if (stopReplace) stopReplace();
       },
-      afterCreate: () => {
+      afterCreate: async () => {
         if (['horizontal', 'vertical'].includes(self.extract)) {
           const { type, id, page, extract } = self;
-          stopReplace = when(
-            () => self.connection.list(type, id).page(page).isReady === true,
-            () => {
-              self.parentContext.replaceExtractedList({
-                type,
-                id,
-                page,
-                extract,
-              });
-            },
-          );
+          if (!self.connection.list(type, id).page(page).isReady)
+            stopReplace = await when(
+              () => self.connection.list(type, id).page(page).isReady,
+            );
+          self.parentContext.replaceExtractedList({
+            type,
+            id,
+            page,
+            extract,
+          });
         }
       },
     };
