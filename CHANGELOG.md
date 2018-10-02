@@ -1,3 +1,11 @@
+## [0.9.5](https://github.com/frontity/wp-org-connection/compare/v0.9.4...v0.9.5) (2018-10-02)
+
+
+### Bug Fixes
+
+* **context:** get next column and extract list at the same time ([1de490e](https://github.com/frontity/wp-org-connection/commit/1de490e))
+* **item:** change afterCreate hook and fix nextItem view ([7914cc4](https://github.com/frontity/wp-org-connection/commit/7914cc4))
+
 ## [0.9.4](https://github.com/frontity/wp-org-connection/compare/v0.9.3...v0.9.4) (2018-09-26)
 
 
