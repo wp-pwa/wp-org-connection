@@ -619,6 +619,21 @@ describe('Connection › Router', () => {
     expect(connection.selectedContext.columns).toHaveLength(5);
   });
 
+  test('Add items from extracted if they are ready when accessing for the first time to colums', async () => {
+    getListPage.mockReturnValueOnce(Promise.resolve(postsFromCategory7));
+    connection.routeChangeSucceed({
+      selectedItem: { type: 'post', id: 54 },
+      context: {
+        columns: [
+          [{ type: 'category', id: 7, page: 1, extract: 'horizontal' }],
+        ],
+      },
+    });
+    await connection.fetchListPage({ type: 'category', id: 7, page: 1 });
+    expect(connection.selectedColumn.nextColumn.items[0].type).toBe('post');
+    expect(connection.selectedContext.columns).toHaveLength(5);
+  });
+
   test('Add items from extracted once they are ready avoiding duplications', async () => {
     getListPage.mockReturnValueOnce(Promise.resolve(postsFromCategory7));
     connection.routeChangeSucceed({
@@ -1063,6 +1078,26 @@ describe('Connection › Router', () => {
     );
     expect(connection.selectedColumn.items[0].isSelected).toBe(false);
     expect(connection.selectedColumn.items[1].isSelected).toBe(true);
+  });
+
+  test('Get the proper values from nextItem in item', () => {
+    connection.routeChangeSucceed({
+      selectedItem: { type: 'latest', id: 'post', page: 1 },
+      context: {
+        columns: [
+          [{ type: 'latest', id: 'post', page: 1 }],
+          [
+            { type: 'category', id: 1, page: 1 },
+            { type: 'category', id: 2, page: 1 },
+          ],
+        ],
+      },
+    });
+    const [item1] = connection.selectedContext.columns[0].items;
+    const [item2, item3] = connection.selectedContext.columns[1].items;
+    expect(item1.nextItem).toBe(item2);
+    expect(item2.nextItem).toBe(item3);
+    expect(item3.nextItem).toBeNull();
   });
 
   test('Add column to context', async () => {

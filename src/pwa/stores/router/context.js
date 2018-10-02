@@ -41,6 +41,8 @@ const Context = types
       // Traverse the columns from selectedColumnIndex to 0 until we find an empty column. This
       // includes the selectedColumn as well.
       for (let i = selectedColumnIndex; i >= 0; i -= 1) {
+        // WARNING - temporal fix, should be removed after refactoring
+        self.rawColumns[i].items; // eslint-disable-line
         if (self.rawColumns[i].items.length === 0) break;
         columns[i] = self.rawColumns[i];
       }
@@ -51,6 +53,8 @@ const Context = types
         i < self.rawColumns.length;
         i += 1
       ) {
+        // WARNING - temporal fix, should be removed after refactoring
+        self.rawColumns[i].items; // eslint-disable-line
         if (self.rawColumns[i].items.length === 0) break;
         columns[i] = self.rawColumns[i];
       }
