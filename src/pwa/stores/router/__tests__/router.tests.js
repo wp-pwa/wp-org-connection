@@ -619,6 +619,21 @@ describe('Connection › Router', () => {
     expect(connection.selectedContext.columns).toHaveLength(5);
   });
 
+  test('Add items from extracted if they are ready when accessing for the first time to colums', async () => {
+    getListPage.mockReturnValueOnce(Promise.resolve(postsFromCategory7));
+    connection.routeChangeSucceed({
+      selectedItem: { type: 'post', id: 54 },
+      context: {
+        columns: [
+          [{ type: 'category', id: 7, page: 1, extract: 'horizontal' }],
+        ],
+      },
+    });
+    await connection.fetchListPage({ type: 'category', id: 7, page: 1 });
+    expect(connection.selectedColumn.nextColumn.items[0].type).toBe('post');
+    expect(connection.selectedContext.columns).toHaveLength(5);
+  });
+
   test('Add items from extracted once they are ready avoiding duplications', async () => {
     getListPage.mockReturnValueOnce(Promise.resolve(postsFromCategory7));
     connection.routeChangeSucceed({
