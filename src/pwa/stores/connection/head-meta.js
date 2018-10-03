@@ -1,5 +1,5 @@
 import { types, getParent, getEnv } from 'mobx-state-tree';
-import { isMatch } from 'lodash-es';
+import { isMatch } from 'lodash';
 import { decode } from 'he';
 
 const getEntityTitle = entity =>
