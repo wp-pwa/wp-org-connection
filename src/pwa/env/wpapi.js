@@ -1,5 +1,5 @@
 import Wpapi from 'wpapi';
-import { forOwn } from 'lodash';
+import { forOwn } from 'lodash-es';
 
 const typesToEndpoints = type => {
   const endpoints = {
