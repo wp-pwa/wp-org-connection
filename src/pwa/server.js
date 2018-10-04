@@ -1,4 +1,4 @@
-import Store from './stores';
+import Store from './stores/server';
 import env from './env';
 import { version } from '../../package.json';
 
