@@ -1,6 +1,6 @@
 {
   "name": "wp-org-connection",
-  "version": "0.9.3",
+  "version": "0.9.5",
   "private": true,
   "description": "Connect Frontity to any self hosted WP using the REST API",
   "scripts": {
@@ -50,8 +50,8 @@
     "jest": "^23.2.0",
     "lint-staged": "^7.3.0",
     "lodash-es": "^4.17.11",
-    "mobx": "^4.4.2",
-    "mobx-state-tree": "^3.3.0",
+    "mobx": "^4.5.0",
+    "mobx-state-tree": "^3.5.0",
     "semantic-release": "^15.6.0",
     "travis-deploy-once": "^5.0.0"
   },
