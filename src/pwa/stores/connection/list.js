@@ -1,7 +1,7 @@
 import { values, observable } from 'mobx';
 import { types, getParent, resolveIdentifier, getRoot } from 'mobx-state-tree';
-import { flatten } from 'lodash-es';
-import entityShape from './entity-shape';
+import { flatten } from 'lodash';
+import { entityShape } from './entity-shape';
 import { pageShape } from './list-shape';
 import Entity from './entity';
 import { extract } from './utils';

@@ -1,5 +1,5 @@
 import Wpapi from 'wpapi';
-import { forOwn } from 'lodash-es';
+import forOwn from 'lodash/forOwn';
 
 const typesToEndpoints = type => {
   const endpoints = {
@@ -27,28 +27,24 @@ const typesToParams = type => {
 };
 
 class WpApi {
-  api = null;
+  api = null
 
   constructor({ cptEndpoints = {}, siteUrl }) {
     const apiUrl = `${siteUrl.replace(/\/$/, '')}/?rest_route=`;
     this.api = new Wpapi({ endpoint: apiUrl });
     Object.entries(cptEndpoints).forEach(([type, endpoint]) => {
-      this.api[type] = this.api.registerRoute(
-        'wp/v2',
-        `/${endpoint}/(?P<id>\\d+)`,
-      );
+      this.api[type] = this.api.registerRoute('wp/v2', `/${endpoint}/(?P<id>\\d+)`);
     });
   }
 
-  getEntity({ type, id }) {
+  getEntity({ type, id }){
     return this.api[typesToEndpoints(type)]()
-      .id(id)
-      .embed();
+    .id(id)
+    .embed()
   }
 
   getListPage({ type, id, page = 1, perPage = 10 }) {
-    const endpoint =
-      type === 'latest' ? typesToEndpoints(id) : typesToEndpoints('post');
+    const endpoint = type === 'latest' ? typesToEndpoints(id) : typesToEndpoints('post');
     const params = { _embed: true, per_page: perPage };
     if (['category', 'tag', 'author'].includes(type)) {
       params[typesToParams(type)] = id;
