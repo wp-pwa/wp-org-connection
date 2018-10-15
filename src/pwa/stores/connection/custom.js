@@ -1,6 +1,6 @@
 import { values, observable } from 'mobx';
 import { types, getParent } from 'mobx-state-tree';
-import { flatten } from 'lodash';
+import { flatten } from 'lodash-es';
 import { Total, Page } from './list';
 import { pageShape } from './list-shape';
 import { extract } from './utils';

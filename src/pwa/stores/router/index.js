@@ -1,5 +1,5 @@
 import { types } from 'mobx-state-tree';
-import { isEqual } from 'lodash';
+import { isEqual } from 'lodash-es';
 import Context from './context';
 
 const lateContext = types.late(() => Context);
