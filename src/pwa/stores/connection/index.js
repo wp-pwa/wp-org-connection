@@ -119,7 +119,8 @@ export const actions = self => {
           : 0;
         const total = { entities: totalEntities, pages: totalPages };
         self.addListPage({ type, id, page, total, result, entities });
-        listPage.isFetching = false;
+        const entity = self.getEntity({ type, id });
+        if (!entity.raw) yield self.fetchEntity({ type, id });
       } catch (error) {
         if (dev)
           console.warn(
@@ -215,6 +216,7 @@ export const actions = self => {
       const listPage = self.getListPage({ type, id, page: strPage });
       listPage.results = mstResults;
       listPage.isFetching = false;
+      listPage.isReady = true;
       if (total) {
         const list = self.getList({ type, id });
         if (total.entities) list.total.entities = total.entities;
@@ -243,9 +245,10 @@ export const actions = self => {
       const mstResults = result.map(
         res => `${entities[res.schema][res.id].type}_${res.id}`,
       );
-      const item = self.getCustomPage({ name, page: strPage });
-      item.results = mstResults;
-      item.isFetching = false;
+      const customPage = self.getCustomPage({ name, page: strPage });
+      customPage.results = mstResults;
+      customPage.isFetching = false;
+      customPage.isReady = true;
       if (total) {
         const list = self.getCustom({ name });
         if (total.entities) list.total.entities = total.entities;

@@ -3,6 +3,8 @@
 exports[`Connection › Custom Get custom snapshot when it is not ready 1`] = `
 Object {
   "entities": Array [],
+  "hasFailed": false,
+  "isEmpty": true,
   "isFetching": false,
   "isReady": false,
   "name": "test",

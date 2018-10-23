@@ -25,6 +25,7 @@ export const Page = types
   .model('Page')
   .props({
     page: types.identifier,
+    isReady: false,
     isFetching: false,
     hasFailed: false,
     results: types.optional(types.array(types.string), observable([])),
@@ -41,8 +42,8 @@ export const Page = types
         }),
       );
     },
-    get isReady() {
-      return self.results.length > 0;
+    get isEmpty() {
+      return self.results.length === 0;
     },
     get total() {
       return self.results.length || null;
@@ -73,6 +74,11 @@ const List = types
       return values(self.pageMap)
         .map(page => page.hasFailed)
         .reduce((acc, cur) => acc || cur, false);
+    },
+    get isEmpty() {
+      return values(self.pageMap)
+        .map(page => page.isEmpty)
+        .every(isPageEmpty => isPageEmpty);
     },
     get entities() {
       const results = flatten(self.pages.map(page => page.results.peek()));

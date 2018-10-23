@@ -19,6 +19,11 @@ const {
   entities: entitiesFromCategoryPage2,
 } = normalize(postsFromCategory7Page2, list);
 
+const {
+  result: resultFromEmptyList,
+  entities: entitiesFromEmptyList,
+} = normalize([], list);
+
 const Connection = types
   .model()
   .props(connect.props)
@@ -283,5 +288,67 @@ describe('Connection › List', () => {
     });
     const rehydrated = Connection.create(getSnapshot(connection));
     expect(rehydrated.list('category', 7).page(1)).toMatchSnapshot();
+  });
+
+  test('In an empty list page isReady should be true', () => {
+    connection.addListPage({
+      type: 'category',
+      id: 1,
+      page: 1,
+      result: resultFromEmptyList,
+      entities: entitiesFromEmptyList,
+      total: { entities: 0, pages: 1 },
+    });
+
+    expect(connection.list('category', 1).entities).toHaveLength(0);
+    expect(connection.list('category', 1).isReady).toBe(true);
+    expect(connection.list('category', 1).page(1).isReady).toBe(true);
+  });
+
+  test('In an empty list page isFetching should be false', () => {
+    connection.addListPage({
+      type: 'category',
+      id: 1,
+      page: 1,
+      result: resultFromEmptyList,
+      entities: entitiesFromEmptyList,
+      total: { entities: 0, pages: 1 },
+    });
+
+    expect(connection.list('category', 1).entities).toHaveLength(0);
+    expect(connection.list('category', 1).isFetching).toBe(false);
+    expect(connection.list('category', 1).page(1).isFetching).toBe(false);
+  });
+
+  test('In an empty list page isEmpty should be true', () => {
+    connection.addListPage({
+      type: 'category',
+      id: 1,
+      page: 1,
+      result: resultFromEmptyList,
+      entities: entitiesFromEmptyList,
+      total: { entities: 0, pages: 1 },
+    });
+
+    expect(connection.list('category', 1).entities).toHaveLength(0);
+    expect(connection.list('category', 1).isEmpty).toBe(true);
+    expect(connection.list('category', 1).page(1).isEmpty).toBe(true);
+  });
+
+  test('isEmpty should be false if the list has entities', () => {
+    connection.addListPage({
+      type: 'category',
+      id: 7,
+      page: 1,
+      result: resultFromCategory7,
+      entities: entitiesFromCategory,
+      total: { entities: 5, pages: 2 },
+    });
+    expect(connection.list('category', 7).entities).toHaveLength(5);
+    expect(connection.list('category', 7).isEmpty).toBe(false);
+    expect(connection.list('category', 7).page(1).entities).toHaveLength(5);
+    expect(connection.list('category', 7).page(1).isEmpty).toBe(false);
+    expect(connection.list('category', 7).page(2).entities).toHaveLength(0);
+    expect(connection.list('category', 7).page(2).isEmpty).toBe(true);
   });
 });
