@@ -22,6 +22,7 @@ Object {
     "target": "",
     "type": "category",
   },
+  "hasFailed": false,
   "id": 7,
   "isFetching": false,
   "isReady": false,
@@ -43,6 +44,7 @@ exports[`Connection › List Rehydrates pageMap from a snapshot 1`] = `
 Object {
   "hasFailed": false,
   "isFetching": false,
+  "isReady": true,
   "page": "1",
   "results": Array [
     "post_57",

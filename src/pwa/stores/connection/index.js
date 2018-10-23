@@ -111,7 +111,6 @@ export const actions = self => {
           self.root.settings.connection.perPage || self.root.build.perPage;
         const response = yield wpapi.getListPage({ type, id, page, perPage });
         const { entities, result } = normalize(response, schemas.list);
-        console.log('response:', response);
         const totalEntities = response._paging
           ? parseInt(response._paging.total, 10)
           : 0;
@@ -246,9 +245,10 @@ export const actions = self => {
       const mstResults = result.map(
         res => `${entities[res.schema][res.id].type}_${res.id}`,
       );
-      const item = self.getCustomPage({ name, page: strPage });
-      item.results = mstResults;
-      item.isFetching = false;
+      const customPage = self.getCustomPage({ name, page: strPage });
+      customPage.results = mstResults;
+      customPage.isFetching = false;
+      customPage.isReady = true;
       if (total) {
         const list = self.getCustom({ name });
         if (total.entities) list.total.entities = total.entities;
