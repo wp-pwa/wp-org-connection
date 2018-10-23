@@ -15,7 +15,7 @@ const Connection = types
 
 const Stores = types.model().props({
   connection: types.optional(Connection, {}),
-  build: types.optional(types.frozen, {
+  build: types.frozen({
     initialUrl: 'https://www.example.com/some-post',
   }),
 });
@@ -34,6 +34,12 @@ describe('Connection › HeadMeta', () => {
   test('headMeta can be accessed when entity is not ready', () => {
     expect(connection.entity('post', 60).headMeta.title).toBe('');
     expect(connection.entity('post', 60).headMeta.pagedTitle(1)).toBe('');
+  });
+  test('headMeta can be accessed when entity is not ready and entity has been created', () => {
+    connection.getEntity({ type: 'post', id: 60 });
+    expect(connection.entity('post', 60).isReady).toBe(false);
+    expect(connection.entity('post', 60).headMeta.title).toBe('');
+    expect(connection.entity('post', 60).headMeta.pagedTitle(2)).toBe('');
   });
   test("title returns entity's title if head.title is not present", () => {
     Object.assign(initialSelectedItem, { type: 'post', id: 60 });

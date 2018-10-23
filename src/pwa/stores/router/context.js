@@ -1,22 +1,29 @@
-import { types, getParent, resolveIdentifier, detach, getSnapshot } from 'mobx-state-tree';
+import {
+  types,
+  getParent,
+  resolveIdentifier,
+  detach,
+  getSnapshot,
+} from 'mobx-state-tree';
 import Column from './column';
 import Item from './item';
 
 const Context = types
   .model('Context')
   .props({
-    index: types.identifier(types.number),
-    options: types.frozen,
+    index: types.identifierNumber,
+    options: types.frozen(),
     rawColumns: types.optional(types.array(types.late(() => Column)), []),
     selectedColumn: types.optional(
       types.reference(types.late(() => Column), {
-        get: (mstId, parent) => resolveIdentifier(Column, parent, mstId) || parent.columns[0],
+        get: (mstId, parent) =>
+          resolveIdentifier(Column, parent, mstId) || parent.columns[0],
         set: column => column.mstId || column,
       }),
       '',
     ),
-    generator: types.frozen,
-    infinite: types.frozen,
+    generator: types.frozen(),
+    infinite: types.frozen(),
     mstIdForColumn: 0,
   })
   .views(self => ({
@@ -34,12 +41,20 @@ const Context = types
       // Traverse the columns from selectedColumnIndex to 0 until we find an empty column. This
       // includes the selectedColumn as well.
       for (let i = selectedColumnIndex; i >= 0; i -= 1) {
+        // WARNING - temporal fix, should be removed after refactoring
+        self.rawColumns[i].items; // eslint-disable-line
         if (self.rawColumns[i].items.length === 0) break;
         columns[i] = self.rawColumns[i];
       }
       // Traverse the columns from selectedColumnIndex + 1 till the end until we find an
       // empty column.
-      for (let i = selectedColumnIndex + 1; i < self.rawColumns.length; i += 1) {
+      for (
+        let i = selectedColumnIndex + 1;
+        i < self.rawColumns.length;
+        i += 1
+      ) {
+        // WARNING - temporal fix, should be removed after refactoring
+        self.rawColumns[i].items; // eslint-disable-line
         if (self.rawColumns[i].items.length === 0) break;
         columns[i] = self.rawColumns[i];
       }
@@ -47,12 +62,15 @@ const Context = types
     },
     get nextNonVisited() {
       const nextColumnWithNonVisited = self.columns.find(
-        ({ hasNonVisited, index }) => hasNonVisited && index >= self.selectedColumn.index,
+        ({ hasNonVisited, index }) =>
+          hasNonVisited && index >= self.selectedColumn.index,
       );
 
       return (
         (nextColumnWithNonVisited &&
-          nextColumnWithNonVisited.items.find(item => item.hasBeenVisited === false)) ||
+          nextColumnWithNonVisited.items.find(
+            item => item.hasBeenVisited === false,
+          )) ||
         null
       );
     },
@@ -65,7 +83,9 @@ const Context = types
     },
     getMstId: ({ type, id, page, extract }) =>
       page
-        ? `${self.index}_${type}_${id}_page_${page}${extract ? `_${extract}` : ''}`
+        ? `${self.index}_${type}_${id}_page_${page}${
+            extract ? `_${extract}` : ''
+          }`
         : `${self.index}_${type}_${id}`,
     getItem: ({ item: { type, id, page, extract } }) =>
       resolveIdentifier(Item, self, self.getMstId({ type, id, page, extract })),
@@ -73,8 +93,12 @@ const Context = types
     getColumn: mstId => resolveIdentifier(Column, self, mstId),
   }))
   .actions(self => ({
-    addMstIdToItem: ({ item }) => ({ ...item, mstId: self.getMstId({ ...item }) }),
-    addMstIdToItems: ({ items }) => items.map(item => self.addMstIdToItem({ item })),
+    addMstIdToItem: ({ item }) => ({
+      ...item,
+      mstId: self.getMstId({ ...item }),
+    }),
+    addMstIdToItems: ({ items }) =>
+      items.map(item => self.addMstIdToItem({ item })),
     setGenerator: ({ generator }) => {
       self.generator = generator;
     },
@@ -136,7 +160,8 @@ const Context = types
       const newItem = self.getItem(item);
       const newItemParentColumn = newItem.parentColumn;
       detach(newItem);
-      if (newItemParentColumn.items.length === 0) self.rawColumns.remove(newItemParentColumn);
+      if (newItemParentColumn.items.length === 0)
+        self.rawColumns.remove(newItemParentColumn);
       self.selectedItem.parentColumn.rawItems.push(newItem);
     },
     replaceExtractedList: ({ type, id, page, extract }) => {
@@ -144,7 +169,8 @@ const Context = types
       const oldColumn = oldItem.parentColumn;
       const oldIndex = oldItem.parentColumn.index;
       self.deleteItem({ item: oldItem });
-      if (oldColumn.rawItems.length === 0) self.deleteColumn({ column: oldColumn });
+      if (oldColumn.rawItems.length === 0)
+        self.deleteColumn({ column: oldColumn });
       const items = self.connection
         .list(type, id)
         .page(page)

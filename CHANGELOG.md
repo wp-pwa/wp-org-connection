@@ -1,3 +1,47 @@
+## [0.9.5](https://github.com/frontity/wp-org-connection/compare/v0.9.4...v0.9.5) (2018-10-02)
+
+
+### Bug Fixes
+
+* **context:** get next column and extract list at the same time ([1de490e](https://github.com/frontity/wp-org-connection/commit/1de490e))
+* **item:** change afterCreate hook and fix nextItem view ([7914cc4](https://github.com/frontity/wp-org-connection/commit/7914cc4))
+
+## [0.9.4](https://github.com/frontity/wp-org-connection/compare/v0.9.3...v0.9.4) (2018-09-26)
+
+
+### Bug Fixes
+
+* **media:** use original src and width for srcset if no sizes ([f76a719](https://github.com/frontity/wp-org-connection/commit/f76a719))
+
+## [0.9.3](https://github.com/frontity/wp-org-connection/compare/v0.9.2...v0.9.3) (2018-08-31)
+
+
+### Bug Fixes
+
+* **entity:** check if sizes.length is not 0 before reducing the array ([09f0585](https://github.com/frontity/wp-org-connection/commit/09f0585))
+
+## [0.9.2](https://github.com/frontity/wp-org-connection/compare/v0.9.1...v0.9.2) (2018-08-29)
+
+
+### Bug Fixes
+
+* **head-meta:** fix bug with title when entity is not ready yet ([8169e30](https://github.com/frontity/wp-org-connection/commit/8169e30))
+
+## [0.9.1](https://github.com/frontity/wp-org-connection/compare/v0.9.0...v0.9.1) (2018-08-23)
+
+
+### Bug Fixes
+
+* **head-content:** filters out meta tags with invalid attributes ([428bb6e](https://github.com/frontity/wp-org-connection/commit/428bb6e))
+
+# [0.9.0](https://github.com/frontity/wp-org-connection/compare/v0.8.1...v0.9.0) (2018-08-16)
+
+
+### Features
+
+* **api:** uses cdn for api if available ([a367eaf](https://github.com/frontity/wp-org-connection/commit/a367eaf))
+* **media:** adds src and srcSet fields to media entity ([00c23ca](https://github.com/frontity/wp-org-connection/commit/00c23ca))
+
 ## [0.8.1](https://github.com/frontity/wp-org-connection/compare/v0.8.0...v0.8.1) (2018-07-25)
 
 

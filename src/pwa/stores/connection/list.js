@@ -1,7 +1,7 @@
 import { values, observable } from 'mobx';
 import { types, getParent, resolveIdentifier, getRoot } from 'mobx-state-tree';
-import { flatten } from 'lodash';
-import { entityShape } from './entity-shape';
+import { flatten } from 'lodash-es';
+import entityShape from './entity-shape';
 import { pageShape } from './list-shape';
 import Entity from './entity';
 import { extract } from './utils';
@@ -24,7 +24,7 @@ export const Total = types
 export const Page = types
   .model('Page')
   .props({
-    page: types.identifier(types.string),
+    page: types.identifier,
     isReady: false,
     isFetching: false,
     hasFailed: false,
@@ -53,10 +53,10 @@ export const Page = types
 const List = types
   .model('List')
   .props({
-    mstId: types.identifier(types.string), // latest_post, category_7, movie_34, author_3
+    mstId: types.identifier, // latest_post, category_7, movie_34, author_3
     type: types.string,
     id: types.union(types.string, types.number),
-    pageMap: types.optional(types.map(Page), {}),
+    pageMap: types.map(Page),
     total: types.optional(Total, {}),
   })
   .views(self => ({

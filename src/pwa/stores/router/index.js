@@ -1,11 +1,11 @@
 import { types } from 'mobx-state-tree';
-import { isEqual } from 'lodash';
+import { isEqual } from 'lodash-es';
 import Context from './context';
 
 const lateContext = types.late(() => Context);
 
 export const props = {
-  contexts: types.optional(types.array(lateContext), []),
+  contexts: types.array(lateContext),
   selectedContext: types.maybe(types.reference(lateContext)),
 };
 
@@ -32,7 +32,9 @@ export const actions = self => {
   const changeSelectedItem = ({ selectedItem }) => {
     const newItem = self.selectedContext.getItem({ item: selectedItem });
     if (!newItem) {
-      throw new Error("You are trying to select an item in a context where doesn't exist");
+      throw new Error(
+        "You are trying to select an item in a context where doesn't exist",
+      );
     }
     newItem.parentColumn.selectedItem = newItem;
     self.selectedContext.selectedColumn = newItem.parentColumn;
@@ -68,7 +70,10 @@ export const actions = self => {
 
   const moveItemToSelectedColumn = ({ item }) => {
     const newItem = self.selectedContext.getItem({ item });
-    if (!newItem) throw new Error("Can't move if selected doesn't exist in the previous context.");
+    if (!newItem)
+      throw new Error(
+        "Can't move if selected doesn't exist in the previous context.",
+      );
     if (newItem.parentColumn !== self.selectedItem.parentColumn) {
       self.selectedContext.moveItem({ item });
     }
@@ -118,18 +123,26 @@ export const actions = self => {
       } else {
         // If there's a previous context...
         // First, get some info:
-        const itemInSelectedContext = self.selectedContext.hasItem({ item: selectedItem });
+        const itemInSelectedContext = self.selectedContext.hasItem({
+          item: selectedItem,
+        });
         if (!actionContext && itemInSelectedContext) {
           generator = self.selectedContext.generator; // eslint-disable-line
         }
-        const generatorsAreEqual = isEqual(self.selectedContext.generator, generator);
+        const generatorsAreEqual = isEqual(
+          self.selectedContext.generator,
+          generator,
+        );
 
         // Then check conditions:
         // If we are in the same context and we just want to change the selected.
-        if (generatorsAreEqual && itemInSelectedContext) changeSelectedItem({ selectedItem });
+        if (generatorsAreEqual && itemInSelectedContext)
+          changeSelectedItem({ selectedItem });
         // If we are going backward or forward in the history
-        else if (method === 'backward') selectItemInPreviousContext({ selectedItem });
-        else if (method === 'forward') selectItemInNextContext({ selectedItem });
+        else if (method === 'backward')
+          selectItemInPreviousContext({ selectedItem });
+        else if (method === 'forward')
+          selectItemInNextContext({ selectedItem });
         // If nothing of the previous, we just create a new context
         else createNewContext({ selectedItem, context, generator });
       }
@@ -144,7 +157,10 @@ export const actions = self => {
       self.selectedContext.addColumn({ column });
     },
     replaceContext: ({ context }) => {
-      replaceSelectedContext({ context: extractItemsInContext({ context }), generator: context });
+      replaceSelectedContext({
+        context: extractItemsInContext({ context }),
+        generator: context,
+      });
     },
   };
 };

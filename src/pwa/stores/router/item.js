@@ -4,7 +4,7 @@ import { types, getParent } from 'mobx-state-tree';
 const BaseItem = types
   .model('BaseItem')
   .props({
-    mstId: types.identifier(types.string),
+    mstId: types.identifier,
     type: types.string,
     id: types.union(types.string, types.number),
     hasBeenVisited: false,
@@ -35,7 +35,7 @@ const BaseItem = types
       const items = getParent(self);
       const index = items.indexOf(self);
       return index === items.length - 1
-        ? self.column.nextColumn && self.column.nextColumn.items[0]
+        ? self.parentColumn.nextColumn && self.parentColumn.nextColumn.items[0]
         : items[index + 1];
     },
     isExtracted() {
@@ -49,7 +49,9 @@ const BaseItem = types
 export const List = BaseItem.named('List')
   .props({
     page: types.number,
-    extract: types.maybe(types.enumeration('Extract', ['horizontal', 'vertical'])),
+    extract: types.maybe(
+      types.enumeration('Extract', ['horizontal', 'vertical']),
+    ),
   })
   .views(self => ({
     get list() {
@@ -66,24 +68,32 @@ export const List = BaseItem.named('List')
       beforeDestroy: () => {
         if (stopReplace) stopReplace();
       },
-      afterCreate: () => {
+      afterCreate: async () => {
         if (['horizontal', 'vertical'].includes(self.extract)) {
           const { type, id, page, extract } = self;
-          stopReplace = when(
-            () => self.connection.list(type, id).page(page).isReady === true,
-            () => {
-              self.parentContext.replaceExtractedList({ type, id, page, extract });
-            },
-          );
+          if (!self.connection.list(type, id).page(page).isReady)
+            stopReplace = await when(
+              () => self.connection.list(type, id).page(page).isReady,
+            );
+          self.parentContext.replaceExtractedList({
+            type,
+            id,
+            page,
+            extract,
+          });
         }
       },
     };
   });
 
 export const Single = BaseItem.named('Single').props({
-  fromList: types.optional(types.frozen, { type: 'latest', id: 'post', page: 1 }),
+  fromList: types.frozen({ type: 'latest', id: 'post', page: 1 }),
 });
 
-const Item = types.union(({ page }) => (page ? List : Single), List, Single);
+const Item = types.union(
+  { dispatcher: ({ page }) => (page ? List : Single) },
+  List,
+  Single,
+);
 
 export default Item;

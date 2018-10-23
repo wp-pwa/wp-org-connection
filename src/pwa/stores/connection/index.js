@@ -7,8 +7,6 @@ import {
   getEnv,
 } from 'mobx-state-tree';
 import { normalize } from 'normalizr';
-import { decode } from 'he';
-import getHeadContent from './head/getHeadContent';
 import { join } from './utils';
 import Entity from './entity';
 import entityShape from './entity-shape';
@@ -22,9 +20,9 @@ import * as schemas from '../../schemas';
 const dev = process.env.NODE_ENV !== 'production';
 
 export const props = {
-  entities: types.optional(types.map(Entity), {}),
-  lists: types.optional(types.map(List), {}),
-  customs: types.optional(types.map(Custom), {}),
+  entities: types.map(Entity),
+  lists: types.map(List),
+  customs: types.map(Custom),
   head: types.optional(Head, {}),
   typeRelations: types.optional(types.map(types.string), {
     post: 'single',
@@ -257,24 +255,5 @@ export const actions = self => {
         if (total.pages) list.total.pages = total.pages;
       }
     },
-    fetchHeadContent: flow(function* fetchHeadContent() {
-      try {
-        self.head.hasFailed = false;
-        const url = self.root.build.initialUrl;
-
-        if (!url) throw new Error('No initial url found.');
-
-        const { text: html } = yield getEnv(self).request(url);
-        const headHtml = html.match(
-          /<\s*?head[^>]*>([\w\W]+)<\s*?\/\s*?head\s*?>/,
-        )[1];
-        const { title, content } = getHeadContent(headHtml);
-
-        self.head.title = decode(title);
-        self.head.content = content;
-      } catch (error) {
-        self.head.hasFailed = true;
-      }
-    }),
   };
 };

@@ -164,6 +164,9 @@ const media = self => {
           return final;
         }, []);
 
+        // If there are no reduced sizes use src and original width.
+        if (!reducedSizes.length) return `${self.src} ${self.original.width}w`;
+
         // Maps the reduced sizes array into the couples ['url size'] needed
         // for the srcSet attribute.
         const mappedSizes = reducedSizes.map(size => {
@@ -190,11 +193,11 @@ const media = self => {
         if (width && height && filename && url)
           return { width, height, filename, url };
 
-        if (self.sizes)
+        if (self.sizes && self.sizes.length > 0)
           return self.sizes.reduce((current, final) => {
             if (current.width > final.width) return current;
             return final;
-          });
+          }, []);
       }
 
       return originalShape;
@@ -233,12 +236,12 @@ const author = self => ({
 const Entity = types
   .model('Entity')
   .props({
-    mstId: types.identifier(types.string), // post_60, category_7, movie_34, author_3, media_35
+    mstId: types.identifier, // post_60, category_7, movie_34, author_3, media_35
     type: types.string,
     id: types.union(types.number, types.string),
     isFetching: false,
     hasFailed: false,
-    raw: types.frozen,
+    raw: types.frozen(),
     headMeta: types.optional(HeadMeta, {}),
   })
   .views(common)

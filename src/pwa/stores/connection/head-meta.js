@@ -1,5 +1,5 @@
 import { types, getParent, getEnv } from 'mobx-state-tree';
-import { isMatch } from 'lodash';
+import { isMatch } from 'lodash-es';
 import { decode } from 'he';
 
 const getEntityTitle = entity =>
@@ -20,17 +20,23 @@ export default types.model('HeadMeta').views(self => ({
     return getEnv(self).initialSelectedItem;
   },
   get title() {
-    return self.head.title &&
+    if (
+      self.head.title &&
       isMatch(self.entity, { type: self.initial.type, id: self.initial.id })
-      ? self.head.title
-      : getEntityTitle(self.entity);
+    ) {
+      return self.head.title;
+    }
+    return self.entity.isReady ? getEntityTitle(self.entity) : '';
   },
   pagedTitle(page) {
     if (!page) return self.title;
-    return self.head.title &&
+    if (
+      self.head.title &&
       isMatch(self.entity, { type: self.initial.type, id: self.initial.id }) &&
       page === self.initial.page
-      ? self.head.title
-      : getEntityTitle(self.entity);
+    ) {
+      return self.head.title;
+    }
+    return self.entity.isReady ? getEntityTitle(self.entity) : '';
   },
 }));

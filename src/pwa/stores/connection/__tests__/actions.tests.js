@@ -19,11 +19,11 @@ const Connection = types
 
 const Stores = types.model().props({
   connection: types.optional(Connection, {}),
-  settings: types.optional(types.frozen, {
+  settings: types.frozen({
     connection: {},
     generalSite: { url: 'https://example.com' },
   }),
-  build: types.optional(types.frozen, { perPage: 10 }),
+  build: types.frozen({ perPage: 10 }),
 });
 
 let connection = null;
@@ -35,7 +35,7 @@ beforeEach(() => {
   WpApi.mockClear();
   connection = Stores.create({}, { connection: { WpApi } }).connection; // eslint-disable-line
   connection.initApi();
-  ({ getEntity, getListPage, getCustomPage } = WpApi.mock.instances[0]);  // eslint-disable-line
+  ({ getEntity, getListPage, getCustomPage } = WpApi.mock.instances[0]); // eslint-disable-line
 });
 
 describe('Connection › Actions', () => {
@@ -49,7 +49,9 @@ describe('Connection › Actions', () => {
     expect(connection.entity('post', 60).isFetching).toBe(true);
     await fetchPromise;
     expect(connection.entity('post', 60).isReady).toBe(true);
-    expect(connection.entity('post', 60).title).toBe('The Beauties of Gullfoss');
+    expect(connection.entity('post', 60).title).toBe(
+      'The Beauties of Gullfoss',
+    );
     expect(connection.entity('media', 62).title).toBe('iceland');
     expect(connection.entity('author', 4).name).toBe('Alan Martin');
   });
@@ -67,7 +69,7 @@ describe('Connection › Actions', () => {
     await connection.fetchEntity({ type: 'post', id: 60 });
     expect(connection.entity('post', 60).isReady).toBe(true);
     await connection.fetchEntity({ type: 'post', id: 60 });
-    expect(getEntity.mock.calls.length).toBe(1);
+    expect(getEntity.mock.calls).toHaveLength(1);
   });
 
   test('Entity: Refetching if force is true', async () => {
@@ -75,7 +77,7 @@ describe('Connection › Actions', () => {
     await connection.fetchEntity({ type: 'post', id: 60 });
     expect(connection.entity('post', 60).isReady).toBe(true);
     await connection.fetchEntity({ type: 'post', id: 60, force: true });
-    expect(getEntity.mock.calls.length).toBe(2);
+    expect(getEntity.mock.calls).toHaveLength(2);
   });
 
   test('List: Fetching Succeed', async () => {
@@ -84,7 +86,11 @@ describe('Connection › Actions', () => {
     expect(connection.list('category', 7).isFetching).toBe(false);
     expect(connection.list('category', 7).page(1).isReady).toBe(false);
     expect(connection.list('category', 7).page(1).isFetching).toBe(false);
-    const fetchPromise = connection.fetchListPage({ type: 'category', id: 7, page: 1 });
+    const fetchPromise = connection.fetchListPage({
+      type: 'category',
+      id: 7,
+      page: 1,
+    });
     expect(connection.list('category', 7).isReady).toBe(false);
     expect(connection.list('category', 7).isFetching).toBe(true);
     expect(connection.list('category', 7).page(1).isReady).toBe(false);
@@ -111,7 +117,11 @@ describe('Connection › Actions', () => {
     expect(connection.list('category', 7).page(1).isFetching).toBe(false);
     expect(connection.list('category', 7).page(2).isReady).toBe(false);
     expect(connection.list('category', 7).page(2).isFetching).toBe(false);
-    const fetchPromise2 = connection.fetchListPage({ type: 'category', id: 7, page: 2 });
+    const fetchPromise2 = connection.fetchListPage({
+      type: 'category',
+      id: 7,
+      page: 2,
+    });
     expect(connection.list('category', 7).isReady).toBe(false);
     expect(connection.list('category', 7).isFetching).toBe(true);
     expect(connection.list('category', 7).page(1).isReady).toBe(false);
@@ -125,7 +135,11 @@ describe('Connection › Actions', () => {
     expect(connection.list('category', 7).page(1).isFetching).toBe(false);
     expect(connection.list('category', 7).page(2).isReady).toBe(true);
     expect(connection.list('category', 7).page(2).isFetching).toBe(false);
-    const fetchPromise1 = connection.fetchListPage({ type: 'category', id: 7, page: 1 });
+    const fetchPromise1 = connection.fetchListPage({
+      type: 'category',
+      id: 7,
+      page: 1,
+    });
     expect(connection.list('category', 7).isReady).toBe(true);
     expect(connection.list('category', 7).isFetching).toBe(true);
     expect(connection.list('category', 7).page(1).isReady).toBe(false);
@@ -155,15 +169,20 @@ describe('Connection › Actions', () => {
     await connection.fetchListPage({ type: 'category', id: 7, page: 1 });
     expect(connection.list('category', 7).page(1).isReady).toBe(true);
     await connection.fetchListPage({ type: 'category', id: 7, page: 1 });
-    expect(getListPage.mock.calls.length).toBe(1);
+    expect(getListPage.mock.calls).toHaveLength(1);
   });
 
   test('List: Refetching if force is true', async () => {
     getListPage.mockReturnValue(Promise.resolve(postsFromCategory7));
     await connection.fetchListPage({ type: 'category', id: 7, page: 1 });
     expect(connection.list('category', 7).page(1).isReady).toBe(true);
-    await connection.fetchListPage({ type: 'category', id: 7, page: 1, force: true });
-    expect(getListPage.mock.calls.length).toBe(2);
+    await connection.fetchListPage({
+      type: 'category',
+      id: 7,
+      page: 1,
+      force: true,
+    });
+    expect(getListPage.mock.calls).toHaveLength(2);
   });
 
   test('Custom: Fetching Succeed', async () => {

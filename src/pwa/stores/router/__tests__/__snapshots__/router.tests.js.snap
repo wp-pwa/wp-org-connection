@@ -211,7 +211,7 @@ Array [
         "mstId": "context_0_column_2",
         "rawItems": Array [
           Object {
-            "extract": null,
+            "extract": undefined,
             "hasBeenVisited": false,
             "id": 7,
             "mstId": "0_category_7_page_1",
@@ -295,7 +295,7 @@ Array [
         "mstId": "context_0_column_2",
         "rawItems": Array [
           Object {
-            "extract": null,
+            "extract": undefined,
             "hasBeenVisited": false,
             "id": 7,
             "mstId": "0_category_7_page_1",
@@ -2550,7 +2550,7 @@ Array [
         "mstId": "context_0_column_1",
         "rawItems": Array [
           Object {
-            "extract": null,
+            "extract": undefined,
             "hasBeenVisited": true,
             "id": "post",
             "mstId": "0_latest_post_page_1",
@@ -2564,7 +2564,7 @@ Array [
         "mstId": "context_0_column_2",
         "rawItems": Array [
           Object {
-            "extract": null,
+            "extract": undefined,
             "hasBeenVisited": false,
             "id": 1,
             "mstId": "0_category_1_page_1",
@@ -2578,7 +2578,7 @@ Array [
         "mstId": "context_0_column_3",
         "rawItems": Array [
           Object {
-            "extract": null,
+            "extract": undefined,
             "hasBeenVisited": false,
             "id": 2,
             "mstId": "0_category_2_page_1",
@@ -2631,7 +2631,7 @@ Array [
         "mstId": "context_0_column_1",
         "rawItems": Array [
           Object {
-            "extract": null,
+            "extract": undefined,
             "hasBeenVisited": true,
             "id": "post",
             "mstId": "0_latest_post_page_1",
@@ -2645,7 +2645,7 @@ Array [
         "mstId": "context_0_column_2",
         "rawItems": Array [
           Object {
-            "extract": null,
+            "extract": undefined,
             "hasBeenVisited": false,
             "id": 1,
             "mstId": "0_category_1_page_1",
@@ -2659,7 +2659,7 @@ Array [
         "mstId": "context_0_column_3",
         "rawItems": Array [
           Object {
-            "extract": null,
+            "extract": undefined,
             "hasBeenVisited": false,
             "id": 2,
             "mstId": "0_category_2_page_1",
@@ -2710,7 +2710,7 @@ Array [
         "mstId": "context_0_column_1",
         "rawItems": Array [
           Object {
-            "extract": null,
+            "extract": undefined,
             "hasBeenVisited": true,
             "id": "post",
             "mstId": "0_latest_post_page_1",
@@ -2724,7 +2724,7 @@ Array [
         "mstId": "context_0_column_2",
         "rawItems": Array [
           Object {
-            "extract": null,
+            "extract": undefined,
             "hasBeenVisited": false,
             "id": 1,
             "mstId": "0_category_1_page_1",
@@ -2732,7 +2732,7 @@ Array [
             "type": "category",
           },
           Object {
-            "extract": null,
+            "extract": undefined,
             "hasBeenVisited": false,
             "id": 2,
             "mstId": "0_category_2_page_1",
@@ -2778,7 +2778,7 @@ Array [
         "mstId": "context_0_column_1",
         "rawItems": Array [
           Object {
-            "extract": null,
+            "extract": undefined,
             "hasBeenVisited": true,
             "id": "post",
             "mstId": "0_latest_post_page_1",
@@ -2792,7 +2792,7 @@ Array [
         "mstId": "context_0_column_2",
         "rawItems": Array [
           Object {
-            "extract": null,
+            "extract": undefined,
             "hasBeenVisited": false,
             "id": 3,
             "mstId": "0_category_3_page_1",
@@ -2894,7 +2894,7 @@ Array [
         "mstId": "context_0_column_1",
         "rawItems": Array [
           Object {
-            "extract": null,
+            "extract": undefined,
             "hasBeenVisited": false,
             "id": "post",
             "mstId": "0_latest_post_page_1",
@@ -2908,7 +2908,7 @@ Array [
         "mstId": "context_0_column_2",
         "rawItems": Array [
           Object {
-            "extract": null,
+            "extract": undefined,
             "hasBeenVisited": true,
             "id": 3,
             "mstId": "0_category_3_page_1",
@@ -3322,7 +3322,7 @@ Array [
             "type": "post",
           },
           Object {
-            "extract": null,
+            "extract": undefined,
             "hasBeenVisited": false,
             "id": "post",
             "mstId": "0_latest_post_page_1",
@@ -3336,7 +3336,7 @@ Array [
         "mstId": "context_0_column_5",
         "rawItems": Array [
           Object {
-            "extract": null,
+            "extract": undefined,
             "hasBeenVisited": false,
             "id": 7,
             "mstId": "0_category_7_page_1",
@@ -3350,7 +3350,7 @@ Array [
         "mstId": "context_0_column_6",
         "rawItems": Array [
           Object {
-            "extract": null,
+            "extract": undefined,
             "hasBeenVisited": false,
             "id": 3,
             "mstId": "0_tag_3_page_1",
@@ -3394,7 +3394,7 @@ Array [
         "mstId": "context_0_column_1",
         "rawItems": Array [
           Object {
-            "extract": null,
+            "extract": undefined,
             "hasBeenVisited": true,
             "id": 7,
             "mstId": "0_category_7_page_1",
@@ -3402,7 +3402,7 @@ Array [
             "type": "category",
           },
           Object {
-            "extract": null,
+            "extract": undefined,
             "hasBeenVisited": true,
             "id": 7,
             "mstId": "0_category_7_page_2",
@@ -3482,7 +3482,7 @@ Array [
         "mstId": "context_0_column_1",
         "rawItems": Array [
           Object {
-            "extract": null,
+            "extract": undefined,
             "hasBeenVisited": true,
             "id": 7,
             "mstId": "0_category_7_page_1",
@@ -3490,7 +3490,7 @@ Array [
             "type": "category",
           },
           Object {
-            "extract": null,
+            "extract": undefined,
             "hasBeenVisited": true,
             "id": 7,
             "mstId": "0_category_7_page_2",
@@ -3565,7 +3565,7 @@ Array [
         "mstId": "context_0_column_1",
         "rawItems": Array [
           Object {
-            "extract": null,
+            "extract": undefined,
             "hasBeenVisited": true,
             "id": 7,
             "mstId": "0_category_7_page_2",
@@ -3623,7 +3623,7 @@ Array [
         "mstId": "context_0_column_1",
         "rawItems": Array [
           Object {
-            "extract": null,
+            "extract": undefined,
             "hasBeenVisited": false,
             "id": "post",
             "mstId": "0_latest_post_page_1",
@@ -3637,7 +3637,7 @@ Array [
         "mstId": "context_0_column_2",
         "rawItems": Array [
           Object {
-            "extract": null,
+            "extract": undefined,
             "hasBeenVisited": true,
             "id": 7,
             "mstId": "0_category_7_page_1",
@@ -3651,7 +3651,7 @@ Array [
         "mstId": "context_0_column_3",
         "rawItems": Array [
           Object {
-            "extract": null,
+            "extract": undefined,
             "hasBeenVisited": false,
             "id": 10,
             "mstId": "0_tag_10_page_1",
@@ -3709,7 +3709,7 @@ Array [
         "mstId": "context_0_column_4",
         "rawItems": Array [
           Object {
-            "extract": null,
+            "extract": undefined,
             "hasBeenVisited": true,
             "id": 7,
             "mstId": "0_category_7_page_1",
@@ -3723,7 +3723,7 @@ Array [
         "mstId": "context_0_column_1",
         "rawItems": Array [
           Object {
-            "extract": null,
+            "extract": undefined,
             "hasBeenVisited": false,
             "id": "post",
             "mstId": "0_latest_post_page_1",
@@ -3737,7 +3737,7 @@ Array [
         "mstId": "context_0_column_2",
         "rawItems": Array [
           Object {
-            "extract": null,
+            "extract": undefined,
             "hasBeenVisited": false,
             "id": 3,
             "mstId": "0_category_3_page_1",
@@ -3751,7 +3751,7 @@ Array [
         "mstId": "context_0_column_3",
         "rawItems": Array [
           Object {
-            "extract": null,
+            "extract": undefined,
             "hasBeenVisited": false,
             "id": 10,
             "mstId": "0_tag_10_page_1",
@@ -3826,7 +3826,7 @@ Array [
         "mstId": "context_1_column_1",
         "rawItems": Array [
           Object {
-            "extract": null,
+            "extract": undefined,
             "hasBeenVisited": true,
             "id": 7,
             "mstId": "1_category_7_page_1",
