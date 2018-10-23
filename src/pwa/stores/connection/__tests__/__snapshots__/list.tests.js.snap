@@ -24,6 +24,7 @@ Object {
   },
   "hasFailed": false,
   "id": 7,
+  "isEmpty": true,
   "isFetching": false,
   "isReady": false,
   "page": [Function],

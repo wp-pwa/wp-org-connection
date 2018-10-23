@@ -18,15 +18,20 @@ beforeEach(() => {
   unprotect(connection);
 });
 
-const { result: resultFromCategoryList, entities: entitiesFromCategoryList } = normalize(
-  categoriesList,
-  list,
-);
+const {
+  result: resultFromCategoryList,
+  entities: entitiesFromCategoryList,
+} = normalize(categoriesList, list);
 
-const { result: resultFromCategoryListPage2, entities: entitiesFromCategoryListPage2 } = normalize(
-  categoriesListPage2,
-  list,
-);
+const {
+  result: resultFromCategoryListPage2,
+  entities: entitiesFromCategoryListPage2,
+} = normalize(categoriesListPage2, list);
+
+const {
+  result: resultFromEmptyCategoryList,
+  entities: entitiesFromEmptyCategoryList,
+} = normalize([], list);
 
 describe('Connection › Custom', () => {
   test('Get custom snapshot when it is not ready', () => {
@@ -54,7 +59,9 @@ describe('Connection › Custom', () => {
       entities: entitiesFromCategoryList,
     });
     const results = [5, 4, 6];
-    expect(connection.custom('test').entities.map(entity => entity.id)).toEqual(results);
+    expect(connection.custom('test').entities.map(entity => entity.id)).toEqual(
+      results,
+    );
     expect(
       connection
         .custom('test')
@@ -64,9 +71,13 @@ describe('Connection › Custom', () => {
     expect(connection.custom('test').entities[0].id).toBe(5);
     expect(connection.custom('test').entities[0].name).toBe('Architecture');
     expect(connection.custom('test').page(1).entities[0].id).toBe(5);
-    expect(connection.custom('test').page(1).entities[0].name).toBe('Architecture');
+    expect(connection.custom('test').page(1).entities[0].name).toBe(
+      'Architecture',
+    );
     expect(connection.custom('test').pages[0].entities[0].id).toBe(5);
-    expect(connection.custom('test').pages[0].entities[0].name).toBe('Architecture');
+    expect(connection.custom('test').pages[0].entities[0].name).toBe(
+      'Architecture',
+    );
   });
 
   test('Get list entity shapes after adding two pages', () => {
@@ -84,10 +95,9 @@ describe('Connection › Custom', () => {
     });
     const page1 = [5, 4, 6];
     const page2 = [7, 3, 8];
-    expect(connection.custom('test').entities.map(entity => entity.id)).toEqual([
-      ...page1,
-      ...page2,
-    ]);
+    expect(connection.custom('test').entities.map(entity => entity.id)).toEqual(
+      [...page1, ...page2],
+    );
     expect(
       connection
         .custom('test')
@@ -106,7 +116,11 @@ describe('Connection › Custom', () => {
     expect(connection.custom('test').page(2).isReady).toBe(false);
     expect(connection.custom('test').isReady).toBe(false);
     autorun(() => {
-      if (connection.custom('test').page(2).isReady && connection.custom('test').isReady) done();
+      if (
+        connection.custom('test').page(2).isReady &&
+        connection.custom('test').isReady
+      )
+        done();
     });
     connection.addCustomPage({
       name: 'test',
@@ -120,7 +134,11 @@ describe('Connection › Custom', () => {
     expect(connection.custom('test').page(1).isFetching).toBe(false);
     expect(connection.custom('test').page(1).isFetching).toBe(false);
     autorun(() => {
-      if (connection.custom('test').page(1).isFetching && connection.custom('test').isFetching) done();
+      if (
+        connection.custom('test').page(1).isFetching &&
+        connection.custom('test').isFetching
+      )
+        done();
     });
     connection.fetchingCustomPage({ name: 'test', page: 1 });
     expect(connection.custom('test').page(1).isReady).toBe(false);
@@ -209,5 +227,79 @@ describe('Connection › Custom', () => {
       entities: entitiesFromCategoryList,
       total: { entities: 6, pages: 2 },
     });
+  });
+
+  test('In an empty custom list page isReady and isEmpty should be true', () => {
+    connection.addCustomPage({
+      name: 'test',
+      page: 1,
+      result: resultFromEmptyCategoryList,
+      entities: entitiesFromEmptyCategoryList,
+      total: { entities: 0, pages: 1 },
+    });
+
+    expect(connection.custom('test').entities).toHaveLength(0);
+    expect(connection.custom('test').isReady).toBe(true);
+    expect(connection.custom('test').isFetching).toBe(false);
+    expect(connection.custom('test').page(1).isReady).toBe(true);
+    expect(connection.custom('test').page(1).isFetching).toBe(false);
+  });
+
+  test('In an empty custom list page isReady should be true', () => {
+    connection.addCustomPage({
+      name: 'test',
+      page: 1,
+      result: resultFromEmptyCategoryList,
+      entities: entitiesFromEmptyCategoryList,
+      total: { entities: 0, pages: 1 },
+    });
+
+    expect(connection.custom('test').entities).toHaveLength(0);
+    expect(connection.custom('test').isReady).toBe(true);
+    expect(connection.custom('test').page(1).isReady).toBe(true);
+  });
+
+  test('In an empty custom list page isFetching should be false', () => {
+    connection.addCustomPage({
+      name: 'test',
+      page: 1,
+      result: resultFromEmptyCategoryList,
+      entities: entitiesFromEmptyCategoryList,
+      total: { entities: 0, pages: 1 },
+    });
+
+    expect(connection.custom('test').entities).toHaveLength(0);
+    expect(connection.custom('test').isFetching).toBe(false);
+    expect(connection.custom('test').page(1).isFetching).toBe(false);
+  });
+
+  test('In an empty custom list page isEmpty should be true', () => {
+    connection.addCustomPage({
+      name: 'test',
+      page: 1,
+      result: resultFromEmptyCategoryList,
+      entities: entitiesFromEmptyCategoryList,
+      total: { entities: 0, pages: 1 },
+    });
+
+    expect(connection.custom('test').entities).toHaveLength(0);
+    expect(connection.custom('test').isEmpty).toBe(true);
+    expect(connection.custom('test').page(1).isEmpty).toBe(true);
+  });
+
+  test('isEmpty should be false if the custom list has entities', () => {
+    connection.addCustomPage({
+      name: 'test',
+      page: 1,
+      result: resultFromCategoryList,
+      entities: entitiesFromCategoryList,
+      total: { entities: 3, pages: 2 },
+    });
+    expect(connection.custom('test').entities).toHaveLength(3);
+    expect(connection.custom('test').isEmpty).toBe(false);
+    expect(connection.custom('test').page(1).entities).toHaveLength(3);
+    expect(connection.custom('test').page(1).isEmpty).toBe(false);
+    expect(connection.custom('test').page(2).entities).toHaveLength(0);
+    expect(connection.custom('test').page(2).isEmpty).toBe(true);
   });
 });

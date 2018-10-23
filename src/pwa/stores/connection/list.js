@@ -75,6 +75,11 @@ const List = types
         .map(page => page.hasFailed)
         .reduce((acc, cur) => acc || cur, false);
     },
+    get isEmpty() {
+      return values(self.pageMap)
+        .map(page => page.isEmpty)
+        .every(isPageEmpty => isPageEmpty);
+    },
     get entities() {
       const results = flatten(self.pages.map(page => page.results.peek()));
       return observable(

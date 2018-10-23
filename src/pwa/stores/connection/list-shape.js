@@ -10,7 +10,7 @@ export const pageShape = {
   isReady: false,
   isFetching: false,
   hasFailed: false,
-  isEmpty: false,
+  isEmpty: true,
   entities: observable([]),
   total: null,
 };
@@ -19,6 +19,7 @@ const listShape = (type, id) => ({
   isReady: false,
   isFetching: false,
   hasFailed: false,
+  isEmpty: true,
   type,
   id,
   total: {

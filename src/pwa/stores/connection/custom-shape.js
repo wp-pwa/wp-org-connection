@@ -4,6 +4,8 @@ import { pageShape } from './list-shape';
 export default name => ({
   isReady: false,
   isFetching: false,
+  hasFailed: false,
+  isEmpty: true,
   name,
   url: '/',
   total: {
