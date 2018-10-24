@@ -1,3 +1,19 @@
+## [0.9.6](https://github.com/frontity/wp-org-connection/compare/v0.9.5...v0.9.6) (2018-10-24)
+
+
+### Bug Fixes
+
+* **esmodules:** fixes lodash-es loading in jest and entityshape import ([8d97329](https://github.com/frontity/wp-org-connection/commit/8d97329))
+* **head:** move fetchHeadContent to its own file ([c777416](https://github.com/frontity/wp-org-connection/commit/c777416))
+* **list:** list.isReady doesn't relay in entities.length [WIP] ([9166d87](https://github.com/frontity/wp-org-connection/commit/9166d87))
+* **list-page:** fix isEmpty field and add tests ([c5655ae](https://github.com/frontity/wp-org-connection/commit/c5655ae))
+* **list-page:** fix isReady field when list is empty ([9d4c5e3](https://github.com/frontity/wp-org-connection/commit/9d4c5e3))
+* **lodash:** migrates back to lodash-es ([9d542fd](https://github.com/frontity/wp-org-connection/commit/9d542fd))
+* **lodash:** removes lodash-es and installs lodash ([1f30e75](https://github.com/frontity/wp-org-connection/commit/1f30e75))
+* **stores:** use afterCsr only in the client ([ec3ae3f](https://github.com/frontity/wp-org-connection/commit/ec3ae3f))
+* **stores:** use beforeSsr only in the server ([4a8ae4f](https://github.com/frontity/wp-org-connection/commit/4a8ae4f))
+* **tests:** install missing dev dependencies ([88941a8](https://github.com/frontity/wp-org-connection/commit/88941a8))
+
 ## [0.9.5](https://github.com/frontity/wp-org-connection/compare/v0.9.4...v0.9.5) (2018-10-02)
 
 

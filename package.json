@@ -1,6 +1,6 @@
 {
   "name": "wp-org-connection",
-  "version": "0.9.5",
+  "version": "0.9.6",
   "private": true,
   "description": "Connect Frontity to any self hosted WP using the REST API",
   "scripts": {
