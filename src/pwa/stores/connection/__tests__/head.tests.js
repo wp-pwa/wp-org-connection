@@ -3,12 +3,14 @@ import { types, unprotect } from 'mobx-state-tree';
 import path from 'path';
 import { readFileSync } from 'fs';
 import * as connect from '../';
+import headActions from '../head/actions';
 
 const Connection = types
   .model()
   .props(connect.props)
   .views(connect.views)
-  .actions(connect.actions);
+  .actions(connect.actions)
+  .actions(headActions);
 
 const Stores = types.model().props({
   connection: types.optional(Connection, {}),
