@@ -1,3 +1,10 @@
+## [0.9.8](https://github.com/frontity/wp-org-connection/compare/v0.9.7...v0.9.8) (2018-10-25)
+
+
+### Bug Fixes
+
+* **react:** update react and react-dom ([351dd72](https://github.com/frontity/wp-org-connection/commit/351dd72))
+
 ## [0.9.7](https://github.com/frontity/wp-org-connection/compare/v0.9.6...v0.9.7) (2018-10-25)
 
 
