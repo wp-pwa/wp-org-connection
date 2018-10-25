@@ -1,4 +1,4 @@
-import Store from '../pwa/stores';
+import Store from '../pwa/stores/server';
 import env from '../pwa/env';
 import { version } from '../../package.json';
 
