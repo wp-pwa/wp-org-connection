@@ -33,10 +33,10 @@
     "wpapi": "^1.1.2"
   },
   "devDependencies": {
-    "@semantic-release/changelog": "^2.1.0",
-    "@semantic-release/git": "^5.0.0",
-    "@semantic-release/github": "^4.2.17",
-    "@semantic-release/npm": "^3.3.2",
+    "@semantic-release/changelog": "2.1.0",
+    "@semantic-release/git": "5.0.0",
+    "@semantic-release/github": "4.2.17",
+    "@semantic-release/npm": "3.3.2",
     "babel-core": "^6.26.3",
     "babel-plugin-transform-class-properties": "^6.24.1",
     "babel-preset-env": "^1.7.0",
@@ -47,8 +47,8 @@
     "jest": "^23.2.0",
     "mobx": "^4.5.0",
     "mobx-state-tree": "^3.5.0",
-    "semantic-release": "^15.6.0",
-    "travis-deploy-once": "^5.0.0"
+    "semantic-release": "15.6.0",
+    "travis-deploy-once": "5.0.0"
   },
   "bugs": {
     "url": "https://github.com/frontity/wp-org-connection/issues"
