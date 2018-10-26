@@ -3,6 +3,18 @@
 
 ### Bug Fixes
 
+* **semantic-release:** fix repository url in package.json ([c953079](https://github.com/frontity/wp-org-connection/commit/c953079))
+* **semantic-release:** rollback semantic-release version ([ce36338](https://github.com/frontity/wp-org-connection/commit/ce36338))
+* **semantic-release:** setup with semantic-release-cli ([9536746](https://github.com/frontity/wp-org-connection/commit/9536746))
+* **semantic-release:** update [@semantic-release](https://github.com/semantic-release)/github ([9c1f6d9](https://github.com/frontity/wp-org-connection/commit/9c1f6d9))
+* **semantic-release:** update semantic-release dependencies ([c0b868f](https://github.com/frontity/wp-org-connection/commit/c0b868f))
+* **semantic-release:** update to latest version for security reasons ([5704562](https://github.com/frontity/wp-org-connection/commit/5704562))
+
+## [0.9.9](https://github.com/frontity/wp-org-connection/compare/v0.9.8...v0.9.9) (2018-10-26)
+
+
+### Bug Fixes
+
 * **semantic-release:** rollback semantic-release version ([ce36338](https://github.com/frontity/wp-org-connection/commit/ce36338))
 
 ## [0.9.8](https://github.com/frontity/wp-org-connection/compare/v0.9.7...v0.9.8) (2018-10-25)
