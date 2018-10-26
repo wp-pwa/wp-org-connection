@@ -1,3 +1,10 @@
+## [0.9.9](https://github.com/frontity/wp-org-connection/compare/v0.9.8...v0.9.9) (2018-10-26)
+
+
+### Bug Fixes
+
+* **semantic-release:** rollback semantic-release version ([ce36338](https://github.com/frontity/wp-org-connection/commit/ce36338))
+
 ## [0.9.8](https://github.com/frontity/wp-org-connection/compare/v0.9.7...v0.9.8) (2018-10-25)
 
 
