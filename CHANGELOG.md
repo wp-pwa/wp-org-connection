@@ -1,3 +1,10 @@
+## [0.9.10](https://github.com/frontity/wp-org-connection/compare/v0.9.9...v0.9.10) (2018-10-31)
+
+
+### Bug Fixes
+
+* **media-content:** ensure content is always an array ([c0dc644](https://github.com/frontity/wp-org-connection/commit/c0dc644))
+
 ## [0.9.9](https://github.com/frontity/wp-org-connection/compare/v0.9.8...v0.9.9) (2018-10-26)
 
 
