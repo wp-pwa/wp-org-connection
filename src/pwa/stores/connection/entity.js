@@ -88,7 +88,10 @@ const single = self => ({
             join('media', self.raw.featured_media),
           )) ||
         mediaShape('media', self.isReady && self.raw.featured_media),
-      content: self.isReady ? self.raw.content_media : observable([]),
+      content:
+        self.isReady && self.raw.content_media
+          ? self.raw.content_media
+          : observable([]),
     };
   },
   get meta() {
