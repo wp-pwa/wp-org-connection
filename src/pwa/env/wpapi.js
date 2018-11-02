@@ -26,44 +26,56 @@ const typesToParams = type => {
   return params[type] || type;
 };
 
-class WpApi {
-  api = null
+const addParams = (query, params) => {
+  let q = query;
+  forOwn(params, (value, key) => {
+    q = q.param(key, value);
+  });
+  return q;
+};
 
-  constructor({ cptEndpoints = {}, siteUrl }) {
+class WpApi {
+  api = null;
+  queryParams = null;
+
+  constructor({ cptEndpoints = {}, siteUrl, queryParams = {} }) {
     const apiUrl = `${siteUrl.replace(/\/$/, '')}/?rest_route=`;
     this.api = new Wpapi({ endpoint: apiUrl });
+    this.queryParams = queryParams;
     Object.entries(cptEndpoints).forEach(([type, endpoint]) => {
-      this.api[type] = this.api.registerRoute('wp/v2', `/${endpoint}/(?P<id>\\d+)`);
+      this.api[type] = this.api.registerRoute(
+        'wp/v2',
+        `/${endpoint}/(?P<id>\\d+)`,
+      );
     });
   }
 
-  getEntity({ type, id }){
-    return this.api[typesToEndpoints(type)]()
-    .id(id)
-    .embed()
+  getEntity({ type, id }) {
+    const query = this.api[typesToEndpoints(type)]()
+      .id(id)
+      .embed();
+
+    return addParams(query, this.queryParams);
   }
 
   getListPage({ type, id, page = 1, perPage = 10 }) {
-    const endpoint = type === 'latest' ? typesToEndpoints(id) : typesToEndpoints('post');
-    const params = { _embed: true, per_page: perPage };
+    const endpoint =
+      type === 'latest' ? typesToEndpoints(id) : typesToEndpoints('post');
+    const query = this.api[endpoint]().page(page);
+    const params = { _embed: true, per_page: perPage, ...this.queryParams };
     if (['category', 'tag', 'author'].includes(type)) {
       params[typesToParams(type)] = id;
     }
-    let query = this.api[endpoint]().page(page);
-    forOwn(params, (value, key) => {
-      query = query.param(key, value);
-    });
-    return query;
+
+    return addParams(query, params);
   }
 
   getCustomPage({ type, page = 1, params = {} }) {
-    let query = this.api[typesToEndpoints(type)]()
+    const query = this.api[typesToEndpoints(type)]()
       .page(page)
       .embed();
-    forOwn(params, (value, key) => {
-      query = query.param(key, value);
-    });
-    return query;
+
+    return addParams(query, { ...params, ...this.queryParams });
   }
 }
 

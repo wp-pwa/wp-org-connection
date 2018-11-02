@@ -56,10 +56,11 @@ export const actions = self => {
       if (wpapi) return;
       const { WpApi } = getEnv(self).connection;
       const cptEndpoints = self.root.settings.connection.cptEndpoints || {};
+      const queryParams = self.root.settings.connection.queryParams || {};
       const { cdn } = self.root.settings.connection;
       const siteUrl =
         cdn && cdn.api ? cdn.api : self.root.settings.generalSite.url;
-      wpapi = new WpApi({ cptEndpoints, siteUrl });
+      wpapi = new WpApi({ cptEndpoints, siteUrl, queryParams });
     },
     fetchEntity: flow(function* fetch({ type, id, force = false }) {
       self.initApi();
