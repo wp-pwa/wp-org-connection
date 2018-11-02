@@ -1,3 +1,10 @@
+# [0.10.0](https://github.com/frontity/wp-org-connection/compare/v0.9.10...v0.10.0) (2018-11-02)
+
+
+### Features
+
+* **opt-in-queries:** use query params defined in connection settings ([9ff4f2c](https://github.com/frontity/wp-org-connection/commit/9ff4f2c))
+
 ## [0.9.10](https://github.com/frontity/wp-org-connection/compare/v0.9.9...v0.9.10) (2018-10-31)
 
 
