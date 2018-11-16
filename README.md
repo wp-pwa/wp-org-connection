@@ -10,6 +10,66 @@ Clone the main [» Frontity](https://github.com/frontity/frontity) repository fi
 
 Finally, use `npm run start:pwa` to start the development environment.
 
+# Settings
+
+These are the settings you can configure in `wp-org-connection`:
+
+## `url` (required)
+
+The url of your site:
+
+```json
+{
+    "url": "https://my-blog.com"
+}
+```
+
+## `endpoint` (required)
+
+The endpoint where your WP REST API is located:
+
+```json
+{
+    "endpoint": "https://my-blog.com/wp-json"
+}
+```
+
+Alternatively, if you want to access data from more than one endpoint, you can pass an object. In this case, `default` is required:
+
+```json
+{
+    "endpoint": {
+        "default": "https://my-blog.com/wp-json",
+        "mainSite": "https://my-main-site.com/wp-json"
+    }
+}
+```
+
+## `perPage`
+
+The number of items per page each time a list is requested. Default is `10`.
+
+```json
+{
+    "perPage": 13
+}
+```
+
+> It is recommended to mimic your WP settings.
+
+## `timezone` (WIP, not implemented yet)
+
+The timezone of your WP. Default is `GTM`. 
+
+```json
+{
+    "timezone": "GTM+02"
+}
+```
+
+> It is recommended to mimic your WP settings.
+
+
 ## Changelog
 
 Please take a look at our [Changelog file](https://github.com/frontity/wp-org-connection/blob/master/CHANGELOG.md).
