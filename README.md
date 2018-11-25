@@ -12,17 +12,7 @@ Finally, use `npm run start:pwa` to start the development environment.
 
 # Settings
 
-These are the settings you can configure in `wp-org-connection`:
-
-## `url` (required)
-
-The url of your site:
-
-```json
-{
-    "url": "https://my-blog.com"
-}
-```
+These are the settings you can configure in the `data` field of `wp-org-connection`:
 
 ## `endpoint` (required)
 
