@@ -148,7 +148,7 @@ const media = self => {
         return self.original.url;
       }
 
-      return '';
+      return null;
     },
     get srcSet() {
       if (self.isReady) {
@@ -169,7 +169,7 @@ const media = self => {
 
         // If there are no reduced sizes use src and original width.
         if (!reducedSizes.length) {
-          return self.src ? `${self.src} ${self.original.width || 100}w` : '';
+          return self.src ? `${self.src} ${self.original.width || 100}w` : null;
         }
         // Maps the reduced sizes array into the couples ['url size'] needed
         // for the srcSet attribute.
@@ -184,14 +184,14 @@ const media = self => {
         // Joins the mapped sizes array into the string needed for srcSet.
         const srcSet = mappedSizes.join(', ');
 
-        return srcSet || '';
+        return srcSet || null;
       }
 
-      return '';
+      return null;
     },
     get original() {
       if (self.isReady) {
-        const url = self.raw.source_url || '';
+        const url = self.raw.source_url || null;
         const {
           width = null,
           height = null,
