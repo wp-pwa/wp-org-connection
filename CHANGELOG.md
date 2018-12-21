@@ -1,3 +1,12 @@
+## [0.10.1](https://github.com/frontity/wp-org-connection/compare/v0.10.0...v0.10.1) (2018-12-21)
+
+
+### Bug Fixes
+
+* **media:** fixes media.original sending url before empty shape ([96ffd06](https://github.com/frontity/wp-org-connection/commit/96ffd06))
+* **media:** non existent src or srcset now return null ([a89d4c7](https://github.com/frontity/wp-org-connection/commit/a89d4c7))
+* **tests:** updates snapshot ([cfc758f](https://github.com/frontity/wp-org-connection/commit/cfc758f))
+
 # [0.10.0](https://github.com/frontity/wp-org-connection/compare/v0.9.10...v0.10.0) (2018-11-02)
 
 
