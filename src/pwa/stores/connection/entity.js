@@ -148,7 +148,7 @@ const media = self => {
         return self.original.url;
       }
 
-      return '';
+      return null;
     },
     get srcSet() {
       if (self.isReady) {
@@ -168,8 +168,9 @@ const media = self => {
         }, []);
 
         // If there are no reduced sizes use src and original width.
-        if (!reducedSizes.length) return `${self.src} ${self.original.width}w`;
-
+        if (!reducedSizes.length) {
+          return self.src ? `${self.src} ${self.original.width || 100}w` : null;
+        }
         // Maps the reduced sizes array into the couples ['url size'] needed
         // for the srcSet attribute.
         const mappedSizes = reducedSizes.map(size => {
@@ -183,24 +184,36 @@ const media = self => {
         // Joins the mapped sizes array into the string needed for srcSet.
         const srcSet = mappedSizes.join(', ');
 
-        return srcSet || '';
+        return srcSet || null;
       }
 
-      return '';
+      return null;
     },
     get original() {
       if (self.isReady) {
-        const url = self.raw.source_url;
-        const { width, height, file: filename } = self.raw.media_details;
+        const url = self.raw.source_url || null;
+        const {
+          width = null,
+          height = null,
+          file: filename = '',
+        } = self.raw.media_details;
 
-        if (width && height && filename && url)
-          return { width, height, filename, url };
+        const original = {
+          width,
+          height,
+          filename,
+          url,
+        };
+
+        if (width && height && filename && url) return original;
 
         if (self.sizes && self.sizes.length > 0)
           return self.sizes.reduce((current, final) => {
             if (current.width > final.width) return current;
             return final;
           }, []);
+
+        return original;
       }
 
       return originalShape;

@@ -44,7 +44,7 @@ export const originalShape = {
   height: null,
   width: null,
   filename: '',
-  url: '',
+  url: null,
 };
 
 export const authorShape = (type, id) => ({
