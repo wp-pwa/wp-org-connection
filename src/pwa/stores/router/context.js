@@ -55,7 +55,11 @@ const Context = types
       ) {
         // WARNING - temporal fix, should be removed after refactoring
         self.rawColumns[i].items; // eslint-disable-line
-        if (self.rawColumns[i].items.length === 0) break;
+        if (
+          i >= self.rawColumns.length ||
+          self.rawColumns[i].items.length === 0
+        )
+          break;
         columns[i] = self.rawColumns[i];
       }
       return columns.filter(column => column.items.length > 0);
